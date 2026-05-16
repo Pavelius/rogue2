@@ -43,28 +43,29 @@ const int tick_time = 400;
 typedef unsigned (*fnactionkey)(const void* drawable, int index);
 
 struct tilei {
-	unsigned char priority;
-	aframe frame, decals;
+	unsigned char	priority;
+	aframe			frame, decals;
+	color			minimap;
 };
 static tilei tile_frames[] = {
-	{0}, // NoTile borders(-1)
-	{0, {0, 1}}, // WoodenFloor
-	{0, {9, 3}}, // Cave
-	{0, {12, 8}, {14, 3}}, // DungeonFloor
-	{0, {1, 4}, {0, 8}}, // Grass minimap(60 176 67)
-	{0, {5, 4}, {8, 6}}, // GrassCorupted minimap(66 63 48)
-	{0, {44, 1}}, // Rock minimap(96 71 52)
-	{0, {35, 4}}, // Sand
-	{0, {31, 4}}, // Snow
-	{0, {28, 3}}, // Lava
-	{0, {40, 4}}, // Water
-	{0, {45, 8}}, // DarkWater minimap(22 68 59)
-	{0, {53, 8}}, // DeepWater minimap(29 80 120)
-	{0, {0, 2}}, // WallCave tile(Cave)
-	{0, {13, 1}}, // WallBuilding tile(WoodenFloor)
-	{0, {25, 3}}, // WallDungeon tile(DungeonFloor)
-	{0, {39, 5}}, // WallFire tile(Lava)
-	{0, {55, 3}}, // WallIce tile(Snow)
+	{0}, // NoTile
+	{0, {0, 1}, {}, color(130, 104, 86)}, // WoodenFloor
+	{0, {9, 3}, {}, color(89, 97, 101)}, // Cave
+	{0, {12, 8}, {14, 3}, color(89, 97, 101)}, // DungeonFloor
+	{0, {1, 4}, {0, 8}, color(60, 176, 67)}, // Grass
+	{0, {5, 4}, {8, 6}, color(66, 63, 48)}, // GrassCorupted
+	{0, {44, 1}, {}, color(96, 71, 52)}, // Rock
+	{0, {35, 4}, {}, }, // Sand
+	{0, {31, 4}, {}, }, // Snow
+	{0, {28, 3}, {}, }, // Lava
+	{0, {40, 4}, {}, }, // Water
+	{0, {45, 8}, {}, color(22, 68, 59)}, // DarkWater
+	{0, {53, 8}, {}, color(29, 80, 120)}, // DeepWater
+	{0, {0, 2}, {}, color(1, 1, 1)}, // WallCave
+	{0, {13, 1}, {}, color(1, 1, 1)}, // WallBuilding tile(WoodenFloor)
+	{0, {25, 3}, {}, color(1, 1, 1)}, // WallDungeon tile(DungeonFloor)
+	{0, {39, 5}, {}, color(1, 1, 1)}, // WallFire tile(Lava)
+	{0, {55, 3}, {}, color(1, 1, 1)}, // WallIce tile(Snow)
 };
 static_assert(lenghtof(tile_frames) == (WallIce + 1), "Invalid tile frames data count");
 static tilei flag_frames[] = {
@@ -118,7 +119,10 @@ static point next_tile[] = {
 	{tsx, -tsy}, {tsx, tsy}, {-tsx, tsy}, {-tsx, -tsy},
 	{0, 0}
 };
-static array console(1);
+static char console_text[512];
+static stringbuilder console(console_text);
+static point answer_end;
+
 answers an;
 bool show_floor_rect;
 
@@ -319,7 +323,7 @@ static void paint_items() {
 	update_items();
 	auto pi = gres(ResItems);
 	auto mb = camera_box();
-	for(auto p : items.records<itemlay>()) {
+	for(auto p : items) {
 		if(!mb.have(i2m(p->index)))
 			continue;
 		if(!area_is(p->index, Explored))
@@ -539,7 +543,7 @@ static void paint_features() {
 }
 
 static bool area_isb(short unsigned i, areafn v) {
-	return (i==Blocked) || area_is(i, v);
+	return (i == Blocked) || area_is(i, v);
 }
 
 static void paint_fow() {
@@ -811,25 +815,6 @@ static unsigned answer_key(int index) {
 	}
 }
 
-static void paint_status() {
-	auto push_caret = caret;
-	auto push_height = height;
-	auto push_width = width;
-	caret.x = getwidth() - panel_width;
-	caret.y = 0;
-	width = panel_width - 1;
-	height = getheight() - 1;
-	fillform();
-	strokeborder();
-	setoffset(metrics::border, metrics::border);
-	caret.x = getwidth() - panel_width + 1;
-	caret.y = getheight() - 128 - 1;
-	//	paint_minimap();
-	caret = push_caret;
-	height = push_height;
-	width = push_width - panel_width;
-}
-
 void creature::fixact(directionn d) {
 	look(d);
 	auto s2 = position;
@@ -838,7 +823,25 @@ void creature::fixact(directionn d) {
 	fixmove(s2, tick_time / 3);
 }
 
-static point answer_end;
+static void text_header(const char* format) {
+	auto push_caret = caret;
+	pushfont push_font(metrics::h2);
+	pushfore push_fore(colors::header);
+	caret.x += (width - textw(format)) / 2;
+	text(format);
+	caret = push_caret;
+	caret.y += texth();
+}
+
+static void text_header_small(const char* format) {
+	auto push_caret = caret;
+	pushfont push_font(metrics::h3);
+	pushfore push_fore(colors::header);
+	caret.x += (width - textw(format)) / 2;
+	text(format);
+	caret = push_caret;
+	caret.y += texth();
+}
 
 static void answer_before_paint() {
 	caret.x = (getwidth() - window_width - panel_width) / 2;
@@ -848,19 +851,11 @@ static void answer_before_paint() {
 	width = window_width;
 	height = window_height;
 	strokeout(fillform, metrics::padding);
-	auto push_fore = fore;
-	fore = colors::form;
+	pushfore push_fore(colors::form);
 	strokeout(strokeup, metrics::padding);
 	strokeout(strokeup, metrics::padding - 1);
-	if(answers::header) {
-		auto push_font = font;
-		font = metrics::h2;
-		fore = colors::special;
-		texta(answers::header, AlignCenter);
-		caret.y += texth();
-		font = push_font;
-	}
-	fore = push_fore;
+	if(answers::header)
+		text_header(answers::header);
 }
 
 static void answer_paint_cell(int index, long value, const char* format, fnevent proc) {
@@ -984,6 +979,109 @@ long choose_answers() {
 	screen.restore();
 	console.clear();
 	return getresult();
+}
+
+static void set_minimap_caret(point origin, short unsigned i) {
+	caret.x = origin.x + (i % mps) * width;
+	caret.y = origin.y + (i / mps) * height;
+}
+
+static void paint_area(point origin, int z) {
+	pushrect push;
+	pushvalue push_fore(fore);
+	height = width = z;
+	for(short unsigned i = 0; i < mps * mps; i++) {
+		auto t = area_tiles[i];
+		if(!t || !area_is(i, Explored))
+			continue;
+		set_minimap_caret(origin, i);
+		fore = tile_frames[t].minimap;
+		if(fore.u)
+			rectf();
+		auto f = area_features[i];
+		fore = feature_frames[f].minimap;
+		if(fore.u)
+			rectf();
+	}
+}
+
+static void paint_area_screen(point origin, int z) {
+	if(!player)
+		return;
+	auto pc = point(player->index % mps, player->index / mps);
+	auto s1 = point(camera.x / tsx, camera.y / tsy);
+	pushrect push;
+	pushvalue push_fore(fore);
+	caret.x = origin.x + s1.x * z;
+	caret.y = origin.y + s1.y * z;
+	width = ((getwidth() - panel_width) / tsx + 2) * z;
+	height = (getheight() / tsy + 1) * z;
+	fore = colors::white;
+	rectb();
+}
+
+static void paint_minimap_items(point origin, int z) {
+	pushrect push;
+	pushfore push_fore(color(255, 255, 0));
+	height = width = z;
+	update_items();
+	for(auto p : items) {
+		auto i = p->index;
+		if(!area_is(i, Explored))
+			continue;
+		set_minimap_caret(origin, i);
+		rectf();
+	}
+}
+
+static void paint_minimap_creatures(point origin, int z, bool use_hearing) {
+	pushrect push;
+	pushfore push_fore;
+	height = width = z;
+	if(!player)
+		return;
+	update_creatures();
+	for(auto p : creatures) {
+		auto i = p->index;
+		if(use_hearing) {
+			if(player && !player->canhear(p->index))
+				continue;
+		} else if(!area_is(i, Explored))
+			continue;
+		set_minimap_caret(origin, i);
+		if(player->isenemy(p))
+			fore = color(255, 0, 0);
+		else
+			fore = color(255, 255, 255);
+		rectf();
+	}
+}
+
+static void paint_minimap() {
+	const auto z = 2;
+	paint_area(caret, z);
+	paint_minimap_items(caret, z);
+	paint_minimap_creatures(caret, z, true);
+	paint_area_screen(caret, z);
+}
+
+static void paint_status() {
+	auto push_caret = caret;
+	auto push_height = height;
+	auto push_width = width;
+	caret.x = getwidth() - panel_width;
+	caret.y = 0;
+	width = panel_width;
+	height = getheight();
+	fillform();
+	strokeborder();
+	setoffset(metrics::border, metrics::border);
+	caret.x = getwidth() - panel_width + 1;
+	caret.y = getheight() - 128 - 1;
+	paint_minimap();
+	caret = push_caret;
+	height = push_height;
+	width = push_width - panel_width;
 }
 
 /*
@@ -1134,120 +1232,6 @@ static void answer_after_paint() {
 	caret = push_caret;
 }
 
-static point m2a(point m, int z) {
-	point r;
-	r.x = m.x * z;
-	r.y = m.y * z;
-	return r;
-}
-
-static void paint_minimap_items(point origin, int z) {
-	pushrect push;
-	height = width = z;
-	for(auto& e : area->items) {
-		if(!e)
-			continue;
-		auto i = e.position;
-		if(!area->isvalid(i))
-			continue;
-		if(!area->is(i, Explored))
-			continue;
-		caret.x = origin.x + i.x * width;
-		caret.y = origin.y + i.y * height;
-		fillfade(color(255, 255, 0), 192);
-	}
-}
-
-static void paint_minimap_creatures(point origin, int z, bool use_hearing) {
-	pushrect push;
-	height = width = z;
-	for(auto& e : bsdata<creature>()) {
-		if(e.worldpos != game)
-			continue;
-		auto i = e.getposition();
-		if(use_hearing) {
-			if(player && !player->canhear(e.getposition()))
-				continue;
-		} else if(!area->is(i, Explored))
-			continue;
-		caret.x = origin.x + i.x * width;
-		caret.y = origin.y + i.y * height;
-		if(e.get(Reputation) <= -20)
-			fillfade(color(255, 0, 0), 192);
-		else if(e.get(Reputation) >= 20)
-			fillfade(color(0, 255, 0), 192);
-		else
-			fillfade(color(255, 255, 255), 192);
-	}
-}
-
-static void paint_area(point origin, int z) {
-	pushrect push;
-	pushvalue push_fore(fore);
-	height = width = z;
-	point i;
-	for(i.y = 0; i.y < area->mps; i.y++) {
-		for(i.x = 0; i.x < area->mps; i.x++) {
-			auto t = area->tiles[i];
-			if(!t || !area->is(i, Explored))
-				continue;
-			auto p = bsdata<tilei>::elements + t;
-			caret.x = origin.x + i.x * width;
-			caret.y = origin.y + i.y * height;
-			fore = p->minimap;
-			rectf();
-			auto pf = bsdata<featurei>::elements + (int)area->features[i];
-			if(pf->isvisible()) {
-				color v = pf->minimap; v.a = 0;
-				fillfade(v, pf->minimap.a);
-			}
-		}
-	}
-}
-
-static void paint_area_screen(point origin, int z) {
-	if(!player)
-		return;
-	auto pc = player->getposition();
-	auto s1 = s2m(camera);
-	pushrect push;
-	pushvalue push_fore(fore);
-	caret.x = origin.x + s1.x * z;
-	caret.y = origin.y + s1.y * z;
-	width = ((getwidth() - panel_width) / tsx + 2) * z;
-	height = (getheight() / tsy + 1) * z;
-	fore = colors::white;
-	rectb();
-}
-
-static void text_header(const char* format) {
-	auto push_caret = caret;
-	auto push_font = font;
-	auto push_fore = fore;
-	font = metrics::h2;
-	fore = colors::h2;
-	caret.x += (width - textw(format)) / 2;
-	text(format);
-	caret = push_caret;
-	caret.y += texth();
-	font = push_font;
-	fore = push_fore;
-}
-
-static void small_header(const char* format) {
-	auto push_caret = caret;
-	auto push_font = font;
-	auto push_fore = fore;
-	font = metrics::h3;
-	fore = colors::h3;
-	caret.x += (width - textw(format)) / 2;
-	text(format);
-	caret = push_caret;
-	caret.y += texth();
-	font = push_font;
-	fore = push_fore;
-}
-
 static void paint_legends(point origin, int z) {
 	auto push_caret = caret;
 	auto push_fore = fore;
@@ -1317,14 +1301,6 @@ static void show_area() {
 	paint_area_screen(origin, z);
 }
 
-static void paint_minimap() {
-	const auto z = 2;
-	paint_area(caret, z);
-	paint_minimap_creatures(caret, z, true);
-	paint_minimap_items(caret, z);
-	paint_area_screen(caret, z);
-}
-
 static void beforepaint() {
 	paint_status();
 }
@@ -1384,7 +1360,7 @@ static void camera_direction() {
 
 static void add_creatures() {
 	update_creatures();
-	for(auto p : creatures.records<creature>()) {
+	for(auto p : creatures) {
 		if(p->onscreen())
 			add_object(p);
 	}
@@ -1443,7 +1419,7 @@ static void direction_keys() {
 
 static void update_creature_orders() {
 	update_creatures();
-	for(auto p : creatures.records<creature>()) {
+	for(auto p : creatures) {
 		auto m = i2s(p->index);
 		if(p->position != m)
 			p->fixmove(m, tick_time);

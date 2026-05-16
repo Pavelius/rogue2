@@ -18,6 +18,7 @@
 #include "bsdata.h"
 #include "collectiona.h"
 #include "creature.h"
+#include "math.h"
 #include "message.h"
 #include "rand.h"
 
@@ -26,7 +27,7 @@ creature* player;
 creature* opponent;
 static int roll_result;
 
-collectiona creatures;
+collectionv<creature> creatures;
 bool need_update_creatures;
 
 void fix(messagen v) {
@@ -137,6 +138,11 @@ int creature::getlos() const {
 	else if(darkness < 0)
 		darkness = 0;
 	return 5 - darkness;
+}
+
+bool creature::canhear(short unsigned i) const {
+	auto n = 2 + get(Wits) / 10 + get(Dexterity) / 20;
+	return area_range(index, i) < n;
 }
 
 void create_creature(short unsigned index_position, monstern type) {

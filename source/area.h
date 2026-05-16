@@ -66,6 +66,7 @@ extern featuren area_features[mps * mps];
 extern unsigned short movement_rate[mps * mps];
 
 inline short unsigned m2i(unsigned char x, unsigned char y) { return y * mps + x; }
+
 inline bool left_side(short unsigned i) { return (i % mps) == 0; }
 inline bool right_side(short unsigned i) { return (i % mps) == (mps - 1); }
 inline bool up_side(short unsigned i) { return (i / mps) == 0; }
@@ -103,6 +104,8 @@ struct areai {
 	landscapen		type;
 	constexpr explicit operator bool() const { return index != 0xFFFF; }
 };
+
+int area_range(short unsigned i1, short unsigned i2);
 
 void area_change(tilen t1, tilen t2);
 void area_clear();

@@ -29,7 +29,7 @@ const int lb = 50;
 
 static_assert(sizeof(item) == 4, "Structure `item` must 4 bytes");
 
-collectiona items;
+collectionv<itemlay> items;
 bool need_update_items;
 
 static int get_weight(itemn v) {

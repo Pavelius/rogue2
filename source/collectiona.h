@@ -29,3 +29,8 @@ struct collectiona : adat<void*, 256> {
 	void* random() const;
 };
 extern collectiona targets;
+
+template<typename T> struct collectionv : collectiona {
+	T** begin() const { return (T**)data; }
+	T** end() const { return (T**)data + count; }
+};

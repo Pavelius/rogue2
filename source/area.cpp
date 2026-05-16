@@ -181,6 +181,14 @@ void area_block(short unsigned m, unsigned short v) {
 	movement_rate[m] = v;
 }
 
+int area_range(short unsigned i1, short unsigned i2) {
+	auto x1 = i1 % mps;
+	auto y1 = i1 / mps;
+	auto x2 = i2 % mps;
+	auto y2 = i2 / mps;
+	return imax(iabs(x1 - x2), iabs(y1 - y2));
+}
+
 short unsigned to(short unsigned m, directionn d, short unsigned me) {
 	switch(d) {
 	case North: return up_side(m) ? me : (m - mps);

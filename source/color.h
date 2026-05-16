@@ -16,8 +16,11 @@
 
 #pragma once
 
-struct color {
-	unsigned char b, g, r, a;
+union color {
+	struct {
+		unsigned char b, g, r, a;
+	};
+	unsigned u;
 	color() = default;
 	constexpr color(unsigned char r, unsigned char g, unsigned char b) : b(b), g(g), r(r), a(0) {}
 	constexpr color(unsigned char r, unsigned char g, unsigned char b, unsigned char a) : b(b), g(g), r(r), a(a) {}

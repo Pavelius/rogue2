@@ -64,6 +64,7 @@ struct creature : drawable, posable, statable, featable, wearable {
 	short hits, hits_maximum;
 	int	get(abilityn v) const { return abilities[v]; }
 	int getlos() const;
+	bool canhear(short unsigned i) const;
 	bool is(featn v) const { return featable::is(v); }
 	bool ischaracter() const { return type <= Elf; }
 	bool isenemy(const creature* p) const { return false; }

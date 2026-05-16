@@ -18,6 +18,10 @@
 
 #include "collectiona.h"
 
-extern collectiona creatures, items;
+struct creature;
+struct itemlay;
+
+extern collectionv<creature> creatures;
+extern collectionv<itemlay> items;
 
 void choose_game_move();
