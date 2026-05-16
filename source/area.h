@@ -52,8 +52,6 @@ enum featuren : unsigned char {
 };
 
 const short mps = 64;
-const int tsx = 64;
-const int tsy = 48;
 const int mst = 260;
 
 extern unsigned short current_area;
@@ -69,7 +67,7 @@ inline short unsigned m2i(unsigned char x, unsigned char y) { return y * mps + x
 inline bool left_side(short unsigned i) { return (i % mps) == 0; }
 inline bool right_side(short unsigned i) { return (i % mps) == (mps - 1); }
 inline bool up_side(short unsigned i) { return (i / mps) == 0; }
-inline bool down_side(short unsigned i) { return (i % mps) == (mps - 1); }
+inline bool down_side(short unsigned i) { return (i / mps) == (mps - 1); }
 
 struct apos {
 	unsigned char x, y;

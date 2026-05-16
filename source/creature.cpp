@@ -198,3 +198,28 @@ bool is_blocked(short unsigned i) {
 		return true;
 	return false;
 }
+
+bool use_area(short unsigned i) {
+	auto f = area_features[i];
+	switch(f) {
+	case Door:
+		area_features[i] = OpenedDoor;
+		break;
+	default:
+		return false;
+	}
+	return true;
+}
+
+bool player_move(directionn d) {
+	player->look(d);
+	auto i1 = to(player->index, d);
+	if(i1 == Blocked || is_blocked(i1)) {
+		player->fixact(d);
+		if(i1 != Blocked)
+			use_area(i1);
+		return true;
+	}
+	player->index = i1;
+	return true;
+}

@@ -29,9 +29,12 @@
 #include "pushvalue.h"
 #include "resid.h"
 
+const int tsx = 64;
+const int tsy = 48;
+
 const int panel_width = 130;
-const int window_width = 480;
-const int window_height = 280;
+const int window_width = 608;
+const int window_height = 376;
 const int wears_offset = 80;
 
 const int tick_time = 400;
@@ -1450,25 +1453,14 @@ static void paint_test() {
 	rectb();
 }
 
-static void player_move(directionn d) {
-	player->look(d);
-	auto i1 = to(player->index, d);
-	if(i1 == Blocked || is_blocked(i1)) {
-		player->fixact(d);
-		return;
-	}
-	player->index = i1;
-	breakmodal(1);
-}
-
 static void check_orders() {
 	if(have_orders())
 		breakmodal(1);
-
 }
 
 static void player_move_cmd() {
-	player_move((directionn)hparam);
+	if(player_move((directionn)hparam))
+		breakmodal(1);
 	check_orders();
 }
 
@@ -1536,7 +1528,7 @@ void initialize_gui() {
 	camera_initialize();
 	sys_create_window(window_width, window_height);
 	sys_caption(getname(ApplicationTitle));
-	camera_set_screen(350, 280);
+	camera_set_screen(478, 376);
 }
 
 BSDATA(drawrender) = {

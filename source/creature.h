@@ -84,4 +84,6 @@ int getv(monstern v, abilityn a);
 void create_creature(short unsigned index_position, monstern type);
 bool is_blocked(short unsigned i);
 void fix(messagen v);
+bool player_move(directionn d);
 void update_creatures();
+bool use_area(short unsigned i);
