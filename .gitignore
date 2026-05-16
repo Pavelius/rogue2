@@ -363,3 +363,5 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /source/main_util.cpp
+/source/sprite_util.cpp
+/source/sprite_util.h
