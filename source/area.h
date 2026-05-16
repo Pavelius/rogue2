@@ -16,6 +16,8 @@
 
 #pragma once
 
+typedef bool(*fnareais)(short unsigned i);
+
 enum directionn : unsigned char;
 
 enum rendern : unsigned char {
@@ -56,7 +58,7 @@ const int mst = 260;
 
 extern unsigned short current_area;
 
-extern unsigned char area_flags[mps * mps];
+//extern unsigned char area_flags[mps * mps];
 extern unsigned char area_params[mps * mps];
 extern tilen area_tiles[mps * mps];
 extern featuren area_features[mps * mps];
@@ -106,7 +108,9 @@ void area_change(tilen t1, tilen t2);
 void area_clear();
 bool area_is(short unsigned i, areafn f);
 bool area_iswall(short unsigned i);
+void area_los(short unsigned i, int r, fnareais test);
 void area_hor(short unsigned i, tilen v, short unsigned count);
+void area_remove(short unsigned i, areafn f);
 void area_set(short unsigned i, areafn f);
 void area_set(short unsigned i, tilen v);
 void area_set(short unsigned i, featuren v);
@@ -119,3 +123,4 @@ void block_walls();
 void block_zero();
 void clear_path();
 bool is_wall(tilen v);
+void update_los();

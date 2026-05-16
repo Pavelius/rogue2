@@ -30,9 +30,6 @@
     <ClCompile Include="draw.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
-    <ClCompile Include="draw_answers.cpp">
-      <Filter>Interface</Filter>
-    </ClCompile>
     <ClCompile Include="draw_object.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
@@ -87,7 +84,7 @@
     <ClCompile Include="shape.cpp">
       <Filter>Logic</Filter>
     </ClCompile>
-    <ClCompile Include="view_area.cpp">
+    <ClCompile Include="interface.cpp">
       <Filter>Logic</Filter>
     </ClCompile>
     <ClCompile Include="answers.cpp">
@@ -143,6 +140,9 @@
     </ClCompile>
     <ClCompile Include="zip.cpp">
       <Filter>Formats</Filter>
+    </ClCompile>
+    <ClCompile Include="screenshoot.cpp">
+      <Filter>Interface</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -265,6 +265,9 @@
     </ClInclude>
     <ClInclude Include="keyname.h">
       <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="screenshoot.h">
+      <Filter>Interface</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

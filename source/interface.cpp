@@ -27,6 +27,7 @@
 #include "keyname.h"
 #include "message.h"
 #include "pushvalue.h"
+#include "screenshoot.h"
 #include "resid.h"
 
 const int tsx = 64;
@@ -38,6 +39,8 @@ const int window_height = 376;
 const int wears_offset = 80;
 
 const int tick_time = 400;
+
+typedef unsigned (*fnactionkey)(const void* drawable, int index);
 
 struct tilei {
 	unsigned char priority;
@@ -115,14 +118,12 @@ static point next_tile[] = {
 	{tsx, -tsy}, {tsx, tsy}, {-tsx, tsy}, {-tsx, -tsy},
 	{0, 0}
 };
+static array console(1);
+answers an;
+bool show_floor_rect;
 
 void set_dark_theme();
 void show_manual();
-
-static const void* focus_pressed;
-bool show_floor_rect;
-
-typedef unsigned (*fnactionkey)(const void* drawable, int index);
 
 static void strokedown() {
 	pushrect push;
@@ -246,19 +247,13 @@ static int get_avatar(monstern race, bool female, int armor) {
 	return race * 6 + (female ? 1 : 0) + armor * 2;
 }
 
-static int get_2harms(itemn v) {
+static int get_arms(itemn v) {
 	switch(v) {
 	case GreatAxe: return 0;
 	case GreatMace: return 1;
 	case WarHammer: return 3;
 	case Spear: return 4;
 	case Staff: return 6;
-	default: return 0;
-	}
-}
-
-static int get_arms(itemn v) {
-	switch(v) {
 	case Axe: return 36;
 	case ShortSword: return 56;
 	case LongSword: return 59;
@@ -313,7 +308,7 @@ static void paint_creature() {
 		image(pb, get_avatar(p->type, p->isfemale(), get_armor(p->wears[Torso].type)), feats);
 		// Secondanary arm
 		if(p->wears[MeleeWeapon].istwohanded())
-			image(pa, get_2harms(p->wears[MeleeWeapon].type), feats);
+			image(pa, get_arms(p->wears[MeleeWeapon].type), feats);
 		else
 			image(pa, get_arms(p->wears[MeleeWeaponOffhand].type) - 36 + 10, feats);
 	} else
@@ -543,6 +538,10 @@ static void paint_features() {
 	}
 }
 
+static bool area_isb(short unsigned i, areafn v) {
+	return (i==Blocked) || area_is(i, v);
+}
+
 static void paint_fow() {
 	pushrect push;
 	auto pi = gres(ResFow);
@@ -566,14 +565,14 @@ static void paint_fow() {
 					image(pi, 1, 0);
 				if((f & 8) != 0)
 					image(pi, 1, ImageMirrorH);
-				//if((f & (2 | 8)) == 0 && !area->isb(to(i, SouthEast), Explored))
-				//	image(pi, 2, ImageMirrorH);
-				//if((f & (1 | 4)) == 0 && !area->isb(to(i, NorthWest), Explored))
-				//	image(pi, 2, ImageMirrorV);
-				//if((f & (1 | 8)) == 0 && !area->isb(to(i, NorthEast), Explored))
-				//	image(pi, 2, ImageMirrorV | ImageMirrorH);
-				//if((f & (2 | 4)) == 0 && !area->isb(to(i, SouthWest), Explored))
-				//	image(pi, 2, 0);
+				if((f & (2 | 8)) == 0 && !area_isb(to(i, SouthEast), Explored))
+					image(pi, 2, ImageMirrorH);
+				if((f & (1 | 4)) == 0 && !area_isb(to(i, NorthWest), Explored))
+					image(pi, 2, ImageMirrorV);
+				if((f & (1 | 8)) == 0 && !area_isb(to(i, NorthEast), Explored))
+					image(pi, 2, ImageMirrorV | ImageMirrorH);
+				if((f & (2 | 4)) == 0 && !area_isb(to(i, SouthWest), Explored))
+					image(pi, 2, 0);
 			}
 		}
 	}
@@ -588,15 +587,16 @@ static void paint_los() {
 	for(auto y = mb.y; y < y2; y++) {
 		auto i2 = m2i(mb.x + mb.w, y);
 		for(auto i = m2i(mb.x, y); i < i2; i++) {
-			auto pt = i2s(i);
-			caret = pt - camera;
 			if(!area_is(i, Explored))
 				continue;
+			auto pt = i2s(i);
+			caret = pt - camera;
 			if(!area_is(i, Visible))
 				filllos();
 			else {
-				auto f = get_frame(i, Visible);
-				if(f != get_frame(i, Explored)) {
+				auto f = get_frame(i, Visible) ^ 0x0F;
+				auto e = get_frame(i, Explored) ^ 0x0F;
+				if(f != e) {
 					// 1 - North, 2 - South, 4 - West, 8 - East
 					switch(f) {
 					case 1: image(pi, 0, ImageMirrorV); break;
@@ -616,14 +616,14 @@ static void paint_los() {
 					default: break;
 					}
 				}
-				//			if((f & (2 | 8)) == 0 && !area->isb(to(i, SouthEast), Visible))
-				//				image(pi, 2, ImageMirrorH);
-				//			if((f & (1 | 4)) == 0 && !area->isb(to(i, NorthWest), Visible))
-				//				image(pi, 2, ImageMirrorV);
-				//			if((f & (1 | 8)) == 0 && !area->isb(to(i, NorthEast), Visible))
-				//				image(pi, 2, ImageMirrorV | ImageMirrorH);
-				//			if((f & (2 | 4)) == 0 && !area->isb(to(i, SouthWest), Visible))
-				//				image(pi, 2, 0);
+				if((f & (2 | 8)) == 0 && !area_isb(to(i, SouthEast), Visible))
+					image(pi, 2, ImageMirrorH);
+				if((f & (1 | 4)) == 0 && !area_isb(to(i, NorthWest), Visible))
+					image(pi, 2, ImageMirrorV);
+				if((f & (1 | 8)) == 0 && !area_isb(to(i, NorthEast), Visible))
+					image(pi, 2, ImageMirrorV | ImageMirrorH);
+				if((f & (2 | 4)) == 0 && !area_isb(to(i, SouthWest), Visible))
+					image(pi, 2, 0);
 			}
 		}
 	}
@@ -709,19 +709,6 @@ static void paint_health_bar() {
 	}
 }
 
-//void creature::fixappear() {
-//	movable::fixappear(ftpaint<creature>);
-//}
-//
-//void featurei::paint(int r) const {
-//	if(!isvisible())
-//		return;
-//	auto pi = gres(res::Features);
-//	image(pi, features.get(r), 0);
-//	if(overlay)
-//		image(pi, overlay.get(r >> 4), 0);
-//}
-//
 //void visualeffect::paint(unsigned char param) const {
 //	auto pi = gres(resid);
 //	if(!pi)
@@ -851,6 +838,154 @@ void creature::fixact(directionn d) {
 	fixmove(s2, tick_time / 3);
 }
 
+static point answer_end;
+
+static void answer_before_paint() {
+	caret.x = (getwidth() - window_width - panel_width) / 2;
+	caret.y = (getheight() - window_height) / 2;
+	answer_end = caret;
+	answer_end.y += window_height - texth() - 2;
+	width = window_width;
+	height = window_height;
+	strokeout(fillform, metrics::padding);
+	auto push_fore = fore;
+	fore = colors::form;
+	strokeout(strokeup, metrics::padding);
+	strokeout(strokeup, metrics::padding - 1);
+	if(answers::header) {
+		auto push_font = font;
+		font = metrics::h2;
+		fore = colors::special;
+		texta(answers::header, AlignCenter);
+		caret.y += texth();
+		font = push_font;
+	}
+	fore = push_fore;
+}
+
+static void answer_paint_cell(int index, long value, const char* format, fnevent proc) {
+	auto push_caret = caret;
+	auto push_width = width;
+	unsigned key = value ? answer_key(index) : KeyEscape;
+	auto need_execute = button(key, 24);
+	//if(bsdata<creature>::have(value)) {
+	//	auto pc = bsdata<creature>::elements + bsdata<creature>::source.indexof(value);
+	//	auto pi = pc->getwear(value);
+	//	auto st = pc->getwearslot(pi);
+	//	if(pi && st >= MeleeWeapon && st <= Legs) {
+	//		text(bsdata<weari>::elements[st].getname());
+	//		caret.x += wears_offset; width -= wears_offset;
+	//	}
+	//}
+	textf(format);
+	width = push_width;
+	caret.y = push_caret.y;
+	//if(answers::current_columns) {
+	//	auto total_width = current_columns->totalwidth() + 4;
+	//	char temp[260]; stringbuilder sb(temp);
+	//	if(width >= total_width) {
+	//		caret.x = push_caret.x + width - total_width;
+	//		for(auto p = current_columns; *p; p++) {
+	//			sb.clear();
+	//			auto push_caret = caret;
+	//			auto pn = p->proc(value, sb);
+	//			if(p->rightalign) {
+	//				pushvalue push_width(width);
+	//				pushvalue push_height(height);
+	//				textfs(pn);
+	//				caret.x += p->width - width;
+	//				textf(pn);
+	//			} else
+	//				textf(pn);
+	//			caret = push_caret;
+	//			caret.x += p->width;
+	//		}
+	//	}
+	//}
+	if(need_execute)
+		execute(proc, (long)value);
+	caret = push_caret;
+	caret.y += texth() + 1;
+	width = push_width;
+}
+
+static void answer_paint_cell_small(int index, long value, const char* format, fnevent proc) {
+	auto push_caret = caret;
+	auto push_width = width;
+	unsigned key = answer_key(index);
+	auto need_execute = button(key, 24);
+	width -= caret.x - push_caret.x;
+	textf(format);
+	if(need_execute)
+		execute(proc, (long)value);
+	width = push_width;
+	caret = push_caret;
+	caret.y += texth() + 1;
+}
+
+static void get_total_height(const answers& source) {
+	auto push_clipping = clipping;
+	auto total_height = 0;
+	width = window_width - 60;
+	auto p = console.begin();
+	textfs(p);
+	total_height += height;
+	auto minimal_width = width;
+	auto minimal_height = texth() + 1;
+	if(source)
+		total_height += metrics::padding;
+	for(auto& e : source) {
+		width = window_width - 24 - metrics::padding;
+		textfs(e.text);
+		width += 24 + metrics::padding;
+		if(minimal_width < width)
+			minimal_width = width;
+		if(height < minimal_height)
+			height = minimal_height;
+		total_height += height;
+	}
+	width = minimal_width;
+	height = total_height;
+}
+
+static void paint_message(const answers& source, int window_width) {
+	auto p = console.begin();
+	if(!p || !p[0])
+		return;
+	pushrect push;
+	width = window_width;
+	caret.y = metrics::padding * 2;
+	caret.x = (getwidth() - window_width - panel_width) / 2;
+	textf(p);
+	caret.y += metrics::padding;
+	auto index = 0;
+	for(auto& e : an)
+		answer_paint_cell_small(index++, e.value, e.text, buttonparam);
+}
+
+static void paint_dialog_message(int window_width) {
+	caret.y = metrics::padding * 2;
+	caret.x = (getwidth() - window_width - panel_width) / 2;
+	strokeout(fillwindow, metrics::padding);
+	strokeout(strokeborder, metrics::padding);
+	paint_message(an, window_width);
+}
+
+long choose_answers() {
+	pushrect push;
+	screenshoot screen;
+	// pushvalue push_choose(choosing, true);
+	while(ismodal()) {
+		screen.restore();
+		get_total_height(an);
+		paint_dialog_message(width);
+		domodal();
+	}
+	screen.restore();
+	console.clear();
+	return getresult();
+}
+
 /*
 static void player_info() {
 	char temp[1024]; stringbuilder sb(temp); sb.clear();
@@ -951,18 +1086,6 @@ static void reset_message() {
 	}
 }
 
-int choose_dialog(fnevent proc) {
-	while(ismodal()) {
-		paintstart();
-		fillform();
-		proc();
-		pause_keys();
-		paintfinish();
-		domodal();
-	}
-	return getresult();
-}
-
 static void execute_hotkey() {
 	auto pn = (hotkey*)hot.drawable;
 	if(pn->data.iskind<widget>())
@@ -980,13 +1103,6 @@ static void presskey() {
 	}
 }
 
-void animate_figures() {
-	start_stamp = getobjectstamp();
-	waitall();
-	remove_temp_objects();
-	removeobjects(bsdata<visualeffect>::source);
-}
-
 void adventure_mode() {
 	animate_figures();
 	auto human = player;
@@ -1000,161 +1116,6 @@ void adventure_mode() {
 		paintfinish();
 		domodal();
 	}
-}
-
-static point answer_end;
-
-static void answer_before_paint() {
-	paintobjects();
-	caret.x = (getwidth() - window_width - panel_width) / 2;
-	caret.y = (getheight() - window_height) / 2;
-	answer_end = caret;
-	answer_end.y += window_height - texth() - 2;
-	width = window_width;
-	height = window_height;
-	strokeout(fillform, metrics::padding, metrics::padding);
-	auto push_fore = fore;
-	fore = colors::form;
-	strokeout(strokeup, metrics::padding, metrics::padding);
-	strokeout(strokeup, metrics::padding - 1, metrics::padding - 1);
-	if(answers::prompa) {
-		auto push_font = font;
-		font = metrics::h2;
-		fore = colors::h2;
-		texta(answers::prompa, AlignCenter);
-		caret.y += texth();
-		font = push_font;
-	}
-	fore = push_fore;
-}
-
-static void answer_paint_cell(int index, const void* value, const char* format, fnevent proc) {
-	auto push_caret = caret;
-	auto push_width = width;
-	unsigned key = value ? answer_key(index) : KeyEscape;
-	auto need_execute = button(key, 24);
-	if(bsdata<creature>::have(value)) {
-		auto pc = bsdata<creature>::elements + bsdata<creature>::source.indexof(value);
-		auto pi = pc->getwear(value);
-		auto st = pc->getwearslot(pi);
-		if(pi && st >= MeleeWeapon && st <= Legs) {
-			text(bsdata<weari>::elements[st].getname());
-			caret.x += wears_offset; width -= wears_offset;
-		}
-	}
-	textf(format);
-	width = push_width;
-	caret.y = push_caret.y;
-	if(current_columns) {
-		auto total_width = current_columns->totalwidth() + 4;
-		char temp[260]; stringbuilder sb(temp);
-		if(width >= total_width) {
-			caret.x = push_caret.x + width - total_width;
-			for(auto p = current_columns; *p; p++) {
-				sb.clear();
-				auto push_caret = caret;
-				auto pn = p->proc(value, sb);
-				if(p->rightalign) {
-					pushvalue push_width(width);
-					pushvalue push_height(height);
-					textfs(pn);
-					caret.x += p->width - width;
-					textf(pn);
-				} else
-					textf(pn);
-				caret = push_caret;
-				caret.x += p->width;
-			}
-		}
-	}
-	if(need_execute)
-		execute(proc, (long)value);
-	caret = push_caret;
-	caret.y += texth() + 1;
-	width = push_width;
-}
-
-static void answer_paint_cell_small(int index, const void* value, const char* format, fnevent proc) {
-	auto push_caret = caret;
-	auto push_width = width;
-	unsigned key = answer_key(index);
-	auto need_execute = button(key, 24);
-	width -= caret.x - push_caret.x;
-	textf(format);
-	if(need_execute)
-		execute(proc, (long)value);
-	width = push_width;
-	caret = push_caret;
-	caret.y += texth() + 1;
-}
-
-static void get_total_height(const answers& source) {
-	auto push_clipping = clipping;
-	auto total_height = 0;
-	width = window_width - 60;
-	auto p = console.begin();
-	textfs(p);
-	total_height += height;
-	auto minimal_width = width;
-	auto minimal_height = texth() + 1;
-	if(source)
-		total_height += metrics::padding;
-	for(auto& e : source) {
-		width = window_width - 24 - metrics::padding;
-		textfs(e.text);
-		width += 24 + metrics::padding;
-		if(minimal_width < width)
-			minimal_width = width;
-		if(height < minimal_height)
-			height = minimal_height;
-		total_height += height;
-	}
-	width = minimal_width;
-	height = total_height;
-}
-
-static void paint_message(const answers& source, int window_width) {
-	auto p = console.begin();
-	if(!p || !p[0])
-		return;
-	pushrect push;
-	width = window_width;
-	caret.y = metrics::padding * 2;
-	caret.x = (getwidth() - window_width - panel_width) / 2;
-	textf(p);
-	caret.y += metrics::padding;
-	auto index = 0;
-	for(auto& e : source)
-		answer_paint_cell_small(index++, e.value, e.text, buttonparam);
-}
-
-static void update_scene() {
-	pushrect push;
-	ismodal();
-	paintstart();
-	paintobjects();
-}
-
-void* answers::choose() const {
-	update_scene();
-	pushrect push;
-	screenshoot screen;
-	pushvalue push_choose(choosing, true);
-	while(ismodal()) {
-		screen.restore();
-		get_total_height(*this);
-		auto window_width = width;
-		caret.y = metrics::padding * 2;
-		caret.x = (getwidth() - window_width - panel_width) / 2;
-		strokeout(fillwindow, metrics::padding, metrics::padding);
-		strokeout(strokeborder, metrics::padding, metrics::padding);
-		paint_message(*this, window_width);
-		domodal();
-	}
-	screen.restore();
-	console.clear();
-	last_tick_message = getcputime();
-	return (void*)getresult();
 }
 
 static void answer_after_paint() {
@@ -1441,6 +1402,7 @@ static void paint_area() {
 	paint_features();
 	sort_objects();
 	paint_objects();
+	paint_los();
 	paint_fow();
 	for_each_object(paint_health_bar);
 	clipping = push_clip;
@@ -1513,6 +1475,7 @@ static void next_game_move(int mode) {
 
 void choose_game_move() {
 	link_camera();
+	update_los();
 	auto mode = scene(play_game_scene);
 	update_creature_orders();
 	wait_all();

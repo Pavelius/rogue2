@@ -62,7 +62,8 @@ struct creature : drawable, posable, statable, featable, wearable {
 	monstern type; // Character or Monster type
 	statable basic; // Raw ability before any modification
 	short hits, hits_maximum;
-	int	 get(abilityn v) const { return abilities[v]; }
+	int	get(abilityn v) const { return abilities[v]; }
+	int getlos() const;
 	bool is(featn v) const { return featable::is(v); }
 	bool ischaracter() const { return type <= Elf; }
 	bool isenemy(const creature* p) const { return false; }
@@ -82,7 +83,7 @@ point i2s(short unsigned i);
 int getv(monstern v, abilityn a);
 
 void create_creature(short unsigned index_position, monstern type);
-bool is_blocked(short unsigned i);
+bool is_free(short unsigned i);
 void fix(messagen v);
 bool player_move(directionn d);
 void update_creatures();

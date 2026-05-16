@@ -32,9 +32,6 @@
     <ClCompile Include="dice.cpp" />
     <ClCompile Include="direction.cpp" />
     <ClCompile Include="draw.cpp" />
-    <ClCompile Include="draw_answers.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="draw_object.cpp" />
     <ClCompile Include="draw_surface.cpp" />
     <ClCompile Include="draw_text.cpp" />
@@ -54,12 +51,13 @@
     <ClCompile Include="print.cpp" />
     <ClCompile Include="resid.cpp" />
     <ClCompile Include="scale2x.cpp" />
+    <ClCompile Include="screenshoot.cpp" />
     <ClCompile Include="shape.cpp" />
     <ClCompile Include="sprite_util.cpp" />
     <ClCompile Include="stringbuilder.cpp" />
     <ClCompile Include="stringvar.cpp" />
     <ClCompile Include="szdup.cpp" />
-    <ClCompile Include="view_area.cpp" />
+    <ClCompile Include="interface.cpp" />
     <ClCompile Include="win_draw.cpp" />
     <ClCompile Include="win_io_file.cpp" />
     <ClCompile Include="win_time.cpp" />
@@ -67,9 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="adat.h" />
-    <ClInclude Include="answers.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
+    <ClInclude Include="answers.h" />
     <ClInclude Include="area.h" />
     <ClInclude Include="array.h" />
     <ClInclude Include="bsdata.h" />
@@ -100,6 +96,7 @@
     <ClInclude Include="rand.h" />
     <ClInclude Include="rect.h" />
     <ClInclude Include="resid.h" />
+    <ClInclude Include="screenshoot.h" />
     <ClInclude Include="shape.h" />
     <ClInclude Include="slice.h" />
     <ClInclude Include="sprite_util.h" />

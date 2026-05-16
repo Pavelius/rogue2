@@ -40,8 +40,6 @@ int main(int argc, char* argv[]) {
 	initialize_gui();
 	area_clear();
 	area_set({0, 0, mps, mps}, Grass);
-	area_set({0, 0, mps, mps}, Visible);
-	area_set({0, 0, mps, mps}, Explored);
 	area_set(apos(3, 3), Grave);
 	area_set(apos(3, 4), Grave);
 	area_set(apos(6, 4), Tree);

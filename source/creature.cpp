@@ -128,6 +128,17 @@ void creature::look(directionn d) {
 	}
 }
 
+int creature::getlos() const {
+	auto darkness = 0;
+	if(is(DarkVision))
+		darkness--;
+	if(darkness > 4)
+		darkness = 4;
+	else if(darkness < 0)
+		darkness = 0;
+	return 5 - darkness;
+}
+
 void create_creature(short unsigned index_position, monstern type) {
 	player = bsdata<creature>::add();
 	player->clear();
@@ -166,37 +177,41 @@ void update_creatures() {
 	}
 }
 
-static bool is_blocked(featuren v) {
+static bool is_free(featuren v) {
 	switch(v) {
 	case TreePalm: case Tree: case DeadTree:
 	case Grave:
 	case Statue:
 	case Door: case LockedDoor: case StuckDoor:
 	case StairsUp: case StairsDown:
-		return true;
-	default:
 		return false;
+	default:
+		return true;
 	}
 }
 
-bool is_blocked(short unsigned i) {
+bool is_free(short unsigned i) {
 	switch(area_tiles[i]) {
 	case Water:
 	case DeepWater:
 	case DarkWater:
-		return true;
+		if(player->is(WaterWalking))
+			break;
+		return false;
 	case WallBuilding:
 	case WallCave:
 	case WallDungeon:
 	case WallFire:
 	case WallIce:
-		return true;
+		return false;
+	case NoTile:
+		return false;
 	default:
 		break;
 	}
-	if(is_blocked(area_features[i]))
-		return true;
-	return false;
+	if(!is_free(area_features[i]))
+		return false;
+	return true;
 }
 
 bool use_area(short unsigned i) {
@@ -204,6 +219,8 @@ bool use_area(short unsigned i) {
 	switch(f) {
 	case Door:
 		area_features[i] = OpenedDoor;
+		break;
+	case LockedDoor:
 		break;
 	default:
 		return false;
@@ -214,7 +231,7 @@ bool use_area(short unsigned i) {
 bool player_move(directionn d) {
 	player->look(d);
 	auto i1 = to(player->index, d);
-	if(i1 == Blocked || is_blocked(i1)) {
+	if(i1 == Blocked || !is_free(i1)) {
 		player->fixact(d);
 		if(i1 != Blocked)
 			use_area(i1);
@@ -222,4 +239,22 @@ bool player_move(directionn d) {
 	}
 	player->index = i1;
 	return true;
+}
+
+static bool is_free_light_set(short unsigned i) {
+	area_set(i, Visible);
+	area_set(i, Explored);
+	if(area_is(i, Darkened))
+		return false;
+	return is_free(i);
+}
+
+void update_los() {
+	for(short unsigned i = 0; i < mps * mps; i++) {
+		area_remove(i, Visible);
+		if(area_is(i, Darkened))
+			area_remove(i, Explored);
+	}
+	if(human)
+		area_los(human->index, player->getlos(), is_free_light_set);
 }

@@ -34,7 +34,6 @@ struct answers {
 	static bool			interactive;
 	static int			column_count;
 	static const char*	header;
-	static const char*	resid;
 	static const char*	string;
 	static bool			show_tips;
 	answers() : sc(buffer) {}
@@ -43,7 +42,6 @@ struct answers {
 	void				addv(long value, const char* name, const char* format);
 	const element*		begin() const { return elements.data; }
 	element*			begin() { return elements.data; }
-	long				choose(const char* title = 0, const char* cancel_text = 0, int cancel_mode = 0) const;
 	void				clear();
 	static int			compare(const void* v1, const void* v2);
 	const element*		end() const { return elements.end(); }
@@ -66,4 +64,4 @@ unsigned anhotkey(int index);
 
 const char* find_separator(const char* p);
 
-long choose_answers(const char* title, const char* cancel_text, int columns);
+long choose_answers();

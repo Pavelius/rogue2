@@ -25,7 +25,7 @@
 
 unsigned short current_area;
 
-unsigned char area_flags[mps * mps];
+static unsigned char area_flags[mps * mps];
 tilen area_tiles[mps * mps];
 featuren area_features[mps * mps];
 unsigned char area_params[mps * mps];
@@ -173,6 +173,10 @@ void area_set(short unsigned i, areafn v) {
 	area_flags[i] |= 1 << v;
 }
 
+void area_remove(short unsigned i, areafn v) {
+	area_flags[i] &= ~(1 << v);
+}
+
 void area_block(short unsigned m, unsigned short v) {
 	movement_rate[m] = v;
 }
@@ -188,5 +192,40 @@ short unsigned to(short unsigned m, directionn d, short unsigned me) {
 	case SouthWest: return (down_side(m) || left_side(m)) ? me : (m + mps - 1);
 	case SouthEast: return (down_side(m) || right_side(m)) ? me : (m + mps + 1);
 	default: return me;
+	}
+}
+
+static bool line_los(int x0, int y0, int x1, int y1, fnareais test) {
+	int dx = iabs(x1 - x0), sx = x0 < x1 ? 1 : -1;
+	int dy = iabs(y1 - y0), sy = y0 < y1 ? 1 : -1;
+	int err = (dx > dy ? dx : -dy) / 2, e2;
+	for(;;) {
+		if(x0 >= 0 && x0 < mps && y0 >= 0 && y0 < mps) {
+			if(!test(m2i(x0, y0)))
+				return false;
+		}
+		if(x0 == x1 && y0 == y1)
+			return true;
+		e2 = err;
+		if(e2 > -dx) {
+			err -= dy;
+			x0 += sx;
+		}
+		if(e2 < dy) {
+			err += dx;
+			y0 += sy;
+		}
+	}
+}
+
+void area_los(short unsigned i, int r, fnareais test) {
+	point m(i % mps, i / mps);
+	for(auto x = m.x - r; x <= m.x + r; x++) {
+		line_los(m.x, m.y, x, m.y - r, test);
+		line_los(m.x, m.y, x, m.y + r, test);
+	}
+	for(auto y = m.y - r; y <= m.y + r; y++) {
+		line_los(m.x, m.y, m.x - r, y, test);
+		line_los(m.x, m.y, m.x + r, y, test);
 	}
 }
