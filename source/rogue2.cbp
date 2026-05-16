@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="rogue2" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="../bin/Debug/rogue2" prefix_auto="1" extension_auto="1" />
+				<Option object_output="../obj/Debug/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="../bin/Release/rogue2" prefix_auto="1" extension_auto="1" />
+				<Option object_output="../obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add directory="../atg" />
+		</Compiler>
+		<Linker>
+			<Add library="X11" />
+		</Linker>
+		<Unit filename="../atg/adat.h" />
+		<Unit filename="../atg/array.cpp" />
+		<Unit filename="../atg/array.h" />
+		<Unit filename="../atg/bsdata.h" />
+		<Unit filename="../atg/bstream.cpp" />
+		<Unit filename="../atg/bstream.h" />
+		<Unit filename="../atg/collection.cpp" />
+		<Unit filename="../atg/collection.h" />
+		<Unit filename="../atg/collectiona.cpp" />
+		<Unit filename="../atg/collectiona.h" />
+		<Unit filename="../atg/color.cpp" />
+		<Unit filename="../atg/color.h" />
+		<Unit filename="../atg/dice.cpp" />
+		<Unit filename="../atg/dice.h" />
+		<Unit filename="../atg/draw.cpp" />
+		<Unit filename="../atg/draw.h" />
+		<Unit filename="../atg/draw_object.cpp" />
+		<Unit filename="../atg/draw_object.h" />
+		<Unit filename="../atg/draw_surface.cpp" />
+		<Unit filename="../atg/draw_text.cpp" />
+		<Unit filename="../atg/draw_textf.cpp" />
+		<Unit filename="../atg/draw_theme.cpp" />
+		<Unit filename="../atg/flagable.h" />
+		<Unit filename="../atg/io_stream.cpp" />
+		<Unit filename="../atg/io_stream.h" />
+		<Unit filename="../atg/keyname.cpp" />
+		<Unit filename="../atg/keyname.h" />
+		<Unit filename="../atg/math.cpp" />
+		<Unit filename="../atg/math.h" />
+		<Unit filename="../atg/my_initialize_list.h" />
+		<Unit filename="../atg/nix_draw3x.cpp" />
+		<Unit filename="../atg/nix_io_file.cpp" />
+		<Unit filename="../atg/nix_time.cpp" />
+		<Unit filename="../atg/png.cpp" />
+		<Unit filename="../atg/point.cpp" />
+		<Unit filename="../atg/point.h" />
+		<Unit filename="../atg/print.cpp" />
+		<Unit filename="../atg/print.h" />
+		<Unit filename="../atg/pushvalue.h" />
+		<Unit filename="../atg/rand.h" />
+		<Unit filename="../atg/rect.h" />
+		<Unit filename="../atg/scale2x.cpp" />
+		<Unit filename="../atg/slice.h" />
+		<Unit filename="../atg/sprite_util.cpp" />
+		<Unit filename="../atg/sprite_util.h" />
+		<Unit filename="../atg/stringbuilder.cpp" />
+		<Unit filename="../atg/stringbuilder.h" />
+		<Unit filename="../atg/stringvar.cpp" />
+		<Unit filename="../atg/stringvar.h" />
+		<Unit filename="../atg/szdup.cpp" />
+		<Unit filename="../atg/zip.cpp" />
+		<Unit filename="area.cpp" />
+		<Unit filename="area.h" />
+		<Unit filename="creature.cpp" />
+		<Unit filename="creature.h" />
+		<Unit filename="direction.cpp" />
+		<Unit filename="direction.h" />
+		<Unit filename="drawable.h" />
+		<Unit filename="feats.h" />
+		<Unit filename="game.cpp" />
+		<Unit filename="game.h" />
+		<Unit filename="information.cpp" />
+		<Unit filename="item.cpp" />
+		<Unit filename="item.h" />
+		<Unit filename="itemlay.h" />
+		<Unit filename="locale_ru.cpp" />
+		<Unit filename="main_util.cpp" />
+		<Unit filename="message.h" />
+		<Unit filename="monster.cpp" />
+		<Unit filename="posable.h" />
+		<Unit filename="resid.cpp" />
+		<Unit filename="resid.h" />
+		<Unit filename="shape.cpp" />
+		<Unit filename="shape.h" />
+		<Unit filename="view_area.cpp" />
+		<Extensions />
+	</Project>
+</CodeBlocks_project_file>
