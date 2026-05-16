@@ -122,5 +122,7 @@ void block_tiles();
 void block_walls();
 void block_zero();
 void clear_path();
+bool is_free(featuren v, bool ignore_doors);
+bool is_free(tilen v, bool water_free);
 bool is_wall(tilen v);
 void update_los();

@@ -177,39 +177,10 @@ void update_creatures() {
 	}
 }
 
-static bool is_free(featuren v) {
-	switch(v) {
-	case TreePalm: case Tree: case DeadTree:
-	case Grave:
-	case Statue:
-	case Door: case LockedDoor: case StuckDoor:
-	case StairsUp: case StairsDown:
+static bool is_free(short unsigned i) {
+	if(!is_free(area_tiles[i], player->is(WaterWalking)))
 		return false;
-	default:
-		return true;
-	}
-}
-
-bool is_free(short unsigned i) {
-	switch(area_tiles[i]) {
-	case Water:
-	case DeepWater:
-	case DarkWater:
-		if(player->is(WaterWalking))
-			break;
-		return false;
-	case WallBuilding:
-	case WallCave:
-	case WallDungeon:
-	case WallFire:
-	case WallIce:
-		return false;
-	case NoTile:
-		return false;
-	default:
-		break;
-	}
-	if(!is_free(area_features[i]))
+	if(!is_free(area_features[i], false))
 		return false;
 	return true;
 }
@@ -246,7 +217,11 @@ static bool is_free_light_set(short unsigned i) {
 	area_set(i, Explored);
 	if(area_is(i, Darkened))
 		return false;
-	return is_free(i);
+	if(!is_free(area_tiles[i], true))
+		return false;
+	if(!is_free(area_features[i], false))
+		return false;
+	return true;
 }
 
 void update_los() {

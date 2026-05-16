@@ -229,3 +229,42 @@ void area_los(short unsigned i, int r, fnareais test) {
 		line_los(m.x, m.y, m.x + r, y, test);
 	}
 }
+
+bool is_free(tilen v, bool ignore_water) {
+	switch(v) {
+	case Water:
+	case DeepWater:
+	case DarkWater:
+		if(ignore_water)
+			break;
+		return false;
+	case WallBuilding:
+	case WallCave:
+	case WallDungeon:
+	case WallFire:
+	case WallIce:
+		return false;
+	case NoTile:
+		return false;
+	default:
+		break;
+	}
+	return true;
+}
+
+bool is_free(featuren v, bool ignore_doors) {
+	switch(v) {
+	case TreePalm: case Tree: case DeadTree:
+	case Grave:
+	case Statue:
+	case Door: case LockedDoor: case StuckDoor:
+		if(ignore_doors)
+			break;
+		return false;
+	case StairsUp: case StairsDown:
+		return false;
+	default:
+		break;
+	}
+	return true;
+}

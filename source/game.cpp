@@ -44,6 +44,7 @@ int main(int argc, char* argv[]) {
 	area_set(apos(3, 4), Grave);
 	area_set(apos(6, 4), Tree);
 	area_set({5, 5, 4, 4}, WoodenFloor);
+	area_set({10, 10, 3, 4}, DeepWater);
 	area_hor(apos(5, 5), WallBuilding, 4);
 	area_ver(apos(5, 5), WallBuilding, 4);
 	area_ver(apos(5 + 4, 5), WallBuilding, 4);
