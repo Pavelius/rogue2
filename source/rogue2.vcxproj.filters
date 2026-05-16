@@ -36,9 +36,6 @@
     <ClCompile Include="draw_object.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
-    <ClCompile Include="draw_res.cpp">
-      <Filter>Interface</Filter>
-    </ClCompile>
     <ClCompile Include="draw_surface.cpp">
       <Filter>Interface</Filter>
     </ClCompile>

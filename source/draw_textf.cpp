@@ -1,13 +1,31 @@
+///////////////////////////////////////////////////////////////////////////
+// 
+//  Copyright 2026 by Pavel Chistyakov
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//  http ://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
+//
+//-------------------------------------------------------------------------
+//
+//  RICH COMMAND FORMAT EXAMPLE:
+//
+//  /x 64 image Bitmap 0 'art/images'
+//  /lf w 200 h 64
+//  /x 10 w 64 h 64 center text Some text centered in rectangle.
+
+
 #include "draw.h"
 #include "slice.h"
 #include "stringbuilder.h"
-
-///////////////////////////////////////////////////////////
-// RICH COMMAND FORMAT EXAMPLE
-//
-// /x 64 image Bitmap 0 'art/images'
-// /lf w 200 h 64
-// /x 10 w 64 h 64 center text Some text centered in rectangle.
 
 int tab_pixels = 0;
 static const char* text_start_string;

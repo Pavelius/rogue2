@@ -36,7 +36,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="draw_object.cpp" />
-    <ClCompile Include="draw_res.cpp" />
     <ClCompile Include="draw_surface.cpp" />
     <ClCompile Include="draw_text.cpp" />
     <ClCompile Include="draw_textf.cpp" />
