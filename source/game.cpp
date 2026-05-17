@@ -21,8 +21,10 @@
 #include "game.h"
 #include "itemlay.h"
 
+BSDATAC(areai, 512)
 BSDATAC(creature, 1024)
 BSDATAC(itemlay, 8192)
+BSDATAC(roomi, 2048)
 
 void initialize_gui();
 void main_util();

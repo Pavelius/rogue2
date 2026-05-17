@@ -80,29 +80,29 @@ static tilei flag_frames[] = {
 static_assert(lenghtof(flag_frames) == (Webbed + 1), "Invalid flag frames data count");
 static tilei feature_frames[] = {
 	{}, // NoFeature
-	{10, {7, 4}, {11, 3}}, // Tree minimap(35 79 31 192)
-	{10, {100, 6}}, // TreePalm minimap(35 79 31 192)
-	{10, {45, 4}, {49, 3}}, // DeadTree
-	{10, {97, 3}}, // ThornBush movedifficult(200)
-	{5, {14, 1}}, // FootMud movedifficult(300)
-	{5, {15, 1}}, // FootHill movedifficult(200)
-	{10, {16, 2}}, // Grave
-	{10, {43, 2}}, // Statue
-	{5, {18, 1}}, // HiveHole
-	{10, {19, 1}}, // Hive
-	{10, {20, 1}}, // Hole
-	{10, {21, 3}}, // Plant minimap(77 111 62 160) power(2)
-	{6, {24, 3}}, // Herbs minimap(77 111 62 128)
-	{6, {56, 1}}, // AltarGood
-	{6, {57, 1}}, // AltarNeutral
-	{6, {58, 1}}, // AltarEvil
-	{6, {76, 1}}, // Pit
-	{6, {28, 1}}, // AcidTrap
-	{7, {39, 1}}, // Door minimap(102 70 18 128)
-	{7, {41, 1}}, // OpenedDoor minimap(102 70 18 128)
+	{10, {7, 4}, {11, 3}, color(35, 79, 31)}, // Tree minimap(35 79 31 192)
+	{10, {100, 6}, {}, color(35, 79, 31)}, // TreePalm minimap(35 79 31 192)
+	{10, {45, 4}, {49, 3}, color(35, 79, 31)}, // DeadTree
+	{10, {97, 3}, {}}, // ThornBush movedifficult(200)
+	{5, {14, 1}, {}}, // FootMud movedifficult(300)
+	{5, {15, 1}, {}}, // FootHill movedifficult(200)
+	{10, {16, 2}, {}}, // Grave
+	{10, {43, 2}, {}}, // Statue
+	{5, {18, 1}, {}}, // HiveHole
+	{10, {19, 1}, {}}, // Hive
+	{10, {20, 1}, {}}, // Hole
+	{10, {21, 3}, {}, color(77, 111, 62)}, // Plant power(2)
+	{6, {24, 3}, {}, color(77, 111, 62)}, // Herbs
+	{6, {56, 1}, {}}, // AltarGood
+	{6, {57, 1}, {}}, // AltarNeutral
+	{6, {58, 1}, {}}, // AltarEvil
+	{6, {76, 1}, {}}, // Pit
+	{6, {28, 1}, {}}, // AcidTrap
+	{7, {39, 1}, {}, color(102, 70, 18)}, // Door
+	{7, {41, 1}, {}, color(102, 70, 18)}, // OpenedDoor
 	{7, {}}, // HiddenDoor
-	{7, {39, 1}}, // LockedDoor minimap(102 70 18 128) activate_item(TinyKey) random_count(6)
-	{7, {39, 1}}, // StuckDoor minimap(102 70 18 128)
+	{7, {39, 1}, {}, color(102, 70, 18)}, // LockedDoor activate_item(TinyKey) random_count(6)
+	{7, {39, 1}, {}, color(102, 70, 18)}, // StuckDoor
 	{4, {52, 1}}, // StairsUp
 	{4, {53, 1}}, // StairsDown
 	{3, {77, 1}}, // GreenPool
@@ -1000,8 +1000,11 @@ static void paint_area(point origin, int z) {
 			rectf();
 		auto f = area_features[i];
 		fore = feature_frames[f].minimap;
-		if(fore.u)
+		if(fore.u) {
+			auto push_alpha = alpha; alpha = 128;
 			rectf();
+			alpha = push_alpha;
+		}
 	}
 }
 

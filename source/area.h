@@ -25,6 +25,8 @@ enum rendern : unsigned char {
 };
 enum landscapen : unsigned char {
 	Plains, Forest, DeepForest, Swamp, Hills, Mountains,
+	Caves, Ruins,
+	Village,
 };
 enum blocktypen : short unsigned {
 	NotCalculatedMovement = 0xFFF0, Blocked = 0xFFFF,
@@ -52,17 +54,18 @@ enum featuren : unsigned char {
 	GatePortal, OpenedGatePortal,
 	Chest, LockedChest, ChestOpen
 };
+enum roomn : unsigned char {
+	EmptyRoom,
+	MonstersLair, DarkenedRoom, TreasureRoom,
+};
 
 const short mps = 64;
-const int mst = 260;
 
 extern unsigned short current_area;
 
-//extern unsigned char area_flags[mps * mps];
 extern unsigned char area_params[mps * mps];
 extern tilen area_tiles[mps * mps];
 extern featuren area_features[mps * mps];
-
 extern unsigned short movement_rate[mps * mps];
 
 inline short unsigned m2i(unsigned char x, unsigned char y) { return y * mps + x; }
@@ -102,7 +105,11 @@ struct abox : apos {
 struct areai {
 	short unsigned	index; // Position on world map
 	landscapen		type;
+	unsigned char	level; // Current level of dungeon
 	constexpr explicit operator bool() const { return index != 0xFFFF; }
+};
+struct roomi : abox {
+	roomn			type;
 };
 
 int area_range(short unsigned i1, short unsigned i2);
