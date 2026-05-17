@@ -144,6 +144,9 @@
     <ClCompile Include="screenshoot.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
+    <ClCompile Include="font_util.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sprite_util.h">

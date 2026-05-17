@@ -37,6 +37,7 @@ const int panel_width = 130;
 const int window_width = 608;
 const int window_height = 376;
 const int wears_offset = 80;
+const int stat_value_width = 40;
 
 const int tick_time = 400;
 
@@ -969,7 +970,6 @@ static void paint_dialog_message(int window_width) {
 long choose_answers() {
 	pushrect push;
 	screenshoot screen;
-	// pushvalue push_choose(choosing, true);
 	while(ismodal()) {
 		screen.restore();
 		get_total_height(an);
@@ -1068,11 +1068,37 @@ static void paint_minimap() {
 	paint_area_screen(caret, z);
 }
 
+static void paint_title(const char* header) {
+	pushfore push(fore.mix(colors::form, 128));
+	text(header, -1, 0);
+}
+
+static void paint_field(const char* header, const char* value) {
+	auto ox = caret.x;
+	paint_title(header);
+	caret.x = caret.x + width - stat_value_width;
+	text(value);
+	caret.x = ox;
+	caret.y += texth();
+}
+
+static void paint_field(abilityn v) {
+	switch(v) {
+	case WeaponSkill:
+	case BalisticSkill:
+		paint_field(getname(v), str("%1i%%", player->abilities[v]));
+		break;
+	default:
+		paint_field(getname(v), str("%1i", player->abilities[v]));
+		break;
+	}
+}
+
 static void paint_player_status() {
-	pushfore push(colors::text);
-	char temp[1024]; stringbuilder sb(temp); sb.clear();
-	sb.add("%PlayerCharacterPanel");
-	textf(temp);
+	paint_field(Strenght);
+	paint_field(Dexterity);
+	paint_field(Wits);
+	paint_field(WeaponSkill);
 }
 
 static void paint_status() {

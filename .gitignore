@@ -9,7 +9,6 @@
 *.user
 *.userosscache
 *.sln.docstates
-*_util.cpp
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -365,3 +364,5 @@ FodyWeavers.xsd
 /source/main_util.cpp
 /source/sprite_util.cpp
 /source/sprite_util.h
+/source/*_util.cpp
+/source/*_util.h

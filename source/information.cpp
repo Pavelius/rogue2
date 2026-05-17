@@ -27,9 +27,25 @@ static void player_name(stringbuilder& sb) {
 	sb.add(player->name());
 }
 
+static void addv(stringbuilder& sb, const char* header, const char* value) {
+	sb.addn("%1: %2", header, value);
+}
+
+static void addv(stringbuilder& sb, const char* header, int value) {
+	sb.addn("%1: %2i", header, value);
+}
+
+static void addv(stringbuilder& sb, abilityn id) {
+	addv(sb, getname(id), player->abilities[id]);
+}
+
 static void player_character_panel(stringbuilder& sb) {
 	sb.addn(player->name());
 	sb.addn(getname(player->type));
+	addv(sb, Strenght);
+	addv(sb, Dexterity);
+	addv(sb, Wits);
+	addv(sb, WeaponSkill);
 }
 
 BSDATA(stringvari) = {
