@@ -147,6 +147,9 @@
     <ClCompile Include="font_util.cpp">
       <Filter>Util</Filter>
     </ClCompile>
+    <ClCompile Include="indexa.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sprite_util.h">
@@ -273,6 +276,9 @@
       <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="speech.h">
+      <Filter>Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="indexa.h">
       <Filter>Logic</Filter>
     </ClInclude>
   </ItemGroup>

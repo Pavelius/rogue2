@@ -19,5 +19,6 @@
 enum messagen : unsigned char {
 	ApplicationTitle,
 	MsgMiss,
+	PlayerFoundSecretDoor, PlayerFoundTrap,
 	ItemDamaged, ItemBurnAway, ItemMeldDown, ItemCrumbleToDust, ItemCrushingOut,
 };

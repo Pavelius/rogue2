@@ -24,4 +24,19 @@ struct itemlay;
 extern collectionv<creature> creatures;
 extern collectionv<itemlay> items;
 
-void choose_game_move();
+enum gamen : unsigned char {
+	Rounds, Blessing,
+	Money,
+};
+
+struct gamei {
+	int variables[Blessing + 1];
+	int restore_half_turn, restore_turn, restore_hour, restore_day_part, restore_day, restore_several_days;
+};
+
+int getv(gamen v);
+
+void addv(gamen v, int i);
+void choose_player_move();
+void pass_minute();
+void skip_long_time();

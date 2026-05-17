@@ -1082,6 +1082,10 @@ static void paint_field(const char* header, const char* value) {
 	caret.y += texth();
 }
 
+static void paint_field(gamen v) {
+	paint_field(getname(v), str("%1i", getv(v)));
+}
+
 static void paint_field(abilityn v) {
 	switch(v) {
 	case WeaponSkill:
@@ -1097,7 +1101,7 @@ static void paint_field(abilityn v) {
 		paint_field(getname(v), str("%1i/%2i", player->hits, player->hits_maximum));
 		break;
 	case Mana:
-		paint_field(getname(v), str("%1i/%2i", 0, 0));
+		paint_field(getname(v), str("%1i/%2i", player->mana, player->abilities[Mana]));
 		break;
 	case Armor:
 		if(player->abilities[Block])
@@ -1133,6 +1137,8 @@ static void paint_player_status() {
 	paint_field(Hits);
 	paint_field(Mana);
 	paint_separator();
+	paint_field(Money);
+	paint_field(Rounds);
 }
 
 static void paint_status() {
@@ -1456,15 +1462,17 @@ static void paint_test() {
 	rectb();
 }
 
-static void check_orders() {
+static void check_end_turn() {
+	if(need_end_turn) {
+		need_end_turn = false;
+		breakmodal(1);
+	}
 	if(have_orders())
 		breakmodal(1);
 }
 
 static void player_move_cmd() {
-	if(player_move((directionn)hparam))
-		breakmodal(1);
-	check_orders();
+	player_move((directionn)hparam);
 }
 
 static void direction_keys() {
@@ -1491,12 +1499,6 @@ static void update_creature_orders() {
 	}
 }
 
-static void play_game_scene() {
-	paint_status();
-	paint_area();
-	direction_keys();
-}
-
 static void play_game_animate() {
 	paint_status();
 	link_camera();
@@ -1507,20 +1509,18 @@ static void wait_all() {
 	wait_all_objects(play_game_animate);
 }
 
-static void next_game_move(int mode) {
-	switch(mode) {
-	case 1: next_scene(choose_game_move); break;
-	default: break;
-	}
-}
-
-void choose_game_move() {
+void choose_player_move() {
 	link_camera();
-	update_los();
-	auto mode = scene(play_game_scene);
 	update_creature_orders();
 	wait_all();
-	next_game_move(mode);
+	update_los();
+	while(ismodal()) {
+		paint_status();
+		paint_area();
+		direction_keys();
+		domodal();
+		check_end_turn();
+	}
 }
 
 static void camera_initialize() {

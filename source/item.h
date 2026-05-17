@@ -34,7 +34,8 @@ enum itemn : unsigned char {
 	Dagger, ShortSword, LongSword, Scimitar, GreatSword,
 	ShortBow, LongBow, Crossbow, HeavyCrossbow,
 	Robe, LeatherArmor, StuddedArmor, HideArmor, ScaleMail, ChainMail, PlateMail,
-	LastItem = PlateMail,
+	BluePotion, GreenPotion, RedPotion,
+	LastItem = RedPotion,
 };
 struct item {
 	itemn type;

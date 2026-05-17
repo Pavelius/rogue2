@@ -32,7 +32,7 @@ enum abilityn : unsigned char {
 	WeaponSkill, BalisticSkill,
 	DamageMelee, DamageRanged, DamageThrown,
 	Armor, Block, BlockRanged,
-	ChanceFailSpell,
+	ChanceFailSpell, EnemyAttacks,
 	Alchemy, Alertness, Gemcutting, Dodge, Thievery, Literacy, Metallurgy, Mining,
 	Stealth, Survival, Haggling, History, Religion, Woodcutting,
 	CarryCapacity,
@@ -57,27 +57,44 @@ extern creature* player;
 extern creature* opponent;
 
 extern bool need_update_creatures;
+extern bool need_end_turn;
 
 struct creature : drawable, posable, statable, featable, wearable {
 	unsigned char name_id; // Random name seed or 0xFF if no name
 	monstern type; // Character or Monster type
 	statable basic; // Raw ability before any modification
-	short hits, hits_maximum;
+	short unsigned fear_id, boss_id;
+	short hits, hits_maximum, mana;
+	int wait_seconds;
 	const char* name() const;
+	creature* getboss() const;
+	creature* getfear() const;
 	int	get(abilityn v) const { return abilities[v]; }
 	int getlos() const;
+	void act(messagen v) const;
+	void add(abilityn v, int i);
 	bool canhear(short unsigned i) const;
+	void damage(int v) {}
 	bool is(featn v) const { return featable::is(v); }
+	bool is(abilityn v) const { return abilities[v] > 0; }
 	bool ischaracter() const { return type <= Elf; }
 	bool isenemy(const creature* p) const { return false; }
 	bool isfemale() const { return false; }
 	bool ishuman() const { return this == human; }
 	bool ismirror() const { return is(Mirrorred); }
+	bool isunaware() const { return wait_seconds >= 25 * 4 * 6; }
 	void clear();
 	void fixact(directionn d);
 	void look(directionn d);
+	bool resist(featn resistane, featn immunity) { return false; }
+	bool roll(abilityn v, int bonus = 0) { return true; }
+	void set(abilityn v, int i) { abilities[v] = (char)i; }
+	void set(featn v) { featable::set(v); }
 	void setindex(short unsigned i);
 	void update();
+	void wait(int v) { wait_seconds += v; need_end_turn = true; }
+	void wait() { wait(100); }
+	void waitmove();
 };
 
 const char* get_avatar(monstern v);
@@ -88,6 +105,7 @@ int getv(monstern v, abilityn a);
 
 void create_creature(short unsigned index_position, monstern type);
 bool is_free(short unsigned i);
+void make_move();
 void fix(messagen v);
 bool player_move(directionn d);
 void update_creatures();

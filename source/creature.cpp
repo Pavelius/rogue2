@@ -16,10 +16,14 @@
 
 #include "area.h"
 #include "bsdata.h"
+#include "collection.h"
 #include "collectiona.h"
 #include "creature.h"
+#include "indexa.h"
+#include "game.h"
 #include "math.h"
 #include "message.h"
+#include "pushvalue.h"
 #include "rand.h"
 #include "speech.h"
 #include "stringbuilder.h"
@@ -31,6 +35,9 @@ static int roll_result;
 
 collectionv<creature> creatures;
 bool need_update_creatures;
+bool need_end_turn;
+
+static collection allowed_spells;
 
 void fix(messagen v) {
 }
@@ -73,7 +80,7 @@ void add_value(abilityn v, int value) {
 }
 
 static void update_derived() {
-	player->hits_maximum += player->abilities[Hits];
+	player->hits_maximum = player->abilities[Hits];
 	player->hits_maximum += player->abilities[Strenght] / 4;
 }
 
@@ -94,6 +101,7 @@ static void update_abilities() {
 
 static void create_finish() {
 	player->hits = player->hits_maximum;
+	player->mana = player->abilities[Mana];
 }
 
 static void copy(statable& v1, const statable& v2) {
@@ -116,53 +124,9 @@ static void apply_monster(monstern type) {
 	} else {
 		player->basic.abilities[WeaponSkill] += 15;
 		player->basic.abilities[BalisticSkill] += 15;
+		player->basic.abilities[Hits] += 10;
+		player->basic.abilities[Mana] += 10;
 	}
-}
-
-void creature::clear() {
-	memset((void*)this, 0, sizeof(*this));
-	index = 0xFFFF;
-	area_index = 0xFFFF;
-	name_id = 0xFF;
-}
-
-void creature::setindex(short unsigned i) {
-	player->index = i;
-	player->area_index = current_area;
-	player->position = i2s(i);
-}
-
-void creature::look(directionn d) {
-	switch(d) {
-	case NorthWest:
-	case West:
-	case SouthWest:
-		player->set(Mirrorred);
-		break;
-	case NorthEast:
-	case East:
-	case SouthEast:
-		player->remove(Mirrorred);
-		break;
-	default:
-		break;
-	}
-}
-
-int creature::getlos() const {
-	auto darkness = 0;
-	if(is(DarkVision))
-		darkness--;
-	if(darkness > 4)
-		darkness = 4;
-	else if(darkness < 0)
-		darkness = 0;
-	return 5 - darkness;
-}
-
-bool creature::canhear(short unsigned i) const {
-	auto n = 2 + get(Wits) / 10 + get(Dexterity) / 20;
-	return area_range(index, i) < n;
 }
 
 static speechn get_name_speech(monstern v) {
@@ -171,12 +135,6 @@ static speechn get_name_speech(monstern v) {
 	case Dwarf: return DwarfNames;
 	default: return HumanNames;
 	}
-}
-
-const char* creature::name() const {
-	if(name_id == 0xFF)
-		return getname(type);
-	return getspeech(get_name_speech(type), name_id);
 }
 
 static void random_name() {
@@ -200,14 +158,6 @@ void create_creature(short unsigned index_position, monstern type) {
 	create_finish();
 	random_name();
 	need_update_creatures = true;
-}
-
-creature* wearable::owner() {
-	return bsdata<creature>::get(this);
-}
-
-creature* item::owner() {
-	return bsdata<creature>::get(this);
 }
 
 void add_item(creature* p, item& v) {
@@ -254,11 +204,14 @@ bool player_move(directionn d) {
 	auto i1 = to(player->index, d);
 	if(i1 == Blocked || !is_free(i1)) {
 		player->fixact(d);
-		if(i1 != Blocked)
-			use_area(i1);
-		return true;
+		if(i1 != Blocked) {
+			if(use_area(i1))
+				player->wait();
+		}
+		return false;
 	}
 	player->index = i1;
+	player->waitmove();
 	return true;
 }
 
@@ -288,4 +241,251 @@ void creature::update() {
 	auto push = player; player = this;
 	update_player();
 	player = push;
+}
+
+static void nullify_elements(abilityn v1, abilityn v2) {
+	if(player->is(v1) && player->is(v2)) {
+		player->set(v1, 0);
+		player->set(v2, 0);
+	}
+}
+
+static void nullify_elements(featn v1, featn v2) {
+	if(player->is(v1) && player->is(v2)) {
+		player->remove(v1);
+		player->remove(v2);
+	}
+}
+
+static void nullify_elements() {
+	nullify_elements(Burning, Freezing);
+	//nullify_elements(FastAction, SlowAction);
+	//nullify_elements(FastAttack, SlowAttack);
+	//nullify_elements(FastMove, SlowMove);
+}
+
+static void check_blooding() {
+	if(player->is(Blooding)) {
+		player->damage(1);
+		area_set(player->index, Blooded);
+		if(player->roll(Strenght))
+			player->remove(Blooding);
+	}
+}
+
+static void detect_hidden_objects() {
+	if(!last_site)
+		return;
+	indexa source;
+	source.select(player->index, imin(player->getlos(), 2));
+	source.match(Hidden, true);
+	source.shuffle();
+	// Secrect doors
+	for(auto i : source) {
+		if(!player->roll(Alertness))
+			continue;
+		auto f = area_features[i];
+		if(f==HiddenDoor)
+			player->act(PlayerFoundSecretDoor);
+		else if(is_trap(f))
+			player->act(PlayerFoundTrap);
+		area_remove(i, Hidden);
+		break;
+	}
+}
+
+static void check_burning() {
+	if(player->is(Burning)) {
+		if(!player->resist(FireResistance, FireImmunity))
+			player->damage(xrand(1, 3));
+		player->add(Burning, -1);
+	}
+}
+
+static void damage_player_items(itemn v, int chance) {
+}
+
+static void check_freezing() {
+	if(player->is(Freezing)) {
+		if(!player->resist(ColdResistance, ColdImmunity)) {
+			player->wait(100);
+			damage_player_items(BluePotion, 30);
+			damage_player_items(GreenPotion, 20);
+			damage_player_items(RedPotion, 15);
+		}
+		player->add(Freezing, -1);
+	}
+}
+
+static void ready_skills() {
+}
+
+static void ready_spells() {
+	allowed_spells.clear();
+}
+
+void make_move() {
+	// Recoil form action
+	if(player->wait_seconds > 0) {
+		player->wait_seconds -= 25;
+		return;
+	}
+	pushvalue push_player(opponent);
+	//pushvalue push_action(last_action);
+	//pushvalue push_rect(last_rect, player->getposition().rectangle());
+	//pushvalue push_site(last_site, get_site(player));
+	player->set(EnemyAttacks, 0);
+	player->update();
+	nullify_elements();
+	check_blooding();
+	if(!player->is(Local))
+		detect_hidden_objects();
+	check_burning();
+	check_freezing();
+	// check_corrosion();
+	if(!player->operator bool())
+		return; // Dead from blooding, burning, cold or other bad
+	// check_levelup();
+	ready_spells();
+	// check_horror();
+	if(player->ishuman()) {
+		ready_skills();
+//		last_actions.sort(compare_actions);
+		choose_player_move();
+	} else if(player->getfear()) {
+		//if(!player->moveaway(player->getfear()->getposition()))
+		//	pay_action();
+	} else if(opponent) {
+		//allowed_spells.select(player);
+		//allowed_spells.match(spell_iscombat, true);
+		//allowed_spells.match(spell_allowmana, true);
+		//allowed_spells.match(spell_allowuse, true);
+		//if(allowed_spells && d100() < 70)
+		//	cast_spell(*((spelli*)allowed_spells.random()));
+		//else if(can_shoot())
+		//	attack_range(0);
+		//else if(can_thrown() && d100() < 60)
+		//	attack_thrown(0);
+		//else if(d100() < 20 && use_items()) {
+		//	// Nothing to do
+		//} else
+		//	player->moveto(opponent->getposition());
+	} else {
+		//allowed_spells.match(spell_isnotcombat, true);
+		//allowed_spells.match(spell_allowmana, true);
+		//allowed_spells.match(spell_allowuse, true);
+		//if(player->isfollowmaster())
+		//	player->moveto(player->getowner()->getposition());
+		//else if(d100() < 20)
+		//	use_skills();
+		//else if(allowed_spells && d100() < 20)
+		//	cast_spell(*((spelli*)allowed_spells.random()));
+		//else if(area->isvalid(player->moveorder)) {
+		//	if(player->moveorder == player->getposition())
+		//		player->moveorder = {-1000, -1000};
+		//	else if(!player->moveto(player->moveorder))
+		//		player->moveorder = {-1000, -1000};
+		//} else if(area->isvalid(player->guardorder)) {
+		//	if(player->guardorder != player->getposition())
+		//		player->moveorder = player->guardorder;
+		//} else if(d100() < 20 && use_items()) {
+		//	// Nothing to do
+		//} else
+		//	random_walk();
+	}
+}
+
+void creature::clear() {
+	memset((void*)this, 0, sizeof(*this));
+	index = 0xFFFF;
+	area_index = 0xFFFF;
+	name_id = 0xFF;
+}
+
+void creature::setindex(short unsigned i) {
+	player->index = i;
+	player->area_index = current_area;
+	player->position = i2s(i);
+}
+
+void creature::add(abilityn v, int i) {
+	i += abilities[v];
+	if(i > 120)
+		i = 120;
+	else if(i < 0)
+		i = 0;
+	abilities[v] = (char)i;
+}
+
+void creature::look(directionn d) {
+	switch(d) {
+	case NorthWest:
+	case West:
+	case SouthWest:
+		player->set(Mirrorred);
+		break;
+	case NorthEast:
+	case East:
+	case SouthEast:
+		player->remove(Mirrorred);
+		break;
+	default:
+		break;
+	}
+}
+
+int creature::getlos() const {
+	auto darkness = 0;
+	if(is(DarkVision))
+		darkness--;
+	if(darkness > 4)
+		darkness = 4;
+	else if(darkness < 0)
+		darkness = 0;
+	return 4 - darkness;
+}
+
+bool creature::canhear(short unsigned i) const {
+	auto n = 2 + get(Wits) / 10 + get(Dexterity) / 20;
+	return area_range(index, i) < n;
+}
+
+const char* creature::name() const {
+	if(name_id == 0xFF)
+		return getname(type);
+	return getspeech(get_name_speech(type), name_id);
+}
+
+creature* wearable::owner() {
+	return bsdata<creature>::get(this);
+}
+
+creature* item::owner() {
+	return bsdata<creature>::get(this);
+}
+
+creature* creature::getfear() const {
+	if(fear_id == 0xFFFF)
+		return 0;
+	return bsdata<creature>::elements + fear_id;
+}
+
+creature* creature::getboss() const {
+	if(boss_id == 0xFFFF)
+		return 0;
+	return bsdata<creature>::elements + boss_id;
+}
+
+void creature::act(messagen v) const {
+	if(!ispresent() || !area_is(index, Visible))
+		return;
+}
+
+void creature::waitmove() {
+	auto modifier = get_move_cost(area_features[player->index]);
+	auto base = 100 - player->get(Dexterity) / 10;
+	if(base < 50)
+		base = 50;
+	auto result = base * 100 / base;
+	wait(result);
 }

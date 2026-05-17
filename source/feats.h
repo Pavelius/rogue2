@@ -19,7 +19,10 @@
 enum featn : unsigned char {
 	DarkVision, Mirrorred,
 	BloodingHit, StunningHit, ParalizeHit, PoisonHit, PushHit, ArmorPierceHit,
-	WaterWalking,
+	FireResistance, ColdResistance,
+	FireImmunity, ColdImmunity,
+	Blooding,
+	Local, WaterWalking,
 };
 struct featable {
 	unsigned feats;

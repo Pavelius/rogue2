@@ -20,6 +20,8 @@
 #include "draw.h"
 #include "game.h"
 #include "itemlay.h"
+#include "pushvalue.h"
+#include "rand.h"
 #include "resid.h"
 #include "stringbuilder.h"
 #include "stringvar.h"
@@ -27,11 +29,166 @@
 BSDATAC(areai, 512)
 BSDATAC(creature, 1024)
 BSDATAC(itemlay, 8192)
-BSDATAC(roomi, 2048)
+BSDATAC(sitei, 2048)
 
 void initialize_gui();
 void main_util();
 void set_dark_theme();
+
+gamei game;
+
+int getv(gamen v) {
+	switch(v) {
+	case Money: return human->money;
+	default: return game.variables[v];
+	}
+}
+
+void addv(gamen v, int i) {
+	switch(v) {
+	case Money: human->money += i; break;
+	default: game.variables[v] += i; break;
+	}
+}
+
+static void all(fnevent proc) {
+	pushvalue push(player);
+	update_creatures();
+	for(auto p : creatures) {
+		player = p;
+		proc();
+	}
+}
+
+static void all_next(fnevent proc) {
+	pushvalue push(player);
+	update_creatures();
+	for(auto p : creatures) {
+		player = p;
+		proc();
+		if(!running_scene())
+			break;
+	}
+}
+
+static void monsters_spawning() {
+}
+
+static void decoy_items() {
+}
+
+static void update_need() {
+}
+
+static void update_all_boost(int minutes) {
+}
+
+static void update_every_serveral_days() {
+}
+
+static void creature_every_minute() {
+}
+
+static void creature_every_10_minutes() {
+}
+
+static void creature_every_day_part() {
+}
+
+static void remove_flags(areafn f, int chance) {
+	for(short unsigned i = 0; i < mps * mps; i++) {
+		if(!area_is(i, f))
+			continue;
+		if(d100() >= chance)
+			continue;
+		area_remove(i, f);
+	}
+}
+
+static void apply_temperature() {
+	remove_flags(Iced, 20);
+}
+
+static void auto_activate_features() {
+}
+
+void pass_minute() {
+	addv(Rounds, 1);
+	auto minutes = getv(Rounds);
+	update_all_boost(minutes);
+	all(creature_every_minute);
+	while(game.restore_half_turn < minutes) {
+		game.restore_half_turn += 5;
+		apply_temperature();
+	}
+	while(game.restore_turn < minutes) {
+		all(creature_every_10_minutes);
+		monsters_spawning();
+		game.restore_turn += 10;
+	}
+	while(game.restore_hour < minutes) {
+		game.restore_hour = (game.restore_hour / 60 + 1) * 60 + rand() % 60;
+		update_need();
+	}
+	while(game.restore_day_part < minutes) {
+		all(creature_every_day_part);
+		decoy_items();
+		game.restore_day_part = (game.restore_day_part / (60 * 4) + 1) * (60 * 4) + rand() % (60 * 4);
+	}
+	while(game.restore_day < minutes) {
+		auto_activate_features();
+		game.restore_day = (game.restore_day / (60 * 24) + 1) * (60 * 24) + rand() % (60 * 24);
+	}
+	while(game.restore_several_days < minutes) {
+		update_every_serveral_days();
+		game.restore_several_days += xrand(60 * 24 * 2, 60 * 24 * 6);
+	}
+}
+
+static void make_move_long() {
+	if(player->wait_seconds >= 100 * 6)
+		player->wait_seconds -= 100 * 6;
+}
+
+void skip_long_time() {
+	if(!human)
+		return;
+	while(human->isunaware()) {
+		all(make_move_long);
+		pass_minute();
+	}
+}
+
+static bool checkalive() {
+	if(!human)
+		return false;
+	if(!human->hits)
+		return false;
+	return true;
+}
+
+static void play_minute() {
+	const int moves_per_minute = 5 * 4;
+	bool need_continue = true;
+	while(need_continue) {
+		need_continue = true;
+		for(auto i = 0; i < moves_per_minute; i++) {
+			update_los();
+			all_next(make_move);
+			if(!checkalive() || !running_scene()) {
+				need_continue = false;
+				break;
+			}
+		}
+		pass_minute();
+		skip_long_time();
+	}
+}
+
+void play_game() {
+	while(checkalive() && running_scene())
+		play_minute();
+}
 
 static void put_item(short unsigned i, itemn v) {
 	item it(v);
@@ -80,7 +237,7 @@ int main(int argc, char* argv[]) {
 	player->equip(LongBow);
 	player->update();
 	human = player;
-	next_scene(choose_game_move);
+	next_scene(play_game);
 	start_scene();
 	return 0;
 }

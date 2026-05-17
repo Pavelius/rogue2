@@ -54,7 +54,7 @@ enum featuren : unsigned char {
 	GatePortal, OpenedGatePortal,
 	Chest, LockedChest, ChestOpen
 };
-enum roomn : unsigned char {
+enum siten : unsigned char {
 	EmptyRoom,
 	MonstersLair, DarkenedRoom, TreasureRoom,
 };
@@ -108,11 +108,13 @@ struct areai {
 	unsigned char	level; // Current level of dungeon
 	constexpr explicit operator bool() const { return index != 0xFFFF; }
 };
-struct roomi : abox {
-	roomn			type;
+struct sitei : abox {
+	siten			type;
 };
+extern sitei* last_site;
 
 int area_range(short unsigned i1, short unsigned i2);
+int get_move_cost(featuren v);
 
 void area_change(tilen t1, tilen t2);
 void area_clear();
@@ -132,6 +134,7 @@ void block_tiles();
 void block_walls();
 void block_zero();
 void clear_path();
+bool is_trap(featuren v);
 bool is_free(featuren v, bool ignore_doors);
 bool is_free(tilen v, bool water_free);
 bool is_wall(tilen v);

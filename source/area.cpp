@@ -24,6 +24,7 @@
 #include "slice.h"
 
 unsigned short current_area;
+sitei* last_site;
 
 static unsigned char area_flags[mps * mps];
 tilen area_tiles[mps * mps];
@@ -43,6 +44,7 @@ static const directionn orientations_7b7[49] = {
 	SouthWest, SouthWest, SouthWest, South, SouthEast, SouthEast, SouthEast,
 	SouthWest, SouthWest, South, South, South, SouthEast, SouthEast,
 };
+
 static void addwave(short unsigned v) {
 	*push_counter++ = v;
 	if(push_counter >= stack + sizeof(stack) / sizeof(stack[0]))
@@ -68,6 +70,10 @@ static bool is_impassable(featuren v) {
 
 bool is_wall(tilen v) {
 	return v == NoTile || v >= WallCave;
+}
+
+bool is_trap(featuren v) {
+	return v == AcidTrap;
 }
 
 void block_features() {
@@ -275,4 +281,12 @@ bool is_free(featuren v, bool ignore_doors) {
 		break;
 	}
 	return true;
+}
+
+int get_move_cost(featuren v) {
+	switch(v) {
+	case FootHill: return 150;
+	case FootMud: return 200;
+	default: return 100;
+	}
 }
