@@ -150,6 +150,9 @@
     <ClCompile Include="indexa.cpp">
       <Filter>Logic</Filter>
     </ClCompile>
+    <ClCompile Include="spell.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sprite_util.h">
@@ -279,6 +282,9 @@
       <Filter>Logic</Filter>
     </ClInclude>
     <ClInclude Include="indexa.h">
+      <Filter>Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="spell.h">
       <Filter>Logic</Filter>
     </ClInclude>
   </ItemGroup>

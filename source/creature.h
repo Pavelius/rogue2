@@ -17,10 +17,11 @@
 #pragma once
 
 #include "direction.h"
+#include "draw_object.h"
 #include "feats.h"
 #include "item.h"
 #include "posable.h"
-#include "draw_object.h"
+#include "spell.h"
 
 enum messagen : unsigned char;
 
@@ -33,11 +34,12 @@ enum abilityn : unsigned char {
 	DamageMelee, DamageRanged, DamageThrown,
 	Armor, Block, BlockRanged,
 	ChanceFailSpell, EnemyAttacks,
-	Alchemy, Alertness, Gemcutting, Dodge, Thievery, Literacy, Metallurgy, Mining,
+	Alchemy, Alertness, Gemcutting, Riding, Dodge, Thievery, Literacy, Metallurgy, Mining,
 	Stealth, Survival, Haggling, History, Religion, Woodcutting,
 	CarryCapacity,
 	Hits, Mana, Faith, Mood, Reputation,
 	Poison, Illness, Corrosion, Burning, Freezing, Drunk,
+	Experience,
 	FirstSkill = Alertness, LastSkill = Woodcutting,
 };
 enum monstern : unsigned char {
@@ -59,17 +61,19 @@ extern creature* opponent;
 extern bool need_update_creatures;
 extern bool need_end_turn;
 
-struct creature : drawable, posable, statable, featable, wearable {
-	unsigned char name_id; // Random name seed or 0xFF if no name
-	monstern type; // Character or Monster type
-	statable basic; // Raw ability before any modification
-	short unsigned fear_id, boss_id;
-	short hits, hits_maximum, mana;
-	int wait_seconds;
+struct creature : drawable, posable, statable, featable, spellable, wearable {
+	unsigned char	name_id; // Random name seed or 0xFF if no name
+	monstern		type; // Character or Monster type
+	statable		basic; // Raw ability before any modification
+	spellable		known; // Known spells
+	short unsigned	fear_id, boss_id;
+	short			hits, hits_maximum, mana;
+	int				experience;
+	int				wait_seconds;
 	const char* name() const;
 	creature* getboss() const;
 	creature* getfear() const;
-	int	get(abilityn v) const { return abilities[v]; }
+	int	get(abilityn v) const { return (v < sizeof(abilities) / sizeof(abilities[0])) ? abilities[v] : 0; }
 	int getlos() const;
 	void act(messagen v) const;
 	void add(abilityn v, int i);
@@ -86,6 +90,8 @@ struct creature : drawable, posable, statable, featable, wearable {
 	void clear();
 	void fixact(directionn d);
 	void look(directionn d);
+	void remove(featn v) { featable::remove(v); }
+	void remove(spelln v) { spellable::remove(v); }
 	bool resist(featn resistane, featn immunity) { return false; }
 	bool roll(abilityn v, int bonus = 0) { return true; }
 	void set(abilityn v, int i) { abilities[v] = (char)i; }

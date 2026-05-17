@@ -259,7 +259,6 @@ static void nullify_elements(featn v1, featn v2) {
 
 static void nullify_elements() {
 	nullify_elements(Burning, Freezing);
-	//nullify_elements(FastAction, SlowAction);
 	//nullify_elements(FastAttack, SlowAttack);
 	//nullify_elements(FastMove, SlowMove);
 }
@@ -320,8 +319,25 @@ static void check_freezing() {
 static void ready_skills() {
 }
 
-static void ready_spells() {
+static void select(collection& result, const spellable& known) {
 	allowed_spells.clear();
+	for(auto i = FirstSpell; i <= LastSpell; i = spelln(i + 1)) {
+		if(known.is(i))
+			allowed_spells.add(i);
+	}
+}
+
+static bool is_enough_mana(unsigned char v) {
+	auto mana = get_mana(spelln(v));
+	return player->mana >= mana;
+}
+
+static void ready_spells() {
+	select(allowed_spells, player->known);
+	allowed_spells.match(is_enough_mana, true);
+}
+
+static void ready_actions() {
 }
 
 void make_move() {
@@ -409,12 +425,15 @@ void creature::setindex(short unsigned i) {
 }
 
 void creature::add(abilityn v, int i) {
-	i += abilities[v];
-	if(i > 120)
-		i = 120;
-	else if(i < 0)
-		i = 0;
-	abilities[v] = (char)i;
+	if(v < sizeof(abilities) / sizeof(abilities[0])) {
+		i += abilities[v];
+		if(i > 120)
+			i = 120;
+		else if(i < 0)
+			i = 0;
+		abilities[v] = (char)i;
+	} else if(v == Experience)
+		experience += i;
 }
 
 void creature::look(directionn d) {

@@ -17,12 +17,13 @@
 #pragma once
 
 enum featn : unsigned char {
-	DarkVision, Mirrorred,
+	DarkVision,
 	BloodingHit, StunningHit, ParalizeHit, PoisonHit, PushHit, ArmorPierceHit,
 	FireResistance, ColdResistance,
 	FireImmunity, ColdImmunity,
-	Blooding,
-	Local, WaterWalking,
+	WaterWalking,
+	Blooding, Regenerating,
+	Mirrorred, Local,
 };
 struct featable {
 	unsigned feats;

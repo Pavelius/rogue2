@@ -37,7 +37,7 @@ const int panel_width = 130;
 const int window_width = 608;
 const int window_height = 376;
 const int wears_offset = 80;
-const int stat_value_width = 40;
+const int stat_value_width = 50;
 
 const int tick_time = 400;
 
@@ -1082,6 +1082,11 @@ static void paint_field(const char* header, const char* value) {
 	caret.y += texth();
 }
 
+static void paint_field(const char* value) {
+	text(value);
+	caret.y += texth();
+}
+
 static void paint_field(gamen v) {
 	paint_field(getname(v), str("%1i", getv(v)));
 }
@@ -1102,6 +1107,9 @@ static void paint_field(abilityn v) {
 		break;
 	case Mana:
 		paint_field(getname(v), str("%1i/%2i", player->mana, player->abilities[Mana]));
+		break;
+	case Experience:
+		paint_field(getname(v), str("%1i", player->experience));
 		break;
 	case Armor:
 		if(player->abilities[Block])
@@ -1126,6 +1134,9 @@ static void paint_separator() {
 }
 
 static void paint_player_status() {
+	paint_field(player->name());
+	paint_field(getname(player->type));
+	paint_separator();
 	paint_field(Strenght);
 	paint_field(Dexterity);
 	paint_field(Wits);
@@ -1133,10 +1144,12 @@ static void paint_player_status() {
 	paint_field(WeaponSkill);
 	paint_field(BalisticSkill);
 	paint_field(Armor);
-	paint_field(Dodge);
 	paint_field(Hits);
 	paint_field(Mana);
 	paint_separator();
+	paint_field(Dodge);
+	paint_separator();
+	paint_field(Experience);
 	paint_field(Money);
 	paint_field(Rounds);
 }
