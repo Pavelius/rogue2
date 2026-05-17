@@ -77,6 +77,7 @@ struct creature : drawable, posable, statable, featable, wearable {
 	void fixact(directionn d);
 	void look(directionn d);
 	void setindex(short unsigned i);
+	void update();
 };
 
 const char* get_avatar(monstern v);

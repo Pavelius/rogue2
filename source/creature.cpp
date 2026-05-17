@@ -79,7 +79,17 @@ static void update_derived() {
 
 static void update_abilities() {
 	add_value(Armor, player->abilities[Strenght] / 15);
-	add_value(Dodge, player->abilities[Dexterity] / 2);
+	add_value(Armor, player->wears[Torso].armor());
+	add_value(Armor, player->wears[Backward].armor());
+	add_value(Armor, player->wears[MeleeWeaponOffhand].armor());
+	add_value(Armor, player->wears[Head].armor());
+	add_value(Armor, player->wears[Elbows].armor());
+	add_value(Armor, player->wears[Legs].armor());
+	// Dodge bonuses
+	add_value(Dodge, player->abilities[Dexterity] / 3);
+	add_value(Dodge, player->wears[Torso].dodge());
+	add_value(Dodge, player->wears[Elbows].dodge());
+	add_value(Dodge, player->wears[Backward].dodge());
 }
 
 static void create_finish() {
@@ -90,7 +100,7 @@ static void copy(statable& v1, const statable& v2) {
 	v1 = v2;
 }
 
-void update_player() {
+static void update_player() {
 	copy(*player, player->basic);
 	update_abilities();
 	update_derived();
@@ -265,4 +275,10 @@ void update_los() {
 	}
 	if(human)
 		area_los(human->index, player->getlos(), is_free_light_set);
+}
+
+void creature::update() {
+	auto push = player; player = this;
+	update_player();
+	player = push;
 }

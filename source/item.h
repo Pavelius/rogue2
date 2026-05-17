@@ -52,8 +52,10 @@ struct item {
 	constexpr item(itemn v, unsigned char count = 1) : type(v), count(count), properties(0) {}
 	explicit operator bool() const { return type != 0; }
 	creature* owner();
+	int	armor() const;
 	int	cost() const;
 	int damage() const;
+	int dodge() const;
 	int	weight() const;
 	bool broke() const;
 	void clear() { count = 0; type = (itemn)0; properties = 0; }

@@ -1086,7 +1086,20 @@ static void paint_field(abilityn v) {
 	switch(v) {
 	case WeaponSkill:
 	case BalisticSkill:
+	case Dodge:
 		paint_field(getname(v), str("%1i%%", player->abilities[v]));
+		break;
+	case Hits:
+		paint_field(getname(v), str("%1i/%2i", player->hits, player->hits_maximum));
+		break;
+	case Mana:
+		paint_field(getname(v), str("%1i/%2i", 0, 0));
+		break;
+	case Armor:
+		if(player->abilities[Block])
+			paint_field(getname(v), str("%1i-%2i", player->abilities[Armor], player->abilities[Armor] + player->abilities[Block]));
+		else
+			paint_field(getname(v), str("%1i", player->abilities[v]));
 		break;
 	default:
 		paint_field(getname(v), str("%1i", player->abilities[v]));
@@ -1094,11 +1107,28 @@ static void paint_field(abilityn v) {
 	}
 }
 
+static void paint_separator() {
+	pushfore fore(colors::border);
+	auto push = caret;
+	caret.y += 3;
+	caret.x -= metrics::padding + 1;
+	line(caret.x + width + metrics::padding * 2 + 1, caret.y);
+	caret.x = push.x;
+	caret.y += 2;
+}
+
 static void paint_player_status() {
 	paint_field(Strenght);
 	paint_field(Dexterity);
 	paint_field(Wits);
+	paint_separator();
 	paint_field(WeaponSkill);
+	paint_field(BalisticSkill);
+	paint_field(Armor);
+	paint_field(Dodge);
+	paint_field(Hits);
+	paint_field(Mana);
+	paint_separator();
 }
 
 static void paint_status() {

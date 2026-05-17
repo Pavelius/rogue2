@@ -78,6 +78,7 @@ int main(int argc, char* argv[]) {
 	player->equip(LongSword);
 	player->equip(LeatherArmor);
 	player->equip(LongBow);
+	player->update();
 	human = player;
 	next_scene(choose_game_move);
 	start_scene();

@@ -77,6 +77,18 @@ static int get_damage(itemn v) {
 	}
 }
 
+static int get_armor(itemn v) {
+	switch(v) {
+	case LeatherArmor: return 1;
+	case StuddedArmor: return 1;
+	case HideArmor: return 2;
+	case ChainMail: return 3;
+	case ScaleMail: return 4;
+	case PlateMail: return 5;
+	default: return 0;
+	}
+}
+
 static wearn get_wear(itemn v) {
 	if(v >= CP && v <= GP)
 		return Backpack;
@@ -99,6 +111,21 @@ int item::cost() const {
 
 int item::damage() const {
 	return get_damage(type);
+}
+
+int item::dodge() const {
+	switch(type) {
+	case StuddedArmor: return -5;
+	case HideArmor: return -10;
+	case ChainMail: return -15;
+	case ScaleMail: return -20;
+	case PlateMail: return -30;
+	default: return 0;
+	}
+}
+
+int item::armor() const {
+	return get_armor(type);
 }
 
 bool item::istwohanded() const {
