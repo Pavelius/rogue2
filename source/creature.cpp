@@ -110,6 +110,13 @@ static void apply_monster(monstern type) {
 	player->basic.abilities[Strenght] += getv(type, Strenght);
 	player->basic.abilities[Dexterity] += getv(type, Dexterity);
 	player->basic.abilities[Wits] += getv(type, Wits);
+	if(type >= FirstMonster) {
+		player->basic.abilities[WeaponSkill] += getv(type, WeaponSkill);
+		player->basic.abilities[BalisticSkill] += getv(type, BalisticSkill);
+	} else {
+		player->basic.abilities[WeaponSkill] += 15;
+		player->basic.abilities[BalisticSkill] += 15;
+	}
 }
 
 void creature::clear() {

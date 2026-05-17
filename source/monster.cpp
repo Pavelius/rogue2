@@ -18,6 +18,7 @@
 #include "creature.h"
 #include "feats.h"
 #include "slice.h"
+#include "math.h"
 #include "my_initialize_list.h"
 
 struct statblock : featable, statable {
@@ -62,6 +63,8 @@ int getv(monstern v, abilityn a) {
 	case Strenght: return monsters[v].strenght;
 	case Dexterity: return monsters[v].dexterity;
 	case Wits: return monsters[v].wits;
+	case WeaponSkill: return imax(15, monsters[Level].level * 5);
+	case BalisticSkill: return imax(15, monsters[Level].level * 5);
 	default: return 0;
 	}
 }

@@ -1085,7 +1085,11 @@ static void paint_field(const char* header, const char* value) {
 static void paint_field(abilityn v) {
 	switch(v) {
 	case WeaponSkill:
+		paint_field(getname(v), str("%1i%%(%2i)", player->abilities[v], player->abilities[DamageMelee] + player->wears[MeleeWeapon].damage()));
+		break;
 	case BalisticSkill:
+		paint_field(getname(v), str("%1i%%(%2i)", player->abilities[v], player->abilities[DamageRanged] + player->wears[RangedWeapon].damage()));
+		break;
 	case Dodge:
 		paint_field(getname(v), str("%1i%%", player->abilities[v]));
 		break;
