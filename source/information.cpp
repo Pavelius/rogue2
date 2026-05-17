@@ -15,6 +15,7 @@
 //  limitations under the License.
 
 #include "bsdata.h"
+#include "creature.h"
 #include "dice.h"
 #include "stringbuilder.h"
 #include "stringvar.h"
@@ -22,7 +23,18 @@
 static void list_of_feats(stringbuilder& sb) {
 }
 
+static void player_name(stringbuilder& sb) {
+	sb.add(player->name());
+}
+
+static void player_character_panel(stringbuilder& sb) {
+	sb.addn(player->name());
+	sb.addn(getname(player->type));
+}
+
 BSDATA(stringvari) = {
 	{"ListOfFeats", list_of_feats},
+	{"PlayerCharacterPanel", player_character_panel},
+	{"PlayerName", player_name},
 };
 BSDATAF(stringvari)

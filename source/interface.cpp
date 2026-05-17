@@ -1068,6 +1068,13 @@ static void paint_minimap() {
 	paint_area_screen(caret, z);
 }
 
+static void paint_player_status() {
+	pushfore push(colors::text);
+	char temp[1024]; stringbuilder sb(temp); sb.clear();
+	sb.add("%PlayerCharacterPanel");
+	textf(temp);
+}
+
 static void paint_status() {
 	auto push_caret = caret;
 	auto push_height = height;
@@ -1079,6 +1086,7 @@ static void paint_status() {
 	fillform();
 	strokeborder();
 	setoffset(metrics::border, metrics::border);
+	paint_player_status();
 	caret.x = getwidth() - panel_width + 1;
 	caret.y = getheight() - 128 - 1;
 	paint_minimap();
@@ -1088,12 +1096,6 @@ static void paint_status() {
 }
 
 /*
-static void player_info() {
-	char temp[1024]; stringbuilder sb(temp); sb.clear();
-	player->getinfo(sb);
-	textf(temp);
-}
-
 static void execute_action() {
 	auto push_action = last_action;
 	last_action = (siteskilli*)hot.drawable;
@@ -1467,6 +1469,8 @@ static void camera_initialize() {
 }
 
 void initialize_gui() {
+	font = metrics::font;
+	fore = colors::text;
 	camera_initialize();
 	sys_create_window(window_width, window_height);
 	sys_caption(getname(ApplicationTitle));

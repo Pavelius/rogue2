@@ -21,6 +21,8 @@
 #include "math.h"
 #include "message.h"
 #include "rand.h"
+#include "speech.h"
+#include "stringbuilder.h"
 
 creature* human;
 creature* player;
@@ -104,6 +106,7 @@ void creature::clear() {
 	memset((void*)this, 0, sizeof(*this));
 	index = 0xFFFF;
 	area_index = 0xFFFF;
+	name_id = 0xFF;
 }
 
 void creature::setindex(short unsigned i) {
@@ -145,6 +148,29 @@ bool creature::canhear(short unsigned i) const {
 	return area_range(index, i) < n;
 }
 
+static speechn get_name_speech(monstern v) {
+	switch(v) {
+	case Elf: return ElfNames;
+	case Dwarf: return DwarfNames;
+	default: return HumanNames;
+	}
+}
+
+const char* creature::name() const {
+	if(name_id == 0xFF)
+		return getname(type);
+	return getspeech(get_name_speech(type), name_id);
+}
+
+static void random_name() {
+	if(player->ischaracter()) {
+		player->name_id = 2 * (rand() % 25);
+		if(player->isfemale())
+			player->name_id++;
+	} else
+		player->name_id = 0xFF;
+}
+
 void create_creature(short unsigned index_position, monstern type) {
 	player = bsdata<creature>::add();
 	player->clear();
@@ -155,6 +181,7 @@ void create_creature(short unsigned index_position, monstern type) {
 	apply_monster(type);
 	update_player();
 	create_finish();
+	random_name();
 	need_update_creatures = true;
 }
 

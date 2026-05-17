@@ -19,6 +19,7 @@
 struct sprite;
 
 enum resid : unsigned char {
+	FontT, Font1, Font2, Font3,
 	ResPCBody, ResPCArms, ResPCAccessories,
 	ResFow, ResLos,
 	ResFloor, ResBorders, ResDecals, ResFeatures, ResItems, ResMonsters,

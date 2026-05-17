@@ -20,6 +20,9 @@
 #include "draw.h"
 #include "game.h"
 #include "itemlay.h"
+#include "resid.h"
+#include "stringbuilder.h"
+#include "stringvar.h"
 
 BSDATAC(areai, 512)
 BSDATAC(creature, 1024)
@@ -35,7 +38,22 @@ static void put_item(short unsigned i, itemn v) {
 	add_item(current_area, i, it);
 }
 
+static void game_string(stringbuilder& sb, const char* id) {
+	if(stringvar_identifier(sb, id))
+		return;
+	sb.add(id);
+}
+
+static void initialize_strings() {
+	metrics::font = gres(FontT);
+	metrics::h1 = gres(Font1);
+	metrics::h2 = gres(Font2);
+	metrics::h3 = gres(Font3);
+	stringbuilder::custom = game_string;
+}
+
 int main(int argc, char* argv[]) {
+	initialize_strings();
 	main_util();
 	area_clear();
 	set_dark_theme();

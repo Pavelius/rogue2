@@ -59,9 +59,11 @@ extern creature* opponent;
 extern bool need_update_creatures;
 
 struct creature : drawable, posable, statable, featable, wearable {
+	unsigned char name_id; // Random name seed or 0xFF if no name
 	monstern type; // Character or Monster type
 	statable basic; // Raw ability before any modification
 	short hits, hits_maximum;
+	const char* name() const;
 	int	get(abilityn v) const { return abilities[v]; }
 	int getlos() const;
 	bool canhear(short unsigned i) const;

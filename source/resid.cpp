@@ -26,6 +26,10 @@ struct residi {
 };
 
 BSDATA(residi) = {
+	{"font"},
+	{"h1"},
+	{"h2"},
+	{"h3"},
 	{"pc_body"},
 	{"pc_arms"},
 	{"pc_accessories"},

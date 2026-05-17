@@ -269,5 +269,8 @@
     <ClInclude Include="screenshoot.h">
       <Filter>Interface</Filter>
     </ClInclude>
+    <ClInclude Include="speech.h">
+      <Filter>Logic</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

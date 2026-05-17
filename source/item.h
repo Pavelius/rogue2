@@ -65,7 +65,6 @@ struct item {
 	void use();
 };
 struct wearable {
-	typedef int (item::*fnitemget)() const;
 	item wears[Legs + 1];
 	int	money;
 	creature* owner();
