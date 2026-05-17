@@ -79,6 +79,7 @@ struct apos {
 	unsigned char x, y;
 	constexpr apos() : x(0xFF), y(0xFF) {}
 	constexpr apos(int x, int y) : x((unsigned char)x), y((unsigned char)y) {}
+	constexpr apos(short unsigned v) : x(v % mps), y(v / mps) {}
 	constexpr explicit operator bool() const { return x < mps && y < mps; }
 	constexpr operator unsigned short() const { return y * mps + x; }
 	constexpr bool operator==(apos v) const { return y == v.y && x == v.x; }

@@ -199,6 +199,27 @@ bool use_area(short unsigned i) {
 	return true;
 }
 
+static sitei* find_site(apos m) {
+	for(auto& e : bsdata<sitei>()) {
+		if(e.have(m))
+			return &e;
+	}
+	return 0;
+}
+
+static void update_player_site() {
+	auto pc = player->getsite();
+	auto pn = find_site(player->index);
+	if(pc == pn)
+		return;
+	if(pn) {
+		player->site_id = pn - bsdata<sitei>::elements;
+		// TODO: When enter site event
+	} else
+		player->site_id = 0xFFFF;
+	player->update();
+}
+
 bool player_move(directionn d) {
 	player->look(d);
 	auto i1 = to(player->index, d);
@@ -212,6 +233,7 @@ bool player_move(directionn d) {
 	}
 	player->index = i1;
 	player->waitmove();
+	update_player_site();
 	return true;
 }
 
@@ -416,6 +438,9 @@ void creature::clear() {
 	index = 0xFFFF;
 	area_index = 0xFFFF;
 	name_id = 0xFF;
+	site_id = 0xFFFF;
+	boss_id = 0xFFFF;
+	fear_id = 0xFFFF;
 }
 
 void creature::setindex(short unsigned i) {
@@ -493,6 +518,12 @@ creature* creature::getboss() const {
 	if(boss_id == 0xFFFF)
 		return 0;
 	return bsdata<creature>::elements + boss_id;
+}
+
+sitei* creature::getsite() const {
+	if(site_id == 0xFFFF)
+		return 0;
+	return bsdata<sitei>::elements + site_id;
 }
 
 void creature::act(messagen v) const {

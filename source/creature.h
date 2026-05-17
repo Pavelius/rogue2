@@ -26,6 +26,7 @@
 enum messagen : unsigned char;
 
 struct creature;
+struct sitei;
 
 enum abilityn : unsigned char {
 	Level,
@@ -67,12 +68,14 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	statable		basic; // Raw ability before any modification
 	spellable		known; // Known spells
 	short unsigned	fear_id, boss_id;
+	short unsigned	site_id; // Current site of 0xFFFF
 	short			hits, hits_maximum, mana;
 	int				experience;
 	int				wait_seconds;
 	const char* name() const;
 	creature* getboss() const;
 	creature* getfear() const;
+	sitei* getsite() const;
 	int	get(abilityn v) const { return (v < sizeof(abilities) / sizeof(abilities[0])) ? abilities[v] : 0; }
 	int getlos() const;
 	void act(messagen v) const;
