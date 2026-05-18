@@ -19,13 +19,20 @@
 #include "feats.h"
 #include "slice.h"
 #include "math.h"
-#include "my_initialize_list.h"
 
 struct statblock : featable, statable {
 	constexpr statblock() : featable(), statable() {}
-	constexpr statblock(std::initializer_list<featn> source) {
-		for(auto v : source)
-			set(v);
+	template<typename T, typename... Ts> constexpr statblock(T v, Ts... args) : statblock(args...) {
+		set(v);
+	}
+	constexpr void set(featn v) {
+		feats = 1 << v;
+	}
+	constexpr void set(abilityn v) {
+		switch(v) {
+		case Armor: abilities[v]++; break;
+		default: abilities[v] += 5; break;
+		}
 	}
 };
 struct monsteri {
@@ -46,8 +53,8 @@ static monsteri monsters[] = {
 	{2, Dog, 20, 30, 4, "6"}, // Dog
 	{2, GiantFrog, 20, 25, 3, "9"}, // GiantFrog
 	{2, GiantBat, 10, 30, 3, "2"}, // GiantBat
-	{6, GiantLizard, 40, 20, 2, "78"}, // GiantLizard
-	{4, GiantSpider, 35, 20, 1, "29"}, // GiantSpider
+	{6, GiantLizard, 40, 20, 2, "78", {Armor, Armor}}, // GiantLizard
+	{4, GiantSpider, 35, 20, 1, "29", {PoisonHit}}, // GiantSpider
 	{1, Rabbit, 6, 20, 3, "103"}, // Rabbit
 	{1, Rabbit, 5, 22, 3, "104"}, // RabbitFemale
 	{2, Racoon, 10, 30, 3, "89"}, // Racoon
