@@ -100,8 +100,12 @@ static const char* orc_names[] = {
 	"Йаргул", "Йугра", "Заргат", "Зрулла", "Бругор",
 	"Багра", "Дрогат", "Дурша", "Кургаш", "Крулла"
 };
+static const char* say_hello[] = {
+	"Добрый день, друг.",
+	"Чем могу помочь?",
+};
 struct speechi {
-	const char** strings; int	count;
+	const char** strings; int count;
 	template<unsigned N> constexpr speechi(const char*(&v)[N]) : strings(v), count(N) {}
 };
 static speechi speech_data[] = {
@@ -109,8 +113,9 @@ static speechi speech_data[] = {
 	{elf_names},
 	{dwarf_names},
 	{orc_names},
+	{say_hello},
 };
-static_assert(lenghtof(speech_data) == OrcNames + 1);
+static_assert(lenghtof(speech_data) == SayHello + 1);
 
 const char* getspeech(speechn v, int index) {
 	auto p = speech_data + v;
