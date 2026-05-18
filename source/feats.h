@@ -23,7 +23,7 @@ enum featn : unsigned char {
 	FireImmunity, ColdImmunity,
 	WaterWalking,
 	Blooding, Regenerating,
-	Mirrorred, Local,
+	Mirrorred, Enemy, Local,
 };
 struct featable {
 	unsigned feats;

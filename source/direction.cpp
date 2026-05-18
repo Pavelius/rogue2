@@ -65,8 +65,12 @@ directionn round(directionn d, directionn v) {
 	case South:
 		switch(d) {
 		case North: return South;
+		case NorthEast: return SouthWest;
+		case NorthWest: return SouthEast;
 		case West: return East;
 		case South: return North;
+		case SouthWest: return NorthEast;
+		case SouthEast: return NorthWest;
 		case East: return West;
 		default: return d;
 		}

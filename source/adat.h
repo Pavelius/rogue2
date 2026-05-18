@@ -46,5 +46,6 @@ struct adat {
 	bool have(const void* element) const { return element >= data && element < (data + count); }
 	void remove(int index, int remove_count = 1) { if(index < 0) return; if(index<int(count - 1)) memcpy(data + index, data + index + 1, sizeof(data[0]) * (count - index - 1)); count--; }
 	void remove(const T t) { remove(find(t), 1); }
+	void sort(fncompare proc) { qsort(data, count, sizeof(data[0]), proc); }
 	void top(unsigned v) { if(count > v) count = v; }
 };

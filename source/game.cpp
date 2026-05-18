@@ -209,6 +209,11 @@ static void initialize_strings() {
 	stringbuilder::custom = game_string;
 }
 
+static void create_enemy(short unsigned index, monstern type) {
+	create_creature(index, type);
+	player->set(Enemy);
+}
+
 int main(int argc, char* argv[]) {
 	initialize_strings();
 	main_util();
@@ -237,6 +242,7 @@ int main(int argc, char* argv[]) {
 	player->equip(LongBow);
 	player->update();
 	human = player;
+	create_enemy(apos(7, 3), Wolf);
 	next_scene(play_game);
 	start_scene();
 	return 0;

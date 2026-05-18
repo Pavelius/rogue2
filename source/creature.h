@@ -69,6 +69,7 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	spellable		known; // Known spells
 	short unsigned	fear_id, boss_id;
 	short unsigned	site_id; // Current site of 0xFFFF
+	short unsigned	move_index; // Move to this point
 	short			hits, hits_maximum, mana;
 	int				experience;
 	int				wait_seconds;
@@ -81,18 +82,20 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	void act(messagen v) const;
 	void add(abilityn v, int i);
 	bool canhear(short unsigned i) const;
+	void clear();
 	void damage(int v) {}
 	bool is(featn v) const { return featable::is(v); }
 	bool is(abilityn v) const { return abilities[v] > 0; }
 	bool ischaracter() const { return type <= Elf; }
-	bool isenemy(const creature* p) const { return false; }
+	bool isenemy(const creature* p) const { return p->is(Enemy) != is(Enemy); }
 	bool isfemale() const { return false; }
 	bool ishuman() const { return this == human; }
 	bool ismirror() const { return is(Mirrorred); }
 	bool isunaware() const { return wait_seconds >= 25 * 4 * 6; }
-	void clear();
 	void fixact(directionn d);
 	void look(directionn d);
+	bool moveto(short unsigned ni);
+	bool moveaway(short unsigned ni);
 	void remove(featn v) { featable::remove(v); }
 	void remove(spelln v) { spellable::remove(v); }
 	bool resist(featn resistane, featn immunity) { return false; }

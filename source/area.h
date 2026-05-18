@@ -20,6 +20,8 @@ typedef bool(*fnareais)(short unsigned i);
 
 enum directionn : unsigned char;
 
+struct creature;
+
 enum rendern : unsigned char {
 	RenderShadow, RenderFeature, RenderWall, RenderCreature,
 };
@@ -114,6 +116,9 @@ struct sitei : abox {
 };
 extern sitei* last_site;
 
+directionn move_lower(short unsigned start, short unsigned goal);
+directionn move_greater(short unsigned start, short unsigned goal);
+
 int area_range(short unsigned i1, short unsigned i2);
 int get_move_cost(featuren v);
 
@@ -130,7 +135,8 @@ void area_set(short unsigned i, featuren v);
 void area_set(const abox& m, tilen v);
 void area_set(const abox& m, areafn v);
 void area_ver(short unsigned i, tilen v, short unsigned count);
-void block_features();
+void block_creatures(const creature* ignore);
+void block_features(bool ignore_water);
 void block_tiles();
 void block_walls();
 void block_zero();
@@ -139,4 +145,5 @@ bool is_trap(featuren v);
 bool is_free(featuren v, bool ignore_doors);
 bool is_free(tilen v, bool water_free);
 bool is_wall(tilen v);
+void make_wave(short unsigned start_index);
 void update_los();

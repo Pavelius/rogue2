@@ -33,13 +33,22 @@ creature* player;
 creature* opponent;
 static int roll_result;
 
-collectionv<creature> creatures;
+collectionv<creature> creatures, enemies;
 bool need_update_creatures;
 bool need_end_turn;
 
 static collection allowed_spells;
+static short unsigned compare_index;
 
 void fix(messagen v) {
+}
+
+static int compare_distace(const void* v1, const void* v2) {
+	auto p1 = (*((creature**)v1))->index;
+	auto p2 = (*((creature**)v2))->index;
+	auto d1 = area_range(p1, compare_index);
+	auto d2 = area_range(p2, compare_index);
+	return d1 - d2;
 }
 
 bool roll(int chance) {
@@ -354,12 +363,24 @@ static bool is_enough_mana(unsigned char v) {
 	return player->mana >= mana;
 }
 
+static bool is_enemy(const void* object) {
+	return player->isenemy((creature*)object);
+}
+
 static void ready_spells() {
 	select(allowed_spells, player->known);
 	allowed_spells.match(is_enough_mana, true);
 }
 
 static void ready_actions() {
+	compare_index = player->index;
+	enemies = creatures;
+	enemies.match(is_enemy, true);
+	enemies.sort(compare_distace);
+	if(enemies)
+		opponent = *enemies.begin();
+	else
+		opponent = 0;
 }
 
 void make_move() {
@@ -369,9 +390,7 @@ void make_move() {
 		return;
 	}
 	pushvalue push_player(opponent);
-	//pushvalue push_action(last_action);
-	//pushvalue push_rect(last_rect, player->getposition().rectangle());
-	//pushvalue push_site(last_site, get_site(player));
+	pushvalue push_site(last_site, player->getsite());
 	player->set(EnemyAttacks, 0);
 	player->update();
 	nullify_elements();
@@ -385,11 +404,14 @@ void make_move() {
 		return; // Dead from blooding, burning, cold or other bad
 	// check_levelup();
 	ready_spells();
+	ready_actions();
 	// check_horror();
 	if(player->ishuman()) {
 		ready_skills();
 //		last_actions.sort(compare_actions);
-		choose_player_move();
+		auto last = player->wait_seconds;
+		while(last==player->wait_seconds)
+			choose_player_move();
 	} else if(player->getfear()) {
 		//if(!player->moveaway(player->getfear()->getposition()))
 		//	pay_action();
@@ -407,7 +429,7 @@ void make_move() {
 		//else if(d100() < 20 && use_items()) {
 		//	// Nothing to do
 		//} else
-		//	player->moveto(opponent->getposition());
+			player->moveto(opponent->index);
 	} else {
 		//allowed_spells.match(spell_isnotcombat, true);
 		//allowed_spells.match(spell_allowmana, true);
@@ -441,6 +463,7 @@ void creature::clear() {
 	site_id = 0xFFFF;
 	boss_id = 0xFFFF;
 	fear_id = 0xFFFF;
+	move_index = 0xFFFF;
 }
 
 void creature::setindex(short unsigned i) {
@@ -538,4 +561,32 @@ void creature::waitmove() {
 		base = 50;
 	auto result = base * 100 / base;
 	wait(result);
+}
+
+bool creature::moveto(short unsigned ni) {
+	clear_path();
+	block_walls();
+	block_features(false);
+	block_creatures(this);
+	make_wave(ni);
+	auto d = move_lower(index, ni);
+	if(d==Center)
+		return false;
+	pushvalue push(player, this);
+	player_move(d);
+	return true;
+}
+
+bool creature::moveaway(short unsigned ni) {
+	clear_path();
+	block_walls();
+	block_features(false);
+	block_creatures(this);
+	make_wave(ni);
+	auto d = move_greater(index, ni);
+	if(d == Center)
+		return false;
+	pushvalue push(player, this);
+	player_move(d);
+	return true;
 }

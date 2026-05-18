@@ -44,6 +44,7 @@ static const directionn orientations_7b7[49] = {
 	SouthWest, SouthWest, SouthWest, South, SouthEast, SouthEast, SouthEast,
 	SouthWest, SouthWest, South, South, South, SouthEast, SouthEast,
 };
+static directionn all_directions[] = {West, East, North, South, NorthWest, NorthEast, SouthWest, SouthEast};
 
 static void addwave(short unsigned v) {
 	*push_counter++ = v;
@@ -51,21 +52,11 @@ static void addwave(short unsigned v) {
 		push_counter = stack;
 }
 
-static point getwave() {
+static short unsigned getwave() {
 	auto index = *pop_counter++;
 	if(pop_counter >= stack + sizeof(stack) / sizeof(stack[0]))
 		pop_counter = stack;
 	return index;
-}
-
-static bool is_impassable(featuren v) {
-	switch(v) {
-	case Statue:
-	case Tree: case TreePalm:
-		return true;
-	default:
-		return false;
-	}
 }
 
 bool is_wall(tilen v) {
@@ -76,10 +67,19 @@ bool is_trap(featuren v) {
 	return v == AcidTrap;
 }
 
-void block_features() {
+void block_features(bool ignore_water) {
 	for(auto i = 0; i < mps * mps; i++) {
-		if(is_impassable(area_features[i]))
+		if(!is_free(area_features[i], ignore_water))
 			movement_rate[i] = Blocked;
+	}
+}
+
+void block_creatures(const creature* ignore) {
+	update_creatures();
+	for(auto p : creatures) {
+		if(ignore == p)
+			continue;
+		movement_rate[p->index] = Blocked;
 	}
 }
 
@@ -124,6 +124,70 @@ void clear_path() {
 		e = NotCalculatedMovement;
 	push_counter = stack;
 	pop_counter = stack;
+}
+
+static void make_wave() {
+	while(pop_counter != push_counter) {
+		auto m = getwave();
+		auto cost = movement_rate[m] + 1;
+		for(auto d : all_directions) {
+			auto m1 = to(m, d, Blocked);
+			if(m1 == Blocked)
+				continue;
+			auto c1 = movement_rate[m1];
+			if(c1 == Blocked || c1 <= cost)
+				continue;
+			movement_rate[m1] = cost;
+			addwave(m1);
+		}
+	}
+}
+
+void make_wave(short unsigned start_index) {
+	movement_rate[start_index] = 0;
+	addwave(start_index);
+	make_wave();
+	block_zero();
+}
+
+directionn move_lower(short unsigned start, short unsigned goal) {
+	auto cost = 0xFFFF;
+	auto result = Center;
+	if(goal == start)
+		return Center;
+	for(auto d : all_directions) {
+		auto i1 = to(start, d, Blocked);
+		if(i1 == Blocked)
+			continue;
+		if(i1 == start)
+			return d;
+		auto c1 = movement_rate[i1];
+		if(c1 >= cost)
+			continue;
+		result = d;
+		cost = c1;
+	}
+	return result;
+}
+
+directionn move_greater(short unsigned start, short unsigned goal) {
+	auto cost = 0;
+	auto result = Center;
+	if(goal == start)
+		return Center;
+	for(auto d : all_directions) {
+		auto i1 = to(start, d, Blocked);
+		if(i1 == Blocked)
+			continue;
+		if(i1 == start)
+			return d;
+		auto c1 = movement_rate[i1];
+		if(c1 == Blocked || c1 <= cost)
+			continue;
+		result = d;
+		cost = c1;
+	}
+	return result;
 }
 
 bool area_is(short unsigned i, areafn f) {
@@ -271,6 +335,7 @@ bool is_free(featuren v, bool ignore_doors) {
 	case TreePalm: case Tree: case DeadTree:
 	case Grave:
 	case Statue:
+		return false;
 	case Door: case LockedDoor: case StuckDoor:
 		if(ignore_doors)
 			break;
