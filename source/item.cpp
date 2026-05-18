@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// 
+//
 //  Copyright 2026 by Pavel Chistyakov
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -89,6 +89,20 @@ static int get_armor(itemn v) {
 	}
 }
 
+static int get_weapon_speed(itemn v) {
+	switch(v) {
+	case LongSword: return 7;
+	case ShortSword: return 8;
+	case Dagger: return 9;
+	case GreatAxe: return 1;
+	case GreatSword: return 1;
+	case Mace: return 6;
+	case Staff: return 5;
+	case Axe: return 6;
+	default: return 10;
+	}
+}
+
 static wearn get_wear(itemn v) {
 	if(v >= CP && v <= GP)
 		return Backpack;
@@ -111,6 +125,10 @@ int item::cost() const {
 
 int item::damage() const {
 	return get_damage(type);
+}
+
+int item::speed() const {
+	return get_weapon_speed(type);
 }
 
 int item::dodge() const {

@@ -19,9 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="answers.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="answers.cpp" />
     <ClCompile Include="area.cpp" />
     <ClCompile Include="array.cpp" />
     <ClCompile Include="bstream.cpp" />

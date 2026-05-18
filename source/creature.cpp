@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// 
+//
 //  Copyright 2026 by Pavel Chistyakov
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -186,8 +186,17 @@ void update_creatures() {
 	}
 }
 
-static bool is_free(short unsigned i) {
-	if(!is_free(area_tiles[i], player->is(WaterWalking)))
+creature* find_creature(short unsigned i) {
+	update_creatures();
+	for(auto p : creatures) {
+		if(p->index==i)
+			return p;
+	}
+	return 0;
+}
+
+bool is_free(short unsigned i) {
+	if(!is_free(area_tiles[i], player->is(Fly)))
 		return false;
 	if(!is_free(area_features[i], false))
 		return false;
@@ -229,19 +238,59 @@ static void update_player_site() {
 	player->update();
 }
 
+static void pay_movement() {
+	auto cost = 150 - player->get(Dexterity);
+	if(!player->is(Fly))
+		cost = cost * get_move_cost(area_features[player->index]) / 100;
+	if(player->is(FastMove))
+		cost /= 2;
+	else if(player->is(SlowMove))
+		cost *= 2;
+	if(cost < 30)
+		cost = 30;
+	player->wait(cost);
+}
+
+static void pay_attack(const item& weapon) {
+	auto cost = 150 - weapon.speed() * 2 - player->get(Dexterity) / 10;
+	if(player->is(FastAttack))
+		cost /= 2;
+	else if(player->is(SlowAttack))
+		cost *= 2;
+	if(cost < 30)
+		cost = 30;
+	player->wait(cost);
+}
+
+static void make_melee_attack() {
+	pay_attack(player->wears[MeleeWeapon]);
+}
+
+static bool player_interact(short unsigned i, directionn d) {
+	auto p = find_creature(i);
+	if(!p)
+		return false;
+	pushvalue push(opponent, p);
+	if(opponent->isenemy(player)) {
+		player->fixact(d);
+		make_melee_attack();
+	}
+	return true;
+}
+
 bool player_move(directionn d) {
 	player->look(d);
 	auto i1 = to(player->index, d);
+	if(player_interact(i1, d))
+		return true;
 	if(i1 == Blocked || !is_free(i1)) {
 		player->fixact(d);
-		if(i1 != Blocked) {
-			if(use_area(i1))
-				player->wait();
-		}
+		if(use_area(i1))
+			player->wait();
 		return false;
 	}
 	player->index = i1;
-	player->waitmove();
+	pay_movement();
 	update_player_site();
 	return true;
 }
@@ -290,8 +339,8 @@ static void nullify_elements(featn v1, featn v2) {
 
 static void nullify_elements() {
 	nullify_elements(Burning, Freezing);
-	//nullify_elements(FastAttack, SlowAttack);
-	//nullify_elements(FastMove, SlowMove);
+	nullify_elements(FastAttack, SlowAttack);
+	nullify_elements(FastMove, SlowMove);
 }
 
 static void check_blooding() {
@@ -554,21 +603,12 @@ void creature::act(messagen v) const {
 		return;
 }
 
-void creature::waitmove() {
-	auto modifier = get_move_cost(area_features[player->index]);
-	auto base = 100 - player->get(Dexterity) / 10;
-	if(base < 50)
-		base = 50;
-	auto result = base * 100 / base;
-	wait(result);
-}
-
 bool creature::moveto(short unsigned ni) {
 	clear_path();
-	block_walls();
+	block_tiles(is(Fly));
 	block_features(false);
 	block_creatures(this);
-	make_wave(ni);
+	make_wave(ni, index);
 	auto d = move_lower(index, ni);
 	if(d==Center)
 		return false;
@@ -579,10 +619,10 @@ bool creature::moveto(short unsigned ni) {
 
 bool creature::moveaway(short unsigned ni) {
 	clear_path();
-	block_walls();
+	block_tiles(is(Fly));
 	block_features(false);
 	block_creatures(this);
-	make_wave(ni);
+	make_wave(ni, index);
 	auto d = move_greater(index, ni);
 	if(d == Center)
 		return false;

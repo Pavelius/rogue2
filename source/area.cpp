@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// 
+//
 //  Copyright 2026 by Pavel Chistyakov
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -90,9 +90,9 @@ void block_tiles(tilen v) {
 	}
 }
 
-void block_walls() {
+void block_tiles(bool ignore_water) {
 	for(auto i = 0; i < mps * mps; i++) {
-		if(is_wall(area_tiles[i]))
+		if(!is_free(area_tiles[i], ignore_water))
 			movement_rate[i] = Blocked;
 	}
 }
@@ -143,9 +143,10 @@ static void make_wave() {
 	}
 }
 
-void make_wave(short unsigned start_index) {
-	movement_rate[start_index] = 0;
-	addwave(start_index);
+void make_wave(short unsigned start, short unsigned goal) {
+	movement_rate[start] = 0;
+	movement_rate[goal] = 0;
+	addwave(start);
 	make_wave();
 	block_zero();
 }

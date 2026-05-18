@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// 
+//
 //  Copyright 2026 by Pavel Chistyakov
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,6 +37,7 @@ enum itemn : unsigned char {
 	BluePotion, GreenPotion, RedPotion,
 	LastItem = RedPotion,
 };
+
 struct item {
 	itemn type;
 	unsigned char count;
@@ -57,6 +58,7 @@ struct item {
 	int	cost() const;
 	int damage() const;
 	int dodge() const;
+	int speed() const;
 	int	weight() const;
 	bool broke() const;
 	void clear() { count = 0; type = (itemn)0; properties = 0; }

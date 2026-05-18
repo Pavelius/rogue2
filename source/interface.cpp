@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// 
+//
 //  Copyright 2026 by Pavel Chistyakov
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -124,7 +124,6 @@ static char console_text[512];
 static stringbuilder console(console_text);
 static point answer_end;
 
-answers an;
 bool show_floor_rect;
 
 void set_dark_theme();
@@ -317,7 +316,7 @@ static void paint_creature() {
 		else
 			image(pa, get_arms(p->wears[MeleeWeaponOffhand].type) - 36 + 10, feats);
 	} else
-		image(gres(ResMonsters), p->type, feats);
+		image(gres(ResMonsters), p->type - FirstMonster, feats);
 }
 
 static void paint_items() {

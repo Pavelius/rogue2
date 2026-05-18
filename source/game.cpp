@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// 
+//
 //  Copyright 2026 by Pavel Chistyakov
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -216,7 +216,7 @@ static void create_enemy(short unsigned index, monstern type) {
 
 int main(int argc, char* argv[]) {
 	initialize_strings();
-	main_util();
+	// main_util();
 	area_clear();
 	set_dark_theme();
 	initialize_gui();

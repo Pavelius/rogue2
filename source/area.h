@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// 
+//
 //  Copyright 2026 by Pavel Chistyakov
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -136,14 +136,13 @@ void area_set(const abox& m, tilen v);
 void area_set(const abox& m, areafn v);
 void area_ver(short unsigned i, tilen v, short unsigned count);
 void block_creatures(const creature* ignore);
-void block_features(bool ignore_water);
-void block_tiles();
-void block_walls();
+void block_features(bool ignore_doors);
+void block_tiles(bool ignore_water);
 void block_zero();
 void clear_path();
 bool is_trap(featuren v);
 bool is_free(featuren v, bool ignore_doors);
 bool is_free(tilen v, bool water_free);
 bool is_wall(tilen v);
-void make_wave(short unsigned start_index);
+void make_wave(short unsigned start, short unsigned goal);
 void update_los();

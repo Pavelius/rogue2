@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// 
+//
 //  Copyright 2026 by Pavel Chistyakov
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -94,6 +94,7 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	bool isunaware() const { return wait_seconds >= 25 * 4 * 6; }
 	void fixact(directionn d);
 	void look(directionn d);
+	bool move(directionn d);
 	bool moveto(short unsigned ni);
 	bool moveaway(short unsigned ni);
 	void remove(featn v) { featable::remove(v); }
@@ -106,8 +107,9 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	void update();
 	void wait(int v) { wait_seconds += v; need_end_turn = true; }
 	void wait() { wait(100); }
-	void waitmove();
 };
+
+creature* find_creature(short unsigned i);
 
 const char* get_avatar(monstern v);
 

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// 
+//
 //  Copyright 2026 by Pavel Chistyakov
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +16,9 @@
 
 #pragma once
 
+#ifdef __GNUC__
+#include <initializer_list>
+#else
 namespace std {
 template<class T>
 class initializer_list {
@@ -35,4 +38,4 @@ public:
 	constexpr unsigned	size() const noexcept { return last - first; }
 };
 }
-
+#endif

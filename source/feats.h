@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// 
+//
 //  Copyright 2026 by Pavel Chistyakov
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,7 @@ enum featn : unsigned char {
 	BloodingHit, StunningHit, ParalizeHit, PoisonHit, PushHit, ArmorPierceHit,
 	FireResistance, ColdResistance,
 	FireImmunity, ColdImmunity,
-	WaterWalking,
+	Fly, FastMove, SlowMove, FastAttack, SlowAttack,
 	Blooding, Regenerating,
 	Mirrorred, Enemy, Local,
 };

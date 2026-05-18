@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// 
+//
 //  Copyright 2026 by Pavel Chistyakov
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +20,6 @@
 
 const char* answers::header;
 const char* answers::string;
-const char* answers::resid;
 
 bool answers::show_tips = true;
 bool answers::interactive = true;
@@ -88,14 +87,6 @@ void answers::sort() {
 	qsort(elements.data, elements.count, sizeof(elements.data[0]), compare);
 }
 
-bool answers::modal(const char* title, const char* cancel) const {
-	auto proc = (fnevent)choose(title, cancel);
-	if(!proc)
-		return false;
-	proc();
-	return true;
-}
-
 long answers::random() const {
 	if(!elements.count)
 		return 0;
@@ -128,35 +119,6 @@ const char* answers::getname(long v) {
 void answers::clear() {
 	elements.clear();
 	sc.clear();
-}
-
-long answers::choose(const char* title, const char* cancel_text, int cancel_mode) const {
-	if(!interactive)
-		return random();
-	if(cancel_mode == 2 && elements.getcount() == 1)
-		return elements.data[0].value;
-	if(!elements) {
-		if(!cancel_mode || (cancel_mode && cancel_text == 0))
-			return 0;
-	}
-	auto columns = column_count;
-	if(columns == -1)
-		columns = getcolumns(*this);
-	pushvalue push(last, this);
-	return choose_answers(title, cancel_text, columns);
-}
-
-bool answers::makeweight() {
-	auto ps = elements.begin();
-	for(auto& e : *this) {
-		if(!e.weight)
-			continue;
-		*ps++ = e;
-	}
-	if(ps == elements.data)
-		return false;
-	elements.count = ps - elements.data;
-	return true;
 }
 
 const answers::element* answers::find(long value) const {
