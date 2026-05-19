@@ -21,12 +21,21 @@
 #include "math.h"
 
 struct statblock : featable, statable {
-	constexpr statblock() : featable(), statable() {}
+	itemn items[4];
+	constexpr statblock() : featable(), statable(), items{} {}
 	template<typename T, typename... Ts> constexpr statblock(T v, Ts... args) : statblock(args...) {
 		set(v);
 	}
 	constexpr void set(featn v) {
 		feats = 1 << v;
+	}
+	constexpr void set(itemn v) {
+		for(auto& e : items) {
+			if(!e) {
+				e = v;
+				break;
+			}
+		}
 	}
 	constexpr void set(abilityn v) {
 		switch(v) {
@@ -60,7 +69,7 @@ static monsteri monsters[] = {
 	{2, Racoon, 10, 30, 3, "89"}, // Racoon
 	{1, Rat, 5, 30, 3, "3"}, // Rat
 	{10, StagBeetle, 30, 15, 1, "26", {StunningHit}}, // StagBeelte
-	{3, Wolf, 20, 30, 4, "113"}, // Wolf
+	{3, Wolf, 20, 30, 4, "113", {BleedingHit, Claws}}, // Wolf
 };
 static_assert(lenghtof(monsters) == (Wolf + 1), "Invalid tile frames data count");
 
@@ -70,12 +79,36 @@ int getv(monstern v, abilityn a) {
 	case Strenght: return monsters[v].strenght;
 	case Dexterity: return monsters[v].dexterity;
 	case Wits: return monsters[v].wits;
-	case WeaponSkill: return imax(15, monsters[Level].level * 5);
-	case BalisticSkill: return imax(15, monsters[Level].level * 5);
+	case WeaponSkill: return imax(15, monsters[v].level * 5);
+	case BalisticSkill: return imax(15, monsters[v].level * 5);
 	default: return 0;
 	}
 }
 
 const char* get_avatar(monstern v) {
 	return monsters[v].avatar;
+}
+
+void apply_monster(monstern type) {
+	player->basic.abilities[Strenght] += getv(type, Strenght);
+	player->basic.abilities[Dexterity] += getv(type, Dexterity);
+	player->basic.abilities[Wits] += getv(type, Wits);
+	if(type >= FirstMonster && type <= LastMonster) {
+		auto& e = monsters[type];
+		player->basic.abilities[Level] += e.level;
+		player->basic.abilities[WeaponSkill] += getv(type, WeaponSkill);
+		player->basic.abilities[BalisticSkill] += getv(type, BalisticSkill);
+		player->feats |= e.stats.feats;
+		for(auto i = 0; i < lenghtof(e.stats.abilities); i++)
+			player->basic.abilities[i] += e.stats.abilities[i];
+		for(auto v : e.stats.items) {
+			if(v)
+				player->equip(v);
+		}
+	} else {
+		player->basic.abilities[WeaponSkill] += 15;
+		player->basic.abilities[BalisticSkill] += 15;
+		player->basic.abilities[Hits] += 10;
+		player->basic.abilities[Mana] += 10;
+	}
 }

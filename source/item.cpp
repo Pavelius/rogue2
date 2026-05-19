@@ -60,7 +60,7 @@ static int get_cost(itemn v) {
 
 static int get_damage(itemn v) {
 	switch(v) {
-	case Dagger:
+	case Claws: case Dagger:
 		return 3;
 	case ShortSword: case Axe: case Spear: case Mace:
 		return 4;
@@ -106,6 +106,7 @@ static int get_weapon_speed(itemn v) {
 int get_pierce(itemn v) {
 	switch(v) {
 	case Axe: return 1;
+	case Claws: return 1;
 	case GreatAxe: return 2;
 	default: return 0;
 	}
@@ -115,6 +116,8 @@ static wearn get_wear(itemn v) {
 	if(v >= CP && v <= GP)
 		return Backpack;
 	else if(v >= Staff && v <= GreatSword)
+		return MeleeWeapon;
+	else if(v == Claws)
 		return MeleeWeapon;
 	else if(v >= ShortBow && v <= HeavyCrossbow)
 		return RangedWeapon;

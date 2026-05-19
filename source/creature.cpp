@@ -93,6 +93,7 @@ void add_value(abilityn v, int value) {
 static void update_derived() {
 	player->hits_maximum = player->abilities[Hits];
 	player->hits_maximum += player->abilities[Strenght] / 4;
+	player->hits_maximum += player->abilities[Level] * 5;
 }
 
 static void update_abilities() {
@@ -123,21 +124,6 @@ static void update_player() {
 	copy(*player, player->basic);
 	update_abilities();
 	update_derived();
-}
-
-static void apply_monster(monstern type) {
-	player->basic.abilities[Strenght] += getv(type, Strenght);
-	player->basic.abilities[Dexterity] += getv(type, Dexterity);
-	player->basic.abilities[Wits] += getv(type, Wits);
-	if(type >= FirstMonster) {
-		player->basic.abilities[WeaponSkill] += getv(type, WeaponSkill);
-		player->basic.abilities[BalisticSkill] += getv(type, BalisticSkill);
-	} else {
-		player->basic.abilities[WeaponSkill] += 15;
-		player->basic.abilities[BalisticSkill] += 15;
-		player->basic.abilities[Hits] += 10;
-		player->basic.abilities[Mana] += 10;
-	}
 }
 
 static void random_name() {
@@ -390,9 +376,9 @@ static void make_attack(item& weapon, int attack_skill, int damage_percent) {
 	else
 		damage -= xrand(1, 4); // Miss gain great damage reduction
 	if(roll_result <= attack_skill - 30)
-		damage += xrand(weapon_damage/2, weapon_damage);
+		damage += xrand(weapon_damage / 2, weapon_damage);
 	if(roll_result <= attack_skill - 60)
-		damage += xrand(weapon_damage/2, weapon_damage);
+		damage += xrand(weapon_damage / 2, weapon_damage);
 	if(damage_percent)
 		damage = damage * damage_percent / 100;
 	auto armor = opponent->get(Armor);
@@ -731,10 +717,10 @@ void creature::kill() {
 	auto human_killed = ishuman();
 	remove_order(this);
 	fixact(BloodVisual);
-//	drop_treasure(this);
-//	drop_throphy(this, 30);
-//	if(opponent == this && player)
-//		player->experience += get_experience_reward(opponent);
+	//	drop_treasure(this);
+	//	drop_throphy(this, 30);
+	//	if(opponent == this && player)
+	//		player->experience += get_experience_reward(opponent);
 	clear();
 	if(human_killed)
 		end_game();
