@@ -1,7 +1,7 @@
 #include "adat.h"
 #include "color.h"
 #include "draw.h"
-#include "floatinfo.h"
+#include "draw_floatinfo.h"
 #include "stringbuilder.h"
 #include "timer.h"
 

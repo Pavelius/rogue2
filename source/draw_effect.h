@@ -16,6 +16,18 @@
 
 #pragma once
 
+#include "point.h"
+
+typedef void(*fnevent)();
+
+enum resid : unsigned char;
+
 enum visualn : unsigned char {
 	PoisonVisual, BloodVisual,
 };
+
+void add_effect(point position, visualn id);
+void add_effect(point position, resid res, int cicle, int priority, int duration);
+void add_effects();
+bool have_effects();
+void paint_effect();

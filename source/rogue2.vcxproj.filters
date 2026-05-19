@@ -156,7 +156,10 @@
     <ClCompile Include="timer.cpp">
       <Filter>Support</Filter>
     </ClCompile>
-    <ClCompile Include="floatinfo.cpp">
+    <ClCompile Include="draw_floatinfo.cpp">
+      <Filter>Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="draw_effect.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
   </ItemGroup>
@@ -293,7 +296,10 @@
     <ClInclude Include="spell.h">
       <Filter>Logic</Filter>
     </ClInclude>
-    <ClInclude Include="floatinfo.h">
+    <ClInclude Include="draw_floatinfo.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="draw_effect.h">
       <Filter>Interface</Filter>
     </ClInclude>
   </ItemGroup>

@@ -20,8 +20,9 @@
 #include "creature.h"
 #include "direction.h"
 #include "draw.h"
+#include "draw_effect.h"
 #include "draw_object.h"
-#include "floatinfo.h"
+#include "draw_floatinfo.h"
 #include "game.h"
 #include "io_stream.h"
 #include "itemlay.h"
@@ -76,9 +77,9 @@ static tilei flag_frames[] = {
 	{0}, // Visible
 	{0}, // Hidden
 	{0}, // Darkened
-	{0, {0, 1}}, // Blooded
-	{0, {0, 1}}, // Iced
-	{0, {0, 1}}, // Webbed
+	{0, {4, 3}}, // Blooded
+	{0, {3, 1}}, // Iced
+	{0, {0, 3}}, // Webbed
 };
 static_assert(lenghtof(flag_frames) == (Webbed + 1), "Invalid flag frames data count");
 static tilei feature_frames[] = {
@@ -471,6 +472,7 @@ static bool is_between_walls(featuren v) {
 static void paint_floor() {
 	pushrect push;
 	auto pi = gres(ResFloor);
+	auto pf = gres(ResFeatures);
 	auto pd = gres(ResDecals);
 	auto mb = camera_box();
 	auto y2 = mb.y + mb.h;
@@ -499,7 +501,7 @@ static void paint_floor() {
 				if(!area_is(i, f))
 					continue;
 				if(flag_frames[f].frame)
-					image(pd, flag_frames[f].frame.get(r), 0);
+					image(pf, flag_frames[f].frame.get(r), 0);
 			}
 			if(show_floor_rect)
 				floorrect();
@@ -681,22 +683,21 @@ static void bar_shade(int value, int maximum, color m) {
 	fore = push_fore;
 }
 
-static point get_top_position(const creature* p) {
+static point get_head(monstern type) {
 	point result = {0, 0};
-	if(p->ischaracter())
-		result.y = -76;
-	else {
+	if(type>=FirstMonster) {
 		auto ps = gres(ResMonsters);
-		auto& fr = ps->get(p->type);
+		auto& fr = ps->get(type - FirstMonster);
 		result.y -= fr.oy + 4 * 2;
-	}
+	} else
+		result.y = -76;
 	return result;
 }
 
 static void paint_bars(const creature* player) {
 	const int dy = 4;
 	pushrect push;
-	caret.y += get_top_position(player).y;
+	caret.y += get_head(player->type).y;
 	caret.x -= tsx / 4;
 	width = tsx / 2; height = 4;
 	bar(player->hits, player->hits_maximum, colors::red);
@@ -826,6 +827,7 @@ void creature::fixact(directionn d) {
 }
 
 void creature::fixact(visualn v) {
+	add_effect(position + point(0, -32), v);
 }
 
 void creature::fixmsg(const char* format, int param) {
@@ -1467,6 +1469,7 @@ static void paint_area() {
 	clear_drawobjects();
 	clear_objects();
 	add_creatures();
+	add_effects();
 	paint_floor();
 	paint_items();
 	paint_features();
@@ -1536,6 +1539,7 @@ static void wait_all() {
 	clear_last_tick();
 	sync_scene(play_game_animate, have_orders);
 	sync_scene(play_game_animate, have_floatinfo);
+	sync_scene(play_game_animate, have_effects);
 }
 
 void choose_player_move() {
@@ -1570,6 +1574,7 @@ BSDATA(drawrender) = {
 	{paint_shadow},
 	{paint_feature},
 	{paint_wall},
+	{paint_effect},
 	{paint_creature},
 };
 BSDATAF(drawrender)

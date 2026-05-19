@@ -23,7 +23,7 @@ enum directionn : unsigned char;
 struct creature;
 
 enum rendern : unsigned char {
-	RenderShadow, RenderFeature, RenderWall, RenderCreature,
+	RenderShadow, RenderFeature, RenderWall, RenderEffect, RenderCreature,
 };
 enum landscapen : unsigned char {
 	Plains, Forest, DeepForest, Swamp, Hills, Mountains,

@@ -19,7 +19,8 @@
 #include "collection.h"
 #include "collectiona.h"
 #include "creature.h"
-#include "floatinfo.h"
+#include "draw_effect.h"
+#include "draw_floatinfo.h"
 #include "indexa.h"
 #include "game.h"
 #include "math.h"
@@ -28,7 +29,6 @@
 #include "rand.h"
 #include "speech.h"
 #include "stringbuilder.h"
-#include "visual.h"
 
 creature* human;
 creature* player;
@@ -331,6 +331,7 @@ static void attack_effect_stun(creature* opponent) {
 }
 
 static void special_attack(item& weapon, creature* opponent, int& pierce, int& damage) {
+	opponent->fixact(BloodVisual);
 	if(player->is(VorpalHit, weapon)) {
 		if(!opponent->resist(DeathResistance, DeathImmunity)) {
 			damage = 100;
@@ -396,7 +397,7 @@ static void make_attack(item& weapon, int attack_skill, int damage_percent) {
 		damage = damage * damage_percent / 100;
 	auto armor = opponent->get(Armor);
 	auto pierce = get_pierce(weapon.type);
-	if(roll_result < attack_skill / 3)
+	if(player->roll(Dexterity))
 		special_attack(weapon, opponent, pierce, damage); // If hit critical
 	apply_pierce(armor, pierce);
 	auto block_damage = opponent->get(Block);
