@@ -21,6 +21,7 @@
 #include "direction.h"
 #include "draw.h"
 #include "draw_object.h"
+#include "floatinfo.h"
 #include "game.h"
 #include "io_stream.h"
 #include "itemlay.h"
@@ -823,6 +824,10 @@ void creature::fixact(directionn d) {
 	fixmove(s2, tick_time / 3);
 }
 
+void creature::fixmsg(const char* format, int param) {
+	add_text(position - camera - point(0, 64), format, param, InfoRed);
+}
+
 static void text_header(const char* format) {
 	auto push_caret = caret;
 	pushfont push_font(metrics::h2);
@@ -1464,6 +1469,8 @@ static void paint_area() {
 	paint_los();
 	paint_fow();
 	for_each_object(paint_health_bar);
+	floatinfo_update();
+	floatinfo_paint();
 	clipping = push_clip;
 }
 
@@ -1479,7 +1486,7 @@ static void check_end_turn() {
 		need_end_turn = false;
 		breakmodal(1);
 	}
-	if(have_orders())
+	if(have_orders() || have_floatinfo())
 		breakmodal(1);
 }
 
@@ -1519,6 +1526,7 @@ static void play_game_animate() {
 
 static void wait_all() {
 	wait_all_objects(play_game_animate);
+	floatinfo_wait(play_game_animate);
 }
 
 void choose_player_move() {

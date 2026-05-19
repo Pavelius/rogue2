@@ -73,7 +73,7 @@ static void attack_roll(abilityn mode, item& weapon) {
 	auto armor = opponent->get(Armor);
 	if(!roll(skill))
 		damage /= 2;
-	if(damage<armor) {
+	if(damage < armor) {
 		fix(MsgMiss);
 		return;
 	}
@@ -138,21 +138,13 @@ static void apply_monster(monstern type) {
 	}
 }
 
-static speechn get_name_speech(monstern v) {
-	switch(v) {
-	case Elf: return ElfNames;
-	case Dwarf: return DwarfNames;
-	default: return HumanNames;
-	}
-}
-
 static void random_name() {
 	if(player->ischaracter()) {
-		player->name_id = 2 * (rand() % 25);
+		player->custom_name = namen(2 * (rand() % 25));
 		if(player->isfemale())
-			player->name_id++;
+			player->custom_name = namen(player->custom_name + 1);
 	} else
-		player->name_id = 0xFF;
+		player->custom_name = NoName;
 }
 
 void create_creature(short unsigned index_position, monstern type) {
@@ -189,7 +181,7 @@ void update_creatures() {
 creature* find_creature(short unsigned i) {
 	update_creatures();
 	for(auto p : creatures) {
-		if(p->index==i)
+		if(p->index == i)
 			return p;
 	}
 	return 0;
@@ -264,6 +256,7 @@ static void pay_attack(const item& weapon) {
 
 static void make_melee_attack() {
 	pay_attack(player->wears[MeleeWeapon]);
+	player->fixmsg("Damage %1i", 5);
 }
 
 static bool player_interact(short unsigned i, directionn d) {
@@ -364,7 +357,7 @@ static void detect_hidden_objects() {
 		if(!player->roll(Alertness))
 			continue;
 		auto f = area_features[i];
-		if(f==HiddenDoor)
+		if(f == HiddenDoor)
 			player->act(PlayerFoundSecretDoor);
 		else if(is_trap(f))
 			player->act(PlayerFoundTrap);
@@ -457,9 +450,9 @@ void make_move() {
 	// check_horror();
 	if(player->ishuman()) {
 		ready_skills();
-//		last_actions.sort(compare_actions);
+		//		last_actions.sort(compare_actions);
 		auto last = player->wait_seconds;
-		while(last==player->wait_seconds)
+		while(last == player->wait_seconds)
 			choose_player_move();
 	} else if(player->getfear()) {
 		//if(!player->moveaway(player->getfear()->getposition()))
@@ -478,7 +471,7 @@ void make_move() {
 		//else if(d100() < 20 && use_items()) {
 		//	// Nothing to do
 		//} else
-			player->moveto(opponent->index);
+		player->moveto(opponent->index);
 	} else {
 		//allowed_spells.match(spell_isnotcombat, true);
 		//allowed_spells.match(spell_allowmana, true);
@@ -508,7 +501,7 @@ void creature::clear() {
 	memset((void*)this, 0, sizeof(*this));
 	index = 0xFFFF;
 	area_index = 0xFFFF;
-	name_id = 0xFF;
+	custom_name = NoName;
 	site_id = 0xFFFF;
 	boss_id = 0xFFFF;
 	fear_id = 0xFFFF;
@@ -567,9 +560,9 @@ bool creature::canhear(short unsigned i) const {
 }
 
 const char* creature::name() const {
-	if(name_id == 0xFF)
+	if(custom_name == NoName)
 		return getname(type);
-	return getspeech(get_name_speech(type), name_id);
+	return getname(custom_name);
 }
 
 creature* wearable::owner() {
@@ -610,7 +603,7 @@ bool creature::moveto(short unsigned ni) {
 	block_creatures(this);
 	make_wave(ni, index);
 	auto d = move_lower(index, ni);
-	if(d==Center)
+	if(d == Center)
 		return false;
 	pushvalue push(player, this);
 	player_move(d);

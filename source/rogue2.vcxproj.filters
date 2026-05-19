@@ -153,6 +153,9 @@
     <ClCompile Include="spell.cpp">
       <Filter>Logic</Filter>
     </ClCompile>
+    <ClCompile Include="floatinfo.cpp">
+      <Filter>Interface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sprite_util.h">
@@ -286,6 +289,9 @@
     </ClInclude>
     <ClInclude Include="spell.h">
       <Filter>Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="floatinfo.h">
+      <Filter>Interface</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -51,6 +51,13 @@ enum monstern : unsigned char {
 	StagBeetle, Wolf,
 	FirstMonster = Bear, LastMonster = Wolf,
 };
+enum namen : unsigned short {
+	HumanNames,
+	ElfNames = HumanNames +50,
+	DwarfNames = ElfNames + 50,
+	OrcNames = DwarfNames + 50,
+	NoName = 0xFFFF
+};
 struct statable {
 	char abilities[Drunk + 1];
 };
@@ -63,7 +70,7 @@ extern bool need_update_creatures;
 extern bool need_end_turn;
 
 struct creature : drawable, posable, statable, featable, spellable, wearable {
-	unsigned char	name_id; // Random name seed or 0xFF if no name
+	namen			custom_name; // Random name seed or 0xFF if no name
 	monstern		type; // Character or Monster type
 	statable		basic; // Raw ability before any modification
 	spellable		known; // Known spells
@@ -93,6 +100,7 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	bool ismirror() const { return is(Mirrorred); }
 	bool isunaware() const { return wait_seconds >= 25 * 4 * 6; }
 	void fixact(directionn d);
+	void fixmsg(const char* format, int param);
 	void look(directionn d);
 	bool move(directionn d);
 	bool moveto(short unsigned ni);

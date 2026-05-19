@@ -35,6 +35,7 @@
     <ClCompile Include="draw_text.cpp" />
     <ClCompile Include="draw_textf.cpp" />
     <ClCompile Include="draw_theme.cpp" />
+    <ClCompile Include="floatinfo.cpp" />
     <ClCompile Include="font_util.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="indexa.cpp" />
@@ -82,6 +83,7 @@
     <ClInclude Include="draw_object.h" />
     <ClInclude Include="feats.h" />
     <ClInclude Include="flagable.h" />
+    <ClInclude Include="floatinfo.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="indexa.h" />
     <ClInclude Include="speech.h" />
