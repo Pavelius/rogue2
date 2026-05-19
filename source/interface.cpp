@@ -30,6 +30,7 @@
 #include "pushvalue.h"
 #include "screenshoot.h"
 #include "resid.h"
+#include "timer.h"
 
 const int tsx = 64;
 const int tsy = 48;
@@ -824,8 +825,13 @@ void creature::fixact(directionn d) {
 	fixmove(s2, tick_time / 3);
 }
 
+void creature::fixact(visualn v) {
+}
+
 void creature::fixmsg(const char* format, int param) {
-	add_text(position - camera - point(0, 64), format, param, InfoRed);
+	if(!isvisible())
+		return;
+	add_floatinfo(position - point(0, 64), format, param, InfoRed);
 }
 
 static void text_header(const char* format) {
@@ -1469,8 +1475,7 @@ static void paint_area() {
 	paint_los();
 	paint_fow();
 	for_each_object(paint_health_bar);
-	floatinfo_update();
-	floatinfo_paint();
+	paint_floatinfo();
 	clipping = push_clip;
 }
 
@@ -1519,14 +1524,18 @@ static void update_creature_orders() {
 }
 
 static void play_game_animate() {
+	update_time();
+	update_floatinfo();
+	update_object_orders();
 	paint_status();
 	link_camera();
 	paint_area();
 }
 
 static void wait_all() {
-	wait_all_objects(play_game_animate);
-	floatinfo_wait(play_game_animate);
+	clear_last_tick();
+	sync_scene(play_game_animate, have_orders);
+	sync_scene(play_game_animate, have_floatinfo);
 }
 
 void choose_player_move() {

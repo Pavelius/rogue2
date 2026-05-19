@@ -18,11 +18,12 @@
 
 enum featn : unsigned char {
 	DarkVision,
-	BloodingHit, StunningHit, ParalizeHit, PoisonHit, PushHit, ArmorPierceHit,
-	FireResistance, ColdResistance,
-	FireImmunity, ColdImmunity,
+	BleedingHit, MightyHit, ParalizeHit, PierceHit, StunningHit, PoisonHit, PushHit, VorpalHit, RetaliateHit,
+	WeakPoison, StrongPoison, DeathPoison, ColdDamage, FireDamage,
+	AcidResistance, ColdResistance, DeathResistance, DiseaseResist, FireResistance, PoisonResistance, StunResistance,
+	AcidImmunity, ColdImmunity, DeathImmunity, DiseaseImmunity, FireImmunity, PoisonImmunity, StunImmunity,
 	Fly, FastMove, SlowMove, FastAttack, SlowAttack,
-	Blooding, Regenerating,
+	Blooding, Regenerating, Stun,
 	Mirrorred, Enemy, Local,
 };
 struct featable {

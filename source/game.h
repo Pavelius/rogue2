@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// 
+//
 //  Copyright 2026 by Pavel Chistyakov
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,5 +38,6 @@ int getv(gamen v);
 
 void addv(gamen v, int i);
 void choose_player_move();
+void end_game();
 void pass_minute();
 void skip_long_time();

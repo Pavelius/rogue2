@@ -10,8 +10,7 @@ enum floatinfon : unsigned char {
 
 const unsigned long floatinfo_duration = 300;
 
-void add_text(point position, const char* format, int param, floatinfon fore);
-void floatinfo_paint();
-void floatinfo_update();
-void floatinfo_wait(fnevent proc);
+void add_floatinfo(point position, const char* format, int param, floatinfon fore);
+void paint_floatinfo();
+void update_floatinfo();
 bool have_floatinfo();

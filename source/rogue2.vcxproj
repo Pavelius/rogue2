@@ -60,6 +60,7 @@
     <ClCompile Include="stringvar.cpp" />
     <ClCompile Include="szdup.cpp" />
     <ClCompile Include="interface.cpp" />
+    <ClCompile Include="timer.cpp" />
     <ClCompile Include="win_draw.cpp" />
     <ClCompile Include="win_io_file.cpp" />
     <ClCompile Include="win_time.cpp" />

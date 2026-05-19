@@ -103,6 +103,14 @@ static int get_weapon_speed(itemn v) {
 	}
 }
 
+int get_pierce(itemn v) {
+	switch(v) {
+	case Axe: return 1;
+	case GreatAxe: return 2;
+	default: return 0;
+	}
+}
+
 static wearn get_wear(itemn v) {
 	if(v >= CP && v <= GP)
 		return Backpack;
@@ -144,6 +152,10 @@ int item::dodge() const {
 
 int item::armor() const {
 	return get_armor(type);
+}
+
+bool item::broke() {
+	return false;
 }
 
 bool item::istwohanded() const {

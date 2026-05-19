@@ -24,6 +24,7 @@
 #include "spell.h"
 
 enum messagen : unsigned char;
+enum visualn : unsigned char;
 
 struct creature;
 struct sitei;
@@ -90,8 +91,9 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	void add(abilityn v, int i);
 	bool canhear(short unsigned i) const;
 	void clear();
-	void damage(int v) {}
+	void damage(int v);
 	bool is(featn v) const { return featable::is(v); }
+	bool is(featn v, const item& m) const { return featable::is(v); }
 	bool is(abilityn v) const { return abilities[v] > 0; }
 	bool ischaracter() const { return type <= Elf; }
 	bool isenemy(const creature* p) const { return p->is(Enemy) != is(Enemy); }
@@ -99,16 +101,19 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	bool ishuman() const { return this == human; }
 	bool ismirror() const { return is(Mirrorred); }
 	bool isunaware() const { return wait_seconds >= 25 * 4 * 6; }
+	bool isvisible() const;
 	void fixact(directionn d);
+	void fixact(visualn v);
 	void fixmsg(const char* format, int param);
+	void kill();
 	void look(directionn d);
 	bool move(directionn d);
 	bool moveto(short unsigned ni);
 	bool moveaway(short unsigned ni);
 	void remove(featn v) { featable::remove(v); }
 	void remove(spelln v) { spellable::remove(v); }
-	bool resist(featn resistane, featn immunity) { return false; }
-	bool roll(abilityn v, int bonus = 0) { return true; }
+	bool resist(featn resistane, featn immunity) const;
+	bool roll(abilityn v, int bonus = 0) const;
 	void set(abilityn v, int i) { abilities[v] = (char)i; }
 	void set(featn v) { featable::set(v); }
 	void setindex(short unsigned i);

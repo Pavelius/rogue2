@@ -190,6 +190,9 @@ void play_game() {
 		play_minute();
 }
 
+void end_game() {
+}
+
 static void put_item(short unsigned i, itemn v) {
 	item it(v);
 	add_item(current_area, i, it);

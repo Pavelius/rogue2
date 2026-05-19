@@ -19,6 +19,7 @@
 #include "collection.h"
 #include "collectiona.h"
 #include "creature.h"
+#include "floatinfo.h"
 #include "indexa.h"
 #include "game.h"
 #include "math.h"
@@ -27,11 +28,12 @@
 #include "rand.h"
 #include "speech.h"
 #include "stringbuilder.h"
+#include "visual.h"
 
 creature* human;
 creature* player;
 creature* opponent;
-static int roll_result;
+static int roll_result, last_value;
 
 collectionv<creature> creatures, enemies;
 bool need_update_creatures;
@@ -209,6 +211,11 @@ bool use_area(short unsigned i) {
 	return true;
 }
 
+static void add_hits(creature* player, int value) {
+	if(value < 0)
+		player->damage(-value);
+}
+
 static sitei* find_site(apos m) {
 	for(auto& e : bsdata<sitei>()) {
 		if(e.have(m))
@@ -254,9 +261,174 @@ static void pay_attack(const item& weapon) {
 	player->wait(cost);
 }
 
-static void make_melee_attack() {
-	pay_attack(player->wears[MeleeWeapon]);
-	player->fixmsg("Damage %1i", 5);
+static void poison_attack(creature* player, int value) {
+	if(value <= 0)
+		return;
+	if(player->resist(PoisonResistance, PoisonImmunity))
+		return;
+	if(player->roll(Strenght, -value))
+		return;
+	auto v = player->get(Poison) + value;
+	player->fixact(PoisonVisual);
+	if(v >= player->basic.abilities[Hits])
+		player->kill();
+	else
+		player->set(Poison, v);
+}
+
+static void poison_attack(const item& weapon) {
+	auto strenght = 0;
+	if(player->is(WeakPoison, weapon))
+		strenght += xrand(1, 2);
+	if(player->is(StrongPoison, weapon))
+		strenght += xrand(2, 4);
+	if(player->is(DeathPoison, weapon))
+		strenght += xrand(3, 6);
+	poison_attack(opponent, strenght);
+}
+
+static void illness_attack(creature* player, int value) {
+	if(value <= 0)
+		return;
+	if(player->resist(DiseaseResist, DiseaseImmunity))
+		return;
+	auto v = player->get(Illness) + value;
+	player->fixact(PoisonVisual);
+	if(v >= player->get(Strenght))
+		player->kill();
+	else
+		player->set(Illness, v);
+}
+
+static void damage_player_items(itemn v, int chance) {
+}
+
+static void damage_equipment(int value, bool run) {
+}
+
+static void check_corrosion() {
+	if(player->is(Corrosion)) {
+		if(!player->resist(AcidResistance, AcidImmunity)) {
+			player->damage(player->get(Corrosion));
+			damage_equipment(1, true);
+		}
+		player->add(Corrosion, -1);
+	}
+}
+
+static abilityn weapon_skill(const item& weapon) {
+	return WeaponSkill;
+}
+
+static abilityn damage_skill(abilityn v) {
+	switch(v) {
+	case BalisticSkill: return DamageRanged;
+	default: return DamageMelee;
+	}
+}
+
+static void attack_effect_stun(creature* opponent) {
+}
+
+static void special_attack(item& weapon, creature* opponent, int& pierce, int& damage) {
+	if(player->is(VorpalHit, weapon)) {
+		if(!opponent->resist(DeathResistance, DeathImmunity)) {
+			damage = 100;
+			pierce = 100;
+		}
+	}
+	if(player->is(BleedingHit, weapon))
+		opponent->set(Blooding);
+	if(player->is(StunningHit, weapon))
+		attack_effect_stun(opponent);
+	if(player->is(PierceHit, weapon))
+		pierce += 3;
+	if(player->is(MightyHit, weapon))
+		damage += 2;
+	if(player->is(ColdDamage, weapon)) {
+		opponent->add(Freezing, 2);
+		area_set(opponent->index, Iced);
+	}
+}
+
+static void apply_pierce(int& armor, int pierce) {
+	if(armor > 0) {
+		if(pierce > armor)
+			armor = 0;
+		else
+			armor -= pierce;
+	} else
+		armor = 0;
+}
+
+static int add_bonus_damage(creature* player, creature* enemy, const item& weapon, featn feat, int value, featn resistance, featn immunity) {
+	if(!player->is(feat, weapon))
+		return 0;
+	auto bonus_damage = value;
+	if(immunity && enemy->is(immunity))
+		bonus_damage = 0;
+	else if(resistance && enemy->is(resistance))
+		bonus_damage /= 2;
+	return bonus_damage;
+}
+
+static void make_attack(item& weapon, int attack_skill, int damage_percent) {
+	if(!opponent)
+		return;
+	auto weapon_ability = weapon_skill(weapon);
+	auto weapon_damage = weapon.damage();
+	auto damage = weapon_damage;
+	damage += player->get(damage_skill(weapon_ability));
+	damage += add_bonus_damage(player, opponent, weapon, FireDamage, 2, FireResistance, FireImmunity);
+	damage += add_bonus_damage(player, opponent, weapon, ColdDamage, 2, ColdResistance, ColdImmunity);
+	attack_skill += player->get(weapon_ability);
+	// Roll how match damage make
+	auto roll_result = d100();
+	if(roll_result <= attack_skill)
+		damage += xrand(0, 2); // Hit, gain random damage increment
+	else
+		damage -= xrand(1, 4); // Miss gain great damage reduction
+	if(roll_result <= attack_skill - 30)
+		damage += xrand(weapon_damage/2, weapon_damage);
+	if(roll_result <= attack_skill - 60)
+		damage += xrand(weapon_damage/2, weapon_damage);
+	if(damage_percent)
+		damage = damage * damage_percent / 100;
+	auto armor = opponent->get(Armor);
+	auto pierce = get_pierce(weapon.type);
+	if(roll_result < attack_skill / 3)
+		special_attack(weapon, opponent, pierce, damage); // If hit critical
+	apply_pierce(armor, pierce);
+	auto block_damage = opponent->get(Block);
+	if(block_damage > 0 && armor < damage) {
+		armor += xrand(0, block_damage);
+		if(armor >= damage) {
+			//player->logs("AttackBlocked", damage - armor, opponent->getname(), roll_result, damage, -armor);
+			opponent->fixmsg(getname(PlayerBlock), InfoGreen);
+			return;
+		}
+	}
+	auto damage_result = damage - armor;
+	if(damage_result > 0 && weapon.is(Cursed) && (d100() < 50)) // Cursed weapon miss half time
+		damage_result = 0;
+	if(damage_result <= 0) {
+		// player->logs("AttackMiss", damage_result, opponent->getname(), roll_result, damage, -armor);
+		return;
+	}
+	if(opponent->roll(Dodge)) {
+		// player->logs("AttackHitButEnemyDodge", opponent->getname());
+		opponent->fixmsg(getname(PlayerDodge), InfoGreen);
+	} else {
+		// player->logs("AttackHit", damage_result, opponent->getname(), roll_result, damage, -armor);
+		opponent->damage(damage_result);
+		poison_attack(weapon);
+		if(opponent->is(RetaliateHit, opponent->wears[MeleeWeapon])) {
+			if(!player->roll(Dodge))
+				player->damage(1);
+		}
+	}
+	if(roll_result >= 95 && d100() < 30)
+		weapon.broke();
 }
 
 static bool player_interact(short unsigned i, directionn d) {
@@ -266,7 +438,8 @@ static bool player_interact(short unsigned i, directionn d) {
 	pushvalue push(opponent, p);
 	if(opponent->isenemy(player)) {
 		player->fixact(d);
-		make_melee_attack();
+		make_attack(player->wears[MeleeWeapon], 0, 100);
+		pay_attack(player->wears[MeleeWeapon]);
 	}
 	return true;
 }
@@ -310,12 +483,6 @@ void update_los() {
 		area_los(human->index, player->getlos(), is_free_light_set);
 }
 
-void creature::update() {
-	auto push = player; player = this;
-	update_player();
-	player = push;
-}
-
 static void nullify_elements(abilityn v1, abilityn v2) {
 	if(player->is(v1) && player->is(v2)) {
 		player->set(v1, 0);
@@ -342,6 +509,32 @@ static void check_blooding() {
 		area_set(player->index, Blooded);
 		if(player->roll(Strenght))
 			player->remove(Blooding);
+	}
+}
+
+static void check_stun() {
+	if(player->is(Stun)) {
+		if(player->roll(Strenght))
+			player->remove(Stun);
+		if(player->is(StunResistance) && player->roll(Strenght))
+			player->remove(Stun);
+	}
+}
+
+static void check_illness_effect() {
+	if(!player->is(Illness))
+		return;
+	auto minimal_hp = player->hits_maximum / 3;
+	if(player->abilities[Hits] > minimal_hp)
+		add_hits(player, -1);
+}
+
+static void check_illness_cure() {
+	if(player->abilities[Illness] > 0) {
+		if(player->resist(DiseaseResist, DiseaseImmunity) || player->roll(Strenght))
+			player->abilities[Illness]--;
+		else if(d100() < 20)
+			illness_attack(player, 1); // Disease have 20% chance to progress
 	}
 }
 
@@ -372,9 +565,6 @@ static void check_burning() {
 			player->damage(xrand(1, 3));
 		player->add(Burning, -1);
 	}
-}
-
-static void damage_player_items(itemn v, int chance) {
 }
 
 static void check_freezing() {
@@ -526,6 +716,29 @@ void creature::add(abilityn v, int i) {
 		experience += i;
 }
 
+void creature::update() {
+	auto push = player; player = this;
+	update_player();
+	player = push;
+}
+
+void creature::kill() {
+	need_update_creatures = true;
+	if(d100() < 40)
+		area_set(index, Blooded);
+	// logs("ApplyKill");
+	auto human_killed = ishuman();
+	remove_order(this);
+	fixact(BloodVisual);
+//	drop_treasure(this);
+//	drop_throphy(this, 30);
+//	if(opponent == this && player)
+//		player->experience += get_experience_reward(opponent);
+	clear();
+	if(human_killed)
+		end_game();
+}
+
 void creature::look(directionn d) {
 	switch(d) {
 	case NorthWest:
@@ -541,6 +754,18 @@ void creature::look(directionn d) {
 	default:
 		break;
 	}
+}
+
+bool creature::resist(featn resist, featn immunity) const {
+	if(!resist)
+		return false;
+	if(is(immunity))
+		return true;
+	if(is(resist)) {
+		if(d100() < 50)
+			return true;
+	}
+	return false;
 }
 
 int creature::getlos() const {
@@ -591,6 +816,10 @@ sitei* creature::getsite() const {
 	return bsdata<sitei>::elements + site_id;
 }
 
+bool creature::isvisible() const {
+	return area_is(index, Visible);
+}
+
 void creature::act(messagen v) const {
 	if(!ispresent() || !area_is(index, Visible))
 		return;
@@ -622,4 +851,19 @@ bool creature::moveaway(short unsigned ni) {
 	pushvalue push(player, this);
 	player_move(d);
 	return true;
+}
+
+bool creature::roll(abilityn v, int bonus) const {
+	last_value = get(v) + bonus;
+	roll_result = d100();
+	return roll_result < last_value;
+}
+
+void creature::damage(int v) {
+	if(v <= 0)
+		return;
+	fixmsg("-%1i", v);
+	hits -= v;
+	if(hits <= 0)
+		kill();
 }

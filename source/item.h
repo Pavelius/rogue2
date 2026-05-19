@@ -38,6 +38,8 @@ enum itemn : unsigned char {
 	LastItem = RedPotion,
 };
 
+int get_pierce(itemn v);
+
 struct item {
 	itemn type;
 	unsigned char count;
@@ -60,7 +62,7 @@ struct item {
 	int dodge() const;
 	int speed() const;
 	int	weight() const;
-	bool broke() const;
+	bool broke();
 	void clear() { count = 0; type = (itemn)0; properties = 0; }
 	bool is(magicn v) const { return magic == v; }
 	bool is(wearn v) const;

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// 
+//
 //  Copyright 2026 by Pavel Chistyakov
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,9 +17,12 @@
 #pragma once
 
 extern unsigned long current_tick;
-extern unsigned long current_game_tick;
-
+extern unsigned long animation_tick;
 extern int current_tick_delta;
 
 unsigned long getcputime();
+
+void clear_last_tick();
+void update_time();
+void update_current_time();
 void waitcputime(unsigned v);

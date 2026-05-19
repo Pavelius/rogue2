@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// 
+//
 //  Copyright 2026 by Pavel Chistyakov
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,6 +30,7 @@ BSENUM(messagen) = {
 	"%Player промазал%а.",
 	"%Player наш%ла секретную дверь.",
 	"%Player наш%ла ловушку.",
+	"ѕарирование", "”клонение",
 	"%Item повреждено", "%Item сгорело полностью", "%Item расплавилось до тла", "%Item расcыпалось в пыль", "%Item разлетелось на куски",
 }; BAENUM(ItemCrushingOut)
 BSENUM(abilityn) = {

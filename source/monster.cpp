@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// 
+//
 //  Copyright 2026 by Pavel Chistyakov
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,7 +49,7 @@ static monsteri monsters[] = {
 	{8, Bear, 50, 20, 4, "347"}, // Bear
 	{4, Boar, 30, 25, 3, "357"}, // Boar
 	{5, Boar, 45, 25, 3, "478", {StunningHit, PushHit}}, // DireBoar
-	{5, Wolf, 35, 30, 4, "91", {BloodingHit}}, // DireWolf
+	{5, Wolf, 35, 30, 4, "91", {BleedingHit}}, // DireWolf
 	{2, Dog, 20, 30, 4, "6"}, // Dog
 	{2, GiantFrog, 20, 25, 3, "9"}, // GiantFrog
 	{2, GiantBat, 10, 30, 3, "2"}, // GiantBat

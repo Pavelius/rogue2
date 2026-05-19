@@ -14,11 +14,26 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-#pragma once
+#include "timer.h"
 
-extern short unsigned current_area;
+unsigned long current_tick;
+unsigned long animation_tick;
+static unsigned long last_tick;
+int current_tick_delta;
 
-struct posable {
-	short unsigned index, area_index;
-	bool ispresent() const { return area_index == current_area; }
-};
+void clear_last_tick() {
+	last_tick = 0;
+}
+
+void update_current_time() {
+	current_tick = getcputime();
+	if(!last_tick || (current_tick - last_tick) > 300)
+		last_tick = current_tick;
+	current_tick_delta = current_tick - last_tick;
+	last_tick = current_tick;
+}
+
+void update_time() {
+	update_current_time();
+	animation_tick += current_tick_delta;
+}

@@ -15,23 +15,7 @@ struct floatinfo {
 	void clear() { memset((void*)this, 0, sizeof(*this)); }
 };
 static adat<floatinfo, 64> objects;
-static unsigned long timestamp, timestamp_last;
 static point floatinfo_offset(0, -32);
-
-static void update_timestamp() {
-	auto c = getcputime();
-	if(!timestamp_last || (c - timestamp_last) > 300)
-		timestamp_last = c;
-	timestamp += c - timestamp_last;
-	timestamp_last = c;
-}
-
-static floatinfo* find_info(point position) {
-	for(auto& e : objects) {
-		if(e && e.position == position)
-			return &e;
-	}
-}
 
 static unsigned long find_max_start(point position) {
 	unsigned long result = 0;
@@ -44,10 +28,10 @@ static unsigned long find_max_start(point position) {
 	return result;
 }
 
-void add_text(point position, const char* format, int param, floatinfon fore) {
+void add_floatinfo(point position, const char* format, int param, floatinfon fore) {
 	auto max_start = find_max_start(position);
 	if(!max_start)
-		max_start = timestamp;
+		max_start = animation_tick;
 	else
 		max_start += floatinfo_duration / 2;
 	auto p = objects.addz();
@@ -76,17 +60,16 @@ static int calculate(int v1, int v2, int n, int m) {
 	return v1 + (v2 - v1) * n / m;
 }
 
-void floatinfo_update() {
-	update_timestamp();
+void update_floatinfo() {
 	for(auto& e : objects) {
-		if(e.finish <= timestamp)
-			e.clear();
-		else if(e.start < timestamp)
+		if(!e || e.start > animation_tick)
 			continue;
+		else if(e.finish <= animation_tick)
+			e.clear();
 		else {
 			auto m = e.finish - e.start;
 			if(m > 0) {
-				auto n = timestamp - e.start;
+				auto n = animation_tick - e.start;
 				if(n >= m)
 					n = m;
 				e.position.x = (short)calculate(e.start_position.x, e.finish_position.x, n, m);
@@ -106,34 +89,25 @@ static color get_color(floatinfon v) {
 	}
 }
 
-void floatinfo_paint() {
+void paint_floatinfo() {
 	pushrect push;
 	pushfore push_fore;
 	rect area = clipping; area.offset(-128, -128);
 	for(auto& e : objects) {
-		if(!e || e.start > timestamp)
+		if(!e || e.start > animation_tick)
 			continue;
-		if(!e.position.in(area))
+		caret = e.position - camera;
+		if(!caret.in(area))
 			continue;
 		auto p = str(e.format, e.param);
 		auto w = textw(p);
 		fore = get_color(e.fore);
-		caret = e.position;
 		caret.x -= w / 2;
 		text(p);
-	}
-}
-
-void floatinfo_wait(fnevent proc) {
-	update_timestamp();
-	while(objects && running_scene() && ismodal()) {
-		update_timestamp();
-		proc();
-		sys_redraw();
-		waitcputime(1);
 	}
 }
 
 bool have_floatinfo() {
 	return objects.operator bool();
 }
+

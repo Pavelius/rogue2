@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// 
+//
 //  Copyright 2026 by Pavel Chistyakov
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,17 +36,8 @@ struct draworder {
 static adat<draworder, 128> orders;
 static adat<drawable*, 256> objects;
 static rect last_screen, last_area;
-static unsigned long timestamp, timestamp_last;
 
 BSDATAC(drawobject, 128)
-
-void update_object_timestamps() {
-	auto c = getcputime();
-	if(!timestamp_last || (c - timestamp_last) > 300)
-		timestamp_last = c;
-	timestamp += c - timestamp_last;
-	timestamp_last = c;
-}
 
 static int calculate(int v1, int v2, int n, int m) {
 	return v1 + (v2 - v1) * n / m;
@@ -69,7 +60,6 @@ bool drawable::onscreen() const {
 }
 
 void drawable::fixmove(point v, unsigned long duration) {
-	update_object_timestamps();
 	auto po = last_order(this);
 	if(position == v && !po)
 		return;
@@ -81,7 +71,7 @@ void drawable::fixmove(point v, unsigned long duration) {
 		duration -= 1;
 	} else {
 		pn->start = position;
-		pn->start_time = timestamp;
+		pn->start_time = animation_tick;
 	}
 	pn->finish = v;
 	pn->finish_time = pn->start_time + duration;
@@ -95,17 +85,17 @@ void drawable::stop() const {
 }
 
 void draworder::update() {
-	if(!object || start_time > timestamp)
+	if(!object || start_time > animation_tick)
 		return;
 	auto m = finish_time - start_time;
 	if(m > 0) {
-		auto n = timestamp - start_time;
+		auto n = animation_tick - start_time;
 		if(n >= m)
 			n = m;
 		object->position.x = (short)calculate(start.x, finish.x, n, m);
 		object->position.y = (short)calculate(start.y, finish.y, n, m);
 	}
-	if(timestamp >= finish_time)
+	if(animation_tick >= finish_time)
 		clear();
 }
 
@@ -231,19 +221,24 @@ static void shrink_orders() {
 	}
 }
 
-void update_object_orders() {
-	update_object_timestamps();
-	for(auto& e : orders)
-		e.update();
+void remove_order(const drawable* object) {
+	for(auto& e : orders) {
+		if(e.object==object)
+			e.clear();
+	}
 }
 
-void wait_all_objects(fnevent proc) {
-	while(orders && ismodal()) {
-		update_object_orders();
+void update_object_orders() {
+	for(auto& e : orders)
+		e.update();
+	shrink_orders();
+}
+
+void sync_scene(fnevent proc, fncondition allow) {
+	while(allow() && running_scene() && ismodal()) {
 		proc();
 		sys_redraw();
 		waitcputime(1);
-		shrink_orders();
 	}
 }
 

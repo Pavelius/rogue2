@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// 
+//
 //  Copyright 2026 by Pavel Chistyakov
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +19,7 @@
 #include "point.h"
 
 typedef void(*fnevent)();
+typedef bool(*fncondition)();
 
 enum resid : unsigned char;
 enum rendern : unsigned char;
@@ -57,8 +58,8 @@ void clear_objects();
 void for_each_object(fnevent proc);
 bool have_orders();
 void paint_objects();
+void remove_order(const drawable* object);
 void set_srceen_area(int offset=-128);
 void sort_objects();
+void sync_scene(fnevent proc, fncondition allow);
 void update_object_orders();
-void update_object_timestamps();
-void wait_all_objects(fnevent proc);
