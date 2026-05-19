@@ -219,7 +219,7 @@ static void create_enemy(short unsigned index, monstern type) {
 
 int main(int argc, char* argv[]) {
 	initialize_strings();
-	// main_util();
+	main_util();
 	area_clear();
 	set_dark_theme();
 	initialize_gui();
@@ -241,11 +241,13 @@ int main(int argc, char* argv[]) {
 	put_item(apos(4, 4), LongBow);
 	create_creature(apos(4, 3), Human);
 	player->equip(LongSword);
-	player->equip(LeatherArmor);
+	player->equip(PlateMail);
 	player->equip(LongBow);
 	player->update();
 	human = player;
 	create_enemy(apos(7, 3), Wolf);
+	create_enemy(apos(7, 4), Bear);
+	create_enemy(apos(8, 3), Wolf);
 	next_scene(play_game);
 	start_scene();
 	return 0;

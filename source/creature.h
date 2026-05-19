@@ -46,11 +46,12 @@ enum abilityn : unsigned char {
 };
 enum monstern : unsigned char {
 	Human, Dwarf, Elf,
+	Goblin,
 	Bear, Boar, DireBoar, DireWolf, Dog,
 	GiantFrog, GiantBat, GiantLizard, GiantSpider,
 	Rabbit, RabbitFemale, Racoon, Rat,
 	StagBeetle, Wolf,
-	FirstMonster = Bear, LastMonster = Wolf,
+	FirstMonster = Goblin, LastMonster = Wolf,
 };
 enum namen : unsigned short {
 	HumanNames,

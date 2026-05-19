@@ -55,6 +55,7 @@ static monsteri monsters[] = {
 	{0, Human, 20, 20, 20}, // Human
 	{0, Dwarf, 25, 15, 20}, // Dwarf
 	{0, Elf, 20, 20, 20}, // Elf
+	{1, Goblin, 10, 30, 10, "0", {Dagger, Dodge}}, // Goblin
 	{8, Bear, 50, 20, 4, "347"}, // Bear
 	{4, Boar, 30, 25, 3, "357"}, // Boar
 	{5, Boar, 45, 25, 3, "478", {StunningHit, PushHit}}, // DireBoar
