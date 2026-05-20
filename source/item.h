@@ -20,6 +20,8 @@ struct creature;
 
 extern bool need_update_items;
 
+enum featn : unsigned char;
+
 enum wearn : unsigned char {
 	MeleeWeapon, MeleeWeaponOffhand, RangedWeapon, Ammunition,
 	Torso, Head, Neck, Backward, Girdle, Gloves, FingerRight, FingerLeft, Elbows, Legs,
@@ -41,6 +43,8 @@ enum itemn : unsigned char {
 
 int get_pierce(itemn v);
 
+bool is_feat(itemn type, featn v);
+
 struct item {
 	itemn type;
 	unsigned char count;
@@ -55,7 +59,7 @@ struct item {
 	};
 	constexpr item() : type((itemn)0), count(0), properties(0) {}
 	constexpr item(itemn v, unsigned char count = 1) : type(v), count(count), properties(0) {}
-	explicit operator bool() const { return type != 0; }
+	explicit operator bool() const { return count != 0; }
 	creature* owner();
 	int	armor() const;
 	int	cost() const;
@@ -67,6 +71,7 @@ struct item {
 	void clear() { count = 0; type = (itemn)0; properties = 0; }
 	bool is(magicn v) const { return magic == v; }
 	bool is(wearn v) const;
+	bool is(featn v) const { return is_feat(type, v); }
 	bool iscoins() const { return type == CP || type == SP || type == GP; }
 	bool istwohanded() const;
 	void join(item& v);
@@ -80,7 +85,7 @@ struct wearable {
 	void additem(const item& v) { item it = v; additem(it); }
 	bool equip(item& v);
 	bool equip(const item& v) { item it = v; return equip(it); }
-	bool is(itemn v) const { for(auto& e : wears) if(e && e.type==v) return true; return false; }
+	bool is(itemn v) const { for(auto& e : wears) if(e && e.type == v) return true; return false; }
 	bool iswear(const void* p) const { return p >= wears && p <= wears + Legs; }
 	item* getwear(wearn id) { return wears + id; }
 	const item* getwear(const void* data) const;

@@ -55,6 +55,10 @@ static draworder* last_order(const drawable* p) {
 	return result;
 }
 
+bool object_onscreen(point position) {
+	return position.in(last_area);
+}
+
 bool drawable::onscreen() const {
 	return position.in(last_area);
 }

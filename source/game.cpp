@@ -86,9 +86,6 @@ static void update_all_boost(int minutes) {
 static void update_every_serveral_days() {
 }
 
-static void creature_every_minute() {
-}
-
 static void creature_every_10_minutes() {
 }
 
@@ -241,13 +238,13 @@ int main(int argc, char* argv[]) {
 	put_item(apos(4, 4), LongBow);
 	create_creature(apos(4, 3), Human);
 	player->equip(LongSword);
-	player->equip(PlateMail);
+	// player->equip(PlateMail);
 	player->equip(LongBow);
 	player->update();
 	human = player;
-	create_enemy(apos(7, 3), Wolf);
-	create_enemy(apos(7, 4), Bear);
-	create_enemy(apos(8, 3), Wolf);
+	create_enemy(apos(7, 3), Goblin);
+	create_enemy(apos(7, 4), Goblin);
+	create_enemy(apos(8, 3), Goblin);
 	next_scene(play_game);
 	start_scene();
 	return 0;

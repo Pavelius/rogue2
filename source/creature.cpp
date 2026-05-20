@@ -97,6 +97,12 @@ static void update_derived() {
 }
 
 static void update_abilities() {
+	if(player->is(Stun)) {
+		add_value(Dexterity, -10);
+		add_value(WeaponSkill, -10);
+		add_value(BalisticSkill, -10);
+	}
+	// Armor
 	add_value(Armor, player->abilities[Strenght] / 15);
 	add_value(Armor, player->wears[Torso].armor());
 	add_value(Armor, player->wears[Backward].armor());
@@ -314,6 +320,10 @@ static abilityn damage_skill(abilityn v) {
 }
 
 static void attack_effect_stun(creature* opponent) {
+	if(!opponent->resist(StunResistance, StunImmunity)) {
+		opponent->set(Stun);
+		opponent->fixact(SearchVisual);
+	}
 }
 
 static void special_attack(item& weapon, creature* opponent, int& pierce, int& damage) {
@@ -672,6 +682,10 @@ void make_move() {
 		//} else
 		//	random_walk();
 	}
+}
+
+void creature_every_minute() {
+	check_stun();
 }
 
 void creature::clear() {

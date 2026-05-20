@@ -6,9 +6,13 @@
 #include "resid.h"
 #include "timer.h"
 
-struct draweffect : drawobject {
+struct draweffect {
+	point			position;
 	resid			res;
+	unsigned char	start_alpha, finish_alpha;
+	short unsigned	frame;
 	unsigned long	start, finish;
+	constexpr explicit operator bool() { return res != (resid)0; }
 	void clear() { memset((void*)this, 0, sizeof(*this)); }
 };
 static adat<draweffect> objects;
@@ -32,13 +36,19 @@ static draweffect* find_effect(point position, resid res, int cicle) {
 	return 0;
 }
 
-void add_effect(point position, resid res, int cicle, int priority, int duration) {
+static draweffect* find_effect(point position) {
+	for(auto& e : objects) {
+		if(e && e.position == position)
+			return &e;
+	}
+	return 0;
+}
+
+void add_effect(point position, resid res, int cicle, int duration) {
 	auto p = find_effect(position, res, cicle);
 	if(p)
 		return;
 	p = objects.addz();
-	p->render = RenderEffect;
-	p->priority = priority;
 	p->position = position;
 	p->frame = cicle;
 	p->res = res;
@@ -48,38 +58,46 @@ void add_effect(point position, resid res, int cicle, int priority, int duration
 
 void add_effect(point position, visualn id) {
 	switch(id) {
-	case BloodVisual: add_effect(position, ResConditions, 0, 15, 500); break;
+	case BloodVisual: add_effect(position, ResConditions, 0, 500); break;
+	case PoisonVisual: add_effect(position, ResConditions, 2, 500); break;
+	case SearchVisual: add_effect(position, ResConditions, 2, 500); break;
 	default: break;
 	}
 }
 
-void add_effects() {
+void update_effects() {
 	for(auto& e : objects) {
 		if(!e || e.start > animation_tick)
 			continue;
-		else if(e.finish <= animation_tick) {
+		else if(e.finish <= animation_tick)
 			e.clear();
-			continue;
-		}
-		if(e.onscreen())
-			add_object(&e);
 	}
 	shrink();
 }
 
-void paint_effect() {
-	auto p = (draweffect*)last_object;
+static void paint_effect(const draweffect* p) {
 	auto ps = gres(p->res);
 	if(!ps)
 		return;
-	auto pc = ps->gcicle(p->frame);
-	if(!pc->count)
-		return;
-	auto per_frame = (p->finish - p->start) / pc->count;
-	if(!per_frame)
-		return;
-	auto frame = pc->start + ((animation_tick - p->start) / per_frame);
+	auto frame = p->frame;
+	if(ps->cicles_offset) {
+		auto pc = ps->gcicle(p->frame);
+		if(!pc->count)
+			return;
+		auto per_frame = (p->finish - p->start) / pc->count;
+		if(!per_frame)
+			per_frame = 1;
+		frame = (short unsigned)(pc->start + ((animation_tick - p->start) / per_frame));
+	}
 	image(ps, frame, 0);
+}
+
+void paint_effects() {
+	pushrect push;
+	for(auto& e : objects) {
+		caret = e.position - camera;
+		paint_effect(&e);
+	}
 }
 
 bool have_effects() {

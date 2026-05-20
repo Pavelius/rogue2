@@ -17,6 +17,7 @@
 #include "bsdata.h"
 #include "collectiona.h"
 #include "itemlay.h"
+#include "feats.h"
 #include "math.h"
 #include "rand.h"
 #include "slice.h"
@@ -169,6 +170,16 @@ bool item::istwohanded() const {
 		return true;
 	default:
 		return false;
+	}
+}
+
+bool is_feat(itemn type, featn v) {
+	switch(v) {
+	case BleedingHit: return type == Claws || (type >= ShortSword && type <= GreatSword);
+	case StunningHit: return type == Mace || type == GreatMace || type == WarHammer || type == Staff;
+	case PierceHit: return type == Dagger;
+	case RetaliateHit: return type == Spear;
+	default: return false;
 	}
 }
 

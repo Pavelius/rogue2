@@ -57,6 +57,7 @@ void clear_drawobjects();
 void clear_objects();
 void for_each_object(fnevent proc);
 bool have_orders();
+bool object_onscreen(point position);
 void paint_objects();
 void remove_order(const drawable* object);
 void set_srceen_area(int offset=-128);

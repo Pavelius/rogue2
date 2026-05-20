@@ -23,11 +23,11 @@ typedef void(*fnevent)();
 enum resid : unsigned char;
 
 enum visualn : unsigned char {
-	PoisonVisual, BloodVisual,
+	PoisonVisual, BloodVisual, SearchVisual,
 };
 
 void add_effect(point position, visualn id);
-void add_effect(point position, resid res, int cicle, int priority, int duration);
-void add_effects();
+void add_effect(point position, resid res, int cicle, int duration);
 bool have_effects();
-void paint_effect();
+void paint_effects();
+void update_effects();

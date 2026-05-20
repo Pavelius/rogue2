@@ -94,7 +94,7 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	void clear();
 	void damage(int v);
 	bool is(featn v) const { return featable::is(v); }
-	bool is(featn v, const item& m) const { return featable::is(v); }
+	bool is(featn v, const item& m) const { return featable::is(v) || m.is(v); }
 	bool is(abilityn v) const { return abilities[v] > 0; }
 	bool ischaracter() const { return type <= Elf; }
 	bool isenemy(const creature* p) const { return p->is(Enemy) != is(Enemy); }
@@ -133,6 +133,7 @@ int getv(monstern v, abilityn a);
 
 void apply_monster(monstern type);
 void create_creature(short unsigned index_position, monstern type);
+void creature_every_minute();
 bool is_free(short unsigned i);
 void make_move();
 void fix(messagen v);

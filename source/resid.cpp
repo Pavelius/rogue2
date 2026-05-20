@@ -41,7 +41,9 @@ BSDATA(residi) = {
 	{"features"},
 	{"items"},
 	{"monsters"},
+	{"status"},
 	{"conditions"},
+	{"splash"},
 	{"walls"},
 	{"shadows"},
 };

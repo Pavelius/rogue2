@@ -689,9 +689,29 @@ static point get_head(monstern type) {
 		auto ps = gres(ResMonsters);
 		auto& fr = ps->get(type - FirstMonster);
 		result.y -= fr.oy + 4 * 2;
-	} else
-		result.y = -76;
+	} else {
+		auto ps = gres(ResPCBody);
+		auto index = get_avatar(type, false, 0);
+		auto& fr = ps->get(index);
+		result.y -= fr.oy + 4 * 2;
+	}
 	return result;
+}
+
+static void paint_status(sprite* ps, int frame, bool present) {
+	if(!present)
+		return;
+	image(ps, frame, 0);
+	caret.x += 8;
+}
+
+static void paint_statuses(const creature* player) {
+	pushrect push;
+	auto ps = gres(ResStatus);
+	caret.x += 4;
+	caret.y += 4;
+	paint_status(ps, 12, player->is(Stun));
+	paint_status(ps, 2, player->is(Blooding));
 }
 
 static void paint_bars(const creature* player) {
@@ -704,6 +724,8 @@ static void paint_bars(const creature* player) {
 	bar_shade(player->get(Poison), player->hits_maximum, colors::green);
 	caret.y += dy - 1;
 	bar(player->get(Mana), player->basic.abilities[Mana], colors::blue);
+	caret.y += dy - 1;
+	paint_statuses(player);
 }
 
 static void paint_health_bar() {
@@ -715,22 +737,6 @@ static void paint_health_bar() {
 			paint_bars(p);
 	}
 }
-
-//void visualeffect::paint(unsigned char param) const {
-//	auto pi = gres(resid);
-//	if(!pi)
-//		return;
-//	if(pi->cicles_offset) {
-//		auto pc = pi->gcicle(frame);
-//		if(pc) {
-//			unsigned long current = getobjectstamp() - start_stamp;
-//			auto tk = current * pc->count / mst;
-//			if(tk < pc->count)
-//				image(pi, pc->start + tk, feats);
-//		}
-//	} else
-//		image(pi, param + frame, feats);
-//}
 
 static void fieldh(const char* format) {
 	char temp[260]; stringbuilder sb(temp);
@@ -1469,12 +1475,12 @@ static void paint_area() {
 	clear_drawobjects();
 	clear_objects();
 	add_creatures();
-	add_effects();
 	paint_floor();
 	paint_items();
 	paint_features();
 	sort_objects();
 	paint_objects();
+	paint_effects();
 	paint_los();
 	paint_fow();
 	for_each_object(paint_health_bar);
@@ -1529,13 +1535,14 @@ static void update_creature_orders() {
 static void play_game_animate() {
 	update_time();
 	update_floatinfo();
+	update_effects();
 	update_object_orders();
 	paint_status();
 	link_camera();
 	paint_area();
 }
 
-static void wait_all() {
+void wait_all() {
 	clear_last_tick();
 	sync_scene(play_game_animate, have_orders);
 	sync_scene(play_game_animate, have_floatinfo);
@@ -1574,7 +1581,6 @@ BSDATA(drawrender) = {
 	{paint_shadow},
 	{paint_feature},
 	{paint_wall},
-	{paint_effect},
 	{paint_creature},
 };
 BSDATAF(drawrender)

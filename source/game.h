@@ -41,3 +41,4 @@ void choose_player_move();
 void end_game();
 void pass_minute();
 void skip_long_time();
+void wait_all();
