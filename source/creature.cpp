@@ -544,6 +544,11 @@ static void check_recovery(short& result, short maximum, abilityn v) {
 	}
 }
 
+static void check_recovery(short& result, short maximum) {
+	if(result < maximum)
+		result++;
+}
+
 static void detect_hidden_objects() {
 	if(!last_site)
 		return;
@@ -696,11 +701,17 @@ void make_move() {
 
 void creature_every_minute() {
 	check_stun();
-	check_recovery(player->hits, player->abilities[Mana], Wits);
+	check_recovery(player->mana, player->abilities[Mana], Wits);
+	if(player->is(Boosting))
+		check_recovery(player->mana, player->abilities[Mana]);
+	if(player->is(Regenerating))
+		check_recovery(player->hits, player->hits_maximum);
 }
 
 void creature_every_10_minutes() {
-	check_recovery(player->mana, player->hits_maximum, Strenght);
+	check_illness_effect();
+	check_illness_cure();
+	check_recovery(player->hits, player->hits_maximum, Strenght);
 }
 
 static int get_experience_reward(const creature* player) {

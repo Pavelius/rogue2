@@ -124,7 +124,7 @@ static point next_tile[] = {
 	{tsx, -tsy}, {tsx, tsy}, {-tsx, tsy}, {-tsx, -tsy},
 	{0, 0}
 };
-static char console_text[512];
+static char console_text[2048];
 static point answer_end;
 static unsigned long last_message_tick;
 
@@ -976,14 +976,13 @@ static void get_total_height(const answers& source) {
 }
 
 static void paint_message_answers(int window_width) {
-	auto p = console.begin();
-	if(!p || !p[0])
+	if(!console_text[0])
 		return;
 	pushrect push;
 	width = window_width;
 	caret.y = metrics::padding * 2;
 	caret.x = (getwidth() - window_width - panel_width) / 2;
-	textf(p);
+	textf(console_text);
 	caret.y += metrics::padding;
 	auto index = 0;
 	for(auto& e : an)

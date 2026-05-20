@@ -25,7 +25,7 @@ enum featn : unsigned char {
 	AcidResistance, ColdResistance, DeathResistance, DiseaseResist, FireResistance, PoisonResistance, StunResistance,
 	AcidImmunity, ColdImmunity, DeathImmunity, DiseaseImmunity, FireImmunity, PoisonImmunity, StunImmunity,
 	Fly, FastMove, SlowMove, FastAttack, SlowAttack,
-	Blooding, Regenerating, Stun,
+	Blooding, Regenerating, Boosting, Stun,
 	Mirrorred, Enemy, Local,
 };
 struct featable {

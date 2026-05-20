@@ -235,7 +235,7 @@ int main(int argc, char* argv[]) {
 	put_item(apos(4, 4), LongBow);
 	create_creature(apos(4, 3), Human);
 	player->equip(LongSword);
-	// player->equip(PlateMail);
+	player->equip(LeatherArmor);
 	player->equip(LongBow);
 	player->update();
 	human = player;
