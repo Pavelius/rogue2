@@ -229,6 +229,10 @@ static void update_player_site() {
 	player->update();
 }
 
+static void pay_action() {
+	player->wait(100);
+}
+
 static void pay_movement() {
 	auto cost = 150 - player->get(Dexterity);
 	if(!player->is(Fly))
@@ -320,10 +324,8 @@ static abilityn damage_skill(abilityn v) {
 }
 
 static void attack_effect_stun(creature* opponent) {
-	if(!opponent->resist(StunResistance, StunImmunity)) {
+	if(!opponent->resist(StunResistance, StunImmunity))
 		opponent->set(Stun);
-		opponent->fixact(SearchVisual);
-	}
 }
 
 static void special_attack(item& weapon, creature* opponent, int& pierce, int& damage) {
@@ -535,6 +537,13 @@ static void check_illness_cure() {
 	}
 }
 
+static void check_recovery(short& result, short maximum, abilityn v) {
+	if(result < maximum) {
+		if(player->roll(v, 10))
+			result++;
+	}
+}
+
 static void detect_hidden_objects() {
 	if(!last_site)
 		return;
@@ -642,8 +651,9 @@ void make_move() {
 		while(last == player->wait_seconds)
 			choose_player_move();
 	} else if(player->getfear()) {
-		//if(!player->moveaway(player->getfear()->getposition()))
-		//	pay_action();
+		auto master = player->getfear();
+		if(!player->moveaway(master->index))
+			pay_action();
 	} else if(opponent) {
 		//allowed_spells.select(player);
 		//allowed_spells.match(spell_iscombat, true);
@@ -686,6 +696,17 @@ void make_move() {
 
 void creature_every_minute() {
 	check_stun();
+	check_recovery(player->hits, player->abilities[Mana], Wits);
+}
+
+void creature_every_10_minutes() {
+	check_recovery(player->mana, player->hits_maximum, Strenght);
+}
+
+static int get_experience_reward(const creature* player) {
+	static int rewards[] = {5, 10, 15, 20, 25, 30, 35, 50, 75, 125, 175, 225, 275, 350, 450, 650, 900, 1100, 1350, 2000, 2500};
+	auto level = player->get(Level);
+	return maptbl(rewards, level);
 }
 
 void creature::clear() {
@@ -733,8 +754,8 @@ void creature::kill() {
 	fixact(BloodVisual);
 	//	drop_treasure(this);
 	//	drop_throphy(this, 30);
-	//	if(opponent == this && player)
-	//		player->experience += get_experience_reward(opponent);
+	if(opponent == this && player)
+		player->experience += get_experience_reward(opponent);
 	clear();
 	if(human_killed)
 		end_game();

@@ -16,10 +16,6 @@
 
 #pragma once
 
-typedef void(*fnoutput)(char separator, const char* format, const char* format_param);
-
-extern fnoutput	print_proc;
-
-void print(const char* format, ...);
-void println(const char* format, ...);
-void printv(char separator, const char* format, const char* format_param);
+enum visualn : unsigned char {
+	PoisonVisual, BloodVisual,
+};

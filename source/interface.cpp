@@ -28,6 +28,7 @@
 #include "itemlay.h"
 #include "keyname.h"
 #include "message.h"
+#include "print.h"
 #include "pushvalue.h"
 #include "screenshoot.h"
 #include "resid.h"
@@ -124,10 +125,12 @@ static point next_tile[] = {
 	{0, 0}
 };
 static char console_text[512];
-static stringbuilder console(console_text);
 static point answer_end;
+static unsigned long last_message_tick;
 
 bool show_floor_rect;
+
+stringbuilder console(console_text);
 
 void set_dark_theme();
 void show_manual();
@@ -298,6 +301,8 @@ static void paint_wear(sprite* ps, int frame, unsigned feats) {
 
 static void paint_creature() {
 	auto p = (creature*)last_object;
+	if(!p->isvisible())
+		return;
 	auto feats = p->ismirror() ? ImageMirrorH : 0;
 	if(p->ischaracter()) {
 		auto pb = gres(ResPCBody);
@@ -782,22 +787,28 @@ static void paint_button(const char* format, bool pressed) {
 	caret.x += (width - textw(format) + 1) / 2;
 	if(pressed)
 		caret.y += 1;
+	pushstroke push_stroke(colors::button.mix(colors::form));
 	text(format, -1, TextBold);
 	caret = push_caret;
 }
 
-bool button(unsigned key, int format_width) {
-	if(!key)
-		return false;
-	char temp[32]; stringbuilder sb(temp);
-	key2str(sb, key);
+static void button(const char* title, unsigned key, int format_width) {
 	auto push_width = width;
 	if(format_width == -1)
-		format_width = textw(temp) + metrics::padding * 2;
+		format_width = textw(title) + metrics::padding * 2;
 	width = format_width;
-	auto result = true; // button(temp, key, pbutton, false);
+	button_check(key, false);
+	paint_button(title, button_pressed);
 	width = push_width;
-	return result;
+	caret.x += format_width + metrics::padding;
+}
+
+static void button(unsigned key, int format_width) {
+	if(!key)
+		return;
+	char temp[32]; stringbuilder sb(temp);
+	key2str(sb, key);
+	button(temp, key, format_width);
 }
 
 static void paint_message(const char* format) {
@@ -806,7 +817,7 @@ static void paint_message(const char* format) {
 	pushrect push;
 	width = window_width;
 	textfs(format);
-	caret.y = metrics::padding * 2;
+	caret.y = metrics::padding * 2; height += 2;
 	caret.x = (getwidth() - width - panel_width) / 2;
 	strokeout(fillwindow, metrics::padding);
 	strokeout(strokeborder, metrics::padding);
@@ -881,7 +892,7 @@ static void answer_paint_cell(int index, long value, const char* format, fnevent
 	auto push_caret = caret;
 	auto push_width = width;
 	unsigned key = value ? answer_key(index) : KeyEscape;
-	auto need_execute = button(key, 24);
+	button(key, 24);
 	//if(bsdata<creature>::have(value)) {
 	//	auto pc = bsdata<creature>::elements + bsdata<creature>::source.indexof(value);
 	//	auto pi = pc->getwear(value);
@@ -916,7 +927,7 @@ static void answer_paint_cell(int index, long value, const char* format, fnevent
 	//		}
 	//	}
 	//}
-	if(need_execute)
+	if(button_executed)
 		execute(proc, (long)value);
 	caret = push_caret;
 	caret.y += texth() + 1;
@@ -926,11 +937,10 @@ static void answer_paint_cell(int index, long value, const char* format, fnevent
 static void answer_paint_cell_small(int index, long value, const char* format, fnevent proc) {
 	auto push_caret = caret;
 	auto push_width = width;
-	unsigned key = answer_key(index);
-	auto need_execute = button(key, 24);
+	button(answer_key(index), 24);
 	width -= caret.x - push_caret.x;
 	textf(format);
-	if(need_execute)
+	if(button_executed)
 		execute(proc, (long)value);
 	width = push_width;
 	caret = push_caret;
@@ -941,8 +951,7 @@ static void get_total_height(const answers& source) {
 	auto push_clipping = clipping;
 	auto total_height = 0;
 	width = window_width - 60;
-	auto p = console.begin();
-	textfs(p);
+	textfs(console_text);
 	total_height += height;
 	auto minimal_width = width;
 	auto minimal_height = texth() + 1;
@@ -962,7 +971,7 @@ static void get_total_height(const answers& source) {
 	height = total_height;
 }
 
-static void paint_message(const answers& source, int window_width) {
+static void paint_message_answers(int window_width) {
 	auto p = console.begin();
 	if(!p || !p[0])
 		return;
@@ -982,7 +991,7 @@ static void paint_dialog_message(int window_width) {
 	caret.x = (getwidth() - window_width - panel_width) / 2;
 	strokeout(fillwindow, metrics::padding);
 	strokeout(strokeborder, metrics::padding);
-	paint_message(an, window_width);
+	paint_message_answers(window_width);
 }
 
 long choose_answers() {
@@ -996,6 +1005,32 @@ long choose_answers() {
 	}
 	screen.restore();
 	console.clear();
+	return getresult();
+}
+
+static void paint_answer_footer(const char* footer, const char* cancel) {
+	auto push_caret = caret;
+	caret.x += 2; width -= 2;
+	caret.y += 2; height -= 2;
+	if(footer)
+		textf(footer);
+	caret = answer_end;
+	auto push_width = width; width = -1;
+	if(cancel) {
+		button(cancel, KeyEscape, -1);
+		fire(buttoncancel);
+	}
+	width = push_width;
+	caret = push_caret;
+}
+
+long choose_menu() {
+	pushrect push;
+	while(ismodal()) {
+		get_total_height(an);
+		paint_dialog_message(width);
+		domodal();
+	}
 	return getresult();
 }
 
@@ -1192,6 +1227,25 @@ static void paint_status() {
 	width = push_width - panel_width;
 }
 
+static void window_back() {
+	pushrect push;
+	pushvalue push_fore(fore, colors::form);
+	setoffset(-metrics::padding + 1, -metrics::padding + 1);
+	rectf();
+}
+
+static void update_message() {
+	if(!console_text[0])
+		return;
+	auto current_tick = getcputime();
+	if(!last_message_tick || (current_tick - last_message_tick) > 4000 || (hkey==KeyEscape)) {
+		last_message_tick = 0;
+		console.clear();
+		if(hkey == KeyEscape)
+			hkey = 0;
+	}
+}
+
 /*
 static void execute_action() {
 	auto push_action = last_action;
@@ -1264,28 +1318,6 @@ static void paint_actions() {
 		paint_collection(last_actions, get_action_key, execute_action);
 }
 
-static void paint_message() {
-	paint_message(console.begin());
-}
-
-static void reset_message() {
-	static unsigned last_console_size;
-	auto current_tick = getcputime();
-	auto size = console.size();
-	if(!size)
-		return;
-	if(!last_tick_message || last_console_size < size) {
-		last_tick_message = current_tick;
-		last_console_size = size;
-	}
-	auto delay = (current_tick - last_tick_message);
-	if(delay >= 4000 || (hot.key == KeyEscape)) {
-		console.clear();
-		last_tick_message = current_tick;
-		last_console_size = 0;
-	}
-}
-
 static void execute_hotkey() {
 	auto pn = (hotkey*)hot.drawable;
 	if(pn->data.iskind<widget>())
@@ -1301,37 +1333,6 @@ static void presskey() {
 			return;
 		}
 	}
-}
-
-void adventure_mode() {
-	animate_figures();
-	auto human = player;
-	if(!human)
-		return;
-	auto start = human->getwait();
-	while((start == human->getwait()) && ismodal()) {
-		paintstart();
-		paintobjects();
-		presskey();
-		paintfinish();
-		domodal();
-	}
-}
-
-static void answer_after_paint() {
-	auto push_caret = caret;
-	caret.x += 2; width -= 2;
-	caret.y += 2; height -= 2;
-	if(answers::footer)
-		textf(answers::footer);
-	caret = answer_end;
-	auto push_width = width; width = -1;
-	if(answers::cancel_text) {
-		if(button(answers::cancel_text, KeyEscape, pbutton, false))
-			execute(buttoncancel);
-	}
-	width = push_width;
-	caret = push_caret;
 }
 
 static void paint_legends(point origin, int z) {
@@ -1401,17 +1402,6 @@ static void show_area() {
 	paint_legends(origin, z);
 	paint_legends_text({(short)(16 + area->mps * z + 16), origin.y});
 	paint_area_screen(origin, z);
-}
-
-static void beforepaint() {
-	paint_status();
-}
-
-static void window_back() {
-	pushrect push;
-	pushvalue push_fore(fore, colors::form);
-	setoffset(-metrics::padding + 1, -metrics::padding + 1);
-	rectf();
 }
 
 static void right_border() {
@@ -1488,13 +1478,6 @@ static void paint_area() {
 	clipping = push_clip;
 }
 
-static void paint_test() {
-	pushrect push;
-	pushfore push_fore(colors::white);
-	setpos(10, 10, 400, 200);
-	rectb();
-}
-
 static void check_end_turn() {
 	if(need_end_turn) {
 		need_end_turn = false;
@@ -1508,6 +1491,15 @@ static void player_move_cmd() {
 	player_move((directionn)hparam);
 }
 
+static void test_scene() {
+	println("Добро пожаловать в центр деревни.");
+	println("Сейчас много дел, зайди позжее.");
+	an.clear();
+	an.add(1, "Первый");
+	an.add(2, "Второй");
+	choose_answers();
+}
+
 static void direction_keys() {
 	switch(hkey) {
 	case KeyUp: execute(player_move_cmd, North); break;
@@ -1519,6 +1511,7 @@ static void direction_keys() {
 	case KeyPageDown: execute(player_move_cmd, SouthEast); break;
 	case KeyEnd: execute(player_move_cmd, SouthWest); break;
 	case 'T': player->is(Mirrorred) ? player->remove(Mirrorred) : player->set(Mirrorred); break;
+	case Ctrl+'T': execute(test_scene); break;
 	default: break;
 	}
 }
@@ -1540,6 +1533,7 @@ static void play_game_animate() {
 	paint_status();
 	link_camera();
 	paint_area();
+	paint_message(console_text);
 }
 
 void wait_all() {
@@ -1557,8 +1551,10 @@ void choose_player_move() {
 	while(ismodal()) {
 		paint_status();
 		paint_area();
+		paint_message(console_text);
 		direction_keys();
 		domodal();
+		update_message();
 		check_end_turn();
 	}
 }
@@ -1568,9 +1564,19 @@ static void camera_initialize() {
 	camera_maximum.y = mps * tsy;
 }
 
+static void console_print(char symbol, const char* format, const char* format_param) {
+	if(symbol)
+		console.addsep(symbol);
+	console.addv(format, format_param);
+	last_message_tick = getcputime();
+}
+
 void initialize_gui() {
+	print_proc = console_print;
+	print("Тестовая строка данных.");
 	font = metrics::font;
 	fore = colors::text;
+	metrics::padding = 4;
 	camera_initialize();
 	sys_create_window(window_width, window_height);
 	sys_caption(getname(ApplicationTitle));

@@ -23,11 +23,12 @@
 struct statblock : featable, statable {
 	itemn items[4];
 	constexpr statblock() : featable(), statable(), items{} {}
-	template<typename T, typename... Ts> constexpr statblock(T v, Ts... args) : statblock(args...) {
+	template<typename T, typename... Ts>
+	constexpr statblock(T v, Ts... args) : statblock(args...) {
 		set(v);
 	}
 	constexpr void set(featn v) {
-		feats = 1 << v;
+		feats[v / 32] = 1 << (v % 32);
 	}
 	constexpr void set(itemn v) {
 		for(auto& e : items) {
@@ -74,7 +75,7 @@ static monsteri monsters[] = {
 };
 static_assert(lenghtof(monsters) == (Wolf + 1), "Invalid tile frames data count");
 
-int getv(monstern v, abilityn a) {
+/*int getv(monstern v, abilityn a) {
 	switch(a) {
 	case Level: return monsters[v].level;
 	case Strenght: return monsters[v].strenght;
@@ -84,22 +85,23 @@ int getv(monstern v, abilityn a) {
 	case BalisticSkill: return imax(15, monsters[v].level * 5);
 	default: return 0;
 	}
-}
+}*/
 
 const char* get_avatar(monstern v) {
 	return monsters[v].avatar;
 }
 
 void apply_monster(monstern type) {
-	player->basic.abilities[Strenght] += getv(type, Strenght);
-	player->basic.abilities[Dexterity] += getv(type, Dexterity);
-	player->basic.abilities[Wits] += getv(type, Wits);
+	auto& e = monsters[type];
+	player->basic.abilities[Level] += e.level;
+	player->basic.abilities[Strenght] += e.strenght;
+	player->basic.abilities[Dexterity] += e.dexterity;
+	player->basic.abilities[Wits] += e.wits;
 	if(type >= FirstMonster && type <= LastMonster) {
-		auto& e = monsters[type];
-		player->basic.abilities[Level] += e.level;
-		player->basic.abilities[WeaponSkill] += getv(type, WeaponSkill);
-		player->basic.abilities[BalisticSkill] += getv(type, BalisticSkill);
-		player->feats |= e.stats.feats;
+		player->basic.abilities[WeaponSkill] += imax(15, e.level * 5);
+		player->basic.abilities[BalisticSkill] += imax(15, e.level * 5);
+		for(auto i = 0; i < lenghtof(player->feats); i++)
+			player->feats[i] = e.stats.feats[i];
 		for(auto i = 0; i < lenghtof(e.stats.abilities); i++)
 			player->basic.abilities[i] += e.stats.abilities[i];
 		for(auto v : e.stats.items) {

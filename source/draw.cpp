@@ -1996,6 +1996,12 @@ void strokeout(fnevent proc, int dx) {
 	proc();
 }
 
+void strokeout(fnevent proc, int dx, unsigned char a) {
+	auto push = alpha; alpha = a;
+	strokeout(proc, dx);
+	alpha = push;
+}
+
 void lineup() {
 	auto push_caret = caret;
 	pushfore push_fore(colors::border);

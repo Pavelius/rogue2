@@ -108,10 +108,11 @@ struct abox : apos {
 struct areai {
 	short unsigned	index; // Position on world map
 	landscapen		type;
-	unsigned char	level; // Current level of dungeon
+	unsigned char	level; // Current level of dungeon. 0 is overland.
 	constexpr explicit operator bool() const { return index != 0xFFFF; }
 };
 struct sitei : abox {
+	short unsigned	area_index;
 	siten			type;
 };
 extern sitei* last_site;

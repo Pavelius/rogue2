@@ -115,7 +115,7 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	void remove(spelln v) { spellable::remove(v); }
 	bool resist(featn resistane, featn immunity) const;
 	bool roll(abilityn v, int bonus = 0) const;
-	void set(abilityn v, int i) { abilities[v] = (char)i; }
+	void set(abilityn v, int i) { if(v<=Drunk) abilities[v] = (char)i; }
 	void set(featn v) { featable::set(v); }
 	void setindex(short unsigned i);
 	void update();
@@ -134,6 +134,7 @@ int getv(monstern v, abilityn a);
 void apply_monster(monstern type);
 void create_creature(short unsigned index_position, monstern type);
 void creature_every_minute();
+void creature_every_10_minutes();
 bool is_free(short unsigned i);
 void make_move();
 void fix(messagen v);

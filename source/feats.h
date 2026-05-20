@@ -16,6 +16,8 @@
 
 #pragma once
 
+#include "flagable.h"
+
 enum featn : unsigned char {
 	DarkVision,
 	BleedingHit, MightyHit, ParalizeHit, PierceHit, StunningHit, PoisonHit, PushHit, VorpalHit, RetaliateHit,
@@ -27,8 +29,8 @@ enum featn : unsigned char {
 	Mirrorred, Enemy, Local,
 };
 struct featable {
-	unsigned feats;
-	constexpr bool is(featn v) const { return (feats & (1 << v)) != 0; }
-	constexpr void remove(featn v) { feats &= ~(1 << v); }
-	constexpr void set(featn v) { feats |= (1 << v); }
+	unsigned feats[2];
+	constexpr bool is(featn v) const { return (feats[v / 32] & (1 << (v % 32))) != 0; }
+	constexpr void remove(featn v) { feats[v / 32] &= ~(1 << (v % 32)); }
+	constexpr void set(featn v) { feats[v / 32] |= (1 << (v % 32)); }
 };

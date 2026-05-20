@@ -266,6 +266,7 @@ void setpos(int x, int y, int width, int height);
 void stroke(int x, int y, const sprite* e, int id, int flags, unsigned char thin = 1, unsigned char* koeff = 0);
 void strokeactive();
 void strokeborder();
+void strokeout(fnevent proc, int dx, unsigned char a);
 void strokeout(fnevent proc, int dx = 0);
 void text(const char* string, int count = -1, unsigned flags = 0);
 void texta(const char* string, unsigned state = 0);
