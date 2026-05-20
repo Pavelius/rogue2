@@ -642,6 +642,12 @@ static void paint_los() {
 	}
 }
 
+static void filldark() {
+	pushfore push;
+	fore = fore.mix(colors::form, 64);
+	rectf();
+}
+
 static void fillbar(int value) {
 	pushrect push;
 	if(value > 0) {
@@ -651,17 +657,15 @@ static void fillbar(int value) {
 		width = push_width - value;
 		caret.x += value;
 	}
-	//	filldark();
+	filldark();
 }
 
 static void bar(int value, int maximum, color m) {
 	if(!maximum)
 		return;
-	auto push_fore = fore;
-	fore = m;
+	pushfore push_fore(m);
 	fillbar(value * width / maximum);
 	strokeborder();
-	fore = push_fore;
 }
 
 static void fillbarnd(int value) {
@@ -715,7 +719,7 @@ static void paint_statuses(const creature* player) {
 	auto ps = gres(ResStatus);
 	caret.x += 4;
 	caret.y += 4;
-	paint_status(ps, 12, player->is(Stun));
+	paint_status(ps, 32, player->is(Stun));
 	paint_status(ps, 2, player->is(Blooding));
 }
 

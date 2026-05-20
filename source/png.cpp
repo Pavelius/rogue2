@@ -75,7 +75,7 @@ static bool chunk_type_equals(const unsigned char* chunk, const char* type) {
 		&& chunk[7] == type[3]);
 }
 
-static int read_idat(unsigned char* out, const unsigned char* p, const unsigned char* pe, const unsigned char** single_input, color& transparent, bool& use_transparent) {
+static int read_idat(unsigned char* out, const unsigned char* p, const unsigned char* pe, const unsigned char** single_input, color& transparent, bool& use_transparent, color* palette) {
 	int size = 0;
 	int blocks = 0;
 	if(single_input)
@@ -113,6 +113,15 @@ static int read_idat(unsigned char* out, const unsigned char* p, const unsigned 
 				transparent.b = pn[5];
 				transparent.a = 0;
 				use_transparent = true;
+			}
+		} else if(chunk_type_equals(p, "PLTE")) {
+			auto pn = get_chunk_data(p);
+			auto count = chunk_length / 3;
+			for(auto i = 0; i < count; i++) {
+				palette[i].r = pn[i * 3 + 0];
+				palette[i].g = pn[i * 3 + 1];
+				palette[i].b = pn[i * 3 + 2];
+				palette[i].a = 0;
 			}
 		} else if(chunk_type_equals(p, "IEND"))
 			break;
@@ -439,6 +448,8 @@ static void apply_transparent(color* p, int w, int h, color transparent) {
 	}
 }
 
+static color pallette[256];
+
 static struct png_bitmap_plugin : public surface::plugin {
 
 	png_bitmap_plugin() : plugin("png", "PNG images\0*.png\0") {}
@@ -449,6 +460,7 @@ static struct png_bitmap_plugin : public surface::plugin {
 			return false;
 		if(!inspect(image_width, image_height, input_bpp, input, input_size))
 			return false;
+		memset(pallette, 0, sizeof(pallette));
 		auto bpp = iabs(input_bpp);
 		//auto colortype = (colortypes)input[25];
 		//auto compression = input[26];
@@ -459,7 +471,7 @@ static struct png_bitmap_plugin : public surface::plugin {
 		const unsigned char* single_input;
 		color transparent;
 		bool use_transparent = false;
-		int size_compressed = read_idat(0, input, input + input_size, &single_input, transparent, use_transparent);
+		int size_compressed = read_idat(0, input, input + input_size, &single_input, transparent, use_transparent, pallette);
 		if(!size_compressed)
 			return false;
 		// decompress image data
@@ -470,7 +482,7 @@ static struct png_bitmap_plugin : public surface::plugin {
 				return false;
 		} else {
 			unsigned char* ptemp = new unsigned char[size_compressed];
-			if(!read_idat(ptemp, input, input + input_size, 0, transparent, use_transparent)) {
+			if(!read_idat(ptemp, input, input + input_size, 0, transparent, use_transparent, pallette)) {
 				delete[] ptemp;
 				return false;
 			}
@@ -482,7 +494,7 @@ static struct png_bitmap_plugin : public surface::plugin {
 			delete[] ptemp;
 		}
 		postprocess_scanlines(output, output, image_width, image_height, bpp, interlace);
-		color_convert(output, image_width, image_height, output_bpp, 0, output, input_bpp, 0);
+		color_convert(output, image_width, image_height, output_bpp, 0, output, input_bpp, pallette);
 		if(output_bpp == 32 && use_transparent)
 			apply_transparent((color*)output, image_width, image_height, transparent);
 		return true;

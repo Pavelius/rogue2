@@ -213,7 +213,7 @@ static void create_enemy(short unsigned index, monstern type) {
 
 int main(int argc, char* argv[]) {
 	initialize_strings();
-	//main_util();
+	main_util();
 	area_clear();
 	set_dark_theme();
 	initialize_gui();
