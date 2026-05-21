@@ -32,10 +32,10 @@ struct answers {
 	adat<element, 32> elements;
 	static const answers* last;
 	static bool			interactive;
-	static int			column_count;
+//	static int			column_count;
 	static const char*	header;
+	static const char*	footer;
 	static const char*	string;
-	static bool			show_tips;
 	answers() : sc(buffer) {}
 	constexpr operator bool() const { return elements.count != 0; }
 	void				add(long value, const char* name, ...);

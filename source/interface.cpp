@@ -20,6 +20,7 @@
 #include "creature.h"
 #include "direction.h"
 #include "draw.h"
+#include "draw_column.h"
 #include "draw_effect.h"
 #include "draw_object.h"
 #include "draw_floatinfo.h"
@@ -129,6 +130,7 @@ static point answer_end;
 static unsigned long last_message_tick;
 
 bool show_floor_rect;
+drawcolumn* last_columns;
 
 stringbuilder console(console_text);
 
@@ -694,7 +696,7 @@ static void bar_shade(int value, int maximum, color m) {
 
 static point get_head(monstern type) {
 	point result = {0, 0};
-	if(type>=FirstMonster) {
+	if(type >= FirstMonster) {
 		auto ps = gres(ResMonsters);
 		auto& fr = ps->get(type - FirstMonster);
 		result.y -= fr.oy + 4 * 2;
@@ -775,7 +777,7 @@ static void fillbuttonpress() {
 
 static void paint_button(const char* format, bool pressed) {
 	auto push_caret = caret;
-	height = texth();
+	height = texth() + 1;
 	if(width == -1)
 		width = textw(format) + 6;
 	auto push_fore = fore;
@@ -909,7 +911,7 @@ static void answer_paint_cell(int index, long value, const char* format, fnevent
 	textf(format);
 	width = push_width;
 	caret.y = push_caret.y;
-	//if(answers::current_columns) {
+	if(last_columns) {
 	//	auto total_width = current_columns->totalwidth() + 4;
 	//	char temp[260]; stringbuilder sb(temp);
 	//	if(width >= total_width) {
@@ -930,7 +932,7 @@ static void answer_paint_cell(int index, long value, const char* format, fnevent
 	//			caret.x += p->width;
 	//		}
 	//	}
-	//}
+	}
 	if(button_executed)
 		execute(proc, (long)value);
 	caret = push_caret;
@@ -948,7 +950,7 @@ static void answer_paint_cell_small(int index, long value, const char* format, f
 		execute(proc, (long)value);
 	width = push_width;
 	caret = push_caret;
-	caret.y += texth() + 1;
+	caret.y += texth() + 2;
 }
 
 static void get_total_height(const answers& source) {
@@ -975,6 +977,12 @@ static void get_total_height(const answers& source) {
 	height = total_height;
 }
 
+static void paint_answers() {
+	auto index = 0;
+	for(auto& e : an)
+		answer_paint_cell_small(index++, e.value, e.text, buttonparam);
+}
+
 static void paint_message_answers(int window_width) {
 	if(!console_text[0])
 		return;
@@ -995,6 +1003,22 @@ static void paint_dialog_message(int window_width) {
 	strokeout(fillwindow, metrics::padding);
 	strokeout(strokeborder, metrics::padding);
 	paint_message_answers(window_width);
+}
+
+static void paint_window(const char* header, int window_width, int window_height) {
+	caret.y = 32;
+	caret.x = (getwidth() - window_width - panel_width) / 2;
+	width = window_width; height = window_height;
+	strokeout(fillwindow, metrics::padding, 192);
+	strokeout(strokeborder, metrics::padding);
+	answer_end = caret;
+	answer_end.y = caret.y + height - texth() - metrics::padding;
+	if(header) {
+		pushfont push(gres(Font2));
+		pushfore push_fore(colors::header);
+		texta(header, AlignCenter);
+		caret.y += texth() + metrics::padding;
+	}
 }
 
 long choose_answers() {
@@ -1025,16 +1049,6 @@ static void paint_answer_footer(const char* footer, const char* cancel) {
 	}
 	width = push_width;
 	caret = push_caret;
-}
-
-long choose_menu() {
-	pushrect push;
-	while(ismodal()) {
-		get_total_height(an);
-		paint_dialog_message(width);
-		domodal();
-	}
-	return getresult();
 }
 
 static void set_minimap_caret(point origin, short unsigned i) {
@@ -1241,7 +1255,7 @@ static void update_message() {
 	if(!console_text[0])
 		return;
 	auto current_tick = getcputime();
-	if(!last_message_tick || (current_tick - last_message_tick) > 4000 || (hkey==KeyEscape)) {
+	if(!last_message_tick || (current_tick - last_message_tick) > 4000 || (hkey == KeyEscape)) {
 		last_message_tick = 0;
 		console.clear();
 		if(hkey == KeyEscape)
@@ -1503,6 +1517,14 @@ static void test_scene() {
 	choose_answers();
 }
 
+static void test_choose_menu() {
+	pushvalue push(answers::header, "Инвенторий");
+	an.clear();
+	for(auto v = MeleeWeapon; v <Backpack; v = (wearn)(v+1))
+		an.add(v, getname(v));
+	choose_menu("Отмена");
+}
+
 static void direction_keys() {
 	switch(hkey) {
 	case KeyUp: execute(player_move_cmd, North); break;
@@ -1514,7 +1536,7 @@ static void direction_keys() {
 	case KeyPageDown: execute(player_move_cmd, SouthEast); break;
 	case KeyEnd: execute(player_move_cmd, SouthWest); break;
 	case 'T': player->is(Mirrorred) ? player->remove(Mirrorred) : player->set(Mirrorred); break;
-	case Ctrl+'T': execute(test_scene); break;
+	case Ctrl + 'T': execute(test_choose_menu); break;
 	default: break;
 	}
 }
@@ -1562,6 +1584,20 @@ void choose_player_move() {
 	}
 }
 
+long choose_menu(const char* cancel) {
+	pushrect push;
+	while(ismodal()) {
+		paint_status();
+		paint_area();
+		paint_message(console_text);
+		paint_window(answers::header, 420, 320);
+		paint_answers();
+		paint_answer_footer(answers::footer, cancel);
+		domodal();
+	}
+	return getresult();
+}
+
 static void camera_initialize() {
 	camera_maximum.x = mps * tsx;
 	camera_maximum.y = mps * tsy;
@@ -1575,6 +1611,7 @@ static void console_print(char symbol, const char* format, const char* format_pa
 }
 
 void initialize_gui() {
+	set_dark_theme();
 	print_proc = console_print;
 	print("Тестовая строка данных.");
 	font = metrics::font;

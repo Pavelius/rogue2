@@ -82,6 +82,7 @@
     <ClInclude Include="direction.h" />
     <ClInclude Include="draw.h" />
     <ClInclude Include="drawable.h" />
+    <ClInclude Include="draw_column.h" />
     <ClInclude Include="draw_effect.h" />
     <ClInclude Include="draw_object.h" />
     <ClInclude Include="feats.h" />

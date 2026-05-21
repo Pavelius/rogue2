@@ -715,7 +715,10 @@ void creature_every_10_minutes() {
 }
 
 static int get_experience_reward(const creature* player) {
-	static int rewards[] = {5, 10, 15, 20, 25, 30, 35, 50, 75, 125, 175, 225, 275, 350, 450, 650, 900, 1100, 1350, 2000, 2500};
+	static int rewards[] = {
+		5, 10, 15, 20, 25, 30, 35, 50, 75, 125,
+		175, 225, 275, 350, 450, 650, 900, 1100, 1350, 2000,
+		2500};
 	auto level = player->get(Level);
 	return maptbl(rewards, level);
 }

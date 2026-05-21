@@ -33,12 +33,15 @@ struct gamei {
 	int variables[Blessing + 1];
 	int restore_half_turn, restore_turn, restore_hour, restore_day_part, restore_day, restore_several_days;
 };
+extern gamei game;
 
 int getv(gamen v);
 
 void addv(gamen v, int i);
 void choose_player_move();
+long choose_menu(const char* cancel);
 void end_game();
+void initialize_gui();
 void pass_minute();
 void skip_long_time();
 void wait_all();

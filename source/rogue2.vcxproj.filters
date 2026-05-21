@@ -302,5 +302,8 @@
     <ClInclude Include="draw_effect.h">
       <Filter>Interface</Filter>
     </ClInclude>
+    <ClInclude Include="draw_column.h">
+      <Filter>Logic</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

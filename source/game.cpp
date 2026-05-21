@@ -31,10 +31,6 @@ BSDATAC(creature, 1024)
 BSDATAC(itemlay, 8192)
 BSDATAC(sitei, 2048)
 
-void initialize_gui();
-void main_util();
-void set_dark_theme();
-
 gamei game;
 
 int getv(gamen v) {
@@ -211,11 +207,16 @@ static void create_enemy(short unsigned index, monstern type) {
 	player->set(Enemy);
 }
 
+#ifdef _DEBUG
+void main_util();
+#endif
+
 int main(int argc, char* argv[]) {
 	initialize_strings();
+#ifdef _DEBUG
 	main_util();
+#endif
 	area_clear();
-	set_dark_theme();
 	initialize_gui();
 	area_clear();
 	area_set({0, 0, mps, mps}, Grass);

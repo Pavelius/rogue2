@@ -19,11 +19,10 @@
 #include "rand.h"
 
 const char* answers::header;
+const char* answers::footer;
 const char* answers::string;
 
-bool answers::show_tips = true;
 bool answers::interactive = true;
-int answers::column_count = 1;
 
 const answers* answers::last;
 
