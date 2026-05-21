@@ -90,7 +90,6 @@
     <ClInclude Include="draw_floatinfo.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="indexa.h" />
-    <ClInclude Include="speech.h" />
     <ClInclude Include="io_stream.h" />
     <ClInclude Include="item.h" />
     <ClInclude Include="itemlay.h" />

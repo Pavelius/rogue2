@@ -281,3 +281,16 @@ void update_items() {
 			items.add(&e);
 	}
 }
+
+bool item::unequip() {
+	auto p = owner();
+	if(!p)
+		return false;
+	if(is(Cursed)) {
+		known_magic = 1;
+		p->say(SayItsMine);
+		return false;
+	}
+	add_item(p, *this);
+	return operator bool();
+}

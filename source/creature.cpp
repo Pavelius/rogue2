@@ -25,9 +25,9 @@
 #include "game.h"
 #include "math.h"
 #include "message.h"
+#include "print.h"
 #include "pushvalue.h"
 #include "rand.h"
-#include "speech.h"
 #include "stringbuilder.h"
 
 creature* human;
@@ -902,4 +902,11 @@ void creature::damage(int v) {
 	hits -= v;
 	if(hits <= 0)
 		kill();
+}
+
+void creature::say(speechn v) const {
+	if(!isvisible())
+		return;
+	auto n = speechn(v * 3 + rand() % 3);
+	println("[%1:] \"%2\"", name(), getname(n));
 }

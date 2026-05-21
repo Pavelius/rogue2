@@ -80,6 +80,7 @@ struct item {
 	bool iscoins() const { return type == CP || type == SP || type == GP; }
 	bool istwohanded() const;
 	void join(item& v);
+	bool unequip();
 	void use();
 };
 struct wearable {

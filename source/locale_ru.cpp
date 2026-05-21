@@ -18,7 +18,6 @@
 #include "creature.h"
 #include "game.h"
 #include "message.h"
-#include "speech.h"
 #include "stringlocale.h"
 
 BSENUM(gamen) = {
@@ -33,6 +32,14 @@ BSENUM(messagen) = {
 	"Парирование", "Уклонение",
 	"%Item повреждено", "%Item сгорело полностью", "%Item расплавилось до тла", "%Item расcыпалось в пыль", "%Item разлетелось на куски",
 }; BAENUM(ItemCrushingOut)
+BSENUM(speechn) = {
+	"Добрый день.",
+	"Приветствую.",
+	"Хороший день для разговора.",
+	"Нет. Это мое.",
+	"Не отдам. Это мое богатство, моя ... прелесть.",
+	"Пожалуй оставлю это себе.",
+}; assert_enum(bsenum<speechn>::names, SayItsMine * 3 + 2)
 BSENUM(abilityn) = {
 	"Уровень",
 	"Сила", "Ловкость", "Интеллект",
@@ -129,7 +136,3 @@ BSENUM(namen) = {
 	"Йаргул", "Йугра", "Заргат", "Зрулла", "Бругор",
 	"Багра", "Дрогат", "Дурша", "Кургаш", "Крулла"
 };
-//static const char* say_hello[] = {
-//	"Добрый день, друг.",
-//	"Чем могу помочь?",
-//};

@@ -60,6 +60,10 @@ enum namen : unsigned short {
 	OrcNames = DwarfNames + 50,
 	NoName = 0xFFFF
 };
+enum speechn : unsigned char {
+	SayHello,
+	SayItsMine,
+};
 struct statable {
 	char abilities[Drunk + 1];
 };
@@ -115,6 +119,7 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	void remove(spelln v) { spellable::remove(v); }
 	bool resist(featn resistane, featn immunity) const;
 	bool roll(abilityn v, int bonus = 0) const;
+	void say(speechn v) const;
 	void set(abilityn v, int i) { if(v<=Drunk) abilities[v] = (char)i; }
 	void set(featn v) { featable::set(v); }
 	void setindex(short unsigned i);

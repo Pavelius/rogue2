@@ -184,14 +184,12 @@ void open_inventory() {
 		if(!p)
 			break;
 		if(*p)
-			add_item(player, *p);
+			p->unequip();
 		else {
 			auto wr = (wearn)(p - player->wears);
 			auto pi = choose_backpack(wr);
-			if(pi) {
-				*p = *pi;
-				pi->clear();
-			}
+			if(pi)
+				p->join(*pi);
 		}
 	}
 }
@@ -333,7 +331,7 @@ int main(int argc, char* argv[]) {
 	put_item(apos(4, 4), LongSword);
 	put_item(apos(4, 4), LongBow);
 	create_creature(apos(4, 3), Human);
-	item i1 = Spear; i1.magic = Blessed; i1.known_magic = 1;
+	item i1 = Spear; i1.magic = Cursed; // i1.known_magic = 1;
 	player->equip(i1);
 	player->equip(LeatherArmor);
 	player->equip(LongBow);

@@ -1191,11 +1191,15 @@ static void window_back() {
 	rectf();
 }
 
+static bool can_clear_console(unsigned long current_tick) {
+	return !last_message_tick || (current_tick - last_message_tick) > 4000;
+}
+
 static void update_message() {
 	if(!console_text[0])
 		return;
 	auto current_tick = getcputime();
-	if(!last_message_tick || (current_tick - last_message_tick) > 4000 || (hkey == KeyEscape)) {
+	if(can_clear_console(current_tick) || (hkey == KeyEscape)) {
 		last_message_tick = 0;
 		console.clear();
 		if(hkey == KeyEscape)
@@ -1452,6 +1456,8 @@ static void test_scene() {
 }
 
 void set_item_color(const item& it) {
+	if(!it.known_magic)
+		return;
 	if(it.is(Cursed))
 		fore = fore.mix(colors::red, 128);
 	else if(it.is(Blessed))
@@ -1534,11 +1540,12 @@ long choose_menu(const char* cancel, const char* footer) {
 	while(ismodal()) {
 		paint_status();
 		paint_area();
-		paint_message(console_text);
 		paint_window(answers::header, 420, 280);
 		paint_answers();
 		paint_answer_footer(footer, cancel);
+		paint_message(console_text);
 		domodal();
+		update_message();
 	}
 	return getresult();
 }
@@ -1549,6 +1556,9 @@ static void camera_initialize() {
 }
 
 static void console_print(char symbol, const char* format, const char* format_param) {
+	auto current_tick = getcputime();
+	if(can_clear_console(current_tick))
+		console.clear();
 	if(symbol)
 		console.addsep(symbol);
 	console.addv(format, format_param);
