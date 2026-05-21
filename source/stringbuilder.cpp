@@ -793,13 +793,17 @@ void stringbuilder::addto(const char* s) {
 int gender_by_name(const char* s) {
 	static genderi source[] = {
 		{"à", 1},
-		{"î", 2},
-		{"û", 3},
 		{"ÿ", 1},
+		{"î", 2},
+		{"å", 2},
+		{"¸", 2},
+		{"û", 3},
+		{"ü", 1},
 		{"üå", 2},
+		{"ìÿ", 2},
 	};
 	auto ps = skip_space(s);
-	auto pw = word_end(ps);
+	auto pw = zend(ps);
 	unsigned s1 = pw - ps;
 	for(auto& e : source) {
 		auto s2 = e.name_size;

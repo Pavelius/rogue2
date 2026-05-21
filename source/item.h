@@ -54,13 +54,16 @@ struct item {
 			unsigned char power : 5; // Item magical power index (1-31) or 0 - if no magical power
 			unsigned char broken : 3; // Charges or Broken status
 			magicn magic : 2;
-			unsigned char identified : 1;
+			unsigned char known_power : 1;
+			unsigned char known_magic : 1;
 		};
 	};
 	constexpr item() : type((itemn)0), count(0), properties(0) {}
 	constexpr item(itemn v, unsigned char count = 1) : type(v), count(count), properties(0) {}
 	explicit operator bool() const { return count != 0; }
 	creature* owner();
+	const char* name() const;
+	const char* fullname() const;
 	int	armor() const;
 	int	cost() const;
 	int damage() const;
@@ -94,4 +97,3 @@ struct wearable {
 void add_item(short unsigned area_index, short unsigned index, item& v);
 void add_item(creature* p, item& v);
 void update_items();
-

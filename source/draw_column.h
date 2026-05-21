@@ -1,7 +1,7 @@
 #pragma once
 
 struct drawcolumn {
-	typedef const char*(*fninfo)(long value);
+	typedef const char*(*fninfo)(int index, long value, const char* format);
 	fninfo		proc;
 	int			width;
 	unsigned	flags; // Align

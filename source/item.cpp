@@ -15,12 +15,15 @@
 //  limitations under the License.
 
 #include "bsdata.h"
+#include "creature.h"
 #include "collectiona.h"
 #include "itemlay.h"
 #include "feats.h"
 #include "math.h"
 #include "rand.h"
 #include "slice.h"
+#include "stringbuilder.h"
+#include "variant.h"
 
 const int cp = 1;
 const int sp = 10;
@@ -32,6 +35,11 @@ static_assert(sizeof(item) == 4, "Structure `item` must 4 bytes");
 
 collectionv<itemlay> items;
 bool need_update_items;
+
+static variant weapon_powers[] = {
+	Variant,
+	WeaponSkill, DamageMelee, Dexterity,
+};
 
 static int get_weight(itemn v) {
 	switch(v) {
@@ -167,6 +175,7 @@ bool item::istwohanded() const {
 	case GreatAxe:
 	case GreatSword:
 	case Staff:
+	case Spear:
 		return true;
 	default:
 		return false;
@@ -203,6 +212,18 @@ void item::join(item& v) {
 		}
 		need_update_items = true;
 	}
+}
+
+const char* item::name() const {
+	static char temp[160];
+	stringbuilder sb(temp);
+	auto pn = getname(type);
+	auto gi = gender_by_name(pn);
+	if(known_magic && magic)
+		sb.adds(getname((magicn)(gi * 4 + magic)));
+	sb.adds(getname(type));
+	sb.lower();
+	return temp;
 }
 
 bool wearable::equip(item& it) {

@@ -40,9 +40,8 @@ const int tsy = 48;
 
 const int panel_width = 130;
 const int window_width = 608;
-const int window_height = 376;
-const int wears_offset = 80;
-const int stat_value_width = 50;
+const int window_height = tsy * 7;
+const int stat_value_width = 58;
 
 const int tick_time = 400;
 
@@ -869,88 +868,29 @@ static void text_header(const char* format) {
 	caret.y += texth();
 }
 
-static void text_header_small(const char* format) {
-	auto push_caret = caret;
-	pushfont push_font(metrics::h3);
-	pushfore push_fore(colors::header);
-	caret.x += (width - textw(format)) / 2;
-	text(format);
-	caret = push_caret;
-	caret.y += texth();
-}
-
-static void answer_before_paint() {
-	caret.x = (getwidth() - window_width - panel_width) / 2;
-	caret.y = (getheight() - window_height) / 2;
-	answer_end = caret;
-	answer_end.y += window_height - texth() - 2;
-	width = window_width;
-	height = window_height;
-	strokeout(fillform, metrics::padding);
-	pushfore push_fore(colors::form);
-	strokeout(strokeup, metrics::padding);
-	strokeout(strokeup, metrics::padding - 1);
-	if(answers::header)
-		text_header(answers::header);
-}
-
-static void answer_paint_cell(int index, long value, const char* format, fnevent proc) {
-	auto push_caret = caret;
-	auto push_width = width;
-	unsigned key = value ? answer_key(index) : KeyEscape;
-	button(key, 24);
-	//if(bsdata<creature>::have(value)) {
-	//	auto pc = bsdata<creature>::elements + bsdata<creature>::source.indexof(value);
-	//	auto pi = pc->getwear(value);
-	//	auto st = pc->getwearslot(pi);
-	//	if(pi && st >= MeleeWeapon && st <= Legs) {
-	//		text(bsdata<weari>::elements[st].getname());
-	//		caret.x += wears_offset; width -= wears_offset;
-	//	}
-	//}
-	textf(format);
-	width = push_width;
-	caret.y = push_caret.y;
-	if(last_columns) {
-	//	auto total_width = current_columns->totalwidth() + 4;
-	//	char temp[260]; stringbuilder sb(temp);
-	//	if(width >= total_width) {
-	//		caret.x = push_caret.x + width - total_width;
-	//		for(auto p = current_columns; *p; p++) {
-	//			sb.clear();
-	//			auto push_caret = caret;
-	//			auto pn = p->proc(value, sb);
-	//			if(p->rightalign) {
-	//				pushvalue push_width(width);
-	//				pushvalue push_height(height);
-	//				textfs(pn);
-	//				caret.x += p->width - width;
-	//				textf(pn);
-	//			} else
-	//				textf(pn);
-	//			caret = push_caret;
-	//			caret.x += p->width;
-	//		}
-	//	}
-	}
-	if(button_executed)
-		execute(proc, (long)value);
-	caret = push_caret;
-	caret.y += texth() + 1;
-	width = push_width;
-}
-
 static void answer_paint_cell_small(int index, long value, const char* format, fnevent proc) {
+	pushfore push_fore;
 	auto push_caret = caret;
 	auto push_width = width;
 	button(answer_key(index), 24);
 	width -= caret.x - push_caret.x;
-	textf(format);
+	if(last_columns) {
+		auto push_origin = caret;
+		for(auto p = last_columns; *p; p++) {
+			fore = push_fore.fore;
+			caret = push_origin;
+			width = p->width;
+			auto pn = p->proc(index, value, format);
+			texta(pn, p->flags);
+			push_origin.x += p->width;
+		}
+	} else
+		textf(format);
 	if(button_executed)
-		execute(proc, (long)value);
-	width = push_width;
+		execute(proc, value);
 	caret = push_caret;
 	caret.y += texth() + 2;
+	width = push_width;
 }
 
 static void get_total_height(const answers& source) {
@@ -1213,11 +1153,11 @@ static void paint_player_status() {
 	paint_separator();
 	paint_field(WeaponSkill);
 	paint_field(BalisticSkill);
+	paint_field(Dodge);
 	paint_field(Armor);
+	paint_separator();
 	paint_field(Hits);
 	paint_field(Mana);
-	paint_separator();
-	paint_field(Dodge);
 	paint_separator();
 	paint_field(Experience);
 	paint_field(Money);
@@ -1517,8 +1457,41 @@ static void test_scene() {
 	choose_answers();
 }
 
+static const char* inventory_wear_name(int index, long value, const char* format) {
+	return str("%1:", getname((wearn)value));
+}
+
+static const char* inventory_item_weight(int index, long value, const char* format) {
+	return str("%1i", player->wears[value].weight());
+}
+
+static void set_item_color(const item& it) {
+	if(it.is(Cursed))
+		fore = fore.mix(colors::red, 192);
+	else if(it.is(Blessed))
+		fore = fore.mix(colors::green, 192);
+	else if(it.is(Artifact))
+		fore = fore.mix(colors::yellow, 192);
+	else
+		fore = fore.mix(colors::form, 192);
+}
+
+static const char* inventory_item(int index, long value, const char* format) {
+	auto& it = player->wears[value];
+	set_item_color(it);
+	if(it)
+		return it.name();
+	return "-";
+}
+
 static void test_choose_menu() {
+	static drawcolumn columns[] = {
+		{inventory_wear_name, 72, 0},
+		{inventory_item, 280, 0},
+		{inventory_item_weight, 30, AlignRight},
+		{}};
 	pushvalue push(answers::header, "Инвенторий");
+	pushvalue push_columns(last_columns, columns);
 	an.clear();
 	for(auto v = MeleeWeapon; v <Backpack; v = (wearn)(v+1))
 		an.add(v, getname(v));
@@ -1590,7 +1563,7 @@ long choose_menu(const char* cancel) {
 		paint_status();
 		paint_area();
 		paint_message(console_text);
-		paint_window(answers::header, 420, 320);
+		paint_window(answers::header, 420, 280);
 		paint_answers();
 		paint_answer_footer(answers::footer, cancel);
 		domodal();
