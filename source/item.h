@@ -43,6 +43,8 @@ enum itemn : unsigned char {
 
 int get_pierce(itemn v);
 
+wearn get_wear(itemn v);
+
 bool is_feat(itemn type, featn v);
 
 struct item {
@@ -94,6 +96,11 @@ struct wearable {
 	const item* getwear(const void* data) const;
 };
 
+item* choose_backpack();
+item* choose_backpack(wearn wear);
+item* choose_inventory();
+
 void add_item(short unsigned area_index, short unsigned index, item& v);
 void add_item(creature* p, item& v);
+void set_item_color(const item& it);
 void update_items();

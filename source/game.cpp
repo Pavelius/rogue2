@@ -14,12 +14,15 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
+#include "answers.h"
 #include "area.h"
 #include "bsdata.h"
 #include "creature.h"
 #include "draw.h"
+#include "draw_column.h"
 #include "game.h"
 #include "itemlay.h"
+#include "message.h"
 #include "pushvalue.h"
 #include "rand.h"
 #include "resid.h"
@@ -32,6 +35,7 @@ BSDATAC(itemlay, 8192)
 BSDATAC(sitei, 2048)
 
 gamei game;
+static wearn last_wear;
 
 int getv(gamen v) {
 	switch(v) {
@@ -100,6 +104,100 @@ static void apply_temperature() {
 }
 
 static void auto_activate_features() {
+}
+
+static const char* inventory_wear_name(int index, long value, const char* format) {
+	auto w = (wearn)((item*)value - player->wears);
+	return str("%1:", getname(w));
+}
+
+static const char* inventory_item_weight(int index, long value, const char* format) {
+	auto p = (item*)value;
+	auto n = p->weight();
+	return str("%1i.%2.2i", n / 100, n % 100);
+}
+
+static const char* inventory_item(int index, long value, const char* format) {
+	auto p = (item*)value;
+	set_item_color(*p);
+	if(*p)
+		return p->name();
+	return "-";
+}
+
+item* choose_inventory() {
+	static drawcolumn columns[] = {
+		{inventory_wear_name, 72, 0},
+		{inventory_item, 280, 0},
+		{inventory_item_weight, 30, AlignRight},
+		{}};
+	pushvalue push(answers::header, getname(Inventory));
+	pushvalue push_columns(last_columns, columns);
+	an.clear();
+	for(auto v = MeleeWeapon; v < Backpack; v = (wearn)(v + 1))
+		an.add((long)(player->wears + v), getname(v));
+	return (item*)choose_menu(getname(Cancel), 0);
+}
+
+void add_answer_items(short unsigned area_index, short unsigned index, fnvisible filter) {
+	for(auto& e : bsdata<itemlay>()) {
+		if(e && e.area_index == 0xFFFF && e.index == index) {
+			if(filter && !filter(&e))
+				continue;
+			an.add((long)&e, e.name());
+		}
+	}
+}
+
+static bool filter_wear(const void* object) {
+	return ((item*)object)->is(last_wear);
+}
+
+item* choose_backpack(wearn wear) {
+	static drawcolumn columns[] = {
+		{inventory_item, 352, 0},
+		{inventory_item_weight, 30, AlignRight},
+		{}};
+	pushvalue push(answers::header, getname(wear));
+	pushvalue push_columns(last_columns, columns);
+	an.clear();
+	last_wear = wear;
+	add_answer_items(0xFFFF, player - bsdata<creature>::elements, filter_wear);
+	return (item*)choose_menu(getname(Cancel), 0);
+}
+
+item* choose_backpack() {
+	static drawcolumn columns[] = {
+		{inventory_item, 352, 0},
+		{inventory_item_weight, 30, AlignRight},
+		{}};
+	pushvalue push(answers::header, getname(Backpack));
+	pushvalue push_columns(last_columns, columns);
+	an.clear();
+	add_answer_items(0xFFFF, player - bsdata<creature>::elements, 0);
+	return (item*)choose_menu(getname(Cancel), 0);
+}
+
+void open_inventory() {
+	while(running_scene()) {
+		auto p = choose_inventory();
+		if(!p)
+			break;
+		if(*p)
+			add_item(player, *p);
+		else {
+			auto wr = (wearn)(p - player->wears);
+			auto pi = choose_backpack(wr);
+			if(pi) {
+				*p = *pi;
+				pi->clear();
+			}
+		}
+	}
+}
+
+void open_backpack() {
+	choose_backpack();
 }
 
 void pass_minute() {

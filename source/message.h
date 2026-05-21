@@ -16,6 +16,9 @@
 
 #pragma once
 
+enum commandn : unsigned char {
+	Cancel, Apply, Inventory,
+};
 enum messagen : unsigned char {
 	ApplicationTitle,
 	MsgMiss,

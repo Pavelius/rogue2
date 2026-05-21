@@ -34,7 +34,6 @@ struct answers {
 	static bool			interactive;
 //	static int			column_count;
 	static const char*	header;
-	static const char*	footer;
 	static const char*	string;
 	answers() : sc(buffer) {}
 	constexpr operator bool() const { return elements.count != 0; }

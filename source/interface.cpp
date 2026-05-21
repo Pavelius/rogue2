@@ -1204,12 +1204,6 @@ static void update_message() {
 }
 
 /*
-static void execute_action() {
-	auto push_action = last_action;
-	last_action = (siteskilli*)hot.drawable;
-	script_execute("ApplyAction", 0);
-	last_action = push_action;
-}
 
 static void paint_action(const void* p, int index, unsigned key, fnevent proc) {
 	auto push_caret = caret;
@@ -1457,45 +1451,15 @@ static void test_scene() {
 	choose_answers();
 }
 
-static const char* inventory_wear_name(int index, long value, const char* format) {
-	return str("%1:", getname((wearn)value));
-}
-
-static const char* inventory_item_weight(int index, long value, const char* format) {
-	return str("%1i", player->wears[value].weight());
-}
-
-static void set_item_color(const item& it) {
+void set_item_color(const item& it) {
 	if(it.is(Cursed))
-		fore = fore.mix(colors::red, 192);
+		fore = fore.mix(colors::red, 128);
 	else if(it.is(Blessed))
-		fore = fore.mix(colors::green, 192);
+		fore = fore.mix(colors::green, 128);
 	else if(it.is(Artifact))
-		fore = fore.mix(colors::yellow, 192);
+		fore = fore.mix(colors::yellow, 128);
 	else
-		fore = fore.mix(colors::form, 192);
-}
-
-static const char* inventory_item(int index, long value, const char* format) {
-	auto& it = player->wears[value];
-	set_item_color(it);
-	if(it)
-		return it.name();
-	return "-";
-}
-
-static void test_choose_menu() {
-	static drawcolumn columns[] = {
-		{inventory_wear_name, 72, 0},
-		{inventory_item, 280, 0},
-		{inventory_item_weight, 30, AlignRight},
-		{}};
-	pushvalue push(answers::header, "Инвенторий");
-	pushvalue push_columns(last_columns, columns);
-	an.clear();
-	for(auto v = MeleeWeapon; v <Backpack; v = (wearn)(v+1))
-		an.add(v, getname(v));
-	choose_menu("Отмена");
+		fore = fore.mix(colors::form, 128);
 }
 
 static void direction_keys() {
@@ -1509,7 +1473,6 @@ static void direction_keys() {
 	case KeyPageDown: execute(player_move_cmd, SouthEast); break;
 	case KeyEnd: execute(player_move_cmd, SouthWest); break;
 	case 'T': player->is(Mirrorred) ? player->remove(Mirrorred) : player->set(Mirrorred); break;
-	case Ctrl + 'T': execute(test_choose_menu); break;
 	default: break;
 	}
 }
@@ -1541,6 +1504,14 @@ void wait_all() {
 	sync_scene(play_game_animate, have_effects);
 }
 
+static void standart_keys() {
+	switch(hkey) {
+	case 'I': execute(open_inventory); break;
+	case 'V': execute(open_backpack); break;
+	default: break;
+	}
+}
+
 void choose_player_move() {
 	link_camera();
 	update_creature_orders();
@@ -1551,13 +1522,14 @@ void choose_player_move() {
 		paint_area();
 		paint_message(console_text);
 		direction_keys();
+		standart_keys();
 		domodal();
 		update_message();
 		check_end_turn();
 	}
 }
 
-long choose_menu(const char* cancel) {
+long choose_menu(const char* cancel, const char* footer) {
 	pushrect push;
 	while(ismodal()) {
 		paint_status();
@@ -1565,7 +1537,7 @@ long choose_menu(const char* cancel) {
 		paint_message(console_text);
 		paint_window(answers::header, 420, 280);
 		paint_answers();
-		paint_answer_footer(answers::footer, cancel);
+		paint_answer_footer(footer, cancel);
 		domodal();
 	}
 	return getresult();

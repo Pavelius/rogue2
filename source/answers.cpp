@@ -19,7 +19,6 @@
 #include "rand.h"
 
 const char* answers::header;
-const char* answers::footer;
 const char* answers::string;
 
 bool answers::interactive = true;

@@ -121,7 +121,7 @@ int get_pierce(itemn v) {
 	}
 }
 
-static wearn get_wear(itemn v) {
+wearn get_wear(itemn v) {
 	if(v >= CP && v <= GP)
 		return Backpack;
 	else if(v >= Staff && v <= GreatSword)
@@ -133,6 +133,15 @@ static wearn get_wear(itemn v) {
 	else if(v >= Robe && v <= PlateMail)
 		return Torso;
 	return Backpack;
+}
+
+bool item::is(wearn v) const {
+	switch(v) {
+	case FingerLeft: case FingerRight:
+		return get_wear(type) == FingerRight;
+	default:
+		return get_wear(type) == v;
+	}
 }
 
 int item::weight() const {

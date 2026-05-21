@@ -38,10 +38,13 @@ extern gamei game;
 int getv(gamen v);
 
 void addv(gamen v, int i);
+void add_answer_items(short unsigned area_index, short unsigned index, fnvisible filter);
 void choose_player_move();
-long choose_menu(const char* cancel);
+long choose_menu(const char* cancel, const char* footer = 0);
 void end_game();
 void initialize_gui();
+void open_backpack();
+void open_inventory();
 void pass_minute();
 void skip_long_time();
 void wait_all();
