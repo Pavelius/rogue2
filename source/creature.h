@@ -93,6 +93,7 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	int	get(abilityn v) const { return (v < sizeof(abilities) / sizeof(abilities[0])) ? abilities[v] : 0; }
 	int getlos() const;
 	void act(messagen v) const;
+	void actn(messagen v) const;
 	void add(abilityn v, int i);
 	bool canhear(short unsigned i) const;
 	void clear();

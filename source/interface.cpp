@@ -822,7 +822,7 @@ static void paint_message(const char* format) {
 	if(!format || !format[0])
 		return;
 	pushrect push;
-	width = window_width;
+	width = 400;
 	textfs(format);
 	caret.y = metrics::padding * 2; height += 2;
 	caret.x = (getwidth() - width - panel_width) / 2;

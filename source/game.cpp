@@ -169,8 +169,8 @@ item* choose_backpack(wearn wear) {
 	return (item*)choose_menu(getname(Cancel), 0);
 }
 
-item* choose_backpack() {
-	pushvalue push(answers::header, getname(Backpack));
+item* choose_backpack(const char* header) {
+	pushvalue push(answers::header, header);
 	pushvalue push_columns(last_columns, backpack_columns);
 	an.clear();
 	add_answer_items(0xFFFF, player - bsdata<creature>::elements, 0);
@@ -184,6 +184,8 @@ item* choose_ground() {
 	add_answer_items(current_area, player->index, 0);
 	if(!an)
 		return 0;
+	if(an.elements.count == 1)
+		return (item*)an.elements[0].value;
 	return (item*)choose_menu(getname(Cancel), 0);
 }
 
@@ -205,30 +207,27 @@ void open_inventory() {
 }
 
 void open_backpack() {
-	auto p = choose_backpack();
+	auto p = choose_backpack(getname(Backpack));
 	if(p)
 		player->use(*p, true);
 }
 
 void open_drop_item() {
-	while(running_scene()) {
-		auto p = choose_backpack();
-		if(!p)
-			break;
-		add_item(current_area, player->index, *p);
-		player->act(PlayerDropItem);
-	}
+	auto p = choose_backpack(getname(DropDown));
+	if(!p)
+		return;
+	add_item(current_area, player->index, *p);
+	player->actn(PlayerDropItem);
+	update_player();
 }
 
 void open_ground() {
-	while(running_scene()) {
-		auto p = choose_ground();
-		if(!p)
-			break;
-		add_item(player, *p);
-		player->act(PlayerPickUpItem);
-		update_player();
-	}
+	auto p = choose_ground();
+	if(!p)
+		return;
+	add_item(player, *p);
+	player->actn(PlayerPickUpItem);
+	update_player();
 }
 
 void pass_minute() {

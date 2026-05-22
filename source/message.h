@@ -17,7 +17,7 @@
 #pragma once
 
 enum commandn : unsigned char {
-	Cancel, Apply, PickUp, Inventory,
+	Cancel, Apply, PickUp, DropDown, Inventory,
 };
 enum messagen : unsigned char {
 	ApplicationTitle,

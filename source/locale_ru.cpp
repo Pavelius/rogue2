@@ -91,7 +91,7 @@ BSENUM(directionn) = {
 }; BAENUM(Center)
 BSENUM(commandn) = {
 	"Отмена", "Принять",
-	"Поднять предмет",
+	"Поднять предмет", "Положить предмет",
 	"Инвентарь",
 }; BAENUM(Inventory)
 BSENUM(namen) = {

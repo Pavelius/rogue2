@@ -878,6 +878,12 @@ void creature::act(messagen v) const {
 	print(getname(v));
 }
 
+void creature::actn(messagen v) const {
+	if(!ispresent() || !area_is(index, Visible))
+		return;
+	println(getname(v));
+}
+
 bool creature::moveto(short unsigned ni) {
 	clear_path();
 	block_tiles(is(Fly));
