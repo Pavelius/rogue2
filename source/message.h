@@ -24,6 +24,6 @@ enum messagen : unsigned char {
 	MsgMiss,
 	PlayerFoundSecretDoor, PlayerFoundTrap,
 	PlayerBlock, PlayerDodge,
-	PlayerPickUpItem,
+	PlayerPickUpItem, PlayerDropItem,
 	ItemDamaged, ItemBurnAway, ItemMeldDown, ItemCrumbleToDust, ItemCrushingOut,
 };

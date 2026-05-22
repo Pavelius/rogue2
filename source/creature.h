@@ -124,6 +124,7 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	void set(featn v) { featable::set(v); }
 	void setindex(short unsigned i);
 	void update();
+	bool use(item& it, bool run);
 	void wait(int v) { wait_seconds += v; need_end_turn = true; }
 	void wait() { wait(100); }
 };

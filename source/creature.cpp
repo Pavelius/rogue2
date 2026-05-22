@@ -875,6 +875,7 @@ bool creature::isvisible() const {
 void creature::act(messagen v) const {
 	if(!ispresent() || !area_is(index, Visible))
 		return;
+	print(getname(v));
 }
 
 bool creature::moveto(short unsigned ni) {
@@ -925,4 +926,8 @@ void creature::say(speechn v) const {
 		return;
 	auto n = speechn(v * 3 + rand() % 3);
 	println("[%1:] \"%2\"", name(), getname(n));
+}
+
+bool creature::use(item& it, bool run) {
+	return false;
 }

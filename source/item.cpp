@@ -35,6 +35,7 @@ static_assert(sizeof(item) == 4, "Structure `item` must 4 bytes");
 
 collectionv<itemlay> items;
 bool need_update_items;
+item* last_item;
 
 static variant weapon_powers[] = {
 	Variant,
@@ -215,6 +216,7 @@ void item::setslot(item& v) {
 			v.clear();
 		else
 			v.count -= 1;
+		last_item = this;
 		need_update_items = true;
 	}
 }
@@ -239,6 +241,7 @@ void item::join(item& v) {
 		}
 		need_update_items = true;
 	}
+	last_item = this;
 }
 
 const char* item::name() const {

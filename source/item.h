@@ -85,6 +85,8 @@ struct item {
 	bool unequip();
 	void use();
 };
+extern item* last_item;
+
 struct wearable {
 	item wears[Legs + 1];
 	int	money;

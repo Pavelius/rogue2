@@ -27,6 +27,10 @@ static void player_name(stringbuilder& sb) {
 	sb.add(player->name());
 }
 
+static void item_name(stringbuilder& sb) {
+	sb.add(last_item->name());
+}
+
 static void addv(stringbuilder& sb, const char* header, const char* value) {
 	sb.addn("%1: %2", header, value);
 }
@@ -49,8 +53,9 @@ static void player_character_panel(stringbuilder& sb) {
 }
 
 BSDATA(stringvari) = {
+	{"Item", item_name},
 	{"ListOfFeats", list_of_feats},
+	{"Player", player_name},
 	{"PlayerCharacterPanel", player_character_panel},
-	{"PlayerName", player_name},
 };
 BSDATAF(stringvari)

@@ -1513,6 +1513,7 @@ void wait_all() {
 
 static void standart_keys() {
 	switch(hkey) {
+	case 'D': execute(open_drop_item); break;
 	case 'I': execute(open_inventory); break;
 	case 'P': execute(open_ground); break;
 	case 'V': execute(open_backpack); break;

@@ -31,6 +31,7 @@ BSENUM(messagen) = {
 	"%Player наш%ла ловушку.",
 	"ѕарирование", "”клонение",
 	"%Player подн€л%а %Item.",
+	"%Player положил%а %Item.",
 	"%Item повреждено", "%Item сгорело полностью", "%Item расплавилось до тла", "%Item расcыпалось в пыль", "%Item разлетелось на куски",
 }; BAENUM(ItemCrushingOut)
 BSENUM(speechn) = {

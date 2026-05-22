@@ -205,7 +205,19 @@ void open_inventory() {
 }
 
 void open_backpack() {
-	choose_backpack();
+	auto p = choose_backpack();
+	if(p)
+		player->use(*p, true);
+}
+
+void open_drop_item() {
+	while(running_scene()) {
+		auto p = choose_backpack();
+		if(!p)
+			break;
+		add_item(current_area, player->index, *p);
+		player->act(PlayerDropItem);
+	}
 }
 
 void open_ground() {
@@ -213,8 +225,8 @@ void open_ground() {
 		auto p = choose_ground();
 		if(!p)
 			break;
-		player->act(PlayerPickUpItem);
 		add_item(player, *p);
+		player->act(PlayerPickUpItem);
 		update_player();
 	}
 }

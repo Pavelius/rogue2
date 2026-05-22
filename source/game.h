@@ -44,6 +44,7 @@ long choose_menu(const char* cancel, const char* footer = 0);
 void end_game();
 void initialize_gui();
 void open_backpack();
+void open_drop_item();
 void open_inventory();
 void open_ground();
 void pass_minute();
