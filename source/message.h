@@ -17,12 +17,13 @@
 #pragma once
 
 enum commandn : unsigned char {
-	Cancel, Apply, Inventory,
+	Cancel, Apply, PickUp, Inventory,
 };
 enum messagen : unsigned char {
 	ApplicationTitle,
 	MsgMiss,
 	PlayerFoundSecretDoor, PlayerFoundTrap,
 	PlayerBlock, PlayerDodge,
+	PlayerPickUpItem,
 	ItemDamaged, ItemBurnAway, ItemMeldDown, ItemCrumbleToDust, ItemCrushingOut,
 };

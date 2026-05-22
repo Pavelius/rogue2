@@ -114,7 +114,9 @@ static const char* inventory_wear_name(int index, long value, const char* format
 static const char* inventory_item_weight(int index, long value, const char* format) {
 	auto p = (item*)value;
 	auto n = p->weight();
-	return str("%1i.%2.2i", n / 100, n % 100);
+	if(!n)
+		return "-";
+	return str("%1i.%2i", n / 100, (n/10) % 100);
 }
 
 static const char* inventory_item(int index, long value, const char* format) {
@@ -125,14 +127,19 @@ static const char* inventory_item(int index, long value, const char* format) {
 	return "-";
 }
 
+static drawcolumn backpack_columns[] = {
+	{inventory_item, 352, 0},
+	{inventory_item_weight, 30, AlignCenter},
+	{}};
+static drawcolumn inventory_columns[] = {
+	{inventory_wear_name, 72, 0},
+	{inventory_item, 280, 0},
+	{inventory_item_weight, 30, AlignCenter},
+	{}};
+
 item* choose_inventory() {
-	static drawcolumn columns[] = {
-		{inventory_wear_name, 72, 0},
-		{inventory_item, 280, 0},
-		{inventory_item_weight, 30, AlignRight},
-		{}};
 	pushvalue push(answers::header, getname(Inventory));
-	pushvalue push_columns(last_columns, columns);
+	pushvalue push_columns(last_columns, inventory_columns);
 	an.clear();
 	for(auto v = MeleeWeapon; v < Backpack; v = (wearn)(v + 1))
 		an.add((long)(player->wears + v), getname(v));
@@ -141,7 +148,7 @@ item* choose_inventory() {
 
 void add_answer_items(short unsigned area_index, short unsigned index, fnvisible filter) {
 	for(auto& e : bsdata<itemlay>()) {
-		if(e && e.area_index == 0xFFFF && e.index == index) {
+		if(e && e.area_index == area_index && e.index == index) {
 			if(filter && !filter(&e))
 				continue;
 			an.add((long)&e, e.name());
@@ -154,12 +161,8 @@ static bool filter_wear(const void* object) {
 }
 
 item* choose_backpack(wearn wear) {
-	static drawcolumn columns[] = {
-		{inventory_item, 352, 0},
-		{inventory_item_weight, 30, AlignRight},
-		{}};
 	pushvalue push(answers::header, getname(wear));
-	pushvalue push_columns(last_columns, columns);
+	pushvalue push_columns(last_columns, backpack_columns);
 	an.clear();
 	last_wear = wear;
 	add_answer_items(0xFFFF, player - bsdata<creature>::elements, filter_wear);
@@ -167,14 +170,20 @@ item* choose_backpack(wearn wear) {
 }
 
 item* choose_backpack() {
-	static drawcolumn columns[] = {
-		{inventory_item, 352, 0},
-		{inventory_item_weight, 30, AlignRight},
-		{}};
 	pushvalue push(answers::header, getname(Backpack));
-	pushvalue push_columns(last_columns, columns);
+	pushvalue push_columns(last_columns, backpack_columns);
 	an.clear();
 	add_answer_items(0xFFFF, player - bsdata<creature>::elements, 0);
+	return (item*)choose_menu(getname(Cancel), 0);
+}
+
+item* choose_ground() {
+	pushvalue push(answers::header, getname(PickUp));
+	pushvalue push_columns(last_columns, backpack_columns);
+	an.clear();
+	add_answer_items(current_area, player->index, 0);
+	if(!an)
+		return 0;
 	return (item*)choose_menu(getname(Cancel), 0);
 }
 
@@ -189,13 +198,25 @@ void open_inventory() {
 			auto wr = (wearn)(p - player->wears);
 			auto pi = choose_backpack(wr);
 			if(pi)
-				p->join(*pi);
+				p->setslot(*pi);
 		}
+		update_player();
 	}
 }
 
 void open_backpack() {
 	choose_backpack();
+}
+
+void open_ground() {
+	while(running_scene()) {
+		auto p = choose_ground();
+		if(!p)
+			break;
+		player->act(PlayerPickUpItem);
+		add_item(player, *p);
+		update_player();
+	}
 }
 
 void pass_minute() {
@@ -331,15 +352,15 @@ int main(int argc, char* argv[]) {
 	put_item(apos(4, 4), LongSword);
 	put_item(apos(4, 4), LongBow);
 	create_creature(apos(4, 3), Human);
-	item i1 = Spear; i1.magic = Cursed; // i1.known_magic = 1;
+	item i1 = Spear; i1.magic = Blessed; // i1.known_magic = 1;
 	player->equip(i1);
 	player->equip(LeatherArmor);
 	player->equip(LongBow);
 	player->update();
 	human = player;
 	create_enemy(apos(7, 3), Goblin);
-	create_enemy(apos(7, 4), Goblin);
-	create_enemy(apos(8, 3), Goblin);
+	//create_enemy(apos(7, 4), Goblin);
+	//create_enemy(apos(8, 3), Goblin);
 	next_scene(play_game);
 	start_scene();
 	return 0;

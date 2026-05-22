@@ -47,6 +47,9 @@ static int get_weight(itemn v) {
 	case ShortSword: return 2 * lb;
 	case GreatAxe: return 7 * lb;
 	case GreatSword: return 6 * lb;
+	case ChainMail: return 40 * lb;
+	case LeatherArmor: return 15 * lb;
+	case StuddedArmor: return 25 * lb;
 	default: return 1 * lb;
 	}
 }
@@ -201,6 +204,21 @@ bool is_feat(itemn type, featn v) {
 	}
 }
 
+void item::setslot(item& v) {
+	auto s = equiped();
+	if(s == Ammunition || s == Backpack)
+		join(v);
+	else {
+		*this = v;
+		count = 1;
+		if(v.count == 1)
+			v.clear();
+		else
+			v.count -= 1;
+		need_update_items = true;
+	}
+}
+
 void item::join(item& v) {
 	if(!count) {
 		*this = v;
@@ -231,6 +249,11 @@ const char* item::name() const {
 	if(known_magic && magic)
 		sb.adds(getname((magicn)(gi * 4 + magic)));
 	sb.adds(getname(type));
+	if(count > 1) {
+//		sb.addsep(',');
+//		sb.addsep(' ');
+		sb.adds("x%1i", count);
+	}
 	sb.lower();
 	return temp;
 }
@@ -239,11 +262,7 @@ bool wearable::equip(item& it) {
 	auto w = get_wear(it.type);
 	if(w == Backpack || wears[w])
 		return false;
-	wears[w] = it;
-	if(w == Ammunition)
-		it.clear();
-	else
-		it.count--;
+	wears[w].setslot(it);
 	return true;
 }
 
@@ -259,16 +278,21 @@ void wearable::additem(item& it, bool try_equip) {
 }
 
 void add_item(short unsigned area_index, short unsigned index, item& v) {
+	if(!v)
+		return;
 	for(auto& e : bsdata<itemlay>()) {
 		if(e.area_index == area_index && e.index == index)
 			e.join(v);
 	}
-	if(!v)
+	if(!v) {
+		need_update_items = true;
 		return;
+	}
 	auto p = bsdata<itemlay>::addz();
 	p->area_index = area_index;
 	p->index = index;
 	p->join(v);
+	need_update_items = true;
 }
 
 void update_items() {
@@ -277,7 +301,7 @@ void update_items() {
 	need_update_items = false;
 	items.clear();
 	for(auto& e : bsdata<itemlay>()) {
-		if(e.ispresent())
+		if(e && e.ispresent())
 			items.add(&e);
 	}
 }

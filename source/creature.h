@@ -145,4 +145,5 @@ void make_move();
 void fix(messagen v);
 bool player_move(directionn d);
 void update_creatures();
+void update_player();
 bool use_area(short unsigned i);

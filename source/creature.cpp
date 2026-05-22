@@ -21,6 +21,7 @@
 #include "creature.h"
 #include "draw_effect.h"
 #include "draw_floatinfo.h"
+#include "itemlay.h"
 #include "indexa.h"
 #include "game.h"
 #include "math.h"
@@ -126,7 +127,7 @@ static void copy(statable& v1, const statable& v2) {
 	v1 = v2;
 }
 
-static void update_player() {
+void update_player() {
 	copy(*player, player->basic);
 	update_abilities();
 	update_derived();
@@ -826,12 +827,27 @@ const char* creature::name() const {
 	return getname(custom_name);
 }
 
-creature* wearable::owner() {
+creature* wearable::owner() const {
 	return bsdata<creature>::get(this);
 }
 
-creature* item::owner() {
-	return bsdata<creature>::get(this);
+creature* item::owner() const {
+	auto p = bsdata<creature>::get(this);
+	if(p)
+		return p;
+	auto pn = bsdata<itemlay>::get(this);
+	if(pn->area_index == 0xFFFF)
+		return bsdata<creature>::elements + pn->index;
+	return 0;
+}
+
+wearn item::equiped() const {
+	auto p = owner();
+	if(!p)
+		return Backpack;
+	if(p->iswear(this))
+		return wearn(this - p->wears);
+	return Backpack;
 }
 
 creature* creature::getfear() const {

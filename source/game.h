@@ -45,6 +45,7 @@ void end_game();
 void initialize_gui();
 void open_backpack();
 void open_inventory();
+void open_ground();
 void pass_minute();
 void skip_long_time();
 void wait_all();

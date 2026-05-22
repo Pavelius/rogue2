@@ -63,7 +63,8 @@ struct item {
 	constexpr item() : type((itemn)0), count(0), properties(0) {}
 	constexpr item(itemn v, unsigned char count = 1) : type(v), count(count), properties(0) {}
 	explicit operator bool() const { return count != 0; }
-	creature* owner();
+	creature* owner() const;
+	wearn equiped() const;
 	const char* name() const;
 	const char* fullname() const;
 	int	armor() const;
@@ -80,13 +81,14 @@ struct item {
 	bool iscoins() const { return type == CP || type == SP || type == GP; }
 	bool istwohanded() const;
 	void join(item& v);
+	void setslot(item& v);
 	bool unequip();
 	void use();
 };
 struct wearable {
 	item wears[Legs + 1];
 	int	money;
-	creature* owner();
+	creature* owner() const;
 	void additem(item& v, bool try_equip = false);
 	void additem(const item& v) { item it = v; additem(it); }
 	bool equip(item& v);
@@ -99,6 +101,7 @@ struct wearable {
 
 item* choose_backpack();
 item* choose_backpack(wearn wear);
+item* choose_ground();
 item* choose_inventory();
 
 void add_item(short unsigned area_index, short unsigned index, item& v);

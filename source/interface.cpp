@@ -310,8 +310,10 @@ static void paint_creature() {
 		auto pa = gres(ResPCArms);
 		auto pc = gres(ResPCAccessories);
 		// Render inventory layers
-		paint_wear(pc, get_acc_back(p->wears[RangedWeapon].type), feats);
-		paint_wear(pc, get_acc_back(p->wears[Backward].type), feats);
+		if(p->wears[RangedWeapon])
+			paint_wear(pc, get_acc_back(p->wears[RangedWeapon].type), feats);
+		if(p->wears[Backward])
+			paint_wear(pc, get_acc_back(p->wears[Backward].type), feats);
 		// Primary arm
 		if(p->wears[MeleeWeapon].istwohanded())
 			image(pa, 9, feats);
@@ -1384,7 +1386,6 @@ static void show_charsheet() {
 	caret.x += width + metrics::padding * 2;
 	right_border();
 	show_block("%ListOfSkills");
-	pause_keys();
 }
 
 */
@@ -1513,6 +1514,7 @@ void wait_all() {
 static void standart_keys() {
 	switch(hkey) {
 	case 'I': execute(open_inventory); break;
+	case 'P': execute(open_ground); break;
 	case 'V': execute(open_backpack); break;
 	default: break;
 	}

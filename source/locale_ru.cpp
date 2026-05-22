@@ -30,6 +30,7 @@ BSENUM(messagen) = {
 	"%Player наш%ла секретную дверь.",
 	"%Player наш%ла ловушку.",
 	"Парирование", "Уклонение",
+	"%Player поднял%а %Item.",
 	"%Item повреждено", "%Item сгорело полностью", "%Item расплавилось до тла", "%Item расcыпалось в пыль", "%Item разлетелось на куски",
 }; BAENUM(ItemCrushingOut)
 BSENUM(speechn) = {
@@ -89,6 +90,7 @@ BSENUM(directionn) = {
 }; BAENUM(Center)
 BSENUM(commandn) = {
 	"Отмена", "Принять",
+	"Поднять предмет",
 	"Инвентарь",
 }; BAENUM(Inventory)
 BSENUM(namen) = {
