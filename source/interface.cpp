@@ -405,14 +405,6 @@ static void floorrect() {
 	rectb();
 }
 
-static void fillfade(color cv, unsigned char av = 128) {
-	pushvalue push_fore(fore);
-	pushvalue push_alpha(alpha);
-	fore = cv;
-	alpha = av;
-	rectf();
-}
-
 static void paint_wall(sprite* pw, point pt, unsigned short i, int bf, int bs) {
 	auto pi = gres(ResWalls);
 	auto bw = 0;
@@ -520,7 +512,7 @@ static void paint_floor() {
 static void paint_features() {
 	pushrect push;
 	auto pw = gres(ResWalls);
-	auto pf = gres(ResFeatures);
+	//auto pf = gres(ResFeatures);
 	auto mb = camera_box();
 	auto y2 = mb.y + mb.h;
 	for(auto y = mb.y; y < y2; y++) {
@@ -750,31 +742,18 @@ static void paint_health_bar() {
 	}
 }
 
-static void fieldh(const char* format) {
-	char temp[260]; stringbuilder sb(temp);
-	sb.add("%1:", format);
-	text(temp);
-}
+//static void fieldh(const char* format) {
+//	char temp[260]; stringbuilder sb(temp);
+//	sb.add("%1:", format);
+//	text(temp);
+//}
 
-static void field(const char* id, int width, const char* format) {
-	fieldh(id);
-	caret.x += width;
-	text(format);
-	caret.x += width;
-}
-
-static void field(const char* id, int width, int value) {
-	char temp[32]; stringbuilder sb(temp);
-	sb.add("%1i", value);
-	field(id, width, temp);
-}
-
-static void fillbuttonpress() {
-	auto push_fore = fore;
-	fore = colors::button.mix(colors::form, 96);
-	rectf();
-	fore = push_fore;
-}
+//static void field(const char* id, int width, const char* format) {
+//	fieldh(id);
+//	caret.x += width;
+//	text(format);
+//	caret.x += width;
+//}
 
 static void paint_button(const char* format, bool pressed) {
 	auto push_caret = caret;
@@ -860,16 +839,6 @@ void creature::fixmsg(const char* format, int param) {
 	add_floatinfo(position - point(0, 64), format, param, InfoRed);
 }
 
-static void text_header(const char* format) {
-	auto push_caret = caret;
-	pushfont push_font(metrics::h2);
-	pushfore push_fore(colors::header);
-	caret.x += (width - textw(format)) / 2;
-	text(format);
-	caret = push_caret;
-	caret.y += texth();
-}
-
 static void answer_paint_cell_small(int index, long value, const char* format, fnevent proc) {
 	pushfore push_fore;
 	auto push_caret = caret;
@@ -896,7 +865,6 @@ static void answer_paint_cell_small(int index, long value, const char* format, f
 }
 
 static void get_total_height(const answers& source) {
-	auto push_clipping = clipping;
 	auto total_height = 0;
 	width = window_width - 60;
 	textfs(console_text);
@@ -1023,7 +991,7 @@ static void paint_area(point origin, int z) {
 static void paint_area_screen(point origin, int z) {
 	if(!player)
 		return;
-	auto pc = point(player->index % mps, player->index / mps);
+	// auto pc = point(player->index % mps, player->index / mps);
 	auto s1 = point(camera.x / tsx, camera.y / tsy);
 	pushrect push;
 	pushvalue push_fore(fore);
@@ -1184,13 +1152,6 @@ static void paint_status() {
 	caret = push_caret;
 	height = push_height;
 	width = push_width - panel_width;
-}
-
-static void window_back() {
-	pushrect push;
-	pushvalue push_fore(fore, colors::form);
-	setoffset(-metrics::padding + 1, -metrics::padding + 1);
-	rectf();
 }
 
 static bool can_clear_console(unsigned long current_tick) {
@@ -1390,21 +1351,10 @@ static void show_charsheet() {
 
 */
 
-static void pause_keys() {
-	if(hkey == KeySpace || hkey == KeyEscape)
-		execute(buttoncancel);
-}
-
-static void camera_direction() {
-	const int dx = 4;
-	switch(hkey) {
-	case KeyLeft: camera.x -= dx; break;
-	case KeyRight: camera.x += dx; break;
-	case KeyUp: camera.y -= dx; break;
-	case KeyDown: camera.y += dx; break;
-	default: break;
-	}
-}
+//static void pause_keys() {
+//	if(hkey == KeySpace || hkey == KeyEscape)
+//		execute(buttoncancel);
+//}
 
 static void add_creatures() {
 	update_creatures();
@@ -1589,3 +1539,4 @@ BSDATA(drawrender) = {
 };
 BSDATAF(drawrender)
 static_assert(lenghtof(bsdata<drawrender>::elements) == (RenderCreature + 1), "Invalid render types count");
+

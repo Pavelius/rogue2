@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// 
+//
 //  Copyright 2026 by Pavel Chistyakov
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +24,6 @@
 #define	BSDATATMPL template<>
 #endif
 
-#define	lenghtof(C) (sizeof(C)/sizeof(C[0]))
 #define	FO(T,R) ((size_t)&((T*)0)->R)
 
 #define BSDATA(e) BSDATATMPL e bsdata<e>::elements[]

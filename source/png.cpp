@@ -117,7 +117,7 @@ static int read_idat(unsigned char* out, const unsigned char* p, const unsigned 
 		} else if(chunk_type_equals(p, "PLTE")) {
 			auto pn = get_chunk_data(p);
 			auto count = chunk_length / 3;
-			for(auto i = 0; i < count; i++) {
+			for(unsigned i = 0; i < count; i++) {
 				palette[i].r = pn[i * 3 + 0];
 				palette[i].g = pn[i * 3 + 1];
 				palette[i].b = pn[i * 3 + 2];

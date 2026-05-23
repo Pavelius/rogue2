@@ -59,6 +59,10 @@
 		<Unit filename="direction.h" />
 		<Unit filename="draw.cpp" />
 		<Unit filename="draw.h" />
+		<Unit filename="draw_effect.cpp" />
+		<Unit filename="draw_effect.h" />
+		<Unit filename="draw_floatinfo.cpp" />
+		<Unit filename="draw_floatinfo.h" />
 		<Unit filename="draw_object.cpp" />
 		<Unit filename="draw_object.h" />
 		<Unit filename="draw_surface.cpp" />
@@ -68,8 +72,6 @@
 		<Unit filename="drawable.h" />
 		<Unit filename="feats.h" />
 		<Unit filename="flagable.h" />
-		<Unit filename="floatinfo.cpp" />
-		<Unit filename="floatinfo.h" />
 		<Unit filename="game.cpp" />
 		<Unit filename="game.h" />
 		<Unit filename="indexa.cpp" />
@@ -88,7 +90,6 @@
 		<Unit filename="math.h" />
 		<Unit filename="message.h" />
 		<Unit filename="monster.cpp" />
-		<Unit filename="my_initialize_list.h" />
 		<Unit filename="nix_draw3x.cpp" />
 		<Unit filename="nix_io_file.cpp" />
 		<Unit filename="nix_time.cpp" />
@@ -120,6 +121,7 @@
 		<Unit filename="szdup.cpp" />
 		<Unit filename="timer.cpp" />
 		<Unit filename="timer.h" />
+		<Unit filename="variant.h" />
 		<Unit filename="visual.h" />
 		<Unit filename="zip.cpp" />
 		<Extensions />

@@ -66,6 +66,7 @@ enum speechn : unsigned char {
 };
 struct statable {
 	char abilities[Drunk + 1];
+	void add(abilityn v, int i) { abilities[v] += i; }
 };
 
 extern creature* human;

@@ -5,6 +5,8 @@
 using size_t = decltype(sizeof(0));
 #endif
 
+#define	lenghtof(C) (sizeof(C)/sizeof(C[0]))
+
 typedef int(*fncompare)(const void*, const void*);
 typedef int(*fngetnum)(const void* object);
 
@@ -34,9 +36,10 @@ struct slice {
 	template<size_t N> constexpr slice(T(&v)[N]) : data(v), count(N) {}
 	constexpr slice(T* data, unsigned count) : data(data), count(count) {}
 	constexpr slice(T* p1, const T* p2) : data(p1), count(p2 - p1) {}
-	explicit operator bool() const { return count != 0; }
+	constexpr explicit operator bool() const { return count != 0; }
 	constexpr T* begin() const { return data; }
 	constexpr T* end() const { return data + count; }
+	constexpr T& operator[](int n) const { return data[n]; }
 	constexpr unsigned size() const { return count; }
 };
 

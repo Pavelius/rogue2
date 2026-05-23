@@ -43,8 +43,7 @@ bool need_end_turn;
 static collection allowed_spells;
 static short unsigned compare_index;
 
-void fix(messagen v) {
-}
+bool drink_potion(item& v, bool run);
 
 static int compare_distace(const void* v1, const void* v2) {
 	auto p1 = (*((creature**)v1))->index;
@@ -68,18 +67,6 @@ int damage_mode(abilityn mode) {
 
 static int get_bonus(magicn v) {
 	return 0;
-}
-
-static void attack_roll(abilityn mode, item& weapon) {
-	auto skill = player->get(mode);
-	auto damage = player->get(DamageMelee) + weapon.damage();
-	auto armor = opponent->get(Armor);
-	if(!roll(skill))
-		damage /= 2;
-	if(damage < armor) {
-		fix(MsgMiss);
-		return;
-	}
 }
 
 void add_value(abilityn v, int value) {
@@ -935,5 +922,10 @@ void creature::say(speechn v) const {
 }
 
 bool creature::use(item& it, bool run) {
-	return false;
+	switch(it.type) {
+	case RedPotion: case BluePotion: case GreenPotion:
+		return drink_potion(it, run);
+	default:
+		return false;
+	}
 }

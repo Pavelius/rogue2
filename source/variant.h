@@ -8,7 +8,7 @@ enum spelln : unsigned char;
 
 enum variantn : unsigned char {
 	Variant,
-	Ability, Gender, Item, Monster, Spell
+	Ability, Feat, Gender, Item, Monster, Spell
 };
 union variant {
 	struct {
@@ -18,6 +18,7 @@ union variant {
 	short unsigned u;
 	constexpr variant() : u(0) {}
 	constexpr variant(abilityn v) : type(Ability), value(v) {}
+	constexpr variant(featn v) : type(Feat), value(v) {}
 	constexpr variant(gendern v) : type(Gender), value(v) {}
 	constexpr variant(itemn v) : type(Item), value(v) {}
 	constexpr variant(monstern v) : type(Monster), value(v) {}

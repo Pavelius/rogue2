@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// 
+//
 //  Copyright 2026 by Pavel Chistyakov
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,10 +29,6 @@ static void player_name(stringbuilder& sb) {
 
 static void item_name(stringbuilder& sb) {
 	sb.add(last_item->name());
-}
-
-static void addv(stringbuilder& sb, const char* header, const char* value) {
-	sb.addn("%1: %2", header, value);
 }
 
 static void addv(stringbuilder& sb, const char* header, int value) {

@@ -37,10 +37,35 @@ collectionv<itemlay> items;
 bool need_update_items;
 item* last_item;
 
-static variant weapon_powers[] = {
+static variant swords_powers[] = {
 	Variant,
 	WeaponSkill, DamageMelee, Dexterity,
 };
+static variant no_powers[] = {Variant};
+static variant potion_powers[] = {
+	Hits, Mana, Strenght, Dexterity, Wits, Regenerating, Boosting,
+	WeaponSkill, BalisticSkill, Dodge, Armor,
+	AcidImmunity, ColdImmunity, DeathImmunity, DiseaseImmunity, FireImmunity, PoisonImmunity, StunImmunity,
+	Fly, FastMove, FastAttack,
+};
+
+static slice<variant> get_powers(itemn v) {
+	switch(v) {
+	case Dagger: case LongSword: case ShortSword: case GreatSword:
+		return swords_powers;
+	case BluePotion: case GreenPotion: case RedPotion:
+		return potion_powers;
+	default:
+		return no_powers;
+	}
+}
+
+variant get_power(const item& v) {
+	auto powers = get_powers(v.type);
+	if(!powers)
+		return variant();
+	return powers[v.power];
+}
 
 static int get_weight(itemn v) {
 	switch(v) {
@@ -137,6 +162,18 @@ wearn get_wear(itemn v) {
 	else if(v >= Robe && v <= PlateMail)
 		return Torso;
 	return Backpack;
+}
+
+bool item::ismagical() const {
+	// Item is magical if is not mudane, if power filled and if power zero and no empty power.
+	if(magic != Mundane)
+		return true;
+	if(power)
+		return true;
+	auto source = get_powers(type);
+	if(!source)
+		return false;
+	return source.begin()[0].u != 0;
 }
 
 bool item::is(wearn v) const {
