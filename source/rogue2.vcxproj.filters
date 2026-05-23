@@ -81,7 +81,7 @@
     <ClCompile Include="resid.cpp">
       <Filter>Logic</Filter>
     </ClCompile>
-    <ClCompile Include="shape.cpp">
+    <ClCompile Include="area_shape.cpp">
       <Filter>Logic</Filter>
     </ClCompile>
     <ClCompile Include="interface.cpp">
@@ -207,9 +207,6 @@
       <Filter>Logic</Filter>
     </ClInclude>
     <ClInclude Include="resid.h">
-      <Filter>Logic</Filter>
-    </ClInclude>
-    <ClInclude Include="shape.h">
       <Filter>Logic</Filter>
     </ClInclude>
     <ClInclude Include="adat.h">

@@ -55,7 +55,7 @@
     <ClCompile Include="resid.cpp" />
     <ClCompile Include="scale2x.cpp" />
     <ClCompile Include="screenshoot.cpp" />
-    <ClCompile Include="shape.cpp" />
+    <ClCompile Include="area_shape.cpp" />
     <ClCompile Include="spell.cpp" />
     <ClCompile Include="sprite_util.cpp" />
     <ClCompile Include="stringbuilder.cpp" />
@@ -107,7 +107,6 @@
     <ClInclude Include="rect.h" />
     <ClInclude Include="resid.h" />
     <ClInclude Include="screenshoot.h" />
-    <ClInclude Include="shape.h" />
     <ClInclude Include="slice.h" />
     <ClInclude Include="spell.h" />
     <ClInclude Include="sprite_util.h" />

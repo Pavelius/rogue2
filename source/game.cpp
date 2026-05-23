@@ -344,6 +344,7 @@ int main(int argc, char* argv[]) {
 	area_set(apos(5 + 3, 5 + 3), WallBuilding);
 	area_set(apos(5 + 2, 5 + 3), WallBuilding);
 	area_set(apos(5 + 1, 5 + 3), Door);
+	area_set(apos(10 + 1, 10 + 3), ShapeCave, West, DeepWater, DeepWater, DeepWater);
 	put_item(apos(4, 4), LongSword);
 	put_item(apos(4, 4), LongSword);
 	put_item(apos(4, 4), LongBow);

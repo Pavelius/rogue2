@@ -60,6 +60,9 @@ enum siten : unsigned char {
 	EmptyRoom,
 	MonstersLair, DarkenedRoom, TreasureRoom,
 };
+enum shapen : unsigned char {
+	ShapeCave,
+};
 
 const short mps = 64;
 
@@ -135,6 +138,9 @@ void area_set(short unsigned i, tilen v);
 void area_set(short unsigned i, featuren v);
 void area_set(const abox& m, tilen v);
 void area_set(const abox& m, areafn v);
+void area_set(short unsigned i, shapen e, directionn d, tilen floor, tilen wall, tilen door);
+void area_set(short unsigned i, shapen e, directionn d, char symbol, tilen value);
+void area_set(short unsigned i, shapen e, directionn d, char symbol, featuren value);
 void area_ver(short unsigned i, tilen v, short unsigned count);
 void block_creatures(const creature* ignore);
 void block_features(bool ignore_doors);
