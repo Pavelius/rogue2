@@ -40,20 +40,6 @@ BSDATAC(sitei, 2048)
 gamei game;
 static wearn last_wear;
 
-int getv(gamen v) {
-	switch(v) {
-	case Money: return human->money;
-	default: return game.variables[v];
-	}
-}
-
-void addv(gamen v, int i) {
-	switch(v) {
-	case Money: human->money += i; break;
-	default: game.variables[v] += i; break;
-	}
-}
-
 static void all(fnevent proc) {
 	pushvalue push(player);
 	update_creatures();
@@ -231,33 +217,32 @@ void open_ground() {
 }
 
 void pass_minute() {
-	addv(Rounds, 1);
-	auto minutes = getv(Rounds);
-	update_enchantments(minutes);
+	game.minutes++;
+	update_enchantments(game.minutes);
 	all(creature_every_minute);
-	while(game.restore_half_turn < minutes) {
+	while(game.restore_half_turn < game.minutes) {
 		game.restore_half_turn += 5;
 		apply_temperature();
 	}
-	while(game.restore_turn < minutes) {
+	while(game.restore_turn < game.minutes) {
 		all(creature_every_10_minutes);
 		monsters_spawning();
 		game.restore_turn += 10;
 	}
-	while(game.restore_hour < minutes) {
+	while(game.restore_hour < game.minutes) {
 		game.restore_hour = (game.restore_hour / 60 + 1) * 60 + rand() % 60;
 		update_need();
 	}
-	while(game.restore_day_part < minutes) {
+	while(game.restore_day_part < game.minutes) {
 		all(creature_every_day_part);
 		decoy_items();
 		game.restore_day_part = (game.restore_day_part / (60 * 4) + 1) * (60 * 4) + rand() % (60 * 4);
 	}
-	while(game.restore_day < minutes) {
+	while(game.restore_day < game.minutes) {
 		auto_activate_features();
 		game.restore_day = (game.restore_day / (60 * 24) + 1) * (60 * 24) + rand() % (60 * 24);
 	}
-	while(game.restore_several_days < minutes) {
+	while(game.restore_several_days < game.minutes) {
 		update_every_serveral_days();
 		game.restore_several_days += xrand(60 * 24 * 2, 60 * 24 * 6);
 	}

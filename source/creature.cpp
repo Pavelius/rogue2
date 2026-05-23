@@ -761,7 +761,7 @@ static bool drink_effect(abilityn v, magicn magic, bool run) {
 			}
 			break;
 		default:
-			add_enchant(player->bsi(), v, getv(Rounds) + xrand(60, 120) * multiply);
+			add_enchant(player->bsi(), v, game.minutes + xrand(60, 120) * multiply);
 			break;
 		}
 		break;
@@ -779,7 +779,7 @@ static bool drink_effect(featn v, magicn magic, bool run) {
 	case Blessed: duration = duration * 3; break;
 	default: break;
 	}
-	add_enchant(player->bsi(), v, getv(Rounds) + duration);
+	add_enchant(player->bsi(), v, game.minutes + duration);
 	return true;
 }
 
@@ -1013,7 +1013,7 @@ bool creature::use(item& it, bool run) {
 }
 
 void creature::enchant(spelln spell, unsigned duration) {
-	add_enchant(bsi(), spell, getv(Rounds) + duration);
+	add_enchant(bsi(), spell, game.minutes + duration);
 	update();
 }
 

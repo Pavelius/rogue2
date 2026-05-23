@@ -1067,10 +1067,6 @@ static void paint_field(const char* value) {
 	caret.y += texth();
 }
 
-static void paint_field(gamen v) {
-	paint_field(getname(v), str("%1i", getv(v)));
-}
-
 static void paint_field(abilityn v) {
 	switch(v) {
 	case WeaponSkill:
@@ -1130,8 +1126,8 @@ static void paint_player_status() {
 	paint_field(Mana);
 	paint_separator();
 	paint_field(Experience);
-	paint_field(Money);
-	paint_field(Rounds);
+	paint_field(getname(Coins), str("%1i", player->money));
+	paint_field(getname(Rounds), str("%1i", game.minutes));
 }
 
 static void paint_status() {

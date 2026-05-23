@@ -24,20 +24,12 @@ struct itemlay;
 extern collectionv<creature> creatures;
 extern collectionv<itemlay> items;
 
-enum gamen : unsigned char {
-	Rounds, Blessing,
-	Money,
-};
-
 struct gamei {
-	int variables[Blessing + 1];
-	int restore_half_turn, restore_turn, restore_hour, restore_day_part, restore_day, restore_several_days;
+	unsigned restore_half_turn, restore_turn, restore_hour, restore_day_part, restore_day, restore_several_days;
+	unsigned minutes;
 };
 extern gamei game;
 
-int getv(gamen v);
-
-void addv(gamen v, int i);
 void add_answer_items(short unsigned area_index, short unsigned index, fnvisible filter);
 void choose_player_move();
 long choose_menu(const char* cancel, const char* footer = 0);

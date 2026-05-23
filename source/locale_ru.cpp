@@ -20,13 +20,9 @@
 #include "message.h"
 #include "stringlocale.h"
 
-BSENUM(gamen) = {
-	"Ходы", "Благословение",
-	"Деньги"
-}; BAENUM(Money)
 BSENUM(messagen) = {
 	"Приключения в Забытых Королевствах",
-	"%Player промазал%а.",
+	"Монеты", "Ходы",
 	"%Player наш%ла секретную дверь.",
 	"%Player наш%ла ловушку.",
 	"Парирование", "Уклонение",
