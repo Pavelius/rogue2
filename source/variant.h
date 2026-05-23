@@ -1,6 +1,7 @@
 #pragma once
 
 enum abilityn : unsigned char;
+enum featn : unsigned char;
 enum gendern : unsigned char;
 enum itemn : unsigned char;
 enum monstern : unsigned char;
@@ -24,4 +25,5 @@ union variant {
 	constexpr variant(monstern v) : type(Monster), value(v) {}
 	constexpr variant(spelln v) : type(Spell), value(v) {}
 	constexpr variant(variantn v) : type(Variant), value(v) {}
+	constexpr bool operator==(const variant& v) const { return u == v.u; }
 };

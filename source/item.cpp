@@ -43,7 +43,7 @@ static variant swords_powers[] = {
 };
 static variant no_powers[] = {Variant};
 static variant potion_powers[] = {
-	Hits, Mana, Strenght, Dexterity, Wits, Regenerating, Boosting,
+	Hits, Mana, Strenght, Dexterity, Wits, Regenerating, Boosting, Poison, Illness, Experience,
 	WeaponSkill, BalisticSkill, Dodge, Armor,
 	AcidImmunity, ColdImmunity, DeathImmunity, DiseaseImmunity, FireImmunity, PoisonImmunity, StunImmunity,
 	Fly, FastMove, FastAttack,
@@ -60,11 +60,11 @@ static slice<variant> get_powers(itemn v) {
 	}
 }
 
-variant get_power(const item& v) {
-	auto powers = get_powers(v.type);
+variant item::getpower() const {
+	auto powers = get_powers(type);
 	if(!powers)
 		return variant();
-	return powers[v.power];
+	return powers[power];
 }
 
 static int get_weight(itemn v) {

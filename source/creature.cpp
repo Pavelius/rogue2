@@ -21,6 +21,7 @@
 #include "creature.h"
 #include "draw_effect.h"
 #include "draw_floatinfo.h"
+#include "enchant.h"
 #include "itemlay.h"
 #include "indexa.h"
 #include "game.h"
@@ -42,8 +43,6 @@ bool need_end_turn;
 
 static collection allowed_spells;
 static short unsigned compare_index;
-
-bool drink_potion(item& v, bool run);
 
 static int compare_distace(const void* v1, const void* v2) {
 	auto p1 = (*((creature**)v1))->index;
@@ -112,6 +111,23 @@ static void create_finish() {
 
 static void copy(statable& v1, const statable& v2) {
 	v1 = v2;
+}
+
+static void apply_boost(variant v) {
+	switch(v.type) {
+	case Ability: player->add((abilityn)v.value, 5); break;
+	case Feat: player->set((featn)v.value); break;
+	case Spell: player->spellable::set((spelln)v.value); break;
+	default: break;
+	}
+}
+
+static void update_boost_effect() {
+	short unsigned parent = player->bsi();
+	for(auto& e : bsdata<enchanti>()) {
+		if(e && e.parent == parent)
+			apply_boost(e.value);
+	}
 }
 
 void update_player() {
@@ -711,6 +727,71 @@ static int get_experience_reward(const creature* player) {
 	return maptbl(rewards, level);
 }
 
+static bool drink_effect(abilityn v, magicn magic, bool run) {
+	int multiply = 1;
+	switch(magic) {
+	case Artifact:
+		if(run)
+			player->basic.add(v, 1);
+		break;
+	case Cursed:
+		if(run)
+			player->basic.add(v, -1);
+		break;
+	default:
+		if(magic == Blessed)
+			multiply = 4;
+		switch(v) {
+		case Hits:
+			if(player->hits >= player->hits_maximum)
+				return false;
+			if(run) {
+				player->hits += xrand(3, 12) * multiply;
+				if(player->hits > player->hits_maximum)
+					player->hits = player->hits_maximum;
+			}
+			break;
+		case Mana:
+			if(player->mana >= player->get(Mana))
+				return false;
+			if(run) {
+				player->mana += xrand(3, 18) * multiply;
+				if(player->mana > player->get(Mana))
+					player->mana = player->get(Mana);
+			}
+			break;
+		default:
+			add_enchant(player->bsi(), v, getv(Rounds) + xrand(60, 120) * multiply);
+			break;
+		}
+		break;
+	}
+	return true;
+}
+
+static bool drink_effect(featn v, magicn magic, bool run) {
+	if(player->is(v))
+		return false;
+	unsigned duration = xrand(60, 120);
+	switch(magic) {
+	case Artifact: duration = duration * 10; break;
+	case Cursed: break;
+	case Blessed: duration = duration * 3; break;
+	default: break;
+	}
+	add_enchant(player->bsi(), v, getv(Rounds) + duration);
+	return true;
+}
+
+static bool drink_potion(item& v, bool run) {
+	auto power = v.getpower();
+	switch(power.type) {
+	case Ability: return drink_effect((abilityn)power.value, v.magic, run);
+	case Feat: return drink_effect((featn)power.value, v.magic, run);
+	default: return false;
+	}
+}
+
 void creature::clear() {
 	memset((void*)this, 0, sizeof(*this));
 	index = 0xFFFF;
@@ -922,10 +1003,20 @@ void creature::say(speechn v) const {
 }
 
 bool creature::use(item& it, bool run) {
+	pushvalue push(player, this);
 	switch(it.type) {
 	case RedPotion: case BluePotion: case GreenPotion:
 		return drink_potion(it, run);
 	default:
 		return false;
 	}
+}
+
+void creature::enchant(spelln spell, unsigned duration) {
+	add_enchant(bsi(), spell, getv(Rounds) + duration);
+	update();
+}
+
+short unsigned creature::bsi() const {
+	return this - bsdata<creature>::elements;
 }

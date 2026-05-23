@@ -16,6 +16,8 @@
 
 #pragma once
 
+#include "variant.h"
+
 struct creature;
 
 extern bool need_update_items;
@@ -67,6 +69,7 @@ struct item {
 	wearn equiped() const;
 	const char* name() const;
 	const char* fullname() const;
+	variant getpower() const;
 	int	armor() const;
 	int	cost() const;
 	int damage() const;

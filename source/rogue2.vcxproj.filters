@@ -162,6 +162,9 @@
     <ClCompile Include="draw_effect.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
+    <ClCompile Include="enchant.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sprite_util.h">
@@ -300,6 +303,9 @@
       <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="draw_column.h">
+      <Filter>Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="enchant.h">
       <Filter>Logic</Filter>
     </ClInclude>
   </ItemGroup>

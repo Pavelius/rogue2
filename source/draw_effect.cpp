@@ -36,14 +36,6 @@ static draweffect* find_effect(point position, resid res, int cicle) {
 	return 0;
 }
 
-//static draweffect* find_effect(point position) {
-//	for(auto& e : objects) {
-//		if(e && e.position == position)
-//			return &e;
-//	}
-//	return 0;
-//}
-
 void add_effect(point position, resid res, int cicle, int duration) {
 	auto p = find_effect(position, res, cicle);
 	if(p)

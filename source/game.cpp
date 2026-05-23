@@ -20,6 +20,7 @@
 #include "creature.h"
 #include "draw.h"
 #include "draw_column.h"
+#include "enchant.h"
 #include "game.h"
 #include "itemlay.h"
 #include "message.h"
@@ -32,13 +33,12 @@
 
 BSDATAC(areai, 512)
 BSDATAC(creature, 1024)
+BSDATAC(enchanti, 512)
 BSDATAC(itemlay, 8192)
 BSDATAC(sitei, 2048)
 
 gamei game;
 static wearn last_wear;
-
-variant get_power(const item& v);
 
 int getv(gamen v) {
 	switch(v) {
@@ -81,9 +81,6 @@ static void decoy_items() {
 }
 
 static void update_need() {
-}
-
-static void update_all_boost(int minutes) {
 }
 
 static void update_every_serveral_days() {
@@ -233,71 +230,10 @@ void open_ground() {
 	update_player();
 }
 
-bool drink_effect(abilityn v, magicn magic, bool run) {
-	int multiply = 1;
-	switch(magic) {
-	case Artifact:
-		if(run)
-			player->basic.add(v, 1);
-		break;
-	case Cursed:
-		if(run)
-			player->basic.add(v, -1);
-		break;
-	default:
-		if(magic == Blessed)
-			multiply = 4;
-		switch(v) {
-		case Hits:
-			if(player->hits>=player->hits_maximum)
-				return false;
-			if(run) {
-				player->hits += xrand(3, 12) * multiply;
-				if(player->hits > player->hits_maximum)
-					player->hits = player->hits_maximum;
-			}
-			break;
-		case Mana:
-			if(player->mana>=player->get(Mana))
-				return false;
-			if(run) {
-				player->mana += xrand(3, 18) * multiply;
-				if(player->mana > player->get(Mana))
-					player->mana = player->get(Mana);
-			}
-			break;
-		}
-		break;
-	}
-	return true;
-}
-
-bool drink_effect(featn v, magicn magic, bool run) {
-	if(player->is(v))
-		return false;
-	unsigned duration = xrand(60, 120);
-	switch(magic) {
-	case Artifact: duration = duration * 10; break;
-	case Cursed: break;
-	case Blessed: duration = duration * 3; break;
-	default: break;
-	}
-	return true;
-}
-
-bool drink_potion(item& v, bool run) {
-	auto power = get_power(v);
-	switch(power.type) {
-	case Ability: return drink_effect((abilityn)power.value, v.magic, run);
-	case Feat: return drink_effect((featn)power.value, v.magic, run);
-	default: return false;
-	}
-}
-
 void pass_minute() {
 	addv(Rounds, 1);
 	auto minutes = getv(Rounds);
-	update_all_boost(minutes);
+	update_enchantments(minutes);
 	all(creature_every_minute);
 	while(game.restore_half_turn < minutes) {
 		game.restore_half_turn += 5;

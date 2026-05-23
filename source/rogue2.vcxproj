@@ -37,6 +37,7 @@
     <ClCompile Include="draw_textf.cpp" />
     <ClCompile Include="draw_theme.cpp" />
     <ClCompile Include="draw_floatinfo.cpp" />
+    <ClCompile Include="enchant.cpp" />
     <ClCompile Include="font_util.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="indexa.cpp" />
@@ -85,6 +86,7 @@
     <ClInclude Include="draw_column.h" />
     <ClInclude Include="draw_effect.h" />
     <ClInclude Include="draw_object.h" />
+    <ClInclude Include="enchant.h" />
     <ClInclude Include="feats.h" />
     <ClInclude Include="flagable.h" />
     <ClInclude Include="draw_floatinfo.h" />

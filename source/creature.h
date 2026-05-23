@@ -91,6 +91,7 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	creature* getboss() const;
 	creature* getfear() const;
 	sitei* getsite() const;
+	short unsigned bsi() const;
 	int	get(abilityn v) const { return (v < sizeof(abilities) / sizeof(abilities[0])) ? abilities[v] : 0; }
 	int getlos() const;
 	void act(messagen v) const;
@@ -99,9 +100,11 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	bool canhear(short unsigned i) const;
 	void clear();
 	void damage(int v);
+	void enchant(spelln spell, unsigned duration);
+	bool is(abilityn v) const { return abilities[v] > 0; }
 	bool is(featn v) const { return featable::is(v); }
 	bool is(featn v, const item& m) const { return featable::is(v) || m.is(v); }
-	bool is(abilityn v) const { return abilities[v] > 0; }
+	bool is(spelln v) const { return spellable::is(v); }
 	bool ischaracter() const { return type <= Elf; }
 	bool isenemy(const creature* p) const { return p->is(Enemy) != is(Enemy); }
 	bool isfemale() const { return false; }
