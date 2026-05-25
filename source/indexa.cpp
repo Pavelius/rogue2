@@ -4,6 +4,8 @@
 
 static unsigned short compare_index;
 
+indexa indecies;
+
 static int compare_distace(const void* v1, const void* v2) {
 	auto p1 = *((short unsigned*)v1);
 	auto p2 = *((short unsigned*)v2);

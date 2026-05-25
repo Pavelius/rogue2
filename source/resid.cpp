@@ -35,6 +35,7 @@ BSDATA(residi) = {
 	{"pc_accessories"},
 	{"fow"},
 	{"los"},
+	{"cursor"},
 	{"floor"},
 	{"borders"},
 	{"decals"},

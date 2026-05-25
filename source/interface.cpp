@@ -1360,9 +1360,7 @@ static void add_creatures() {
 	}
 }
 
-static void paint_area() {
-	pushrect push;
-	auto push_clip = clipping; setclipall();
+static void paint_area_noclip() {
 	set_srceen_area();
 	clear_drawobjects();
 	clear_objects();
@@ -1377,6 +1375,21 @@ static void paint_area() {
 	paint_fow();
 	for_each_object(paint_health_bar);
 	paint_floatinfo();
+}
+
+static void paint_area() {
+	pushrect push;
+	auto push_clip = clipping; setclipall();
+	paint_area_noclip();
+	clipping = push_clip;
+}
+
+static void paint_area_cursor(short unsigned i) {
+	pushrect push;
+	auto push_clip = clipping; setclipall();
+	paint_area_noclip();
+	auto m = i2s(i) - camera;
+	image(m.x, m.y, gres(ResCursors), 2, 0);
 	clipping = push_clip;
 }
 
@@ -1394,12 +1407,13 @@ static void player_move_cmd() {
 }
 
 static void test_scene() {
-	println("Добро пожаловать в центр деревни.");
-	println("Сейчас много дел, зайди позжее.");
-	an.clear();
-	an.add(1, "Первый");
-	an.add(2, "Второй");
-	choose_answers();
+	indecies.clear();
+	indecies.add(player->index);
+	indecies.add(to(player->index, North));
+	indecies.add(to(player->index, West));
+	indecies.add(to(player->index, East));
+	indecies.add(to(player->index, South));
+	choose_indecies("С кем хотите поговорить?");
 }
 
 void set_item_color(const item& it) {
@@ -1463,6 +1477,7 @@ static void standart_keys() {
 	case 'I': execute(open_inventory); break;
 	case 'P': execute(open_ground); break;
 	case 'V': execute(open_backpack); break;
+	case Ctrl + 'T': execute(test_scene); break;
 	default: break;
 	}
 }
@@ -1497,6 +1512,26 @@ long choose_menu(const char* cancel, const char* footer) {
 		update_message();
 	}
 	return getresult();
+}
+
+short unsigned choose_indecies(const char* header, bool can_cancel) {
+	if(!indecies)
+		return 0xFFFF;
+	auto n = 0;
+	while(ismodal()) {
+		paint_status();
+		paint_area_cursor(indecies.data[n]);
+		paint_message(header);
+		domodal();
+		switch(hkey) {
+		case KeyLeft: if(n > 0) n--; break;
+		case KeyRight: if(n < (int)(indecies.count-1)) n++;  break;
+		case KeyEnter: breakmodal(indecies.data[n]); break;
+		case KeyEscape: if(can_cancel) breakmodal(-1); break;
+		default: break;
+		}
+	}
+	return (short unsigned)getresult();
 }
 
 static void camera_initialize() {
@@ -1535,4 +1570,3 @@ BSDATA(drawrender) = {
 };
 BSDATAF(drawrender)
 static_assert(lenghtof(bsdata<drawrender>::elements) == (RenderCreature + 1), "Invalid render types count");
-

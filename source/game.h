@@ -17,6 +17,7 @@
 #pragma once
 
 #include "collectiona.h"
+#include "indexa.h"
 
 struct creature;
 struct itemlay;
@@ -29,6 +30,8 @@ struct gamei {
 	unsigned minutes;
 };
 extern gamei game;
+
+short unsigned choose_indecies(const char* header, bool can_cancel = true);
 
 void add_answer_items(short unsigned area_index, short unsigned index, fnvisible filter);
 void choose_player_move();
