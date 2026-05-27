@@ -40,6 +40,8 @@
 		<Unit filename="answers.h" />
 		<Unit filename="area.cpp" />
 		<Unit filename="area.h" />
+		<Unit filename="area_generate.cpp" />
+		<Unit filename="area_shape.cpp" />
 		<Unit filename="array.cpp" />
 		<Unit filename="array.h" />
 		<Unit filename="bsdata.h" />
@@ -70,6 +72,8 @@
 		<Unit filename="draw_textf.cpp" />
 		<Unit filename="draw_theme.cpp" />
 		<Unit filename="drawable.h" />
+		<Unit filename="enchant.cpp" />
+		<Unit filename="enchant.h" />
 		<Unit filename="feats.h" />
 		<Unit filename="flagable.h" />
 		<Unit filename="game.cpp" />
@@ -107,8 +111,6 @@
 		<Unit filename="scale2x.cpp" />
 		<Unit filename="screenshoot.cpp" />
 		<Unit filename="screenshoot.h" />
-		<Unit filename="shape.cpp" />
-		<Unit filename="shape.h" />
 		<Unit filename="slice.h" />
 		<Unit filename="speech.h" />
 		<Unit filename="spell.cpp" />

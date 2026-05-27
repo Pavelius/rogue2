@@ -360,8 +360,8 @@ int main(int argc, char* argv[]) {
 	create_enemy(apos(7, 3), Goblin);
 	//create_enemy(apos(7, 4), Goblin);
 	//create_enemy(apos(8, 3), Goblin);
-	area_generate();
-	show_locations();
+	//area_generate();
+	//show_locations();
 	next_scene(play_game);
 	start_scene();
 	return 0;
