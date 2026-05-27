@@ -1524,8 +1524,8 @@ short unsigned choose_indecies(const char* header, bool can_cancel) {
 		paint_message(header);
 		domodal();
 		switch(hkey) {
-		case KeyLeft: if(n > 0) n--; break;
-		case KeyRight: if(n < (int)(indecies.count-1)) n++;  break;
+		case KeyLeft: if(!n) n = indecies.count - 1; else n--; break;
+		case KeyRight: if(++n == indecies.count) n = 0; break;
 		case KeyEnter: breakmodal(indecies.data[n]); break;
 		case KeyEscape: if(can_cancel) breakmodal(-1); break;
 		default: break;

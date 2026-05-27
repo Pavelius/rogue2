@@ -21,6 +21,7 @@ extern unsigned long animation_tick;
 extern int current_tick_delta;
 
 unsigned long getcputime();
+unsigned srand_time();
 
 void clear_last_tick();
 void update_time();

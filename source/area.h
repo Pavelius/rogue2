@@ -59,6 +59,9 @@ enum featuren : unsigned char {
 enum siten : unsigned char {
 	EmptyRoom,
 	MonstersLair, DarkenedRoom, TreasureRoom,
+	LightTreeArea, DeepTreeArea,
+	Blacksmith, Temple, Barracs, Tavern,
+	Armory, WeaponSmith, Shop,
 };
 enum shapen : unsigned char {
 	ShapeCave,
@@ -107,6 +110,10 @@ struct abox : apos {
 	constexpr apos ru() const { return apos(x + w - 1, y); }
 	constexpr apos rd() const { return apos(x + w - 1, y + h - 1); }
 	constexpr apos ld() const { return apos(x, y + h - 1); }
+	constexpr int area() const { return h * w; }
+	constexpr int maximum() const { return (w > h) ? w : h; }
+	constexpr int minimum() const { return (w < h) ? w : h; }
+	constexpr abox resize(int dx, int dy) const { return abox(x + dx, y + dy, w - dx * 2, h - dy * 2); }
 };
 struct areai {
 	short unsigned	index; // Position on world map
@@ -128,6 +135,7 @@ int get_move_cost(featuren v);
 
 void area_change(tilen t1, tilen t2);
 void area_clear();
+void area_generate();
 bool area_is(short unsigned i, areafn f);
 bool area_iswall(short unsigned i);
 void area_los(short unsigned i, int r, fnareais test);
@@ -152,4 +160,5 @@ bool is_free(featuren v, bool ignore_doors);
 bool is_free(tilen v, bool water_free);
 bool is_wall(tilen v);
 void make_wave(short unsigned start, short unsigned goal);
+void show_locations();
 void update_los();

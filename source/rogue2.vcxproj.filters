@@ -165,6 +165,9 @@
     <ClCompile Include="enchant.cpp">
       <Filter>Logic</Filter>
     </ClCompile>
+    <ClCompile Include="area_generate.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sprite_util.h">

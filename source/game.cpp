@@ -29,6 +29,7 @@
 #include "resid.h"
 #include "stringbuilder.h"
 #include "stringvar.h"
+#include "timer.h"
 #include "variant.h"
 
 BSDATAC(areai, 512)
@@ -329,6 +330,7 @@ int main(int argc, char* argv[]) {
 #ifdef _DEBUG
 	main_util();
 #endif
+	srand(srand_time());
 	area_clear();
 	initialize_gui();
 	area_clear();
@@ -358,6 +360,8 @@ int main(int argc, char* argv[]) {
 	create_enemy(apos(7, 3), Goblin);
 	//create_enemy(apos(7, 4), Goblin);
 	//create_enemy(apos(8, 3), Goblin);
+	area_generate();
+	show_locations();
 	next_scene(play_game);
 	start_scene();
 	return 0;

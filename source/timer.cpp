@@ -16,6 +16,8 @@
 
 #include "timer.h"
 
+extern "C" unsigned time(struct tms *buffer);
+
 unsigned long current_tick;
 unsigned long animation_tick;
 static unsigned long last_tick;
@@ -23,6 +25,10 @@ int current_tick_delta;
 
 void clear_last_tick() {
 	last_tick = 0;
+}
+
+unsigned srand_time() {
+	return time(0);
 }
 
 void update_current_time() {
