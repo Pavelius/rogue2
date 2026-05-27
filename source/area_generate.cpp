@@ -33,7 +33,7 @@ static void add_location(abox p1) {
 		return;
 	}
 	auto size = p1.maximum();
-	auto m = size * xrand(30, 70) / 100;
+	auto m = size * xrand(30, 75) / 100;
 	if(m < minimal_size)
 		m = minimal_size;
 	if(size == p1.w) {
