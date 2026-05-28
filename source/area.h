@@ -146,6 +146,7 @@ void area_set(short unsigned i, tilen v);
 void area_set(short unsigned i, featuren v);
 void area_set(const abox& m, tilen v);
 void area_set(const abox& m, areafn v);
+void area_set(const abox& m, featuren v, int chance);
 void area_set(short unsigned i, shapen e, directionn d, tilen floor, tilen wall, tilen door);
 void area_set(short unsigned i, shapen e, directionn d, char symbol, tilen value);
 void area_set(short unsigned i, shapen e, directionn d, char symbol, featuren value);

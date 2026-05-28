@@ -57,7 +57,17 @@ static void add_locations() {
 	add_location({0, 0, mps, mps});
 }
 
+static void setv(featuren v, int chance) {
+	area_set({0, 0, mps, mps}, v, chance);
+}
+
+static void setv(tilen v) {
+	area_set({0, 0, mps, mps}, v);
+}
+
 void area_generate() {
+	setv(Grass);
+	setv(Tree, 20);
 	locations.clear();
 	add_locations();
 }

@@ -240,6 +240,17 @@ void area_set(const abox& m, areafn v) {
 	}
 }
 
+void area_set(const abox& m, featuren v, int chance) {
+	auto y2 = m.y + m.h;
+	for(auto y = m.y; y < y2; y++) {
+		auto i2 = m2i(m.x + m.w, y);
+		for(auto i = m2i(m.x, y); i < i2; i++) {
+			if(d100() < chance)
+				area_set(i, v);
+		}
+	}
+}
+
 void area_set(short unsigned i, areafn v) {
 	area_flags[i] |= 1 << v;
 }

@@ -333,8 +333,7 @@ int main(int argc, char* argv[]) {
 	srand(srand_time());
 	area_clear();
 	initialize_gui();
-	area_clear();
-	area_set({0, 0, mps, mps}, Grass);
+	area_generate();
 	area_set(apos(3, 3), Grave);
 	area_set(apos(3, 4), Grave);
 	area_set(apos(6, 4), Tree);
@@ -360,7 +359,6 @@ int main(int argc, char* argv[]) {
 	create_enemy(apos(7, 3), Goblin);
 	//create_enemy(apos(7, 4), Goblin);
 	//create_enemy(apos(8, 3), Goblin);
-	//area_generate();
 	//show_locations();
 	next_scene(play_game);
 	start_scene();
