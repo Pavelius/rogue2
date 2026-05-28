@@ -135,3 +135,17 @@ BSENUM(namen) = {
 	"Йаргул", "Йугра", "Заргат", "Зрулла", "Бругор",
 	"Багра", "Дрогат", "Дурша", "Кургаш", "Крулла"
 };
+
+slice<const char*> locale_data[] = {
+	bsenum<messagen>::names,
+	bsenum<speechn>::names,
+	bsenum<abilityn>::names,
+	bsenum<wearn>::names,
+	bsenum<magicn>::names,
+	bsenum<monstern>::names,
+	bsenum<itemn>::names,
+	bsenum<directionn>::names,
+	bsenum<namen>::names,
+	bsenum<commandn>::names,
+	{}};
+

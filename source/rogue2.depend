@@ -670,7 +670,7 @@
 
 1779890842 /home/user-331/projects/rogue2/source/rand.h
 
-1779890842 source:/home/user-331/projects/rogue2/source/area.cpp
+1779949053 source:/home/user-331/projects/rogue2/source/area.cpp
 	"area.h"
 	"bsdata.h"
 	"creature.h"
@@ -680,7 +680,7 @@
 	"rand.h"
 	"slice.h"
 
-1779890842 /home/user-331/projects/rogue2/source/area.h
+1779949053 /home/user-331/projects/rogue2/source/area.h
 
 1779890842 /home/user-331/projects/rogue2/source/bsdata.h
 	"array.h"
@@ -865,7 +865,7 @@
 1779890842 source:/home/user-331/projects/rogue2/source/draw_theme.cpp
 	"draw.h"
 
-1779891628 source:/home/user-331/projects/rogue2/source/game.cpp
+1779949053 source:/home/user-331/projects/rogue2/source/game.cpp
 	"answers.h"
 	"area.h"
 	"bsdata.h"
@@ -950,7 +950,7 @@
 	"draw.h"
 	"stringbuilder.h"
 
-1779890842 source:/home/user-331/projects/rogue2/source/locale_ru.cpp
+1779978362 source:/home/user-331/projects/rogue2/source/locale_ru.cpp
 	"bsdata.h"
 	"creature.h"
 	"game.h"
@@ -1035,7 +1035,7 @@
 	"bstream.h"
 	"slice.h"
 
-1779890842 source:/home/user-331/projects/rogue2/source/area_generate.cpp
+1779949053 source:/home/user-331/projects/rogue2/source/area_generate.cpp
 	"adat.h"
 	"area.h"
 	"draw.h"
@@ -1049,4 +1049,7 @@
 	"area.h"
 	"direction.h"
 	"slice.h"
+
+1779978347 source:/home/user-331/projects/rogue2/source/localization.cpp
+	"stringbuilder.h"
 
