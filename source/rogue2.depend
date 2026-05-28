@@ -1050,6 +1050,7 @@
 	"direction.h"
 	"slice.h"
 
-1779978347 source:/home/user-331/projects/rogue2/source/localization.cpp
+1779979906 source:/home/user-331/projects/rogue2/source/localization.cpp
+	"io_stream.h"
 	"stringbuilder.h"
 

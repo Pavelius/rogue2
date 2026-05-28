@@ -325,11 +325,14 @@ static void create_enemy(short unsigned index, monstern type) {
 void main_util();
 #endif
 
+void write_locale(const char* url);
+
 int main(int argc, char* argv[]) {
 	initialize_strings();
 #ifdef _DEBUG
 	main_util();
 #endif
+	//write_locale("test.loc");
 	srand(srand_time());
 	area_clear();
 	initialize_gui();

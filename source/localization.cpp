@@ -17,12 +17,17 @@
 #include "io_stream.h"
 #include "stringbuilder.h"
 
-extern slice<const char*> locale_data[];
-
+namespace {
 struct locfile {
 	char		signature[4];
 	unsigned	count;
+	const char	text[1];
 };
+}
+
+extern slice<const char*> locale_data[];
+
+static locfile* loc;
 
 static int total_size() {
 	auto n = 0;
@@ -31,7 +36,40 @@ static int total_size() {
 	return n;
 }
 
+static void clear_locale() {
+	if(loc)
+		delete[] (char*)loc;
+	for(auto p = locale_data; *p; p++) {
+		for(auto i = 0; i < p->count; i++)
+			p->data[i] = 0;
+	}
+}
+
 void read_locale(const char* url) {
-//	if(header.count!=total_size())
-//		return;
+	clear_locale();
+	loc = (locfile*)loadb(url);
+	if(!loc)
+		return;
+	auto pm = loc->text;
+	for(auto p = locale_data; *p; p++) {
+		for(auto i = 0; i < p->count; i++) {
+			p->data[i] = pm;
+			pm = zend(pm); pm++;
+		}
+	}
+}
+
+void write_locale(const char* url) {
+	locfile header = {"LOC", total_size()};
+	io::file file(url, StreamWrite);
+	if(!file)
+		return;
+	file.write(&header, sizeof(header) - sizeof(header.text));
+	for(auto p = locale_data; *p; p++) {
+		for(auto i = 0; i < p->count; i++) {
+			auto pm = p->data[i];
+			auto sz = zlen(pm) + 1;
+			file.write(pm, sz);
+		}
+	}
 }
