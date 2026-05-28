@@ -62,6 +62,7 @@ enum siten : unsigned char {
 	LightTreeArea, DeepTreeArea,
 	Blacksmith, Temple, Barracs, Tavern,
 	Armory, WeaponSmith, Shop,
+	HerdAnimals,
 };
 enum shapen : unsigned char {
 	ShapeCave,
@@ -145,6 +146,7 @@ void area_set(short unsigned i, areafn f);
 void area_set(short unsigned i, tilen v);
 void area_set(short unsigned i, featuren v);
 void area_set(const abox& m, tilen v);
+void area_set(const abox& m, tilen v, int chance);
 void area_set(const abox& m, areafn v);
 void area_set(const abox& m, featuren v, int chance);
 void area_set(short unsigned i, shapen e, directionn d, tilen floor, tilen wall, tilen door);

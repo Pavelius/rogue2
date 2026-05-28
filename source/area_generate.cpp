@@ -6,6 +6,7 @@
 const int minimal_size = 10;
 
 static adat<abox> locations;
+static abox crc = {0, 0, mps, mps};
 
 static abox* add(const abox& source) {
 	auto p = locations.add();
@@ -54,20 +55,46 @@ static void add_location(abox p1) {
 }
 
 static void add_locations() {
-	add_location({0, 0, mps, mps});
+	add_location(crc);
 }
 
-static void setv(featuren v, int chance) {
-	area_set({0, 0, mps, mps}, v, chance);
+static void place(featuren v, int chance) {
+	area_set(crc, v, chance);
 }
 
-static void setv(tilen v) {
-	area_set({0, 0, mps, mps}, v);
+static void place(tilen v) {
+	area_set(crc, v);
+}
+
+static void place(tilen v, int chance) {
+	area_set(crc, v);
+}
+
+static void create(landscapen type) {
+	switch(type) {
+	case Plains:
+		place(Grass);
+		place(FootHill, 3);
+		place(FootMud, 2);
+		place(Tree, 2);
+		break;
+	case Forest:
+		place(Grass);
+		place(FootHill, 3);
+		place(Tree, 10);
+		break;
+	case DeepForest:
+		place(Grass);
+		place(FootHill, 3);
+		place(Tree, 20);
+		break;
+	default:
+		break;
+	}
 }
 
 void area_generate() {
-	setv(Grass);
-	setv(Tree, 20);
+	create(DeepForest);
 	locations.clear();
 	add_locations();
 }
