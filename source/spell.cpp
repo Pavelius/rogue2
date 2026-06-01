@@ -1,3 +1,4 @@
+#include "area.h"
 #include "creature.h"
 #include "message.h"
 #include "rand.h"
@@ -44,6 +45,14 @@ bool use_spell(spelln v, creature* opponent, bool run) {
 		if(run) {
 			effect = xrand(2, 12);
 			opponent->fixmsg(getname(MsgCurePoison), effect, InfoGreen);
+		}
+		break;
+	case Web:
+		if(area_is(opponent->index, Webbed))
+			return false;
+		if(run) {
+			auto i = opponent->index;
+			area_set(i, Webbed);
 		}
 		break;
 	default:
