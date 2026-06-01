@@ -15,13 +15,13 @@
 //  limitations under the License.
 
 #include "io_stream.h"
+#include "slice.h"
 #include "stringbuilder.h"
 
 namespace {
 struct locfile {
 	char		signature[4];
 	unsigned	count;
-	const char	text[1];
 };
 }
 
@@ -40,7 +40,7 @@ static void clear_locale() {
 	if(loc)
 		delete[] (char*)loc;
 	for(auto p = locale_data; *p; p++) {
-		for(auto i = 0; i < p->count; i++)
+		for(unsigned i = 0; i < p->count; i++)
 			p->data[i] = 0;
 	}
 }
@@ -50,9 +50,9 @@ void read_locale(const char* url) {
 	loc = (locfile*)loadb(url);
 	if(!loc)
 		return;
-	auto pm = loc->text;
+	auto pm = (const char*)loc + sizeof(locfile);
 	for(auto p = locale_data; *p; p++) {
-		for(auto i = 0; i < p->count; i++) {
+		for(unsigned i = 0; i < p->count; i++) {
 			p->data[i] = pm;
 			pm = zend(pm); pm++;
 		}
@@ -60,13 +60,13 @@ void read_locale(const char* url) {
 }
 
 void write_locale(const char* url) {
-	locfile header = {"LOC", total_size()};
+	locfile header = {"LOC", (unsigned)total_size()};
 	io::file file(url, StreamWrite);
 	if(!file)
 		return;
-	file.write(&header, sizeof(header) - sizeof(header.text));
+	file.write(&header, sizeof(header));
 	for(auto p = locale_data; *p; p++) {
-		for(auto i = 0; i < p->count; i++) {
+		for(unsigned i = 0; i < p->count; i++) {
 			auto pm = p->data[i];
 			auto sz = zlen(pm) + 1;
 			file.write(pm, sz);

@@ -833,10 +833,10 @@ void creature::fixact(visualn v) {
 	add_effect(position + point(0, -32), v);
 }
 
-void creature::fixmsg(const char* format, int param) {
+void creature::fixmsg(const char* format, int param, floatinfon color) {
 	if(!isvisible())
 		return;
-	add_floatinfo(position - point(0, 64), format, param, InfoRed);
+	add_floatinfo(position - point(0, 64), format, param, color);
 }
 
 static void answer_paint_cell_small(int index, long value, const char* format, fnevent proc) {

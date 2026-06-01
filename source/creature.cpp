@@ -407,7 +407,7 @@ static void make_attack(item& weapon, int attack_skill, int damage_percent) {
 		armor += xrand(0, block_damage);
 		if(armor >= damage) {
 			//player->logs("AttackBlocked", damage - armor, opponent->getname(), roll_result, damage, -armor);
-			opponent->fixmsg(getname(PlayerBlock), InfoGreen);
+			opponent->fixmsg(getname(PlayerBlock), 0, InfoGreen);
 			return;
 		}
 	}
@@ -420,7 +420,7 @@ static void make_attack(item& weapon, int attack_skill, int damage_percent) {
 	}
 	if(opponent->roll(Dodge)) {
 		// player->logs("AttackHitButEnemyDodge", opponent->getname());
-		opponent->fixmsg(getname(PlayerDodge), InfoGreen);
+		opponent->fixmsg(getname(PlayerDodge), 0, InfoGreen);
 	} else {
 		// player->logs("AttackHit", damage_result, opponent->getname(), roll_result, damage, -armor);
 		opponent->damage(damage_result);
@@ -989,7 +989,7 @@ bool creature::roll(abilityn v, int bonus) const {
 void creature::damage(int v) {
 	if(v <= 0)
 		return;
-	fixmsg("-%1i", v);
+	fixmsg("-%1i", v, InfoRed);
 	hits -= v;
 	if(hits <= 0)
 		kill();
@@ -1019,4 +1019,14 @@ void creature::enchant(spelln spell, unsigned duration) {
 
 short unsigned creature::bsi() const {
 	return this - bsdata<creature>::elements;
+}
+
+void creature::heal(int v) {
+	if(v <= 0)
+		return;
+	fixmsg("%1i", v, InfoGreen);
+	v += hits;
+	if(v >= hits_maximum)
+		v = hits_maximum;
+	hits = v;
 }

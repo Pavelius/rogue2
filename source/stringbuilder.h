@@ -74,6 +74,9 @@ bool szstart(const char* text, const char* value);
 bool szmatch(const char* text, const char* value);
 bool szpmatch(const char* text, const char* pattern);
 
+void read_locale(const char* url);
+void write_locale(const char* url);
+
 class stringbuilder {
 	struct grammar;
 	char* p;

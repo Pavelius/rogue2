@@ -1,5 +1,7 @@
 #pragma once
 
+struct creature;
+
 enum spelln : unsigned char {
 	CureLightWounds, CureSeriousWounds, CureCriticalWounds, CureDisease, CurePoison,
 	MageArmor, MageShield, LightSpell, Mending, Sleep, Web,
@@ -15,3 +17,5 @@ struct spellable {
 	void remove(spelln v) { spells &= ~(1 << v); }
 };
 int get_mana(spelln v);
+
+bool use_spell(spelln v, creature* opponent, bool run);

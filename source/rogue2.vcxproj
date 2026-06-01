@@ -46,6 +46,7 @@
     <ClCompile Include="item.cpp" />
     <ClCompile Include="keyname.cpp" />
     <ClCompile Include="locale_ru.cpp" />
+    <ClCompile Include="localization.cpp" />
     <ClCompile Include="main_util.cpp" />
     <ClCompile Include="math.cpp" />
     <ClCompile Include="monster.cpp" />

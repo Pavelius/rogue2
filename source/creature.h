@@ -18,6 +18,7 @@
 
 #include "direction.h"
 #include "draw_object.h"
+#include "draw_floatinfo.h"
 #include "feats.h"
 #include "item.h"
 #include "posable.h"
@@ -114,7 +115,8 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	bool isvisible() const;
 	void fixact(directionn d);
 	void fixact(visualn v);
-	void fixmsg(const char* format, int param);
+	void fixmsg(const char* format, int param, floatinfon color);
+	void heal(int value);
 	void kill();
 	void look(directionn d);
 	bool move(directionn d);

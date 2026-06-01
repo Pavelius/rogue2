@@ -1,4 +1,8 @@
+#include "creature.h"
+#include "message.h"
+#include "rand.h"
 #include "spell.h"
+#include "stringbuilder.h"
 
 int get_mana(spelln v) {
 	switch(v) {
@@ -11,4 +15,39 @@ int get_mana(spelln v) {
 	case Gate: return 50;
 	default: return 3;
 	}
+}
+
+bool use_spell(spelln v, creature* opponent, bool run) {
+	int effect = 0;
+	switch(v) {
+	case CureLightWounds:
+		if(opponent->hits >= opponent->hits_maximum)
+			return false;
+		if(run)
+			opponent->heal(xrand(1, 6) + 1);
+		break;
+	case CureSeriousWounds:
+		if(opponent->hits >= opponent->hits_maximum)
+			return false;
+		if(run)
+			opponent->heal(xrand(2, 12) + 3);
+		break;
+	case CureCriticalWounds:
+		if(opponent->hits >= opponent->hits_maximum)
+			return false;
+		if(run)
+			opponent->heal(xrand(3, 18) + 5);
+		break;
+	case CurePoison:
+		if(!opponent->abilities[Poison])
+			return false;
+		if(run) {
+			effect = xrand(2, 12);
+			opponent->fixmsg(getname(MsgCurePoison), effect, InfoGreen);
+		}
+		break;
+	default:
+		return false;
+	}
+	return true;
 }

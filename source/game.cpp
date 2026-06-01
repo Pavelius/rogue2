@@ -332,7 +332,8 @@ int main(int argc, char* argv[]) {
 #ifdef _DEBUG
 	main_util();
 #endif
-	//write_locale("test.loc");
+	// write_locale("test.loc");
+	// read_locale("test.loc");
 	srand(srand_time());
 	area_clear();
 	initialize_gui();

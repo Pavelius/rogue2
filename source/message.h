@@ -22,6 +22,7 @@ enum commandn : unsigned char {
 enum messagen : unsigned char {
 	ApplicationTitle,
 	Coins, Rounds,
+	MsgHeal, MsgCurePoison,
 	PlayerFoundSecretDoor, PlayerFoundTrap,
 	PlayerBlock, PlayerDodge,
 	PlayerPickUpItem, PlayerDropItem,
