@@ -18,6 +18,15 @@ int get_mana(spelln v) {
 	}
 }
 
+static void area_set_near(short unsigned i, areafn v, int maximum) {
+	directionn source[] = {North, South, East, West, NorthEast, SouthEast, NorthWest, SouthWest};
+	zshuffle(source, lenghtof(source));
+	if(maximum > lenghtof(source))
+		maximum = lenghtof(source);
+	for(auto i = 0; i < 2; i++)
+		area_set(to(i, source[i], i), Webbed);
+}
+
 bool use_spell(spelln v, creature* opponent, bool run) {
 	int effect = 0;
 	switch(v) {
@@ -51,8 +60,8 @@ bool use_spell(spelln v, creature* opponent, bool run) {
 		if(area_is(opponent->index, Webbed))
 			return false;
 		if(run) {
-			auto i = opponent->index;
-			area_set(i, Webbed);
+			area_set(opponent->index, Webbed);
+			area_set_near(opponent->index, Webbed, 1 + player->get(Level) / 4);
 		}
 		break;
 	default:
@@ -60,3 +69,50 @@ bool use_spell(spelln v, creature* opponent, bool run) {
 	}
 	return true;
 }
+
+bool use_spell(spelln v, item* target, bool run) {
+	switch(v) {
+	case BlessItem:
+		if(target->magic==Mundane)
+			return false;
+		if(run) {
+			target->magic = Blessed;
+			target->known_magic = 1;
+		}
+		break;
+	case DetectMagicItem:
+		if(target->known_magic)
+			return false;
+		if(run)
+			target->known_magic = 1;
+		break;
+	case EnchantItem:
+		if(target->power)
+			return false;
+		if(run) {
+		}
+		break;
+	case IdentifyItem:
+		if(target->known_power)
+			return false;
+		if(run)
+			target->known_power = 1;
+		break;
+	case UncurseItem:
+		if(!target->known_magic || target->magic!=Cursed)
+			return false;
+		if(run)
+			target->magic = Mundane;
+		break;
+	case CreateArtifact:
+		if(target->magic!=Artifact)
+			return false;
+		if(run)
+			target->magic = Artifact;
+		break;
+	default:
+		return false;
+	}
+	return true;
+}
+
