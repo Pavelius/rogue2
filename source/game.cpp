@@ -231,7 +231,7 @@ void pass_minute() {
 		game.restore_turn += 10;
 	}
 	while(game.restore_hour < game.minutes) {
-		game.restore_hour = (game.restore_hour / 60 + 1) * 60 + rand() % 60;
+		game.restore_hour = (game.restore_hour / Hour + 1) * Hour + rand() % Hour;
 		update_need();
 	}
 	while(game.restore_day_part < game.minutes) {

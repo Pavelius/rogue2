@@ -1,7 +1,9 @@
 #include "area.h"
 #include "creature.h"
+#include "game.h"
 #include "message.h"
 #include "rand.h"
+#include "slice.h"
 #include "spell.h"
 #include "stringbuilder.h"
 
@@ -28,7 +30,8 @@ static void area_set_near(short unsigned i, areafn v, int maximum) {
 }
 
 bool use_spell(spelln v, creature* opponent, bool run) {
-	int effect = 0;
+	if(opponent->is(v))
+		return false;
 	switch(v) {
 	case CureLightWounds:
 		if(opponent->hits >= opponent->hits_maximum)
@@ -52,8 +55,14 @@ bool use_spell(spelln v, creature* opponent, bool run) {
 		if(!opponent->abilities[Poison])
 			return false;
 		if(run) {
-			effect = xrand(2, 12);
-			opponent->fixmsg(getname(MsgCurePoison), effect, InfoGreen);
+			auto v = xrand(2, 12);
+			opponent->fixmsg(getname(MsgCurePoison), v, InfoGreen);
+		}
+		break;
+	case MageArmor:
+		if(run) {
+			opponent->enchant(MageArmor, xrand(3 * Hour, 5 * Hour));
+			// opponent->fixmsg(getname(MageArmor), 0, InfoGreen);
 		}
 		break;
 	case Web:
@@ -73,7 +82,7 @@ bool use_spell(spelln v, creature* opponent, bool run) {
 bool use_spell(spelln v, item* target, bool run) {
 	switch(v) {
 	case BlessItem:
-		if(target->magic==Mundane)
+		if(target->magic == Mundane)
 			return false;
 		if(run) {
 			target->magic = Blessed;
@@ -99,13 +108,13 @@ bool use_spell(spelln v, item* target, bool run) {
 			target->known_power = 1;
 		break;
 	case UncurseItem:
-		if(!target->known_magic || target->magic!=Cursed)
+		if(!target->known_magic || target->magic != Cursed)
 			return false;
 		if(run)
 			target->magic = Mundane;
 		break;
 	case CreateArtifact:
-		if(target->magic!=Artifact)
+		if(target->magic != Artifact)
 			return false;
 		if(run)
 			target->magic = Artifact;

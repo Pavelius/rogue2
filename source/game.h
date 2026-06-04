@@ -25,6 +25,10 @@ struct itemlay;
 extern collectionv<creature> creatures;
 extern collectionv<itemlay> items;
 
+enum durationn : unsigned {
+	Minute = 1, Hour = 60 * Minute, Day = 24 * Hour,
+};
+
 struct gamei {
 	unsigned restore_half_turn, restore_turn, restore_hour, restore_day_part, restore_day, restore_several_days;
 	unsigned minutes;
