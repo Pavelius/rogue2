@@ -60,10 +60,8 @@ bool use_spell(spelln v, creature* opponent, bool run) {
 		}
 		break;
 	case MageArmor:
-		if(run) {
+		if(run)
 			opponent->enchant(MageArmor, xrand(3 * Hour, 5 * Hour));
-			// opponent->fixmsg(getname(MageArmor), 0, InfoGreen);
-		}
 		break;
 	case Web:
 		if(area_is(opponent->index, Webbed))
