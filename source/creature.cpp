@@ -1013,7 +1013,7 @@ bool creature::use(item& it, bool run) {
 }
 
 void creature::enchant(spelln spell, unsigned duration) {
-	// fixmsg(getname(spell), 0, InfoGreen);
+	fixmsg(getname(spell), 0, InfoGreen);
 	add_enchant(bsi(), spell, game.minutes + duration);
 	update();
 }

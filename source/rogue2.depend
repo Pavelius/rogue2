@@ -721,7 +721,7 @@
 
 1780399629 /home/user-331/projects/rogue2/source/spell.h
 
-1779890842 /home/user-331/projects/rogue2/source/game.h
+1780553285 /home/user-331/projects/rogue2/source/game.h
 	"collectiona.h"
 	"indexa.h"
 
@@ -766,7 +766,7 @@
 
 1779890842 /home/user-331/projects/rogue2/source/color.h
 
-1780310013 source:/home/user-331/projects/rogue2/source/creature.cpp
+1780665865 source:/home/user-331/projects/rogue2/source/creature.cpp
 	"area.h"
 	"bsdata.h"
 	"collection.h"
@@ -866,7 +866,7 @@
 1779890842 source:/home/user-331/projects/rogue2/source/draw_theme.cpp
 	"draw.h"
 
-1780310013 source:/home/user-331/projects/rogue2/source/game.cpp
+1780553285 source:/home/user-331/projects/rogue2/source/game.cpp
 	"answers.h"
 	"area.h"
 	"bsdata.h"
@@ -951,7 +951,7 @@
 	"draw.h"
 	"stringbuilder.h"
 
-1780310013 source:/home/user-331/projects/rogue2/source/locale_ru.cpp
+1780665835 source:/home/user-331/projects/rogue2/source/locale_ru.cpp
 	"bsdata.h"
 	"creature.h"
 	"game.h"
@@ -1015,11 +1015,13 @@
 	"screenshoot.h"
 	"timer.h"
 
-1780399809 source:/home/user-331/projects/rogue2/source/spell.cpp
+1780665664 source:/home/user-331/projects/rogue2/source/spell.cpp
 	"area.h"
 	"creature.h"
+	"game.h"
 	"message.h"
 	"rand.h"
+	"slice.h"
 	"spell.h"
 	"stringbuilder.h"
 
