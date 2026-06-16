@@ -62,7 +62,6 @@
     <ClCompile Include="sprite_util.cpp" />
     <ClCompile Include="stringbuilder.cpp" />
     <ClCompile Include="stringvar.cpp" />
-    <ClCompile Include="szdup.cpp" />
     <ClCompile Include="interface.cpp" />
     <ClCompile Include="timer.cpp" />
     <ClCompile Include="win_draw.cpp" />
@@ -100,7 +99,6 @@
     <ClInclude Include="keyname.h" />
     <ClInclude Include="math.h" />
     <ClInclude Include="message.h" />
-    <ClInclude Include="my_initialize_list.h" />
     <ClInclude Include="point.h" />
     <ClInclude Include="posable.h" />
     <ClInclude Include="print.h" />

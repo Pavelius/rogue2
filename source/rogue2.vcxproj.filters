@@ -129,9 +129,6 @@
     <ClCompile Include="stringvar.cpp">
       <Filter>Support</Filter>
     </ClCompile>
-    <ClCompile Include="szdup.cpp">
-      <Filter>Support</Filter>
-    </ClCompile>
     <ClCompile Include="keyname.cpp">
       <Filter>Support</Filter>
     </ClCompile>
@@ -252,9 +249,6 @@
       <Filter>Support</Filter>
     </ClInclude>
     <ClInclude Include="math.h">
-      <Filter>Support</Filter>
-    </ClInclude>
-    <ClInclude Include="my_initialize_list.h">
       <Filter>Support</Filter>
     </ClInclude>
     <ClInclude Include="point.h">

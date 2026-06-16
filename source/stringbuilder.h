@@ -48,8 +48,6 @@ const char* skipspcr(const char* p);
 const char* skipline(const char* p);
 const char* szfind(const char* text, const char* value);
 const char*	szfindend(const char* source, const char* value);
-const char* szdup(const char* text);
-const char* szdupz(const char* text);
 
 char* szlower(char* temp);
 char* szupper(char* temp);
