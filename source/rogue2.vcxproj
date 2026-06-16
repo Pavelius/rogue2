@@ -114,6 +114,7 @@
     <ClInclude Include="stringlocale.h" />
     <ClInclude Include="stringvar.h" />
     <ClInclude Include="timer.h" />
+    <ClInclude Include="variant.h" />
     <ClInclude Include="win.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

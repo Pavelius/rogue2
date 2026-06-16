@@ -26,4 +26,5 @@ union variant {
 	constexpr variant(spelln v) : type(Spell), value(v) {}
 	constexpr variant(variantn v) : type(Variant), value(v) {}
 	constexpr bool operator==(const variant& v) const { return u == v.u; }
+	constexpr explicit operator bool() const { return u != 0; }
 };

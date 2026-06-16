@@ -305,5 +305,8 @@
     <ClInclude Include="enchant.h">
       <Filter>Logic</Filter>
     </ClInclude>
+    <ClInclude Include="variant.h">
+      <Filter>Logic</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
