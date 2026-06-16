@@ -1548,7 +1548,7 @@ static void console_print(char symbol, const char* format, const char* format_pa
 	console.addv(format, format_param);
 	last_message_tick = getcputime();
 	auto need_upper = false;
-	if(symbol == '\n')
+	if(symbol == '\n' || !p0)
 		need_upper = true;
 	else if(p0)
 		need_upper = (*p0 == '.' || *p0 == '?' || *p0 == '!');
