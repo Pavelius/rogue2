@@ -17,7 +17,7 @@
 #pragma once
 
 #ifdef _MSC_VER
-#define XVA_FORMAT(V) auto format_param = (((const char*)&V) + sizeof(V));
+#define XVA_FORMAT(V) auto format_param = (((const char*)&V) + sizeof(const char*));
 #else
 #include "slice.h"
 #include <stdarg.h>
@@ -149,4 +149,3 @@ struct bsenum {
 	static const int count;
 };
 template<typename T> const char* getname(T v) { return bsenum<T>::names[v]; }
-template<typename T> const char* getinfo(T v) { return bsenum<T>::info[v]; }

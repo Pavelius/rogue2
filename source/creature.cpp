@@ -941,15 +941,18 @@ bool creature::isvisible() const {
 }
 
 void creature::act(messagen v) const {
+	act(' ', getname(v));
+}
+
+void creature::act(char separator, const char* format, ...) const {
 	if(!ispresent() || !area_is(index, Visible))
 		return;
-	print(getname(v));
+	XVA_FORMAT(format);
+	printv(separator, format, format_param);
 }
 
 void creature::actn(messagen v) const {
-	if(!ispresent() || !area_is(index, Visible))
-		return;
-	println(getname(v));
+	act('\n', getname(v));
 }
 
 bool creature::moveto(short unsigned ni) {

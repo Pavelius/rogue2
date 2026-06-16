@@ -23,6 +23,8 @@ struct creature;
 extern bool need_update_items;
 
 enum featn : unsigned char;
+enum messagen : unsigned char;
+enum glown : unsigned char;
 
 enum wearn : unsigned char {
 	MeleeWeapon, MeleeWeaponOffhand, RangedWeapon, Ammunition,
@@ -76,6 +78,7 @@ struct item {
 	int dodge() const;
 	int speed() const;
 	int	weight() const;
+	void act(messagen v, glown glow) const;
 	bool broke();
 	void clear() { count = 0; type = (itemn)0; properties = 0; }
 	bool is(magicn v) const { return magic == v; }

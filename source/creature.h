@@ -97,6 +97,7 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	int getlos() const;
 	void act(messagen v) const;
 	void actn(messagen v) const;
+	void act(char separator, const char* format, ...) const;
 	void add(abilityn v, int i);
 	bool canhear(short unsigned i) const;
 	void clear();

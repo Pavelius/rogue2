@@ -1407,13 +1407,9 @@ static void player_move_cmd() {
 }
 
 static void test_scene() {
-	indecies.clear();
-	indecies.add(player->index);
-	indecies.add(to(player->index, North));
-	indecies.add(to(player->index, West));
-	indecies.add(to(player->index, East));
-	indecies.add(to(player->index, South));
-	choose_indecies("С кем хотите поговорить?");
+	auto p = player->wears + MeleeWeapon;
+	use_spell(CreateArtifact, p,true);
+	use_spell(IdentifyItem, p, true);
 }
 
 void set_item_color(const item& it) {
@@ -1543,10 +1539,21 @@ static void console_print(char symbol, const char* format, const char* format_pa
 	auto current_tick = getcputime();
 	if(can_clear_console(current_tick))
 		console.clear();
+	const char* p0 = 0;
+	if(console)
+		p0 = console.get() - 1;
 	if(symbol)
 		console.addsep(symbol);
+	auto p = console.get();
 	console.addv(format, format_param);
 	last_message_tick = getcputime();
+	auto need_upper = false;
+	if(symbol == '\n')
+		need_upper = true;
+	else if(p0)
+		need_upper = (*p0 == '.' || *p0 == '?' || *p0 == '!');
+	if(need_upper)
+		p[0] = upper_symbol(p[0]);
 }
 
 void initialize_gui() {

@@ -2,6 +2,7 @@
 #include "creature.h"
 #include "game.h"
 #include "message.h"
+#include "pushvalue.h"
 #include "rand.h"
 #include "slice.h"
 #include "spell.h"
@@ -78,9 +79,10 @@ bool use_spell(spelln v, creature* opponent, bool run) {
 }
 
 bool use_spell(spelln v, item* target, bool run) {
+	pushvalue push(last_item, target);
 	switch(v) {
 	case BlessItem:
-		if(target->magic == Mundane)
+		if(target->magic >= Blessed)
 			return false;
 		if(run) {
 			target->magic = Blessed;
@@ -112,14 +114,16 @@ bool use_spell(spelln v, item* target, bool run) {
 			target->magic = Mundane;
 		break;
 	case CreateArtifact:
-		if(target->magic != Artifact)
+		if(target->magic == Artifact)
 			return false;
-		if(run)
+		if(run) {
+			player->wears[MeleeWeapon].act(ItemGrowColor, GlowYellow);
 			target->magic = Artifact;
+			target->known_magic = 1;
+		}
 		break;
 	default:
 		return false;
 	}
 	return true;
 }
-

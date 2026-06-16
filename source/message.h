@@ -19,6 +19,11 @@
 enum commandn : unsigned char {
 	Cancel, Apply, PickUp, DropDown, Inventory,
 };
+enum glown : unsigned char {
+	GlowGray, GlowBlack, GlowWhite,
+	GlowRed, GlowGreen, GlowBlue,
+	GlowBrown, GlowYellow,
+};
 enum messagen : unsigned char {
 	ApplicationTitle,
 	Coins, Rounds,
@@ -26,5 +31,6 @@ enum messagen : unsigned char {
 	PlayerFoundSecretDoor, PlayerFoundTrap,
 	PlayerBlock, PlayerDodge,
 	PlayerPickUpItem, PlayerDropItem,
+	ItemGrowColor,
 	ItemDamaged, ItemBurnAway, ItemMeldDown, ItemCrumbleToDust, ItemCrushingOut,
 };

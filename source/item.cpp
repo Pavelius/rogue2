@@ -358,3 +358,7 @@ bool item::unequip() {
 	add_item(p, *this);
 	return operator bool();
 }
+
+void item::act(messagen v, glown glow) const {
+	player->act(' ', getname(v), getname(glow));
+}
