@@ -121,7 +121,6 @@
 		<Unit filename="stringlocale.h" />
 		<Unit filename="stringvar.cpp" />
 		<Unit filename="stringvar.h" />
-		<Unit filename="szdup.cpp" />
 		<Unit filename="timer.cpp" />
 		<Unit filename="timer.h" />
 		<Unit filename="variant.h" />

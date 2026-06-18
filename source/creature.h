@@ -56,7 +56,7 @@ enum monstern : unsigned char {
 };
 enum namen : unsigned short {
 	HumanNames,
-	ElfNames = HumanNames +50,
+	ElfNames = HumanNames + 50,
 	DwarfNames = ElfNames + 50,
 	OrcNames = DwarfNames + 50,
 	NoName = 0xFFFF
