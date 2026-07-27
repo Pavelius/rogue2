@@ -108,6 +108,8 @@ struct wearable {
 	const item* getwear(const void* data) const;
 };
 
+item random_item();
+
 item* choose_backpack();
 item* choose_backpack(wearn wear);
 item* choose_ground();

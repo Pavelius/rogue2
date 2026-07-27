@@ -944,6 +944,15 @@ void creature::act(messagen v) const {
 	act(' ', getname(v));
 }
 
+void logs(char separator, const char* format, ...) {
+	XVA_FORMAT(format);
+	printv(separator, format, format_param);
+}
+
+void logs(messagen v) {
+	logs(' ', getname(v));
+}
+
 void creature::act(char separator, const char* format, ...) const {
 	if(!ispresent() || !area_is(index, Visible))
 		return;

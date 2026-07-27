@@ -43,7 +43,7 @@ enum abilityn : unsigned char {
 	Hits, Mana, Faith, Mood, Reputation,
 	Poison, Illness, Corrosion, Burning, Freezing, Drunk,
 	Experience,
-	FirstSkill = Alertness, LastSkill = Woodcutting,
+	FirstSkill = Alchemy, LastSkill = Woodcutting,
 };
 enum monstern : unsigned char {
 	Human, Dwarf, Elf,
@@ -96,8 +96,8 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	int	get(abilityn v) const { return (v < sizeof(abilities) / sizeof(abilities[0])) ? abilities[v] : 0; }
 	int getlos() const;
 	void act(messagen v) const;
-	void actn(messagen v) const;
 	void act(char separator, const char* format, ...) const;
+	void actn(messagen v) const;
 	void add(abilityn v, int i);
 	bool canhear(short unsigned i) const;
 	void clear();
@@ -150,6 +150,8 @@ void create_creature(short unsigned index_position, monstern type);
 void creature_every_minute();
 void creature_every_10_minutes();
 bool is_free(short unsigned i);
+void logs(messagen v);
+void logs(char separator, const char* format, ...);
 void make_move();
 void fix(messagen v);
 bool player_move(directionn d);

@@ -43,6 +43,7 @@ public:
 	constexpr explicit operator bool() const { return data != 0; }
 	constexpr flagable() : data(0) {}
 	constexpr flagable(T data) : data(data) {}
+	template<typename... Ts> constexpr flagable(T v, Ts... args) : flagable(args...) { set(v); }
 	constexpr void add(const flagable<1, T>& v) { data |= v.data; }
 	constexpr void clear() { data = 0; }
 	constexpr bool is(short unsigned v) const { return (data & (1 << v)) != 0; }
