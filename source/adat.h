@@ -23,7 +23,9 @@ struct adat {
 	typedef T data_type;
 	unsigned count;
 	T data[count_max];
-	adat() : count(0) {}
+	constexpr adat() : count(0) {}
+	constexpr adat(T v) : adat() { data[count++] = v; }
+	template<typename... Ts> constexpr adat(T v, Ts... args) : adat(args...) { data[count++] = v; }
 	constexpr const T& operator[](unsigned index) const { return data[index]; }
 	constexpr T& operator[](unsigned index) { return data[index]; }
 	explicit operator bool() const { return count != 0; }

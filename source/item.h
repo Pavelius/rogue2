@@ -106,6 +106,7 @@ struct wearable {
 	bool iswear(const void* p) const { return p >= wears && p <= wears + Legs; }
 	item* getwear(wearn id) { return wears + id; }
 	const item* getwear(const void* data) const;
+	int totalweight() const;
 };
 
 item random_item();

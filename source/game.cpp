@@ -106,6 +106,12 @@ static const char* inventory_item_weight(int index, long value, const char* form
 	return str("%1i.%2i", n / 100, (n/10) % 100);
 }
 
+static const char* str_weight(long n) {
+	if(!n)
+		return "-";
+	return str("%1i.%2i", n / 100, (n / 10) % 100);
+}
+
 static const char* inventory_item(int index, long value, const char* format) {
 	auto p = (item*)value;
 	set_item_color(*p);
@@ -130,7 +136,8 @@ item* choose_inventory() {
 	an.clear();
 	for(auto v = MeleeWeapon; v < Backpack; v = (wearn)(v + 1))
 		an.add((long)(player->wears + v), getname(v));
-	return (item*)choose_menu(getname(Cancel), 0);
+	char footer[260]; stringbuilder sb(footer); sb.add(getname(ItemWearTotal), str_weight(player->totalweight()));
+	return (item*)choose_menu(getname(Cancel), footer);
 }
 
 void add_answer_items(short unsigned area_index, short unsigned index, fnvisible filter) {
@@ -327,10 +334,16 @@ void main_util();
 
 void write_locale(const char* url);
 
+static bool test_array() {
+	adat<abilityn> source = {Strenght, Dexterity, Wits};
+	return source.count == 3;
+}
+
 int main(int argc, char* argv[]) {
 	initialize_strings();
 #ifdef _DEBUG
 	main_util();
+	test_array();
 #endif
 	// write_locale("test.loc");
 	// read_locale("test.loc");

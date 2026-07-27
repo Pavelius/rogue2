@@ -54,17 +54,16 @@ static itemn random_weapon[] = {Staff, Spear, Spear, Axe, Axe, Mace, Mace, WarHa
 static itemn random_bow[] = {ShortBow, ShortBow, LongBow, Crossbow, HeavyCrossbow};
 static itemn random_armor[] = {Robe, LeatherArmor, LeatherArmor, LeatherArmor, StuddedArmor, StuddedArmor, HideArmor, HideArmor, ScaleMail, ChainMail, PlateMail};
 
-static slice<itemn> random_magic_item[] = {
-	random_small_blade, random_blade, random_weapon, random_bow,
-	random_armor, random_armor,
-};
-
 static item random_item(const slice<itemn>& source) {
 	return item(source.begin()[rand() % source.count]);
 }
 
 item random_item() {
-	return random_item(maprnd(random_magic_item));
+	static slice<itemn> source[] = {
+		random_small_blade, random_blade, random_weapon, random_bow,
+		random_armor, random_armor,
+	};
+	return random_item(maprnd(source));
 }
 
 static slice<variant> get_powers(itemn v) {
@@ -333,6 +332,15 @@ void wearable::additem(item& it, bool try_equip) {
 	if(try_equip && equip(it))
 		return;
 	add_item(owner(), it);
+}
+
+int wearable::totalweight() const {
+	auto r = 0;
+	for(auto& v : wears) {
+		if(v)
+			r += v.weight();
+	}
+	return r;
 }
 
 void add_item(short unsigned area_index, short unsigned index, item& v) {

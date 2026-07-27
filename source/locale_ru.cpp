@@ -30,6 +30,7 @@ BSENUM(messagen) = {
 	"%Player подн€л%а %Item.",
 	"%Player положил%а %Item.",
 	"%Item вспыхнуло тусклым %-1 свечением.",
+	"¬се ваши предметы вес€т [%1] килограм.",
 	"%Item повреждено", "%Item сгорело полностью", "%Item расплавилось до тла", "%Item расcыпалось в пыль", "%Item разлетелось на куски",
 }; assert_enum(bsenum<messagen>::names, ItemCrushingOut)
 BSENUM(speechn) = {
