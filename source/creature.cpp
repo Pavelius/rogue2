@@ -407,7 +407,7 @@ static void make_attack(item& weapon, int attack_skill, int damage_percent) {
 		armor += xrand(0, block_damage);
 		if(armor >= damage) {
 			//player->logs("AttackBlocked", damage - armor, opponent->getname(), roll_result, damage, -armor);
-			opponent->fixmsg(getname(PlayerBlock), 0, InfoGreen);
+			opponent->fixmsg(getname(PlayerBlock), 0, GlowGreen);
 			return;
 		}
 	}
@@ -420,7 +420,7 @@ static void make_attack(item& weapon, int attack_skill, int damage_percent) {
 	}
 	if(opponent->roll(Dodge)) {
 		// player->logs("AttackHitButEnemyDodge", opponent->getname());
-		opponent->fixmsg(getname(PlayerDodge), 0, InfoGreen);
+		opponent->fixmsg(getname(PlayerDodge), 0, GlowGreen);
 	} else {
 		// player->logs("AttackHit", damage_result, opponent->getname(), roll_result, damage, -armor);
 		opponent->damage(damage_result);
@@ -727,41 +727,43 @@ static int get_experience_reward(const creature* player) {
 	return maptbl(rewards, level);
 }
 
-static bool drink_effect(abilityn v, magicn magic, bool run) {
-	int multiply = 1;
+bool creature::apply(abilityn v, magicn magic, bool run) {
+	auto multiply = 1;
 	switch(magic) {
 	case Artifact:
 		if(run)
-			player->basic.add(v, 1);
+			basic.add(v, 1);
 		break;
 	case Cursed:
 		if(run)
-			player->basic.add(v, -1);
+			basic.add(v, -1);
 		break;
 	default:
 		if(magic == Blessed)
 			multiply = 4;
 		switch(v) {
 		case Hits:
-			if(player->hits >= player->hits_maximum)
+			if(hits >= hits_maximum)
 				return false;
 			if(run) {
-				player->hits += xrand(3, 12) * multiply;
-				if(player->hits > player->hits_maximum)
-					player->hits = player->hits_maximum;
+				auto value = xrand(3, 12) * multiply;
+				fixmsg(getname(Hits), value, GlowGreen);
+				hits += value;
+				if(hits > hits_maximum)
+					hits = hits_maximum;
 			}
 			break;
 		case Mana:
-			if(player->mana >= player->get(Mana))
+			if(mana >= get(Mana))
 				return false;
 			if(run) {
-				player->mana += xrand(3, 18) * multiply;
-				if(player->mana > player->get(Mana))
-					player->mana = player->get(Mana);
+				mana += xrand(3, 18) * multiply;
+				if(mana > get(Mana))
+					mana = get(Mana);
 			}
 			break;
 		default:
-			add_enchant(player->bsi(), v, game.minutes + xrand(60, 120) * multiply);
+			add_enchant(bsi(), v, game.minutes + xrand(60, 120) * multiply);
 			break;
 		}
 		break;
@@ -769,8 +771,8 @@ static bool drink_effect(abilityn v, magicn magic, bool run) {
 	return true;
 }
 
-static bool drink_effect(featn v, magicn magic, bool run) {
-	if(player->is(v))
+bool creature::apply(featn v, magicn magic, bool run) {
+	if(is(v))
 		return false;
 	unsigned duration = xrand(60, 120);
 	switch(magic) {
@@ -779,17 +781,8 @@ static bool drink_effect(featn v, magicn magic, bool run) {
 	case Blessed: duration = duration * 3; break;
 	default: break;
 	}
-	add_enchant(player->bsi(), v, game.minutes + duration);
+	add_enchant(bsi(), v, game.minutes + duration);
 	return true;
-}
-
-static bool drink_potion(item& v, bool run) {
-	auto power = v.getpower();
-	switch(power.type) {
-	case Ability: return drink_effect((abilityn)power.value, v.magic, run);
-	case Feat: return drink_effect((featn)power.value, v.magic, run);
-	default: return false;
-	}
 }
 
 void creature::clear() {
@@ -1001,7 +994,7 @@ bool creature::roll(abilityn v, int bonus) const {
 void creature::damage(int v) {
 	if(v <= 0)
 		return;
-	fixmsg("-%1i", v, InfoRed);
+	fixmsg("-%1i", v, GlowRed);
 	hits -= v;
 	if(hits <= 0)
 		kill();
@@ -1014,18 +1007,26 @@ void creature::say(speechn v) const {
 	println("[%1:] \"%2\"", name(), getname(n));
 }
 
-bool creature::use(item& it, bool run) {
-	pushvalue push(player, this);
-	switch(it.type) {
+static bool drink_potion(item& v, bool run) {
+	auto power = v.getpower();
+	switch(power.type) {
+	case Ability: return player->apply((abilityn)power.value, v.magic, run);
+	case Feat: return player->apply((featn)power.value, v.magic, run);
+	default: return false;
+	}
+}
+
+bool item::use(bool run) {
+	switch(type) {
 	case RedPotion: case BluePotion: case GreenPotion:
-		return drink_potion(it, run);
+		return drink_potion(*this, run);
 	default:
 		return false;
 	}
 }
 
 void creature::enchant(spelln spell, unsigned duration) {
-	fixmsg(getname(spell), 0, InfoGreen);
+	fixmsg(getname(spell), 0, GlowGreen);
 	add_enchant(bsi(), spell, game.minutes + duration);
 	update();
 }
@@ -1037,7 +1038,7 @@ short unsigned creature::bsi() const {
 void creature::heal(int v) {
 	if(v <= 0)
 		return;
-	fixmsg("%1i", v, InfoGreen);
+	fixmsg("%1i", v, GlowGreen);
 	v += hits;
 	if(v >= hits_maximum)
 		v = hits_maximum;

@@ -99,6 +99,8 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	void act(char separator, const char* format, ...) const;
 	void actn(messagen v) const;
 	void add(abilityn v, int i);
+	bool apply(abilityn v, magicn magic, bool run);
+	bool apply(featn v, magicn magic, bool run);
 	bool canhear(short unsigned i) const;
 	void clear();
 	void damage(int v);
@@ -116,7 +118,7 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	bool isvisible() const;
 	void fixact(directionn d);
 	void fixact(visualn v);
-	void fixmsg(const char* format, int param, floatinfon color);
+	void fixmsg(const char* format, int param, glown color);
 	void heal(int value);
 	void kill();
 	void look(directionn d);
@@ -132,7 +134,6 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	void set(featn v) { featable::set(v); }
 	void setindex(short unsigned i);
 	void update();
-	bool use(item& it, bool run);
 	void wait(int v) { wait_seconds += v; need_end_turn = true; }
 	void wait() { wait(100); }
 };

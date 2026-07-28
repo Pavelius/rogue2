@@ -833,10 +833,19 @@ void creature::fixact(visualn v) {
 	add_effect(position + point(0, -32), v);
 }
 
-void creature::fixmsg(const char* format, int param, floatinfon color) {
+void creature::fixmsg(const char* format, int param, glown color) {
 	if(!isvisible())
 		return;
 	add_floatinfo(position - point(0, 64), format, param, color);
+}
+
+color get_color(glown v) {
+	switch(v) {
+	case GlowRed: return colors::red;
+	case GlowGreen: return colors::green;
+	case GlowBlue: return colors::blue;
+	default: return colors::text;
+	}
 }
 
 static void answer_paint_cell_small(int index, long value, const char* format, fnevent proc) {

@@ -91,6 +91,7 @@ struct item {
 	void setslot(item& v);
 	bool unequip();
 	void use();
+	bool use(bool run);
 };
 extern item* last_item;
 

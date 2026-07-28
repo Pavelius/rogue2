@@ -57,7 +57,7 @@ bool use_spell(spelln v, creature* opponent, bool run) {
 			return false;
 		if(run) {
 			auto v = xrand(2, 12);
-			opponent->fixmsg(getname(MsgCurePoison), v, InfoGreen);
+			opponent->fixmsg(getname(MsgCurePoison), v, GlowGreen);
 		}
 		break;
 	case MageArmor:

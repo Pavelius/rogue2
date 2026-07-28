@@ -2,13 +2,14 @@
 #include "color.h"
 #include "draw.h"
 #include "draw_floatinfo.h"
+#include "message.h"
 #include "stringbuilder.h"
 #include "timer.h"
 
 struct floatinfo {
 	const char*		format;
 	int				param;
-	floatinfon		fore;
+	glown			fore;
 	unsigned long	start, finish;
 	point			start_position, finish_position, position;
 	constexpr explicit operator bool() { return format != 0; }
@@ -28,7 +29,7 @@ static unsigned long find_max_start(point position) {
 	return result;
 }
 
-void add_floatinfo(point position, const char* format, int param, floatinfon fore) {
+void add_floatinfo(point position, const char* format, int param, glown fore) {
 	auto max_start = find_max_start(position);
 	if(!max_start)
 		max_start = animation_tick;
@@ -80,14 +81,7 @@ void update_floatinfo() {
 	shrink();
 }
 
-static color get_color(floatinfon v) {
-	switch(v) {
-	case InfoRed: return colors::red;
-	case InfoGreen: return colors::green;
-	case InfoBlue: return colors::blue;
-	default: return colors::text;
-	}
-}
+color get_color(glown v);
 
 void paint_floatinfo() {
 	pushrect push;

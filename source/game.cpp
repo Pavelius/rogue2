@@ -203,7 +203,7 @@ void open_inventory() {
 void open_backpack() {
 	auto p = choose_backpack(getname(Backpack));
 	if(p)
-		player->use(*p, true);
+		p->use(true);
 }
 
 void open_drop_item() {
