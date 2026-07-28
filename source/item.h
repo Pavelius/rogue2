@@ -96,6 +96,8 @@ struct item {
 };
 extern item* last_item;
 
+extern const char* power_names[];
+
 struct wearable {
 	item wears[Legs + 1];
 	int	money;

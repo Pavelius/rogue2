@@ -366,6 +366,8 @@ int main(int argc, char* argv[]) {
 	create_creature(apos(4, 3), Human);
 	item i1 = Spear; i1.magic = Blessed; // i1.known_magic = 1;
 	player->equip(i1);
+	item i2 = BluePotion; i2.setpower(Hits); i2.known_magic = 1; i2.known_power = 1;
+	player->additem(i2);
 	player->equip(LeatherArmor);
 	player->equip(LongBow);
 	player->update();

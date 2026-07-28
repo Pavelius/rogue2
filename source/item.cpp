@@ -314,6 +314,13 @@ void item::join(item& v) {
 	last_item = this;
 }
 
+static const char* get_power_name(variant v) {
+	switch(v.type) {
+	case Ability: return power_names[v.value];
+	default: return power_names[0];
+	}
+}
+
 const char* item::name() const {
 	static char temp[160];
 	stringbuilder sb(temp);
@@ -322,11 +329,13 @@ const char* item::name() const {
 	if(known_magic && magic)
 		sb.adds(getname((magicn)(gi * 4 + magic)));
 	sb.adds(getname(type));
-	if(count > 1) {
-//		sb.addsep(',');
-//		sb.addsep(' ');
-		sb.adds("x%1i", count);
+	if(known_power) {
+		auto pw = getpower();
+		if(pw)
+			sb.adds(get_power_name(pw));
 	}
+	if(count > 1)
+		sb.adds("x%1i", count);
 	sb.lower();
 	return temp;
 }

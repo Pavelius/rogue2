@@ -749,13 +749,8 @@ bool creature::apply(abilityn v, magicn magic, bool run) {
 		case Hits:
 			if(hits >= hits_maximum)
 				return false;
-			if(run) {
-				auto value = xrand(3, 12) * multiply;
-				fixmsg(getname(Hits), value, GlowGreen);
-				hits += value;
-				if(hits > hits_maximum)
-					hits = hits_maximum;
-			}
+			if(run)
+				heal(xrand(3, 12) * multiply);
 			break;
 		case Mana:
 			if(mana >= get(Mana))
