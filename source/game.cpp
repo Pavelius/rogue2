@@ -98,18 +98,14 @@ static const char* inventory_wear_name(int index, long value, const char* format
 	return str("%1:", getname(w));
 }
 
-static const char* inventory_item_weight(int index, long value, const char* format) {
-	auto p = (item*)value;
-	auto n = p->weight();
+static const char* str_weight(long n, const char* zero = "-") {
 	if(!n)
-		return "-";
-	return str("%1i.%2i", n / 100, (n/10) % 100);
+		return zero;
+	return str("%1i.%2i", n / 100, n % 100);
 }
 
-static const char* str_weight(long n) {
-	if(!n)
-		return "-";
-	return str("%1i.%2i", n / 100, (n / 10) % 100);
+static const char* inventory_item_weight(int index, long value, const char* format) {
+	return str_weight(((item*)value)->weight());
 }
 
 static const char* inventory_item(int index, long value, const char* format) {
@@ -136,7 +132,7 @@ item* choose_inventory() {
 	an.clear();
 	for(auto v = MeleeWeapon; v < Backpack; v = (wearn)(v + 1))
 		an.add((long)(player->wears + v), getname(v));
-	char footer[260]; stringbuilder sb(footer); sb.add(getname(ItemWearTotal), str_weight(player->totalweight()));
+	char footer[260]; stringbuilder sb(footer); sb.add(getname(ItemWearTotal), str_weight(player->totalweight(), "0"));
 	return (item*)choose_menu(getname(Cancel), footer);
 }
 
@@ -201,9 +197,10 @@ void open_inventory() {
 }
 
 void open_backpack() {
-	auto p = choose_backpack(getname(Backpack));
-	if(p)
-		p->use(true);
+	pushvalue push(last_item);
+	last_item = choose_backpack(getname(Backpack));
+	if(last_item)
+		last_item->use(true);
 }
 
 void open_drop_item() {
