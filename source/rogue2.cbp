@@ -86,6 +86,7 @@
 		<Unit filename="io_stream.h" />
 		<Unit filename="item.cpp" />
 		<Unit filename="item.h" />
+		<Unit filename="item_generate.cpp" />
 		<Unit filename="itemlay.h" />
 		<Unit filename="keyname.cpp" />
 		<Unit filename="keyname.h" />

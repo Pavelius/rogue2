@@ -48,23 +48,6 @@ static variant potion_powers[] = {
 	AcidImmunity, ColdImmunity, DeathImmunity, DiseaseImmunity, FireImmunity, PoisonImmunity, StunImmunity,
 	Fly, FastMove, FastAttack,
 };
-static itemn random_small_blade[] = {Dagger, Dagger, ShortSword, Scimitar};
-static itemn random_blade[] = {ShortSword, LongSword, GreatSword};
-static itemn random_weapon[] = {Staff, Spear, Spear, Axe, Axe, Mace, Mace, WarHammer, WarHammer, GreatMace, GreatAxe};
-static itemn random_bow[] = {ShortBow, ShortBow, LongBow, Crossbow, HeavyCrossbow};
-static itemn random_armor[] = {Robe, LeatherArmor, LeatherArmor, LeatherArmor, StuddedArmor, StuddedArmor, HideArmor, HideArmor, ScaleMail, ChainMail, PlateMail};
-
-static item random_item(const slice<itemn>& source) {
-	return item(source.begin()[rand() % source.count]);
-}
-
-item random_item() {
-	static slice<itemn> source[] = {
-		random_small_blade, random_blade, random_weapon, random_bow,
-		random_armor, random_armor,
-	};
-	return random_item(maprnd(source));
-}
 
 static slice<variant> get_powers(itemn v) {
 	switch(v) {
