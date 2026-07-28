@@ -89,6 +89,7 @@ struct item {
 	bool istwohanded() const;
 	void join(item& v);
 	void setslot(item& v);
+	bool setpower(variant v);
 	bool unequip();
 	void use();
 	bool use(bool run);

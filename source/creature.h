@@ -151,6 +151,7 @@ void create_creature(short unsigned index_position, monstern type);
 void creature_every_minute();
 void creature_every_10_minutes();
 bool is_free(short unsigned i);
+bool is_skill(unsigned char v);
 void logs(messagen v);
 void logs(char separator, const char* format, ...);
 void make_move();

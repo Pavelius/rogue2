@@ -57,6 +57,10 @@ bool roll(int chance) {
 	return roll_result < chance;
 }
 
+bool is_skill(unsigned char v) {
+	return v >= FirstSkill && v <= LastSkill;
+}
+
 int damage_mode(abilityn mode) {
 	switch(mode) {
 	case BalisticSkill: return DamageRanged;

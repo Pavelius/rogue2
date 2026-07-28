@@ -84,6 +84,22 @@ variant item::getpower() const {
 	return powers[power];
 }
 
+static int find_power(slice<variant> source, variant v) {
+	for(auto& e : source) {
+		if(e == v)
+			return &e - source.begin();
+	}
+	return -1;
+}
+
+bool item::setpower(variant v) {
+	auto n = find_power(get_powers(type), v);
+	if(n == -1)
+		return false;
+	power = n;
+	return true;
+}
+
 static int get_weight(itemn v) {
 	switch(v) {
 	case LongSword: return 3 * lb;
