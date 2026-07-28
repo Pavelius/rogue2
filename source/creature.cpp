@@ -819,6 +819,22 @@ void creature::update() {
 	player = push;
 }
 
+static void drop_throphy(creature* player, int chance) {
+	for(auto& e : player->wears) {
+		if(!e)
+			continue;
+		if(!game_chance(chance))
+			continue;
+		drop_item(player->index, e);
+	}
+}
+
+static void drop_remains(creature* player) {
+}
+
+static void drop_treasure(creature* player) {
+}
+
 void creature::kill() {
 	need_update_creatures = true;
 	if(d100() < 40)
@@ -827,8 +843,9 @@ void creature::kill() {
 	auto human_killed = ishuman();
 	remove_order(this);
 	fixact(BloodVisual);
-	//	drop_treasure(this);
-	//	drop_throphy(this, 30);
+	drop_remains(this);
+	drop_treasure(this);
+	drop_throphy(this, 30);
 	if(opponent == this && player)
 		player->experience += get_experience_reward(opponent);
 	clear();

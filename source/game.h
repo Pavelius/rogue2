@@ -41,6 +41,7 @@ void add_answer_items(short unsigned area_index, short unsigned index, fnvisible
 void choose_player_move();
 long choose_menu(const char* cancel, const char* footer = 0);
 void end_game();
+bool game_chance(int v);
 void initialize_gui();
 void open_backpack();
 void open_drop_item();

@@ -221,6 +221,10 @@ void open_ground() {
 	update_player();
 }
 
+void drop_item(short unsigned index, item& v) {
+	add_item(current_area, index, v);
+}
+
 void pass_minute() {
 	game.minutes++;
 	update_enchantments(game.minutes);
@@ -323,6 +327,10 @@ static void initialize_strings() {
 static void create_enemy(short unsigned index, monstern type) {
 	create_creature(index, type);
 	player->set(Enemy);
+}
+
+bool game_chance(int v) {
+	return d100() < v;
 }
 
 #ifdef _DEBUG

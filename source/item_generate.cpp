@@ -40,8 +40,12 @@ static itemn weapons[] = {Staff, Spear, Spear, Axe, Axe, Mace, Mace, WarHammer, 
 static itemn bows[] = {ShortBow, ShortBow, LongBow, Crossbow, HeavyCrossbow};
 static itemn armors[] = {Robe, LeatherArmor, LeatherArmor, LeatherArmor, StuddedArmor, StuddedArmor, HideArmor, HideArmor, ScaleMail, ChainMail, PlateMail};
 
-static item random_item(const slice<itemn>& source) {
-	return item(source.begin()[rand() % source.count]);
+static itemn random(const slice<itemn>& source) {
+	return source.begin()[rand() % source.count];
+}
+
+static slice<itemn> random(const slice<slice<itemn>>& source) {
+	return source.begin()[rand() % source.count];
 }
 
 item random_item() {
@@ -49,7 +53,7 @@ item random_item() {
 		small_blades, blades, weapons, bows,
 		armors, armors,
 	};
-	return random_item(maprnd(source));
+	return random(maprnd(source));
 }
 
 BSDATA(treasurei) = {

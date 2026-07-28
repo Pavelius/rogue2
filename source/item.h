@@ -122,5 +122,6 @@ item* choose_inventory();
 
 void add_item(short unsigned area_index, short unsigned index, item& v);
 void add_item(creature* p, item& v);
+void drop_item(short unsigned index, item& v);
 void set_item_color(const item& it);
 void update_items();

@@ -168,6 +168,9 @@
     <ClCompile Include="localization.cpp">
       <Filter>Support</Filter>
     </ClCompile>
+    <ClCompile Include="item_generate.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sprite_util.h">

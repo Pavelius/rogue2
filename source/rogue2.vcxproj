@@ -44,6 +44,7 @@
     <ClCompile Include="information.cpp" />
     <ClCompile Include="io_stream.cpp" />
     <ClCompile Include="item.cpp" />
+    <ClCompile Include="item_generate.cpp" />
     <ClCompile Include="keyname.cpp" />
     <ClCompile Include="locale_ru.cpp" />
     <ClCompile Include="localization.cpp" />
