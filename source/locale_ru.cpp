@@ -19,7 +19,6 @@
 #include "game.h"
 #include "message.h"
 #include "stringlocale.h"
-#include "stringset.h"
 
 BSENUM(messagen) = {
 	"Приключения в Забытых Королевствах",
@@ -182,18 +181,17 @@ BSENUM(namen) = {
 	"Багра", "Дрогат", "Дурша", "Кургаш", "Крулла"
 };
 
-BSDATA(stringset) = {
-	{"Abilities", bsenum<abilityn>::names},
-	{"Commands", bsenum<commandn>::names},
-	{"Directions", bsenum<directionn>::names},
-	{"Items", bsenum<itemn>::names},
-	{"Magics", bsenum<magicn>::names},
-	{"Messages", bsenum<messagen>::names},
-	{"Monsters", bsenum<monstern>::names},
-	{"Names", bsenum<namen>::names},
-	{"Powers", spell_power_names},
-	{"Speechs", bsenum<speechn>::names},
-	{"Wears", bsenum<wearn>::names},
-};
-BSDATAF(stringset)
+slice<const char*> locale_data[] = {
+	bsenum<abilityn>::names,
+	bsenum<commandn>::names,
+	bsenum<directionn>::names,
+	bsenum<itemn>::names,
+	bsenum<magicn>::names,
+	bsenum<messagen>::names,
+	bsenum<monstern>::names,
+	bsenum<namen>::names,
+	bsenum<speechn>::names,
+	bsenum<wearn>::names,
+	spell_power_names,
+	{}};
 

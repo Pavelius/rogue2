@@ -23,4 +23,15 @@ struct stringvari {
 	fnprint		proc;
 };
 
+extern const char* string_params[10];
+class pushstring {
+	int			param;
+	const char* value;
+public:
+	pushstring(int param, const char* value) : param(param), value(string_params[param]) { string_params[param] = value; }
+	template<class T> pushstring(int param, T v) : pushstring(param, getname(v)) {}
+	~pushstring() { string_params[param] = value; }
+};
+
 bool stringvar_identifier(stringbuilder& sb, const char* identifier);
+bool stringparam_identifier(stringbuilder& sb, const char* identifier);

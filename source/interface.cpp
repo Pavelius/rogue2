@@ -1568,7 +1568,6 @@ static void console_print(char symbol, const char* format, const char* format_pa
 void initialize_gui() {
 	set_dark_theme();
 	print_proc = console_print;
-	print("Тестовая строка данных.");
 	font = metrics::font;
 	fore = colors::text;
 	metrics::padding = 4;

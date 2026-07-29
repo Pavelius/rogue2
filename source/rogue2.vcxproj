@@ -47,7 +47,6 @@
     <ClCompile Include="item_generate.cpp" />
     <ClCompile Include="keyname.cpp" />
     <ClCompile Include="locale_ru.cpp" />
-    <ClCompile Include="localization.cpp" />
     <ClCompile Include="main_util.cpp" />
     <ClCompile Include="math.cpp" />
     <ClCompile Include="monster.cpp" />
@@ -62,6 +61,7 @@
     <ClCompile Include="spell.cpp" />
     <ClCompile Include="sprite_util.cpp" />
     <ClCompile Include="stringbuilder.cpp" />
+    <ClCompile Include="stringlocale.cpp" />
     <ClCompile Include="stringvar.cpp" />
     <ClCompile Include="interface.cpp" />
     <ClCompile Include="timer.cpp" />
@@ -100,7 +100,6 @@
     <ClInclude Include="keyname.h" />
     <ClInclude Include="math.h" />
     <ClInclude Include="message.h" />
-    <ClInclude Include="stringset.h" />
     <ClInclude Include="point.h" />
     <ClInclude Include="posable.h" />
     <ClInclude Include="print.h" />

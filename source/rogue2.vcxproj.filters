@@ -165,11 +165,11 @@
     <ClCompile Include="area_generate.cpp">
       <Filter>Logic</Filter>
     </ClCompile>
-    <ClCompile Include="localization.cpp">
-      <Filter>Support</Filter>
-    </ClCompile>
     <ClCompile Include="item_generate.cpp">
       <Filter>Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="stringlocale.cpp">
+      <Filter>Support</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -310,9 +310,6 @@
     </ClInclude>
     <ClInclude Include="variant.h">
       <Filter>Logic</Filter>
-    </ClInclude>
-    <ClInclude Include="stringset.h">
-      <Filter>Support</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

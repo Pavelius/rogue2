@@ -14,11 +14,9 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-#include "bsdata.h"
 #include "io_stream.h"
 #include "slice.h"
 #include "stringbuilder.h"
-#include "stringset.h"
 
 namespace {
 struct locfile {
@@ -29,19 +27,21 @@ struct locfile {
 
 static locfile* loc;
 
+extern slice<const char*> locale_data[];
+
 static int total_size() {
 	auto n = 0;
-	for(auto& e : bsdata<stringset>())
-		n += e.strings.size();
+	for(auto p = locale_data; *p; p++)
+		n += p->size();
 	return n;
 }
 
 static void clear_locale() {
 	if(loc)
 		delete[] (char*)loc;
-	for(auto& e : bsdata<stringset>()) {
-		for(unsigned i = 0; i < e.strings.count; i++)
-			e.strings.data[i] = 0;
+	for(auto p = locale_data; *p; p++) {
+		for(unsigned i = 0; i < p->count; i++)
+			p->data[i] = 0;
 	}
 }
 
@@ -51,9 +51,9 @@ void read_locale(const char* url) {
 	if(!loc)
 		return;
 	auto pm = (const char*)loc + sizeof(locfile);
-	for(auto& e : bsdata<stringset>()) {
-		for(unsigned i = 0; i < e.strings.count; i++) {
-			e.strings.data[i] = pm;
+	for(auto p = locale_data; *p; p++) {
+		for(unsigned i = 0; i < p->count; i++) {
+			p->data[i] = pm;
 			pm = zend(pm); pm++;
 		}
 	}
@@ -65,9 +65,9 @@ void write_locale(const char* url) {
 	if(!file)
 		return;
 	file.write(&header, sizeof(header));
-	for(auto& e : bsdata<stringset>()) {
-		for(unsigned i = 0; i < e.strings.count; i++) {
-			auto pm = e.strings.data[i];
+	for(auto p = locale_data; *p; p++) {
+		for(unsigned i = 0; i < p->count; i++) {
+			auto pm = p->data[i];
 			auto sz = zlen(pm) + 1;
 			file.write(pm, sz);
 		}

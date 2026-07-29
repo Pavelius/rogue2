@@ -24,6 +24,7 @@
 #include "game.h"
 #include "itemlay.h"
 #include "message.h"
+#include "print.h"
 #include "pushvalue.h"
 #include "rand.h"
 #include "resid.h"
@@ -313,6 +314,8 @@ static void put_item(short unsigned i, itemn v) {
 static void game_string(stringbuilder& sb, const char* id) {
 	if(stringvar_identifier(sb, id))
 		return;
+	if(stringparam_identifier(sb, id))
+		return;
 	sb.add(id);
 }
 
@@ -344,6 +347,12 @@ static bool test_array() {
 	return source.count == 3;
 }
 
+static void test_strings() {
+	pushstring p1(1, Elf);
+	pushstring p2(2, Strenght);
+	print("“естова€ строка данных. Ёто %Param1 и его атрибут это %Param2.");
+}
+
 int main(int argc, char* argv[]) {
 	initialize_strings();
 #ifdef _DEBUG
@@ -355,6 +364,7 @@ int main(int argc, char* argv[]) {
 	srand(srand_time());
 	area_clear();
 	initialize_gui();
+	test_strings();
 	area_generate();
 	area_set(apos(3, 3), Grave);
 	area_set(apos(3, 4), Grave);
