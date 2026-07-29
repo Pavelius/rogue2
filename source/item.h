@@ -42,7 +42,8 @@ enum itemn : unsigned char {
 	ShortBow, LongBow, Crossbow, HeavyCrossbow,
 	Robe, LeatherArmor, StuddedArmor, HideArmor, ScaleMail, ChainMail, PlateMail,
 	BluePotion, GreenPotion, RedPotion,
-	LastItem = RedPotion,
+	Ration, Apple, Bread, Meat, Bones, BloodyRemains,
+	LastItem = BloodyRemains,
 };
 
 int get_pierce(itemn v);

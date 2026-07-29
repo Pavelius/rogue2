@@ -829,7 +829,21 @@ static void drop_throphy(creature* player, int chance) {
 	}
 }
 
+static itemn get_remains(monstern type) {
+	switch(type) {
+	case Boar:
+		return BloodyRemains;
+	default:
+		return BloodyRemains;
+	}
+}
+
 static void drop_remains(creature* player) {
+	auto chance = 15; // Default chance leave remains
+	if(game_chance(chance)) {
+		item it = get_remains(player->type);
+		drop_item(player->index, it);
+	}
 }
 
 static void drop_treasure(creature* player) {
@@ -839,10 +853,10 @@ void creature::kill() {
 	need_update_creatures = true;
 	if(d100() < 40)
 		area_set(index, Blooded);
-	// logs("ApplyKill");
+	fixact(BloodVisual);
+	logn(PlayerKilled);
 	auto human_killed = ishuman();
 	remove_order(this);
-	fixact(BloodVisual);
 	drop_remains(this);
 	drop_treasure(this);
 	drop_throphy(this, 30);

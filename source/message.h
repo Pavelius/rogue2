@@ -28,7 +28,7 @@ enum messagen : unsigned char {
 	ApplicationTitle,
 	Coins, Rounds,
 	MsgHeal, MsgCurePoison,
-	PlayerFoundSecretDoor, PlayerFoundTrap,
+	PlayerKilled, PlayerFoundSecretDoor, PlayerFoundTrap,
 	PlayerBlock, PlayerDodge,
 	PlayerPickUpItem, PlayerDropItem,
 	ItemGrowColor, ItemWearTotal,

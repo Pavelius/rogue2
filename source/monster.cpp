@@ -75,18 +75,6 @@ static monsteri monsters[] = {
 };
 static_assert(lenghtof(monsters) == (Wolf + 1), "Invalid tile frames data count");
 
-/*int getv(monstern v, abilityn a) {
-	switch(a) {
-	case Level: return monsters[v].level;
-	case Strenght: return monsters[v].strenght;
-	case Dexterity: return monsters[v].dexterity;
-	case Wits: return monsters[v].wits;
-	case WeaponSkill: return imax(15, monsters[v].level * 5);
-	case BalisticSkill: return imax(15, monsters[v].level * 5);
-	default: return 0;
-	}
-}*/
-
 const char* get_avatar(monstern v) {
 	return monsters[v].avatar;
 }

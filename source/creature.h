@@ -105,6 +105,10 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	void clear();
 	void damage(int v);
 	void enchant(spelln spell, unsigned duration);
+	void fixact(directionn d);
+	void fixact(visualn v);
+	void fixmsg(const char* format, int param, glown color);
+	void heal(int value);
 	bool is(abilityn v) const { return abilities[v] > 0; }
 	bool is(featn v) const { return featable::is(v); }
 	bool is(featn v, const item& m) const { return featable::is(v) || m.is(v); }
@@ -116,11 +120,8 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	bool ismirror() const { return is(Mirrorred); }
 	bool isunaware() const { return wait_seconds >= 25 * 4 * 6; }
 	bool isvisible() const;
-	void fixact(directionn d);
-	void fixact(visualn v);
-	void fixmsg(const char* format, int param, glown color);
-	void heal(int value);
 	void kill();
+	void logn(messagen v) const {}
 	void look(directionn d);
 	bool move(directionn d);
 	bool moveto(short unsigned ni);
