@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// 
+//
 //  Copyright 2026 by Pavel Chistyakov
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,3 +23,6 @@
 #define BSENUM(T) template<> const char* bsenum<T>::names[]
 #define BFENUM(T) template<> const int bsenum<T>::count = sizeof(bsenum<T>::names)/sizeof(bsenum<T>::names[0]);
 #define BAENUM(N) assert_enum(bsenum<decltype(N)>::names, N) BFENUM(decltype(N))
+
+void read_locale(const char* url);
+void write_locale(const char* url);

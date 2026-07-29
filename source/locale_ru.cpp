@@ -19,6 +19,7 @@
 #include "game.h"
 #include "message.h"
 #include "stringlocale.h"
+#include "stringset.h"
 
 BSENUM(messagen) = {
 	"Приключения в Забытых Королевствах",
@@ -47,14 +48,8 @@ BSENUM(speechn) = {
 	"Пожалуй оставлю это себе.",
 }; assert_enum(bsenum<speechn>::names, SayItsMine * 3 + 2)
 BSENUM(glown) = {
-	"Серым",
-	"Черным",
-	"Белым",
-	"Красным",
-	"Зеленым",
-	"Синим",
-	"Коричневым",
-	"Желтым",
+	"Серым", "Черным", "Белым", "Красным", "Зеленым",
+	"Синим", "Коричневым", "Желтым",
 }; assert_enum(bsenum<glown>::names, GlowYellow)
 BSENUM(abilityn) = {
 	"Уровень",
@@ -187,17 +182,18 @@ BSENUM(namen) = {
 	"Багра", "Дрогат", "Дурша", "Кургаш", "Крулла"
 };
 
-slice<const char*> locale_data[] = {
-	bsenum<messagen>::names,
-	bsenum<speechn>::names,
-	bsenum<abilityn>::names,
-	bsenum<wearn>::names,
-	bsenum<magicn>::names,
-	bsenum<monstern>::names,
-	bsenum<itemn>::names,
-	bsenum<directionn>::names,
-	bsenum<namen>::names,
-	bsenum<commandn>::names,
-	spell_power_names,
-	{}};
+BSDATA(stringset) = {
+	{"Abilities", bsenum<abilityn>::names},
+	{"Commands", bsenum<commandn>::names},
+	{"Directions", bsenum<directionn>::names},
+	{"Items", bsenum<itemn>::names},
+	{"Magics", bsenum<magicn>::names},
+	{"Messages", bsenum<messagen>::names},
+	{"Monsters", bsenum<monstern>::names},
+	{"Names", bsenum<namen>::names},
+	{"Powers", spell_power_names},
+	{"Speechs", bsenum<speechn>::names},
+	{"Wears", bsenum<wearn>::names},
+};
+BSDATAF(stringset)
 

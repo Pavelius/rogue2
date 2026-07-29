@@ -91,7 +91,6 @@
 		<Unit filename="keyname.cpp" />
 		<Unit filename="keyname.h" />
 		<Unit filename="locale_ru.cpp" />
-		<Unit filename="localization.cpp" />
 		<Unit filename="math.cpp" />
 		<Unit filename="math.h" />
 		<Unit filename="message.h" />
@@ -119,7 +118,10 @@
 		<Unit filename="spell.h" />
 		<Unit filename="stringbuilder.cpp" />
 		<Unit filename="stringbuilder.h" />
+		<Unit filename="stringlocale.cpp" />
 		<Unit filename="stringlocale.h" />
+		<Unit filename="stringset.cpp" />
+		<Unit filename="stringset.h" />
 		<Unit filename="stringvar.cpp" />
 		<Unit filename="stringvar.h" />
 		<Unit filename="timer.cpp" />
