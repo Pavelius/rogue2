@@ -1046,10 +1046,20 @@ static bool drink_potion(item& v, bool run) {
 	}
 }
 
+static bool eat_edible(item& v, bool run) {
+	player->actn(PlayerEat);
+	player->actn(TasteNormal);
+	player->heal(1);
+	v.clear();
+	return true;
+}
+
 bool item::use(bool run) {
 	switch(type) {
 	case RedPotion: case BluePotion: case GreenPotion:
 		return drink_potion(*this, run);
+	case Ration: case BloodyRemains:
+		return eat_edible(*this, run);
 	default:
 		return false;
 	}
@@ -1068,9 +1078,11 @@ short unsigned creature::bsi() const {
 void creature::heal(int v) {
 	if(v <= 0)
 		return;
-	fixmsg("%1i", v, GlowGreen);
+	auto last_hits = hits;
 	v += hits;
 	if(v >= hits_maximum)
 		v = hits_maximum;
 	hits = v;
+	if(hits > last_hits)
+		fixmsg("%1i", hits - last_hits, GlowGreen);
 }

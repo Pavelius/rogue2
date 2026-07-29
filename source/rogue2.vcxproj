@@ -100,6 +100,7 @@
     <ClInclude Include="keyname.h" />
     <ClInclude Include="math.h" />
     <ClInclude Include="message.h" />
+    <ClInclude Include="stringset.h" />
     <ClInclude Include="point.h" />
     <ClInclude Include="posable.h" />
     <ClInclude Include="print.h" />

@@ -311,5 +311,8 @@
     <ClInclude Include="variant.h">
       <Filter>Logic</Filter>
     </ClInclude>
+    <ClInclude Include="stringset.h">
+      <Filter>Support</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
