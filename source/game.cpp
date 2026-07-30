@@ -333,6 +333,10 @@ static void create_enemy(short unsigned index, monstern type) {
 }
 
 bool game_chance(int v) {
+	if(v <= 0)
+		return false;
+	if(v > 95)
+		v = 95;
 	return d100() < v;
 }
 

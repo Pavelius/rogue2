@@ -896,6 +896,23 @@ bool creature::resist(featn resist, featn immunity) const {
 	return false;
 }
 
+static featn get_immunity(featn v) {
+	switch(v) {
+	case PoisonResistance: return PoisonImmunity;
+	case DiseaseResist: return DiseaseImmunity;
+	case AcidResistance: return AcidImmunity;
+	case ColdResistance: return ColdImmunity;
+	case DeathResistance: return DeathImmunity;
+	case FireResistance: return FireImmunity;
+	case StunResistance: return StunImmunity;
+	default: return DeathImmunity;
+	}
+}
+
+bool creature::resist(featn v) const {
+	return resist(v, get_immunity(v));
+}
+
 int creature::getlos() const {
 	auto darkness = 0;
 	if(is(DarkVision))
@@ -1047,15 +1064,52 @@ static bool drink_potion(item& v, bool run) {
 }
 
 static bool eat_edible(item& v, bool run) {
+	int chance_disease = 0;
+	int chance_poison = 0;
+	int chance_raise_ability = 0;
+	int heal_hits = 0;
+	abilityn ability = Strenght;
 	player->actn(PlayerEat);
-	if(v.magic == Cursed) {
+	switch(v.magic) {
+	case Cursed:
 		player->actn(TasteBad);
 		player->damage(1);
-		player->add(Illness, 2); // Catch disease
-	} else {
+		chance_disease += 70;
+		heal_hits -= xrand(1, 2);
+		break;
+	case Mundane:
 		player->actn(TasteNormal);
-		player->heal(1);
+		if(game_chance(40))
+			heal_hits += 1;
+		break;
+	default:
+		player->actn(TasteGood);
+		heal_hits += xrand(1, 3);
+		break;
 	}
+	switch(v.type) {
+	case BloodyRemains:
+		if(player->type != Goblin)
+			chance_disease += 30;
+		break;
+	case Meat:
+		chance_disease += 5;
+		chance_raise_ability += 1;
+		break;
+	case Apple:
+		chance_raise_ability += 2;
+		break;
+	case Ration:
+		heal_hits += xrand(1, 2);
+		break;
+	default:
+		break;
+	}
+	if(game_chance(chance_disease) && !player->resist(DiseaseResist))
+		player->add(Illness, 1); // Catch disease
+	if(game_chance(chance_poison) && !player->resist(PoisonResistance))
+		player->add(Poison, 1); // Catch poison
+	player->addhits(heal_hits);
 	v.clear();
 	return true;
 }

@@ -99,6 +99,7 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	void act(char separator, const char* format, ...) const;
 	void actn(messagen v) const;
 	void add(abilityn v, int i);
+	void addhits(int value) { if(value > 0) heal(value); else damage(-value); }
 	bool apply(abilityn v, magicn magic, bool run);
 	bool apply(featn v, magicn magic, bool run);
 	bool canhear(short unsigned i) const;
@@ -129,6 +130,7 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	void remove(featn v) { featable::remove(v); }
 	void remove(spelln v) { spellable::remove(v); }
 	bool resist(featn resistane, featn immunity) const;
+	bool resist(featn resistane) const;
 	bool roll(abilityn v, int bonus = 0) const;
 	void say(speechn v) const;
 	void set(abilityn v, int i) { if(v<=Drunk) abilities[v] = (char)i; }
