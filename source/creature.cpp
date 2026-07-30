@@ -1048,8 +1048,14 @@ static bool drink_potion(item& v, bool run) {
 
 static bool eat_edible(item& v, bool run) {
 	player->actn(PlayerEat);
-	player->actn(TasteNormal);
-	player->heal(1);
+	if(v.magic == Cursed) {
+		player->actn(TasteBad);
+		player->damage(1);
+		player->add(Illness, 2); // Catch disease
+	} else {
+		player->actn(TasteNormal);
+		player->heal(1);
+	}
 	v.clear();
 	return true;
 }
