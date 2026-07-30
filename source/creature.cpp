@@ -1067,7 +1067,8 @@ static bool eat_edible(item& v, bool run) {
 	int chance_disease = 0;
 	int chance_poison = 0;
 	int chance_raise_ability = 0;
-	int heal_hits = 0;
+	int add_hits = 0;
+	int add_mana = 0;
 	abilityn ability = Strenght;
 	player->actn(PlayerEat);
 	switch(v.magic) {
@@ -1075,16 +1076,16 @@ static bool eat_edible(item& v, bool run) {
 		player->actn(TasteBad);
 		player->damage(1);
 		chance_disease += 70;
-		heal_hits -= xrand(1, 2);
+		add_hits -= xrand(1, 2);
 		break;
 	case Mundane:
 		player->actn(TasteNormal);
 		if(game_chance(40))
-			heal_hits += 1;
+			add_hits += 1;
 		break;
 	default:
 		player->actn(TasteGood);
-		heal_hits += xrand(1, 3);
+		add_hits += xrand(1, 3);
 		break;
 	}
 	switch(v.type) {
@@ -1100,7 +1101,7 @@ static bool eat_edible(item& v, bool run) {
 		chance_raise_ability += 2;
 		break;
 	case Ration:
-		heal_hits += xrand(1, 2);
+		add_hits += xrand(1, 2);
 		break;
 	default:
 		break;
@@ -1109,7 +1110,7 @@ static bool eat_edible(item& v, bool run) {
 		player->add(Illness, 1); // Catch disease
 	if(game_chance(chance_poison) && !player->resist(PoisonResistance))
 		player->add(Poison, 1); // Catch poison
-	player->addhits(heal_hits);
+	player->addhits(add_hits);
 	v.clear();
 	return true;
 }
