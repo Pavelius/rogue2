@@ -688,7 +688,7 @@
 1779890842 /home/user-331/projects/rogue2/source/array.h
 	"slice.h"
 
-1785319438 /home/user-331/projects/rogue2/source/creature.h
+1785421672 /home/user-331/projects/rogue2/source/creature.h
 	"direction.h"
 	"draw_object.h"
 	"draw_floatinfo.h"
@@ -766,7 +766,7 @@
 
 1779890842 /home/user-331/projects/rogue2/source/color.h
 
-1785319438 source:/home/user-331/projects/rogue2/source/creature.cpp
+1785421672 source:/home/user-331/projects/rogue2/source/creature.cpp
 	"area.h"
 	"bsdata.h"
 	"collection.h"
@@ -867,7 +867,7 @@
 1779890842 source:/home/user-331/projects/rogue2/source/draw_theme.cpp
 	"draw.h"
 
-1785319438 source:/home/user-331/projects/rogue2/source/game.cpp
+1785421672 source:/home/user-331/projects/rogue2/source/game.cpp
 	"answers.h"
 	"area.h"
 	"bsdata.h"
@@ -878,6 +878,7 @@
 	"game.h"
 	"itemlay.h"
 	"message.h"
+	"print.h"
 	"pushvalue.h"
 	"rand.h"
 	"resid.h"
@@ -888,7 +889,7 @@
 
 1779890842 /home/user-331/projects/rogue2/source/draw_column.h
 
-1779890842 /home/user-331/projects/rogue2/source/stringvar.h
+1785421672 /home/user-331/projects/rogue2/source/stringvar.h
 	"stringbuilder.h"
 
 1779890842 source:/home/user-331/projects/rogue2/source/indexa.cpp
@@ -903,7 +904,7 @@
 	"stringbuilder.h"
 	"stringvar.h"
 
-1785237598 source:/home/user-331/projects/rogue2/source/interface.cpp
+1785421672 source:/home/user-331/projects/rogue2/source/interface.cpp
 	"answers.h"
 	"area.h"
 	"bsdata.h"
@@ -952,13 +953,12 @@
 	"draw.h"
 	"stringbuilder.h"
 
-1785335163 source:/home/user-331/projects/rogue2/source/locale_ru.cpp
+1785421672 source:/home/user-331/projects/rogue2/source/locale_ru.cpp
 	"bsdata.h"
 	"creature.h"
 	"game.h"
 	"message.h"
 	"stringlocale.h"
-	"stringset.h"
 
 1785335689 /home/user-331/projects/rogue2/source/stringlocale.h
 	"stringbuilder.h"
@@ -1032,7 +1032,7 @@
 	"stringbuilder.h"
 	"slice.h"
 
-1779890842 source:/home/user-331/projects/rogue2/source/stringvar.cpp
+1785421672 source:/home/user-331/projects/rogue2/source/stringvar.cpp
 	"bsdata.h"
 	"stringvar.h"
 
@@ -1083,16 +1083,14 @@
 1785336129 /home/user-331/projects/rogue2/source/stringset.h
 	"slice.h"
 
-1785335573 source:/home/user-331/projects/rogue2/source/stringset.cpp
+1785336139 source:/home/user-331/projects/rogue2/source/stringset.cpp
 	"bsdata.h"
 	"rand.h"
 	"stringbuilder.h"
 	"stringset.h"
 
-1785334300 source:/home/user-331/projects/rogue2/source/stringlocale.cpp
-	"bsdata.h"
+1785421672 source:/home/user-331/projects/rogue2/source/stringlocale.cpp
 	"io_stream.h"
 	"slice.h"
 	"stringbuilder.h"
-	"stringset.h"
 
