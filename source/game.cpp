@@ -348,9 +348,8 @@ static bool test_array() {
 }
 
 static void test_strings() {
-	pushstring p1(1, Elf);
-	pushstring p2(2, Strenght);
-	print("“естова€ строка данных. Ёто %Param1 и его атрибут это %Param2.");
+	pushstring param(getname(Elf), getname(Strenght));
+	print("“естова€ строка данных. Ёто %P1 и его атрибут это %P2.");
 }
 
 int main(int argc, char* argv[]) {

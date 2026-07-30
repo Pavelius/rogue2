@@ -17,7 +17,7 @@
 #include "bsdata.h"
 #include "stringvar.h"
 
-const char* string_params[10];
+const char* string_params[4];
 
 bool stringvar_identifier(stringbuilder& sb, const char* identifier) {
 	auto pn = bsdata<stringvari>::find(identifier);
@@ -30,13 +30,9 @@ bool stringvar_identifier(stringbuilder& sb, const char* identifier) {
 
 bool stringparam_identifier(stringbuilder& sb, const char* identifier) {
 	if(identifier[0] == 'P'
-		&& identifier[1] == 'a'
-		&& identifier[2] == 'r'
-		&& identifier[3] == 'a'
-		&& identifier[4] == 'm'
-		&& isnum(identifier[5])
-		&& identifier[6] == 0) {
-		sb.add(string_params[identifier[5] - '0']);
+		&& identifier[1] >= '1' && identifier[1] <= '4'
+		&& identifier[2] == 0) {
+		sb.add(string_params[identifier[1] - '1']);
 		return true;
 	}
 	return false;
