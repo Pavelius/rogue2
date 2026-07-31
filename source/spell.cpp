@@ -115,14 +115,11 @@ bool item::apply(spelln v, bool run) {
 		}
 		break;
 	case CreateArtifact:
-		if(magic == Artifact)
+		if(!known_magic || !known_power || !power || magic == Artifact)
 			return false;
 		if(run) {
 			act(ItemGrowColor, GlowYellow);
-			if(!power)
-				setpower();
 			magic = Artifact;
-			known_magic = 1;
 		}
 		break;
 	default:
