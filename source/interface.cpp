@@ -1431,7 +1431,7 @@ void set_item_color(const item& it) {
 	else if(it.is(Artifact))
 		fore = fore.mix(colors::yellow, 128);
 	else
-		fore = fore.mix(colors::form, 128);
+		fore = fore.mix(colors::form, 196);
 }
 
 static void direction_keys() {

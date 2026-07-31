@@ -20,6 +20,7 @@
 #include "itemlay.h"
 #include "feats.h"
 #include "math.h"
+#include "message.h"
 #include "pushvalue.h"
 #include "rand.h"
 #include "slice.h"
@@ -259,24 +260,13 @@ bool item::broke() {
 	return false;
 }
 
-bool item::istwohanded() const {
-	switch(type) {
-	case GreatAxe:
-	case GreatSword:
-	case Staff:
-	case Spear:
-		return true;
-	default:
-		return false;
-	}
-}
-
 bool is_feat(itemn type, featn v) {
 	switch(v) {
 	case BleedingHit: return type == Claws || (type >= ShortSword && type <= GreatSword);
 	case StunningHit: return type == Mace || type == GreatMace || type == WarHammer || type == Staff;
 	case PierceHit: return type == Dagger;
 	case RetaliateHit: return type == Spear;
+	case Large: return type == GreatAxe || type == GreatSword || type == Staff || type == Spear;
 	default: return false;
 	}
 }
@@ -327,6 +317,12 @@ static const char* get_power_name(variant v) {
 	}
 }
 
+static void add_weapon_info(stringbuilder& sb, const item& it) {
+	sb.adds("%1%2i", getname(DamageMelee), it.damage());
+	if(it.istwohanded())
+		sb.adds(getname(MsgTwoHands));
+}
+
 const char* item::name() const {
 	static char temp[160];
 	stringbuilder sb(temp);
@@ -342,6 +338,18 @@ const char* item::name() const {
 	}
 	if(count > 1)
 		sb.adds("x%1i", count);
+	auto w = get_wear(type);
+	switch(w) {
+	case MeleeWeapon: case MeleeWeaponOffhand: case RangedWeapon:
+		add_weapon_info(sb, *this);
+		break;
+	case Torso: case Head: case Neck: case Girdle:
+	case Backward: case Gloves: case Elbows:
+	case Legs:
+		break;
+	default:
+		break;
+	}
 	sb.lower();
 	return temp;
 }

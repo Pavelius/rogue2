@@ -19,7 +19,7 @@
 #include "flagable.h"
 
 enum featn : unsigned char {
-	DarkVision,
+	DarkVision, Large,
 	BleedingHit, MightyHit, ParalizeHit, PierceHit, StunningHit, PoisonHit, PushHit, VorpalHit, RetaliateHit,
 	WeakPoison, StrongPoison, DeathPoison, ColdDamage, FireDamage,
 	AcidResistance, ColdResistance, DeathResistance, DiseaseResist, FireResistance, PoisonResistance, StunResistance,

@@ -27,7 +27,7 @@ enum glown : unsigned char {
 enum messagen : unsigned char {
 	ApplicationTitle,
 	Coins, Rounds,
-	MsgHeal, MsgCurePoison,
+	MsgHeal, MsgCurePoison, MsgTwoHands,
 	TasteBad, TasteNormal, TasteGood,
 	PlayerEat, PlayerKilled, PlayerFoundSecretDoor, PlayerFoundTrap,
 	PlayerBlock, PlayerDodge,
