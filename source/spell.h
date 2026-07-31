@@ -19,6 +19,3 @@ struct spellable {
 	void remove(spelln v) { spells &= ~(1 << v); }
 };
 int get_mana(spelln v);
-
-bool use_spell(spelln v, creature* opponent, bool run);
-bool use_spell(spelln v, item* target, bool run);

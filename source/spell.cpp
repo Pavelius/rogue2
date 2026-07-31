@@ -30,46 +30,46 @@ static void area_set_near(short unsigned i, areafn v, int maximum) {
 		area_set(to(i, source[i], i), Webbed);
 }
 
-bool use_spell(spelln v, creature* opponent, bool run) {
-	if(opponent->is(v))
+bool creature::apply(spelln v, bool run) {
+	if(is(v))
 		return false;
 	switch(v) {
 	case CureLightWounds:
-		if(opponent->hits >= opponent->hits_maximum)
+		if(hits >= hits_maximum)
 			return false;
 		if(run)
-			opponent->heal(xrand(1, 6) + 1);
+			heal(xrand(1, 6) + 1);
 		break;
 	case CureSeriousWounds:
-		if(opponent->hits >= opponent->hits_maximum)
+		if(hits >= hits_maximum)
 			return false;
 		if(run)
-			opponent->heal(xrand(2, 12) + 3);
+			heal(xrand(2, 12) + 3);
 		break;
 	case CureCriticalWounds:
-		if(opponent->hits >= opponent->hits_maximum)
+		if(hits >= hits_maximum)
 			return false;
 		if(run)
-			opponent->heal(xrand(3, 18) + 5);
+			heal(xrand(3, 18) + 5);
 		break;
 	case CurePoison:
-		if(!opponent->abilities[Poison])
+		if(!abilities[Poison])
 			return false;
 		if(run) {
 			auto v = xrand(2, 12);
-			opponent->fixmsg(getname(MsgCurePoison), v, GlowGreen);
+			fixmsg(getname(MsgCurePoison), v, GlowGreen);
 		}
 		break;
 	case MageArmor:
 		if(run)
-			opponent->enchant(MageArmor, xrand(3 * Hour, 5 * Hour));
+			enchant(MageArmor, xrand(3 * Hour, 5 * Hour));
 		break;
 	case Web:
-		if(area_is(opponent->index, Webbed))
+		if(area_is(index, Webbed))
 			return false;
 		if(run) {
-			area_set(opponent->index, Webbed);
-			area_set_near(opponent->index, Webbed, 1 + player->get(Level) / 4);
+			area_set(index, Webbed);
+			area_set_near(index, Webbed, 1 + player->get(Level) / 4);
 		}
 		break;
 	default:
@@ -78,48 +78,51 @@ bool use_spell(spelln v, creature* opponent, bool run) {
 	return true;
 }
 
-bool use_spell(spelln v, item* target, bool run) {
-	pushvalue push(last_item, target);
+bool item::apply(spelln v, bool run) {
 	switch(v) {
 	case BlessItem:
-		if(target->magic >= Blessed)
+		if(magic >= Blessed)
 			return false;
 		if(run) {
-			target->magic = Blessed;
-			target->known_magic = 1;
+			magic = Blessed;
+			known_magic = 1;
 		}
 		break;
 	case DetectMagicItem:
-		if(target->known_magic)
+		if(known_magic)
 			return false;
 		if(run)
-			target->known_magic = 1;
+			known_magic = 1;
 		break;
 	case EnchantItem:
-		if(target->power)
+		if(power)
 			return false;
 		if(run) {
 		}
 		break;
 	case IdentifyItem:
-		if(target->known_power)
+		if(known_power)
 			return false;
 		if(run)
-			target->known_power = 1;
+			known_power = 1;
 		break;
 	case UncurseItem:
-		if(!target->known_magic || target->magic != Cursed)
-			return false;
-		if(run)
-			target->magic = Mundane;
-		break;
-	case CreateArtifact:
-		if(target->magic == Artifact)
+		if(!known_magic || magic != Cursed)
 			return false;
 		if(run) {
-			player->wears[MeleeWeapon].act(ItemGrowColor, GlowYellow);
-			target->magic = Artifact;
-			target->known_magic = 1;
+			act(ItemGrowColor, GlowBlue);
+			magic = Mundane;
+		}
+		break;
+	case CreateArtifact:
+		if(magic == Artifact)
+			return false;
+		if(run) {
+			act(ItemGrowColor, GlowYellow);
+			if(!power)
+				setpower();
+			magic = Artifact;
+			known_magic = 1;
 		}
 		break;
 	default:

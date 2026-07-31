@@ -80,6 +80,7 @@ struct item {
 	int speed() const;
 	int	weight() const;
 	void act(messagen v, glown glow) const;
+	bool apply(spelln v, bool run = true);
 	bool broke();
 	void clear() { count = 0; type = (itemn)0; properties = 0; }
 	bool is(magicn v) const { return magic == v; }
@@ -90,6 +91,7 @@ struct item {
 	bool istwohanded() const;
 	void join(item& v);
 	void setslot(item& v);
+	bool setpower();
 	bool setpower(variant v);
 	bool unequip();
 	void use();

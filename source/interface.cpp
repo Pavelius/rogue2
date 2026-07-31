@@ -1417,8 +1417,8 @@ static void player_move_cmd() {
 
 static void test_scene() {
 	auto p = player->wears + MeleeWeapon;
-	use_spell(CreateArtifact, p,true);
-	use_spell(IdentifyItem, p, true);
+	p->apply(CreateArtifact);
+	p->apply(IdentifyItem);
 }
 
 void set_item_color(const item& it) {

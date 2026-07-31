@@ -72,7 +72,13 @@ static int get_bonus(magicn v) {
 	return 0;
 }
 
-void add_value(abilityn v, int value) {
+static void update_derived() {
+	player->hits_maximum = player->abilities[Hits];
+	player->hits_maximum += player->abilities[Strenght] / 4;
+	player->hits_maximum += player->abilities[Level] * 5;
+}
+
+static void add_value(abilityn v, int value) {
 	value += player->abilities[v];
 	if(value > 120)
 		value = 120;
@@ -81,10 +87,39 @@ void add_value(abilityn v, int value) {
 	player->abilities[v] = (char)value;
 }
 
-static void update_derived() {
-	player->hits_maximum = player->abilities[Hits];
-	player->hits_maximum += player->abilities[Strenght] / 4;
-	player->hits_maximum += player->abilities[Level] * 5;
+static void apply_boost(variant v) {
+	switch(v.type) {
+	case Ability: player->add((abilityn)v.value, 5); break;
+	case Feat: player->set((featn)v.value); break;
+	case Spell: player->spellable::set((spelln)v.value); break;
+	default: break;
+	}
+}
+
+static void apply_cursed(variant v) {
+	switch(v.type) {
+	case Ability: player->add((abilityn)v.value, -10); break;
+	case Feat: player->set((featn)v.value); break;
+	case Spell: player->spellable::set((spelln)v.value); break;
+	default: break;
+	}
+}
+
+static void apply_boost(variant v, magicn magic) {
+	if(!v)
+		return;
+	switch(magic) {
+	case Cursed: apply_cursed(v); break;
+	default: apply_boost(v); break;
+	}
+}
+
+static void update_wear_items() {
+	for(auto& e : player->wears) {
+		if(!e || !e.known_magic)
+			continue;
+		apply_boost(e.getpower(), e.magic);
+	}
 }
 
 static void update_abilities() {
@@ -117,15 +152,6 @@ static void copy(statable& v1, const statable& v2) {
 	v1 = v2;
 }
 
-static void apply_boost(variant v) {
-	switch(v.type) {
-	case Ability: player->add((abilityn)v.value, 5); break;
-	case Feat: player->set((featn)v.value); break;
-	case Spell: player->spellable::set((spelln)v.value); break;
-	default: break;
-	}
-}
-
 static void update_boost_effect() {
 	short unsigned parent = player->bsi();
 	for(auto& e : bsdata<enchanti>()) {
@@ -137,6 +163,8 @@ static void update_boost_effect() {
 void update_player() {
 	copy(*player, player->basic);
 	update_abilities();
+	update_wear_items();
+	update_boost_effect();
 	update_derived();
 }
 

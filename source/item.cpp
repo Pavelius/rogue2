@@ -20,6 +20,7 @@
 #include "itemlay.h"
 #include "feats.h"
 #include "math.h"
+#include "pushvalue.h"
 #include "rand.h"
 #include "slice.h"
 #include "stringbuilder.h"
@@ -41,6 +42,10 @@ static variant swords_powers[] = {
 	Variant,
 	WeaponSkill, DamageMelee, Dexterity,
 };
+static variant pierce_melee_weapon_powers[] = {
+	Variant,
+	WeaponSkill, DamageMelee, Dexterity,
+};
 static variant no_powers[] = {Variant};
 static variant potion_powers[] = {
 	Hits, Mana, Strenght, Dexterity, Wits, Regenerating, Boosting, Poison, Illness, Experience,
@@ -53,6 +58,8 @@ static slice<variant> get_powers(itemn v) {
 	switch(v) {
 	case Dagger: case LongSword: case ShortSword: case GreatSword:
 		return swords_powers;
+	case Spear:
+		return pierce_melee_weapon_powers;
 	case BluePotion: case GreenPotion: case RedPotion:
 		return potion_powers;
 	default:
@@ -80,6 +87,22 @@ bool item::setpower(variant v) {
 	if(n == -1)
 		return false;
 	power = n;
+	return true;
+}
+
+bool item::setpower() {
+	auto source = get_powers(type);
+	if(!source)
+		return false;
+	auto is_magical = source.data[0].operator bool();
+	if(!is_magical) {
+		// If first item is empthy power, then this is item, that can be powerless.
+		// Exclude this case.
+		if(source.size() == 1)
+			return false;
+		power = 1 + rand() % (source.size() - 1);
+	} else
+		power = rand() % source.size();
 	return true;
 }
 
@@ -394,5 +417,6 @@ bool item::unequip() {
 }
 
 void item::act(messagen v, glown glow) const {
+	pushvalue push(last_item, const_cast<item*>(this));
 	player->act(' ', getname(v), getname(glow));
 }

@@ -102,6 +102,7 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	void addhits(int value) { if(value > 0) heal(value); else damage(-value); }
 	bool apply(abilityn v, magicn magic, bool run);
 	bool apply(featn v, magicn magic, bool run);
+	bool apply(spelln v, bool run);
 	bool canhear(short unsigned i) const;
 	void clear();
 	void damage(int v);
