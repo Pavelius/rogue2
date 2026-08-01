@@ -14,8 +14,10 @@ enum spelln : unsigned char {
 };
 struct spellable {
 	unsigned spells;
-	bool is(spelln v) const { return (spells & (1 << v)) != 0; }
-	void set(spelln v) { spells |= (1 << v); }
-	void remove(spelln v) { spells &= ~(1 << v); }
+	constexpr bool is(spelln v) const { return (spells & (1 << v)) != 0; }
+	constexpr void set(spelln v) { spells |= (1 << v); }
+	constexpr void remove(spelln v) { spells &= ~(1 << v); }
 };
 int get_mana(spelln v);
+
+void choose_spell_targets(spelln spell);

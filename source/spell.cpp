@@ -1,4 +1,5 @@
 #include "area.h"
+#include "collectiona.h"
 #include "creature.h"
 #include "game.h"
 #include "message.h"
@@ -18,6 +19,30 @@ int get_mana(spelln v) {
 	case Teleport: return 40;
 	case Gate: return 50;
 	default: return 3;
+	}
+}
+
+static bool is_hostile(spelln v) {
+	switch(v) {
+	case BurningHands:
+	case FireBolt:
+	case IceSpear:
+	case MagicMissile:
+	case Entaglement:
+	case HorrorScare:
+		return true;
+	default:
+		return false;
+	}
+}
+
+static variant get_target(spelln v) {
+	switch(v) {
+	case CureLightWounds: case CureSeriousWounds: case CureCriticalWounds:
+	case MageArmor: case MageShield: case LightSpell: case Sleep: case Web:
+		return Monster;
+	default:
+		return Variant;
 	}
 }
 
@@ -124,6 +149,48 @@ bool item::apply(spelln v, bool run) {
 		break;
 	default:
 		return false;
+	}
+	return true;
+}
+
+void choose_spell_targets(spelln spell) {
+	targets.clear();
+	switch(spell) {
+	case Tile:
+		break;
+	case Monster:
+		if(is_hostile(spell)) {
+			for(auto p : enemies) {
+				if(p->apply(spell, false))
+					targets.add(p);
+			}
+		} else {
+			for(auto p : parcipants) {
+				if(p->apply(spell, false))
+					targets.add(p);
+			}
+		}
+		break;
+	}
+}
+
+bool creature::cast(spelln spell, int mana_cost, const char* fail_targets, bool run) {
+	if(mana_cost > 0) {
+		if(mana < mana_cost) {
+			act(NotEnoughMana);
+			return false;
+		}
+	}
+	choose_spell_targets(spell);
+	if(!targets) {
+		if(fail_targets)
+			act(' ', fail_targets, getname(spell));
+		return false;
+	}
+	auto maximum_targets = 1;
+	if(run) {
+		if(mana_cost)
+			mana -= mana_cost;
 	}
 	return true;
 }

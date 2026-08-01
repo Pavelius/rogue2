@@ -22,7 +22,7 @@
 struct creature;
 struct itemlay;
 
-extern collectionv<creature> creatures;
+extern collectionv<creature> creatures, parcipants, enemies;
 extern collectionv<itemlay> items;
 
 enum durationn : unsigned {

@@ -48,10 +48,11 @@ enum abilityn : unsigned char {
 enum monstern : unsigned char {
 	Human, Dwarf, Elf,
 	Goblin, GoblinFemale,
-	Bear, Boar, DireBoar, DireWolf, Dog,
-	GiantFrog, GiantBat, GiantLizard, GiantSpider, GiantAnt,
+	Bear, Boar, Wolf, Dog, DireBoar, DireWolf,
+	StagBeetle,
+	GiantFrog, GiantBat, GiantLizard, GiantSpider,
+	GiantAnt, GiantAntWarrior, GiantAntQueen,
 	Rabbit, RabbitFemale, Racoon, Rat,
-	StagBeetle, Wolf,
 	Skeleton, Zombie,
 	FirstMonster = Goblin, LastMonster = Zombie,
 };
@@ -105,6 +106,7 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	bool apply(featn v, magicn magic, bool run);
 	bool apply(spelln v, bool run);
 	bool canhear(short unsigned i) const;
+	bool cast(spelln spell, int mana_cost, const char* fail_targets, bool run);
 	void clear();
 	void damage(int v);
 	void enchant(spelln spell, unsigned duration);

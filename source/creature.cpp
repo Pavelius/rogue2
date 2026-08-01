@@ -37,7 +37,7 @@ creature* player;
 creature* opponent;
 static int roll_result, last_value;
 
-collectionv<creature> creatures, enemies;
+collectionv<creature> creatures, parcipants, enemies;
 bool need_update_creatures;
 bool need_end_turn;
 
@@ -502,7 +502,7 @@ static void make_attack(item& weapon, int attack_skill, int damage_percent) {
 		opponent->damage(damage_result);
 		poison_attack(weapon);
 		if(player->is(CorrozionHit, weapon))
-			acid_attack(opponent, xrand(1, 2));
+			acid_attack(opponent, 1);
 		if(opponent->is(RetaliateHit, opponent->wears[MeleeWeapon])) {
 			if(!player->roll(Dodge))
 				player->damage(1);
@@ -698,10 +698,18 @@ static void ready_spells() {
 }
 
 static void ready_actions() {
+	update_creatures();
 	compare_index = player->index;
-	enemies = creatures;
+	// Filter visble parcipants
+	parcipants.clear();
+	for(auto p : creatures) {
+		if(area_range(player->index, p->index) <= 4)
+			parcipants.add(p);
+	}
+	parcipants.sort(compare_distace);
+	// Filter visble enemies
+	enemies = parcipants;
 	enemies.match(is_enemy, true);
-	enemies.sort(compare_distace);
 	if(enemies)
 		opponent = *enemies.begin();
 	else
@@ -726,8 +734,8 @@ void make_move() {
 	if(!player->operator bool())
 		return; // Dead from blooding, burning, cold or other bad
 	// check_levelup();
-	ready_spells();
 	ready_actions();
+	ready_spells();
 	// check_horror();
 	if(player->ishuman()) {
 		ready_skills();

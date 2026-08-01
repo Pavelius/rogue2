@@ -38,7 +38,6 @@ enum itemn : unsigned char {
 	CP, SP, GP,
 	Staff, Spear, Axe, Mace, WarHammer, GreatMace, GreatAxe,
 	Dagger, ShortSword, LongSword, Scimitar, GreatSword,
-	Claws, Mandibules,
 	ShortBow, LongBow, Crossbow, HeavyCrossbow,
 	Robe, LeatherArmor, StuddedArmor, HideArmor, ScaleMail, ChainMail, PlateMail,
 	LeatherBoots, IronBoots,

@@ -20,7 +20,7 @@
 #include "slice.h"
 #include "math.h"
 
-struct statblock : featable, statable {
+struct statblock : featable, statable, spellable {
 	itemn items[4];
 	constexpr statblock() : featable(), statable(), items{} {}
 	template<typename T, typename... Ts>
@@ -29,6 +29,9 @@ struct statblock : featable, statable {
 	}
 	constexpr void set(featn v) {
 		feats[v / 32] = 1 << (v % 32);
+	}
+	constexpr void set(spelln v) {
+		spellable::set(v);
 	}
 	constexpr void set(itemn v) {
 		for(auto& e : items) {
@@ -64,21 +67,23 @@ static monsteri monsters[] = {
 	{1, Goblin, 10, 30, 10, "0", {Dagger, Dodge}}, // Goblin
 	{1, Goblin, 8, 32, 11, "0_f", {Female, Dagger, Dodge}}, // Goblin Female
 	{8, Bear, 50, 20, 4, "347"}, // Bear
-	{4, Boar, 30, 25, 3, "357"}, // Boar
-	{5, Boar, 45, 25, 3, "478", {StunningHit, PushHit}}, // DireBoar
-	{5, Wolf, 35, 30, 4, "91", {BleedingHit}}, // DireWolf
-	{2, Dog, 20, 30, 4, "6"}, // Dog
-	{2, GiantFrog, 20, 25, 3, "9"}, // GiantFrog
+	{4, Boar, 30, 25, 3, "357", {Block}}, // Boar
+	{3, Wolf, 20, 30, 4, "113", {BleedingHit, WeaponSkill}}, // Wolf
+	{5, Boar, 45, 25, 3, "478", {Block, StunningHit}}, // DireBoar
+	{5, Wolf, 35, 30, 4, "91", {BleedingHit, WeaponSkill, DamageMelee}}, // DireWolf
+	{2, Dog, 20, 30, 4, "6", {WeaponSkill}}, // Dog
+	{10, StagBeetle, 30, 15, 1, "26", {StunningHit}}, // StagBeelte
+	{2, GiantFrog, 20, 25, 3, "9", {DamageMelee}}, // GiantFrog
 	{1, GiantBat, 10, 30, 3, "2"}, // GiantBat
 	{6, GiantLizard, 40, 20, 2, "78", {Armor, Armor}}, // GiantLizard
-	{4, GiantSpider, 35, 20, 1, "29", {PoisonHit}}, // GiantSpider
-	{1, GiantAnt, 10, 20, 1, "10", {CorrozionHit, Mandibules}}, // GiantAnt
+	{4, GiantSpider, 35, 20, 1, "29", {StrongPoison}}, // GiantSpider
+	{1, GiantAnt, 10, 20, 1, "10", {WeakPoison}}, // GiantAnt
+	{2, GiantAnt, 15, 20, 1, "11", {WeakPoison}}, // GiantAntWarrior
+	{10, GiantAnt, 40, 20, 3, "12", {WeakPoison, SummonMinions}}, // GiantAntQueen
 	{1, Rabbit, 6, 20, 3, "103"}, // Rabbit
 	{1, Rabbit, 5, 22, 3, "104"}, // RabbitFemale
 	{2, Racoon, 10, 30, 3, "89"}, // Racoon
 	{1, Rat, 5, 30, 3, "3"}, // Rat
-	{10, StagBeetle, 30, 15, 1, "26", {StunningHit}}, // StagBeelte
-	{3, Wolf, 20, 30, 4, "113", {BleedingHit, Claws}}, // Wolf
 	{1, Skeleton, 20, 20, 10, "8", {Armor, Block, Spear}}, // Skeleton
 	{2, Zombie, 30, 10, 8, "16", {Dagger}}, // Zombie
 };

@@ -144,7 +144,9 @@ static int get_cost(itemn v) {
 
 static int get_damage(itemn v) {
 	switch(v) {
-	case Mandibules: case Claws: case Dagger:
+	case CP: // Unarmed attack
+		return 2;
+	case Dagger:
 		return 3;
 	case ShortSword: case Axe: case Spear: case Mace:
 		return 4;
@@ -178,7 +180,6 @@ static int get_weapon_speed(itemn v) {
 int item::pierce() const {
 	switch(type) {
 	case Axe: return 1;
-	case Claws: return 1;
 	case GreatAxe: return 2;
 	case Spear: return 3;
 	default: return 0;
@@ -188,7 +189,7 @@ int item::pierce() const {
 wearn item::wear() const {
 	if(type >= CP && type <= GP)
 		return Backpack;
-	else if(type >= Staff && type <= Mandibules)
+	else if(type >= Staff && type <= GreatSword)
 		return MeleeWeapon;
 	else if(type >= ShortBow && type <= HeavyCrossbow)
 		return RangedWeapon;
@@ -272,7 +273,7 @@ bool item::broke() {
 
 bool item::is(featn v) const {
 	switch(v) {
-	case BleedingHit: return type == Claws || (type >= ShortSword && type <= GreatSword);
+	case BleedingHit: return (type >= ShortSword && type <= GreatSword);
 	case StunningHit: return type == Mace || type == GreatMace || type == WarHammer || type == Staff;
 	case PierceHit: return type == Dagger || type==Spear;
 	case RetaliateHit: return type == Spear;

@@ -2,14 +2,16 @@
 
 enum abilityn : unsigned char;
 enum featn : unsigned char;
+enum featuren : unsigned char;
 enum gendern : unsigned char;
 enum itemn : unsigned char;
 enum monstern : unsigned char;
 enum spelln : unsigned char;
+enum tilen : unsigned char;
 
 enum variantn : unsigned char {
 	Variant,
-	Ability, Feat, Gender, Item, Monster, Spell
+	Ability, Feat, Feature, Gender, Item, Monster, Spell, Tile,
 };
 union variant {
 	struct {
@@ -20,10 +22,12 @@ union variant {
 	constexpr variant() : u(0) {}
 	constexpr variant(abilityn v) : type(Ability), value(v) {}
 	constexpr variant(featn v) : type(Feat), value(v) {}
+	constexpr variant(featuren v) : type(Feature), value(v) {}
 	constexpr variant(gendern v) : type(Gender), value(v) {}
 	constexpr variant(itemn v) : type(Item), value(v) {}
 	constexpr variant(monstern v) : type(Monster), value(v) {}
 	constexpr variant(spelln v) : type(Spell), value(v) {}
+	constexpr variant(tilen v) : type(Tile), value(v) {}
 	constexpr variant(variantn v) : type(Variant), value(v) {}
 	constexpr bool operator==(const variant& v) const { return u == v.u; }
 	constexpr explicit operator bool() const { return u != 0; }
