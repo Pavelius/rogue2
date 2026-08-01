@@ -110,11 +110,18 @@ static const char* inventory_item_weight(int index, long value, const char* form
 }
 
 static const char* inventory_item(int index, long value, const char* format) {
+	pushfore push;
 	auto p = (item*)value;
 	set_item_color(*p);
-	if(*p)
-		return p->name();
-	return "-";
+	if(*p) {
+		text(p->name());
+		caret.x = text_next.x + 4;
+		auto p = (item*)value;
+		fore = colors::gray;
+		text(p->description());
+	} else
+		text("-");
+	return 0;
 }
 
 static drawcolumn backpack_columns[] = {
@@ -133,7 +140,8 @@ item* choose_inventory() {
 	an.clear();
 	for(auto v = MeleeWeapon; v < Backpack; v = (wearn)(v + 1))
 		an.add((long)(player->wears + v), getname(v));
-	char footer[260]; stringbuilder sb(footer); sb.add(getname(ItemWearTotal), str_weight(player->totalweight(), "0"));
+	char footer[260]; stringbuilder sb(footer); sb.clear();
+	sb.add(getname(ItemWearTotal), str_weight(player->totalweight(), "0"));
 	return (item*)choose_menu(getname(Cancel), footer);
 }
 

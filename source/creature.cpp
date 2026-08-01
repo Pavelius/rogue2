@@ -136,6 +136,13 @@ static void update_abilities() {
 	add_value(Armor, player->wears[Head].armor());
 	add_value(Armor, player->wears[Elbows].armor());
 	add_value(Armor, player->wears[Legs].armor());
+	// Block
+	add_value(Armor, player->wears[Torso].block());
+	add_value(Armor, player->wears[Backward].block());
+	add_value(Armor, player->wears[MeleeWeaponOffhand].block());
+	add_value(Armor, player->wears[Head].block());
+	add_value(Armor, player->wears[Elbows].block());
+	add_value(Armor, player->wears[Legs].block());
 	// Dodge bonuses
 	add_value(Dodge, player->abilities[Dexterity] / 3);
 	add_value(Dodge, player->wears[Torso].dodge());

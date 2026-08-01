@@ -70,10 +70,12 @@ struct item {
 	explicit operator bool() const { return count != 0; }
 	creature* owner() const;
 	wearn equiped() const;
+	const char* description() const;
 	const char* name() const;
 	const char* fullname() const;
 	variant getpower() const;
 	int	armor() const;
+	int	block() const;
 	int	cost() const;
 	int damage() const;
 	int dodge() const;

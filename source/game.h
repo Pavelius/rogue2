@@ -48,5 +48,6 @@ void open_drop_item();
 void open_inventory();
 void open_ground();
 void pass_minute();
+void paint_item_description(int index, long value, const char* format);
 void skip_long_time();
 void wait_all();

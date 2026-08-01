@@ -861,7 +861,8 @@ static void answer_paint_cell_small(int index, long value, const char* format, f
 			caret = push_origin;
 			width = p->width;
 			auto pn = p->proc(index, value, format);
-			texta(pn, p->flags);
+			if(pn)
+				texta(pn, p->flags);
 			push_origin.x += p->width;
 		}
 	} else

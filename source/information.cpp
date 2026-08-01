@@ -39,19 +39,9 @@ static void addv(stringbuilder& sb, abilityn id) {
 	addv(sb, getname(id), player->abilities[id]);
 }
 
-static void player_character_panel(stringbuilder& sb) {
-	sb.addn(player->name());
-	sb.addn(getname(player->type));
-	addv(sb, Strenght);
-	addv(sb, Dexterity);
-	addv(sb, Wits);
-	addv(sb, WeaponSkill);
-}
-
 BSDATA(stringvari) = {
 	{"Item", item_name},
 	{"ListOfFeats", list_of_feats},
 	{"Player", player_name},
-	{"PlayerCharacterPanel", player_character_panel},
 };
 BSDATAF(stringvari)

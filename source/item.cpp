@@ -155,18 +155,6 @@ static int get_damage(itemn v) {
 	}
 }
 
-static int get_armor(itemn v) {
-	switch(v) {
-	case LeatherArmor: return 1;
-	case StuddedArmor: return 1;
-	case HideArmor: return 2;
-	case ChainMail: return 3;
-	case ScaleMail: return 4;
-	case PlateMail: return 5;
-	default: return 0;
-	}
-}
-
 static int get_weapon_speed(itemn v) {
 	switch(v) {
 	case LongSword: return 7;
@@ -253,7 +241,22 @@ int item::dodge() const {
 }
 
 int item::armor() const {
-	return get_armor(type);
+	switch(type) {
+	case LeatherArmor: return 1;
+	case StuddedArmor: return 1;
+	case HideArmor: return 2;
+	case ChainMail: return 3;
+	case ScaleMail: return 4;
+	case PlateMail: return 5;
+	default: return 0;
+	}
+}
+
+int item::block() const {
+	switch(type) {
+	case StuddedArmor: return 1;
+	default: return 0;
+	}
 }
 
 bool item::broke() {
@@ -318,9 +321,33 @@ static const char* get_power_name(variant v) {
 }
 
 static void add_weapon_info(stringbuilder& sb, const item& it) {
-	sb.adds("%1%2i", getname(DamageMelee), it.damage());
+	sb.adds("(%1i)", it.damage());
 	if(it.istwohanded())
 		sb.adds(getname(MsgTwoHands));
+}
+
+static void add_armor_info(stringbuilder& sb, const item& it) {
+	sb.adds("(%1i,%2i)", it.armor(), it.block());
+}
+
+const char* item::description() const {
+	static char temp[160];
+	stringbuilder sb(temp); sb.clear();
+	auto w = get_wear(type);
+	switch(w) {
+	case MeleeWeapon: case MeleeWeaponOffhand: case RangedWeapon:
+		add_weapon_info(sb, *this);
+		break;
+	case Torso: case Head: case Neck: case Girdle:
+	case Backward: case Gloves: case Elbows:
+	case Legs:
+		add_armor_info(sb, *this);
+		break;
+	default:
+		break;
+	}
+	sb.lower();
+	return temp;
 }
 
 const char* item::name() const {
@@ -338,18 +365,6 @@ const char* item::name() const {
 	}
 	if(count > 1)
 		sb.adds("x%1i", count);
-	auto w = get_wear(type);
-	switch(w) {
-	case MeleeWeapon: case MeleeWeaponOffhand: case RangedWeapon:
-		add_weapon_info(sb, *this);
-		break;
-	case Torso: case Head: case Neck: case Girdle:
-	case Backward: case Gloves: case Elbows:
-	case Legs:
-		break;
-	default:
-		break;
-	}
 	sb.lower();
 	return temp;
 }
