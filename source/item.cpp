@@ -144,7 +144,7 @@ static int get_cost(itemn v) {
 
 static int get_damage(itemn v) {
 	switch(v) {
-	case Claws: case Dagger:
+	case Mandibules: case Claws: case Dagger:
 		return 3;
 	case ShortSword: case Axe: case Spear: case Mace:
 		return 4;
@@ -188,9 +188,7 @@ int item::pierce() const {
 wearn item::wear() const {
 	if(type >= CP && type <= GP)
 		return Backpack;
-	else if(type >= Staff && type <= GreatSword)
-		return MeleeWeapon;
-	else if(type == Claws)
+	else if(type >= Staff && type <= Mandibules)
 		return MeleeWeapon;
 	else if(type >= ShortBow && type <= HeavyCrossbow)
 		return RangedWeapon;

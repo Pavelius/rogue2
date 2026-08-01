@@ -155,8 +155,9 @@ static void create_finish() {
 	player->mana = player->abilities[Mana];
 }
 
-static void copy(statable& v1, const statable& v2) {
-	v1 = v2;
+static void copy_stats(statable& v1, const statable& v2, abilityn from, abilityn to) {
+	memcpy(v1.abilities + from, v2.abilities + from,
+		(to - from + 1) * sizeof(v1.abilities[0]));
 }
 
 static void update_boost_effect() {
@@ -186,7 +187,7 @@ static void update_skills() {
 }
 
 void update_player() {
-	copy(*player, player->basic);
+	copy_stats(*player, player->basic, Strenght, Mana);
 	update_abilities();
 	update_wear_items();
 	update_boost_effect();
@@ -338,7 +339,6 @@ static void acid_attack(creature* player, int value) {
 	if(player->resist(AcidResistance) || player->roll(Dexterity, -value * 3))
 		return;
 	player->add(Corrosion, value);
-	player->fixact(CorrosionVisual);
 }
 
 static void poison_attack(const item& weapon) {
@@ -368,14 +368,17 @@ static void illness_attack(creature* player, int value) {
 static void damage_player_items(itemn v, int chance) {
 }
 
-static void damage_equipment(int value, bool run) {
+static bool can_damage(item& v) {
+}
+
+static void damage_equipment(int value) {
 }
 
 static void check_corrosion() {
 	if(player->is(Corrosion)) {
 		if(!player->resist(AcidResistance)) {
 			player->damage(1);
-			damage_equipment(1, true);
+			damage_equipment(1);
 		}
 		player->add(Corrosion, -1);
 	}
@@ -716,12 +719,10 @@ void make_move() {
 	player->set(EnemyAttacks, 0);
 	player->update();
 	nullify_elements();
-	check_blooding();
 	if(!player->is(Local))
 		detect_hidden_objects();
 	check_burning();
 	check_freezing();
-	check_corrosion();
 	if(!player->operator bool())
 		return; // Dead from blooding, burning, cold or other bad
 	// check_levelup();
@@ -776,6 +777,8 @@ void make_move() {
 		//} else
 		//	random_walk();
 	}
+	check_blooding();
+	check_corrosion();
 }
 
 void creature_every_minute() {

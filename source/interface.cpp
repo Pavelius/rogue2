@@ -716,6 +716,7 @@ static void paint_statuses(const creature* player) {
 	caret.y += 4;
 	paint_status(ps, 32, player->is(Stun));
 	paint_status(ps, 2, player->is(Blooding));
+	paint_status(ps, 24, player->is(Corrosion));
 }
 
 static void paint_bars(const creature* player) {

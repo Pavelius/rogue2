@@ -72,7 +72,7 @@ static monsteri monsters[] = {
 	{1, GiantBat, 10, 30, 3, "2"}, // GiantBat
 	{6, GiantLizard, 40, 20, 2, "78", {Armor, Armor}}, // GiantLizard
 	{4, GiantSpider, 35, 20, 1, "29", {PoisonHit}}, // GiantSpider
-	{1, GiantAnt, 10, 20, 1, "10", {CorrozionHit}}, // GiantAnt
+	{1, GiantAnt, 10, 20, 1, "10", {CorrozionHit, Mandibules}}, // GiantAnt
 	{1, Rabbit, 6, 20, 3, "103"}, // Rabbit
 	{1, Rabbit, 5, 22, 3, "104"}, // RabbitFemale
 	{2, Racoon, 10, 30, 3, "89"}, // Racoon
@@ -90,7 +90,7 @@ const char* get_avatar(monstern v) {
 
 void apply_monster(monstern type) {
 	auto& e = monsters[type];
-	player->basic.abilities[Level] += e.level;
+	player->abilities[Level] += e.level;
 	player->basic.abilities[Strenght] += e.strenght;
 	player->basic.abilities[Dexterity] += e.dexterity;
 	player->basic.abilities[Wits] += e.wits;
