@@ -248,6 +248,7 @@ int item::armor() const {
 	case ChainMail: return 3;
 	case ScaleMail: return 4;
 	case PlateMail: return 5;
+	case IronBoots: return 1;
 	default: return 0;
 	}
 }
@@ -255,6 +256,7 @@ int item::armor() const {
 int item::block() const {
 	switch(type) {
 	case StuddedArmor: return 1;
+	case LeatherBoots: return 1;
 	default: return 0;
 	}
 }
