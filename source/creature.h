@@ -52,7 +52,8 @@ enum monstern : unsigned char {
 	GiantFrog, GiantBat, GiantLizard, GiantSpider,
 	Rabbit, RabbitFemale, Racoon, Rat,
 	StagBeetle, Wolf,
-	FirstMonster = Goblin, LastMonster = Wolf,
+	Skeleton, Zombie,
+	FirstMonster = Goblin, LastMonster = Zombie,
 };
 enum namen : unsigned short {
 	HumanNames,

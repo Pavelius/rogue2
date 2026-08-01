@@ -169,11 +169,12 @@ static int get_weapon_speed(itemn v) {
 	}
 }
 
-int get_pierce(itemn v) {
-	switch(v) {
+int item::pierce() const {
+	switch(type) {
 	case Axe: return 1;
 	case Claws: return 1;
 	case GreatAxe: return 2;
+	case Spear: return 3;
 	default: return 0;
 	}
 }

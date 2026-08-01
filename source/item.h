@@ -47,8 +47,6 @@ enum itemn : unsigned char {
 	LastItem = BloodyRemains,
 };
 
-int get_pierce(itemn v);
-
 wearn get_wear(itemn v);
 
 bool is_feat(itemn type, featn v);
@@ -80,6 +78,7 @@ struct item {
 	int	cost() const;
 	int damage() const;
 	int dodge() const;
+	int pierce() const;
 	int speed() const;
 	int	weight() const;
 	void act(messagen v, glown glow) const;

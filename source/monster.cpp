@@ -72,8 +72,10 @@ static monsteri monsters[] = {
 	{1, Rat, 5, 30, 3, "3"}, // Rat
 	{10, StagBeetle, 30, 15, 1, "26", {StunningHit}}, // StagBeelte
 	{3, Wolf, 20, 30, 4, "113", {BleedingHit, Claws}}, // Wolf
+	{1, Skeleton, 20, 20, 10, "8", {Armor, Block, Spear}}, // Skeleton
+	{2, Zombie, 30, 10, 8, "16", {Dagger}}, // Zombie
 };
-static_assert(lenghtof(monsters) == (Wolf + 1), "Invalid tile frames data count");
+static_assert(lenghtof(monsters) == (LastMonster + 1), "Invalid tile frames data count");
 
 const char* get_avatar(monstern v) {
 	return monsters[v].avatar;

@@ -437,7 +437,7 @@ static void make_attack(item& weapon, int attack_skill, int damage_percent) {
 	if(damage_percent)
 		damage = damage * damage_percent / 100;
 	auto armor = opponent->get(Armor);
-	auto pierce = get_pierce(weapon.type);
+	auto pierce = weapon.pierce();
 	if(player->roll(Dexterity))
 		special_attack(weapon, opponent, pierce, damage); // If hit critical
 	apply_pierce(armor, pierce);
