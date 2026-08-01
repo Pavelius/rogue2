@@ -47,9 +47,9 @@ enum abilityn : unsigned char {
 };
 enum monstern : unsigned char {
 	Human, Dwarf, Elf,
-	Goblin,
+	Goblin, GoblinFemale,
 	Bear, Boar, DireBoar, DireWolf, Dog,
-	GiantFrog, GiantBat, GiantLizard, GiantSpider,
+	GiantFrog, GiantBat, GiantLizard, GiantSpider, GiantAnt,
 	Rabbit, RabbitFemale, Racoon, Rat,
 	StagBeetle, Wolf,
 	Skeleton, Zombie,
@@ -114,11 +114,11 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	void heal(int value);
 	bool is(abilityn v) const { return abilities[v] > 0; }
 	bool is(featn v) const { return featable::is(v); }
-	bool is(featn v, const item& m) const { return featable::is(v) || m.is(v); }
+	bool is(featn v, const item& m) const { return featable::is(v) || m.is(v) || m.ispower(v); }
 	bool is(spelln v) const { return spellable::is(v); }
 	bool ischaracter() const { return type <= Elf; }
 	bool isenemy(const creature* p) const { return p->is(Enemy) != is(Enemy); }
-	bool isfemale() const { return false; }
+	bool isfemale() const { return is(Female); }
 	bool ishuman() const { return this == human; }
 	bool ismirror() const { return is(Mirrorred); }
 	bool isunaware() const { return wait_seconds >= 25 * 4 * 6; }

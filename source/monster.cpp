@@ -40,8 +40,13 @@ struct statblock : featable, statable {
 	}
 	constexpr void set(abilityn v) {
 		switch(v) {
-		case Armor: abilities[v]++; break;
-		default: abilities[v] += 5; break;
+		case Armor: case Block: case BlockRanged:
+		case DamageMelee: case DamageRanged: case DamageThrown:
+			abilities[v]++;
+			break;
+		default:
+			abilities[v] += 5;
+			break;
 		}
 	}
 };
@@ -57,15 +62,17 @@ static monsteri monsters[] = {
 	{0, Dwarf, 25, 15, 20}, // Dwarf
 	{0, Elf, 20, 20, 20}, // Elf
 	{1, Goblin, 10, 30, 10, "0", {Dagger, Dodge}}, // Goblin
+	{1, Goblin, 8, 32, 11, "0_f", {Female, Dagger, Dodge}}, // Goblin Female
 	{8, Bear, 50, 20, 4, "347"}, // Bear
 	{4, Boar, 30, 25, 3, "357"}, // Boar
 	{5, Boar, 45, 25, 3, "478", {StunningHit, PushHit}}, // DireBoar
 	{5, Wolf, 35, 30, 4, "91", {BleedingHit}}, // DireWolf
 	{2, Dog, 20, 30, 4, "6"}, // Dog
 	{2, GiantFrog, 20, 25, 3, "9"}, // GiantFrog
-	{2, GiantBat, 10, 30, 3, "2"}, // GiantBat
+	{1, GiantBat, 10, 30, 3, "2"}, // GiantBat
 	{6, GiantLizard, 40, 20, 2, "78", {Armor, Armor}}, // GiantLizard
 	{4, GiantSpider, 35, 20, 1, "29", {PoisonHit}}, // GiantSpider
+	{1, GiantAnt, 10, 20, 1, "10", {CorrozionHit}}, // GiantAnt
 	{1, Rabbit, 6, 20, 3, "103"}, // Rabbit
 	{1, Rabbit, 5, 22, 3, "104"}, // RabbitFemale
 	{2, Racoon, 10, 30, 3, "89"}, // Racoon

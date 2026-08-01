@@ -322,9 +322,7 @@ static void pay_attack(const item& weapon) {
 static void poison_attack(creature* player, int value) {
 	if(value <= 0)
 		return;
-	if(player->resist(PoisonResistance, PoisonImmunity))
-		return;
-	if(player->roll(Strenght, -value))
+	if(player->resist(PoisonResistance, PoisonImmunity) || player->roll(Strenght, -value))
 		return;
 	auto v = player->get(Poison) + value;
 	player->fixact(PoisonVisual);
@@ -334,14 +332,23 @@ static void poison_attack(creature* player, int value) {
 		player->set(Poison, v);
 }
 
+static void acid_attack(creature* player, int value) {
+	if(value <= 0)
+		return;
+	if(player->resist(AcidResistance) || player->roll(Dexterity, -value * 3))
+		return;
+	player->add(Corrosion, value);
+	player->fixact(CorrosionVisual);
+}
+
 static void poison_attack(const item& weapon) {
 	auto strenght = 0;
 	if(player->is(WeakPoison, weapon))
-		strenght += xrand(1, 2);
+		strenght += xrand(1, 3);
 	if(player->is(StrongPoison, weapon))
-		strenght += xrand(2, 4);
+		strenght += xrand(2, 6);
 	if(player->is(DeathPoison, weapon))
-		strenght += xrand(3, 6);
+		strenght += xrand(3, 8);
 	poison_attack(opponent, strenght);
 }
 
@@ -366,11 +373,19 @@ static void damage_equipment(int value, bool run) {
 
 static void check_corrosion() {
 	if(player->is(Corrosion)) {
-		if(!player->resist(AcidResistance, AcidImmunity)) {
-			player->damage(player->get(Corrosion));
+		if(!player->resist(AcidResistance)) {
+			player->damage(1);
 			damage_equipment(1, true);
 		}
 		player->add(Corrosion, -1);
+	}
+}
+
+static void check_poison() {
+	if(player->is(Poison)) {
+		if(!player->resist(PoisonResistance) && !roll(Strenght))
+			player->damage(1);
+		player->add(Poison, -1);
 	}
 }
 
@@ -483,6 +498,8 @@ static void make_attack(item& weapon, int attack_skill, int damage_percent) {
 		// player->logs("AttackHit", damage_result, opponent->getname(), roll_result, damage, -armor);
 		opponent->damage(damage_result);
 		poison_attack(weapon);
+		if(player->is(CorrozionHit, weapon))
+			acid_attack(opponent, xrand(1, 2));
 		if(opponent->is(RetaliateHit, opponent->wears[MeleeWeapon])) {
 			if(!player->roll(Dodge))
 				player->damage(1);
@@ -704,7 +721,7 @@ void make_move() {
 		detect_hidden_objects();
 	check_burning();
 	check_freezing();
-	// check_corrosion();
+	check_corrosion();
 	if(!player->operator bool())
 		return; // Dead from blooding, burning, cold or other bad
 	// check_levelup();
@@ -763,6 +780,7 @@ void make_move() {
 
 void creature_every_minute() {
 	check_stun();
+	check_poison();
 	check_recovery(player->mana, player->abilities[Mana], Wits);
 	if(player->is(Boosting))
 		check_recovery(player->mana, player->abilities[Mana]);

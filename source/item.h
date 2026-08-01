@@ -86,6 +86,7 @@ struct item {
 	bool is(featn v) const;
 	bool iscoins() const { return type == CP || type == SP || type == GP; }
 	bool ismagical() const;
+	bool ispower(variant v) const;
 	bool istwohanded() const { return is(Large); }
 	void join(item& v);
 	void setslot(item& v);

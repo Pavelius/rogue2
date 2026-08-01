@@ -23,7 +23,8 @@ typedef void(*fnevent)();
 enum resid : unsigned char;
 
 enum visualn : unsigned char {
-	PoisonVisual, BloodVisual, SearchVisual,
+	PoisonVisual, BloodVisual,
+	CorrosionVisual, SearchVisual,
 };
 
 void add_effect(point position, visualn id);

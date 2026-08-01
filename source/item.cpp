@@ -107,6 +107,12 @@ bool item::setpower() {
 	return true;
 }
 
+bool item::ispower(variant v) const {
+	if(!v)
+		return false;
+	return getpower() == v;
+}
+
 static int get_weight(itemn v) {
 	switch(v) {
 	case LongSword: return 3 * lb;
