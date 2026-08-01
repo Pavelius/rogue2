@@ -47,10 +47,6 @@ enum itemn : unsigned char {
 	LastItem = BloodyRemains,
 };
 
-wearn get_wear(itemn v);
-
-bool is_feat(itemn type, featn v);
-
 struct item {
 	itemn type;
 	unsigned char count;
@@ -69,9 +65,9 @@ struct item {
 	explicit operator bool() const { return count != 0; }
 	creature* owner() const;
 	wearn equiped() const;
+	wearn wear() const;
 	const char* description() const;
 	const char* name() const;
-	const char* fullname() const;
 	variant getpower() const;
 	int	armor() const;
 	int	block() const;
@@ -87,7 +83,7 @@ struct item {
 	void clear() { count = 0; type = (itemn)0; properties = 0; }
 	bool is(magicn v) const { return magic == v; }
 	bool is(wearn v) const;
-	bool is(featn v) const { return is_feat(type, v); }
+	bool is(featn v) const;
 	bool iscoins() const { return type == CP || type == SP || type == GP; }
 	bool ismagical() const;
 	bool istwohanded() const { return is(Large); }

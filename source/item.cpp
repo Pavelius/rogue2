@@ -179,16 +179,16 @@ int item::pierce() const {
 	}
 }
 
-wearn get_wear(itemn v) {
-	if(v >= CP && v <= GP)
+wearn item::wear() const {
+	if(type >= CP && type <= GP)
 		return Backpack;
-	else if(v >= Staff && v <= GreatSword)
+	else if(type >= Staff && type <= GreatSword)
 		return MeleeWeapon;
-	else if(v == Claws)
+	else if(type == Claws)
 		return MeleeWeapon;
-	else if(v >= ShortBow && v <= HeavyCrossbow)
+	else if(type >= ShortBow && type <= HeavyCrossbow)
 		return RangedWeapon;
-	else if(v >= Robe && v <= PlateMail)
+	else if(type >= Robe && type <= PlateMail)
 		return Torso;
 	return Backpack;
 }
@@ -208,9 +208,9 @@ bool item::ismagical() const {
 bool item::is(wearn v) const {
 	switch(v) {
 	case FingerLeft: case FingerRight:
-		return get_wear(type) == FingerRight;
+		return wear() == FingerRight;
 	default:
-		return get_wear(type) == v;
+		return wear() == v;
 	}
 }
 
@@ -266,11 +266,11 @@ bool item::broke() {
 	return false;
 }
 
-bool is_feat(itemn type, featn v) {
+bool item::is(featn v) const {
 	switch(v) {
 	case BleedingHit: return type == Claws || (type >= ShortSword && type <= GreatSword);
 	case StunningHit: return type == Mace || type == GreatMace || type == WarHammer || type == Staff;
-	case PierceHit: return type == Dagger;
+	case PierceHit: return type == Dagger || type==Spear;
 	case RetaliateHit: return type == Spear;
 	case Large: return type == GreatAxe || type == GreatSword || type == Staff || type == Spear;
 	default: return false;
@@ -336,7 +336,7 @@ static void add_armor_info(stringbuilder& sb, const item& it) {
 const char* item::description() const {
 	static char temp[160];
 	stringbuilder sb(temp); sb.clear();
-	auto w = get_wear(type);
+	auto w = wear();
 	switch(w) {
 	case MeleeWeapon: case MeleeWeaponOffhand: case RangedWeapon:
 		add_weapon_info(sb, *this);
@@ -373,7 +373,7 @@ const char* item::name() const {
 }
 
 bool wearable::equip(item& it) {
-	auto w = get_wear(it.type);
+	auto w = it.wear();
 	if(w == Backpack || wears[w])
 		return false;
 	wears[w].setslot(it);

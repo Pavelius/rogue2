@@ -167,12 +167,31 @@ static void update_boost_effect() {
 	}
 }
 
+static abilityn get_skill_base(abilityn v) {
+	switch(v) {
+	case Alchemy: case Alertness: case Literacy:
+	case Haggling: case Survival:
+	case History: case Religion:
+		return Wits;
+	default:
+		return Dexterity;
+	}
+}
+
+static void update_skills() {
+	for(auto i = FirstSkill; i <= LastSkill; i = (abilityn)(i + 1)) {
+		if(player->basic.abilities[i])
+			add_value(i, player->abilities[get_skill_base(i)] / 3);
+	}
+}
+
 void update_player() {
 	copy(*player, player->basic);
 	update_abilities();
 	update_wear_items();
 	update_boost_effect();
 	update_derived();
+	update_skills();
 }
 
 static void random_name() {
