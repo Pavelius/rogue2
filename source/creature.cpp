@@ -512,6 +512,12 @@ static void make_attack(item& weapon, int attack_skill, int damage_percent) {
 		weapon.broke();
 }
 
+static void attack_range(int bonus) {
+}
+
+static void attack_throw(int bonus) {
+}
+
 static bool player_interact(short unsigned i, directionn d) {
 	auto p = find_creature(i);
 	if(!p)
@@ -716,6 +722,18 @@ static void ready_actions() {
 		opponent = 0;
 }
 
+static bool can_shoot() {
+	return false;
+}
+
+static bool can_throw() {
+	return false;
+}
+
+static bool use_items() {
+	return false;
+}
+
 void make_move() {
 	// Recoil form action
 	if(player->wait_seconds > 0) {
@@ -739,7 +757,7 @@ void make_move() {
 	// check_horror();
 	if(player->ishuman()) {
 		ready_skills();
-		//		last_actions.sort(compare_actions);
+		// last_actions.sort(compare_actions);
 		auto last = player->wait_seconds;
 		while(last == player->wait_seconds)
 			choose_player_move();
@@ -748,20 +766,18 @@ void make_move() {
 		if(!player->moveaway(master->index))
 			pay_action();
 	} else if(opponent) {
-		//allowed_spells.select(player);
-		//allowed_spells.match(spell_iscombat, true);
-		//allowed_spells.match(spell_allowmana, true);
-		//allowed_spells.match(spell_allowuse, true);
-		//if(allowed_spells && d100() < 70)
-		//	cast_spell(*((spelli*)allowed_spells.random()));
-		//else if(can_shoot())
-		//	attack_range(0);
-		//else if(can_thrown() && d100() < 60)
-		//	attack_thrown(0);
-		//else if(d100() < 20 && use_items()) {
-		//	// Nothing to do
-		//} else
-		player->moveto(opponent->index);
+		allowed_spells.match(spell_is_combat, true);
+		if(allowed_spells && d100() < 70) {
+			auto n = (spelln)allowed_spells.random();
+			player->cast(n, get_mana(n), true);
+		} else if(can_shoot())
+			attack_range(0);
+		else if(can_throw() && d100() < 60)
+			attack_throw(0);
+		else if(d100() < 20 && use_items()) {
+			// Nothing to do
+		} else
+			player->moveto(opponent->index);
 	} else {
 		//allowed_spells.match(spell_isnotcombat, true);
 		//allowed_spells.match(spell_allowmana, true);

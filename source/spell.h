@@ -21,3 +21,5 @@ struct spellable {
 int get_mana(spelln v);
 
 void choose_spell_targets(spelln spell);
+bool spell_is_combat(unsigned char v);
+bool spell_is_hostile(unsigned char v);

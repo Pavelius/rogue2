@@ -8,6 +8,7 @@
 #include "slice.h"
 #include "spell.h"
 #include "stringbuilder.h"
+#include "variant.h"
 
 int get_mana(spelln v) {
 	switch(v) {
@@ -22,7 +23,7 @@ int get_mana(spelln v) {
 	}
 }
 
-static bool is_hostile(spelln v) {
+bool spell_is_hostile(unsigned char v) {
 	switch(v) {
 	case BurningHands:
 	case FireBolt:
@@ -36,7 +37,16 @@ static bool is_hostile(spelln v) {
 	}
 }
 
-static variant get_target(spelln v) {
+bool spell_is_combat(unsigned char v) {
+	switch(v) {
+	case SummonAnimals: case SummonMinions: case SummonUndead:
+		return true;
+	default:
+		return spell_is_hostile(v);
+	}
+}
+
+static variantn get_target(spelln v) {
 	switch(v) {
 	case CureLightWounds: case CureSeriousWounds: case CureCriticalWounds:
 	case MageArmor: case MageShield: case LightSpell: case Sleep: case Web:
@@ -158,8 +168,16 @@ void choose_spell_targets(spelln spell) {
 	switch(spell) {
 	case Tile:
 		break;
+	case Item:
+		for(auto& e : player->wears) {
+			if(!e)
+				continue;
+			if(e.apply(spell, false))
+				targets.add(&e);
+		}
+		break;
 	case Monster:
-		if(is_hostile(spell)) {
+		if(spell_is_hostile(spell)) {
 			for(auto p : enemies) {
 				if(p->apply(spell, false))
 					targets.add(p);
@@ -174,21 +192,30 @@ void choose_spell_targets(spelln spell) {
 	}
 }
 
-bool creature::cast(spelln spell, int mana_cost, const char* fail_targets, bool run) {
+bool creature::cast(spelln spell, int mana_cost, bool run) {
+	pushvalue push(player, this);
 	if(mana_cost > 0) {
-		if(mana < mana_cost) {
-			act(NotEnoughMana);
+		if(mana < mana_cost)
 			return false;
-		}
 	}
 	choose_spell_targets(spell);
-	if(!targets) {
-		if(fail_targets)
-			act(' ', fail_targets, getname(spell));
+	if(!targets)
 		return false;
-	}
 	auto maximum_targets = 1;
+	auto target = get_target(spell);
 	if(run) {
+		switch(target) {
+		case Monster:
+			for(auto p : targets.records<creature>())
+				p->apply(spell, true);
+			break;
+		case Item:
+			for(auto p : targets.records<item>())
+				p->apply(spell, true);
+			break;
+		default:
+			break;
+		}
 		if(mana_cost)
 			mana -= mana_cost;
 	}

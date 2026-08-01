@@ -401,8 +401,8 @@ int main(int argc, char* argv[]) {
 	player->equip(LongBow);
 	player->update();
 	human = player;
-	create_enemy(apos(7, 3), GiantAnt);
-	create_enemy(apos(7, 4), GiantAnt);
+	create_enemy(apos(7, 3), GiantAntWarrior);
+	create_enemy(apos(7, 4), GiantAntWarrior);
 	//create_enemy(apos(8, 3), Goblin);
 	//show_locations();
 	next_scene(play_game);
