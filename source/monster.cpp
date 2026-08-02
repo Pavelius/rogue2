@@ -57,40 +57,45 @@ struct monsteri {
 	char		level;
 	monstern	race;
 	short		strenght, dexterity, wits;
+	itemn		remains;
 	const char*	avatar;
 	statblock	stats;
 };
 static monsteri monsters[] = {
-	{0, Human, 20, 20, 20}, // Human
-	{0, Dwarf, 25, 15, 20}, // Dwarf
-	{0, Elf, 20, 20, 20}, // Elf
-	{1, Goblin, 10, 30, 10, "0", {Dagger, Dodge}}, // Goblin
-	{1, Goblin, 8, 32, 11, "0_f", {Female, Dagger, Dodge}}, // Goblin Female
-	{8, Bear, 50, 20, 4, "347"}, // Bear
-	{4, Boar, 30, 25, 3, "357", {Block}}, // Boar
-	{3, Wolf, 20, 30, 4, "113", {BleedingHit, WeaponSkill}}, // Wolf
-	{5, Boar, 45, 25, 3, "478", {Block, StunningHit}}, // DireBoar
-	{5, Wolf, 35, 30, 4, "91", {BleedingHit, WeaponSkill, DamageMelee}}, // DireWolf
-	{2, Dog, 20, 30, 4, "6", {WeaponSkill}}, // Dog
-	{10, StagBeetle, 30, 15, 1, "26", {StunningHit}}, // StagBeelte
-	{2, GiantFrog, 20, 25, 3, "9", {DamageMelee}}, // GiantFrog
-	{1, GiantBat, 10, 30, 3, "2"}, // GiantBat
-	{6, GiantLizard, 40, 20, 2, "78", {Armor, Armor}}, // GiantLizard
-	{4, GiantSpider, 35, 20, 1, "29", {StrongPoison}}, // GiantSpider
-	{1, GiantAnt, 10, 20, 1, "10", {WeakPoison}}, // GiantAnt
-	{2, GiantAnt, 15, 20, 1, "11", {WeakPoison}}, // GiantAntWarrior
-	{10, GiantAnt, 40, 20, 3, "12", {WeakPoison, SummonMinions}}, // GiantAntQueen
-	{1, Rabbit, 6, 20, 3, "103"}, // Rabbit
-	{1, Rabbit, 5, 22, 3, "104"}, // RabbitFemale
-	{2, Racoon, 10, 30, 3, "89"}, // Racoon
-	{1, Rat, 5, 30, 3, "3"}, // Rat
-	{1, Skeleton, 20, 20, 10, "8", {Armor, Block, Spear}}, // Skeleton
-	{2, Zombie, 30, 10, 8, "16", {Dagger}}, // Zombie
+	{0, Human, 20, 20, 20, BloodyRemains, "", {Religion}}, // Human
+	{0, Dwarf, 25, 15, 20, BloodyRemains, "", {PoisonResistance, Mining}}, // Dwarf
+	{0, Elf, 15, 25, 20, BloodyRemains, "", {Alertness, Stealth}}, // Elf
+	{1, Goblin, 10, 30, 10, BloodyRemains, "0", {Dagger, Dodge}}, // Goblin
+	{1, Goblin, 8, 32, 11, BloodyRemains, "0_f", {Female, Dagger, Dodge}}, // Goblin Female
+	{8, Bear, 50, 20, 4, Meat, "347"}, // Bear
+	{4, Boar, 30, 25, 3, Meat, "357", {Block}}, // Boar
+	{3, Wolf, 20, 30, 4, BloodyRemains, "113", {BleedingHit, WeaponSkill}}, // Wolf
+	{5, Boar, 45, 25, 3, Meat, "478", {Block, StunningHit}}, // DireBoar
+	{5, Wolf, 35, 30, 4, BloodyRemains, "91", {BleedingHit, WeaponSkill, DamageMelee}}, // DireWolf
+	{2, Dog, 20, 30, 4, BloodyRemains, "6", {WeaponSkill}}, // Dog
+	{10, StagBeetle, 30, 15, 1, Shell, "26", {StunningHit}}, // StagBeelte
+	{2, GiantFrog, 20, 25, 3, BloodyRemains, "9", {DamageMelee}}, // GiantFrog
+	{1, GiantBat, 10, 30, 3, BloodyRemains, "2"}, // GiantBat
+	{6, GiantLizard, 40, 20, 2, BloodyRemains, "78", {Armor, Armor}}, // GiantLizard
+	{4, GiantSpider, 35, 20, 1, BloodyRemains, "29", {StrongPoison}}, // GiantSpider
+	{1, GiantAnt, 10, 20, 1, Shell, "10", {WeakPoison}}, // GiantAnt
+	{2, GiantAnt, 15, 20, 1, Shell, "11", {WeakPoison}}, // GiantAntWarrior
+	{10, GiantAnt, 40, 20, 3, Shell, "12", {WeakPoison, SummonMinions}}, // GiantAntQueen
+	{1, Rabbit, 6, 20, 3, Meat, "103"}, // Rabbit
+	{1, Rabbit, 5, 22, 3, Meat, "104"}, // RabbitFemale
+	{2, Racoon, 10, 30, 3, Meat, "89"}, // Racoon
+	{1, Rat, 5, 30, 3, BloodyRemains, "3"}, // Rat
+	{1, Skeleton, 20, 20, 10, Bones, "8", {Armor, Block, Spear}}, // Skeleton
+	{2, Zombie, 30, 10, 8, Bones, "16", {Dagger}}, // Zombie
 };
 static_assert(lenghtof(monsters) == (LastMonster + 1), "Invalid tile frames data count");
 
 const char* get_avatar(monstern v) {
 	return monsters[v].avatar;
+}
+
+itemn get_remains(monstern type) {
+	return monsters[type].remains;
 }
 
 void apply_monster(monstern type) {

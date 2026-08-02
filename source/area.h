@@ -131,6 +131,9 @@ extern sitei* last_site;
 directionn move_lower(short unsigned start, short unsigned goal);
 directionn move_greater(short unsigned start, short unsigned goal);
 
+inline short unsigned p2i(unsigned char* v) { return (tilen*)v - area_tiles; }
+inline char unsigned* i2p(unsigned short v) { return (char unsigned*)area_tiles + v; }
+
 int area_range(short unsigned i1, short unsigned i2);
 int get_move_cost(featuren v);
 

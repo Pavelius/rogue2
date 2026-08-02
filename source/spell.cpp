@@ -65,6 +65,10 @@ static void area_set_near(short unsigned i, areafn v, int maximum) {
 		area_set(to(i, source[i], i), Webbed);
 }
 
+bool area_apply(short unsigned index, spelln spell, bool run) {
+	return false;
+}
+
 bool creature::apply(spelln v, bool run) {
 	if(is(v))
 		return false;
@@ -106,6 +110,10 @@ bool creature::apply(spelln v, bool run) {
 			area_set(index, Webbed);
 			area_set_near(index, Webbed, 1 + player->get(Level) / 4);
 		}
+		break;
+	case SummonAnimals:
+	case SummonMinions:
+	case SummonUndead:
 		break;
 	default:
 		return false;
@@ -189,6 +197,10 @@ void choose_spell_targets(spelln spell) {
 			}
 		}
 		break;
+	case Spell:
+		if(player->apply(spell, false))
+			targets.add(player);
+		break;
 	}
 }
 
@@ -212,6 +224,11 @@ bool creature::cast(spelln spell, int mana_cost, bool run) {
 		case Item:
 			for(auto p : targets.records<item>())
 				p->apply(spell, true);
+			break;
+		case Feature:
+			for(auto p : targets.records<unsigned char>()) {
+				auto index = p2i(p);
+			}
 			break;
 		default:
 			break;

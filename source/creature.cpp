@@ -928,15 +928,6 @@ static void drop_throphy(creature* player, int chance) {
 	}
 }
 
-static itemn get_remains(monstern type) {
-	switch(type) {
-	case Boar:
-		return BloodyRemains;
-	default:
-		return BloodyRemains;
-	}
-}
-
 static void drop_remains(creature* player) {
 	auto chance = 15; // Default chance leave remains
 	if(game_chance(chance)) {

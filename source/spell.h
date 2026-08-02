@@ -20,6 +20,7 @@ struct spellable {
 };
 int get_mana(spelln v);
 
+bool area_apply(short unsigned index, spelln spell, bool run);
 void choose_spell_targets(spelln spell);
 bool spell_is_combat(unsigned char v);
 bool spell_is_hostile(unsigned char v);

@@ -149,6 +149,8 @@ creature* find_creature(short unsigned i);
 
 const char* get_avatar(monstern v);
 
+itemn get_remains(monstern type);
+
 point i2s(short unsigned i);
 
 int getv(monstern v, abilityn a);
