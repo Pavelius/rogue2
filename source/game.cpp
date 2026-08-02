@@ -376,7 +376,7 @@ int main(int argc, char* argv[]) {
 	area_clear();
 	initialize_gui();
 	test_strings();
-	area_generate();
+	area_generate(Plains);
 	area_set(apos(3, 3), Grave);
 	area_set(apos(3, 4), Grave);
 	area_set(apos(6, 4), Tree);

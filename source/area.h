@@ -115,6 +115,7 @@ struct abox : apos {
 	constexpr int maximum() const { return (w > h) ? w : h; }
 	constexpr int minimum() const { return (w < h) ? w : h; }
 	constexpr abox resize(int dx, int dy) const { return abox(x + dx, y + dy, w - dx * 2, h - dy * 2); }
+	constexpr void set(const abox& v) { x = v.x; y = v.y; h = v.h;  w = v.w; }
 };
 struct areai {
 	short unsigned	index; // Position on world map
@@ -128,18 +129,21 @@ struct sitei : abox {
 };
 extern sitei* last_site;
 
+areai& area();
+
 directionn move_lower(short unsigned start, short unsigned goal);
 directionn move_greater(short unsigned start, short unsigned goal);
 
 inline short unsigned p2i(unsigned char* v) { return (tilen*)v - area_tiles; }
 inline char unsigned* i2p(unsigned short v) { return (char unsigned*)area_tiles + v; }
 
+int area_get_monsters(short unsigned i1, int radius);
 int area_range(short unsigned i1, short unsigned i2);
 int get_move_cost(featuren v);
 
 void area_change(tilen t1, tilen t2);
 void area_clear();
-void area_generate();
+void area_generate(landscapen type);
 bool area_is(short unsigned i, areafn f);
 bool area_iswall(short unsigned i);
 void area_los(short unsigned i, int r, fnareais test);
@@ -161,6 +165,7 @@ void block_features(bool ignore_doors);
 void block_tiles(bool ignore_water);
 void block_zero();
 void clear_path();
+void create_site(siten type);
 bool is_trap(featuren v);
 bool is_free(featuren v, bool ignore_doors);
 bool is_free(tilen v, bool water_free);

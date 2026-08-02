@@ -59,6 +59,10 @@ static short unsigned getwave() {
 	return index;
 }
 
+areai& area() {
+	return bsdata<areai>::elements[current_area];
+}
+
 bool is_wall(tilen v) {
 	return v == NoTile || v >= WallCave;
 }
@@ -377,4 +381,17 @@ int get_move_cost(featuren v) {
 	case FootMud: return 200;
 	default: return 100;
 	}
+}
+
+int area_get_monsters(short unsigned i1, int radius) {
+	update_creatures();
+	auto result = 0;
+	for(auto p : creatures) {
+		if(!(*p) || !p->is(Local))
+			continue;
+		if(area_range(i1, p->index) > radius)
+			continue;
+		result++;
+	}
+	return result;
 }

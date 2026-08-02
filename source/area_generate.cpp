@@ -1,10 +1,12 @@
 #include "adat.h"
 #include "area.h"
+#include "bsdata.h"
 #include "draw.h"
 #include "rand.h"
 
 const int minimal_size = 10;
 
+static unsigned char current_box_index;
 static adat<abox> locations;
 static abox crc = {0, 0, mps, mps};
 
@@ -93,10 +95,26 @@ static void create(landscapen type) {
 	}
 }
 
-void area_generate() {
-	create(DeepForest);
+static int compare_location(const void* v1, const void* v2) {
+	auto p1 = (abox*)v1;
+	auto p2 = (abox*)v2;
+	return p2->area() - p1->area();
+}
+
+void area_generate(landscapen type) {
+	area().type = type;
+	create(type);
 	locations.clear();
 	add_locations();
+	locations.sort(compare_location);
+	current_box_index = 0;
+}
+
+void create_site(siten type) {
+	last_site = bsdata<sitei>::add();
+	last_site->set(locations.data[current_box_index++]);
+	last_site->area_index = current_area;
+	last_site->type = type;
 }
 
 void show_locations() {

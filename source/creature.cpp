@@ -41,6 +41,8 @@ collectionv<creature> creatures, parcipants, enemies;
 bool need_update_creatures;
 bool need_end_turn;
 
+const int locale_remove_range = 17;
+
 static collection allowed_spells;
 static short unsigned compare_index;
 
@@ -380,11 +382,14 @@ static void check_locale_remove() {
 	if(human->area_index != player->area_index)
 		return;
 	auto range = area_range(human->index, player->index);
-	if(range <= 10)
+	if(range <= locale_remove_range)
 		return;
 	need_update_creatures = true;
 	remove_order(player);
 	player->clear();
+}
+
+void appear_local_monsters() {
 }
 
 static void check_corrosion() {
