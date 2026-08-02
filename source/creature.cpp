@@ -374,6 +374,19 @@ static bool can_damage(item& v) {
 static void damage_equipment(int value) {
 }
 
+static void check_locale_remove() {
+	if(!human || human==player || !player->is(Local))
+		return;
+	if(human->area_index != player->area_index)
+		return;
+	auto range = area_range(human->index, player->index);
+	if(range <= 10)
+		return;
+	need_update_creatures = true;
+	remove_order(player);
+	player->clear();
+}
+
 static void check_corrosion() {
 	if(player->is(Corrosion)) {
 		if(!player->resist(AcidResistance)) {
@@ -749,6 +762,7 @@ void make_move() {
 		detect_hidden_objects();
 	check_burning();
 	check_freezing();
+	check_locale_remove();
 	if(!player->operator bool())
 		return; // Dead from blooding, burning, cold or other bad
 	// check_levelup();

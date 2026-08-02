@@ -48,8 +48,11 @@ static variant pierce_melee_weapon_powers[] = {
 	WeaponSkill, DamageMelee, Dexterity,
 };
 static variant no_powers[] = {Variant};
+static variant blue_potion_powers[] = {
+	Hits, Mana, Strenght, Dexterity, Wits, Poison, Illness,
+};
 static variant potion_powers[] = {
-	Hits, Mana, Strenght, Dexterity, Wits, Regenerating, Boosting, Poison, Illness, Experience,
+	Regenerating, Boosting, Poison, Illness, Experience,
 	WeaponSkill, BalisticSkill, Dodge, Armor,
 	AcidImmunity, ColdImmunity, DeathImmunity, DiseaseImmunity, FireImmunity, PoisonImmunity, StunImmunity,
 	Fly, FastMove, FastAttack,
@@ -57,14 +60,11 @@ static variant potion_powers[] = {
 
 static slice<variant> get_powers(itemn v) {
 	switch(v) {
-	case Dagger: case LongSword: case ShortSword: case GreatSword:
-		return swords_powers;
-	case Spear:
-		return pierce_melee_weapon_powers;
-	case BluePotion: case GreenPotion: case RedPotion:
-		return potion_powers;
-	default:
-		return no_powers;
+	case Dagger: case LongSword: case ShortSword: case GreatSword: return swords_powers;
+	case Spear: return pierce_melee_weapon_powers;
+	case BluePotion: return blue_potion_powers;
+	case GreenPotion: case RedPotion: return potion_powers;
+	default: return no_powers;
 	}
 }
 

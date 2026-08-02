@@ -17,8 +17,9 @@
 #include "bsdata.h"
 #include "creature.h"
 #include "feats.h"
-#include "slice.h"
 #include "math.h"
+#include "rand.h"
+#include "slice.h"
 
 struct statblock : featable, statable, spellable {
 	itemn items[4];
@@ -48,7 +49,10 @@ struct statblock : featable, statable, spellable {
 			abilities[v]++;
 			break;
 		default:
-			abilities[v] += 5;
+			if(abilities[v])
+				abilities[v] += 5;
+			else
+				abilities[v] += d6();
 			break;
 		}
 	}
@@ -115,6 +119,7 @@ void apply_monster(monstern type) {
 			if(v)
 				player->equip(v);
 		}
+		player->set(Local);
 	} else {
 		player->basic.abilities[WeaponSkill] += 15;
 		player->basic.abilities[BalisticSkill] += 15;
