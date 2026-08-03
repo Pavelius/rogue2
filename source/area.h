@@ -108,6 +108,7 @@ struct abox : apos {
 	constexpr bool have(apos v) const { return v.x >= x && v.x < (x + w) && v.y >= y && v.y < (y + h); }
 	constexpr void correct() { if((x + w) > mps) x = mps - w; if((y + h) > mps) y = mps - h; }
 	constexpr void clip() { if((x + w) > mps) w = mps - x; if((y + h) > mps) h = mps - y; }
+	constexpr apos center() const { return apos(x + w / 2, y + h / 2); }
 	constexpr apos ru() const { return apos(x + w - 1, y); }
 	constexpr apos rd() const { return apos(x + w - 1, y + h - 1); }
 	constexpr apos ld() const { return apos(x, y + h - 1); }
@@ -123,19 +124,14 @@ struct areai {
 	unsigned char	level; // Current level of dungeon. 0 is overland.
 	constexpr explicit operator bool() const { return index != 0xFFFF; }
 };
-struct sitei : abox {
-	short unsigned	area_index;
-	siten			type;
-};
-extern sitei* last_site;
-
-areai& area();
 
 directionn move_lower(short unsigned start, short unsigned goal);
 directionn move_greater(short unsigned start, short unsigned goal);
 
 inline short unsigned p2i(unsigned char* v) { return (tilen*)v - area_tiles; }
 inline char unsigned* i2p(unsigned short v) { return (char unsigned*)area_tiles + v; }
+
+short unsigned area_free(short unsigned index, fnareais test_free);
 
 int area_get_monsters(short unsigned i1, int radius);
 int area_range(short unsigned i1, short unsigned i2);

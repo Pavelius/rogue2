@@ -395,3 +395,74 @@ int area_get_monsters(short unsigned i1, int radius) {
 	}
 	return result;
 }
+
+static short unsigned area_free_horz(short unsigned index, int count, fnareais test_free) {
+	if(count <= 0)
+		return 0xFFFF;
+	for(auto index_end = index + count; index < index_end; index++) {
+		if(test_free(index))
+			return index;
+	}
+	return 0xFFFF;
+}
+
+static short unsigned area_free_vert(short unsigned index, int count, fnareais test_free) {
+	if(count <= 0)
+		return 0xFFFF;
+	for(auto index_end = index + count; index < index_end; index += mps) {
+		if(test_free(index))
+			return index;
+	}
+	return 0xFFFF;
+}
+
+short unsigned area_free(short unsigned index, fnareais test_free) {
+	if(test_free(index))
+		return index;
+	apos m = index;
+	for(auto radius = 1; radius < 6; radius++) {
+		auto x1 = m.x - radius;
+		if(x1 < 0)
+			x1 = 0;
+		auto x2 = m.x + radius;
+		if(x2 > mps)
+			x2 = mps;
+		auto y1 = m.y - radius;
+		if(y1 < 0)
+			y1 = 0;
+		auto y2 = m.y + radius;
+		if(y2 > mps)
+			y2 = mps;
+		if((rand() % 2) != 0) {
+			auto n = area_free_horz(apos(x1, y1), x2 - x1 + 1, test_free);
+			if(n != 0xFFFF)
+				return n;
+			n = area_free_horz(apos(x1, y2), x2 - x1 + 1, test_free);
+			if(n != 0xFFFF)
+				return n;
+		} else {
+			auto n = area_free_horz(apos(x1, y2), x2 - x1 + 1, test_free);
+			if(n != 0xFFFF)
+				return n;
+			n = area_free_horz(apos(x1, y1), x2 - x1 + 1, test_free);
+			if(n != 0xFFFF)
+				return n;
+		}
+		if((rand() % 2) != 0) {
+			auto n = area_free_vert(apos(x1, y1 + 1), y2 - y1 - 2 + 1, test_free);
+			if(n != 0xFFFF)
+				return n;
+			n = area_free_vert(apos(x2, y1 + 1), y2 - y1 - 2 + 1, test_free);
+			if(n != 0xFFFF)
+				return n;
+		} else {
+			auto n = area_free_vert(apos(x2, y1 + 1), y2 - y1 - 2 + 1, test_free);
+			if(n != 0xFFFF)
+				return n;
+			n = area_free_vert(apos(x1, y1 + 1), y2 - y1 - 2 + 1, test_free);
+			if(n != 0xFFFF)
+				return n;
+		}
+	}
+	return 0xFFFF;
+}

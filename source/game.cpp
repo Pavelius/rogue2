@@ -62,6 +62,31 @@ static void all_next(fnevent proc) {
 	}
 }
 
+static void check_monster_encounters() {
+	for(auto& e : bsdata<sitei>()) {
+		if(!e.ispresent())
+			continue;
+		if(!e.needspawn())
+			continue;
+		if(area_get_monsters(e.center(), 4) >= 6)
+			continue;
+		auto range = area_range(human->index, e.center());
+		if(range >= locale_remove_range - 2 && range <= locale_remove_range) {
+			e.spawn = game.minutes;
+			auto count = xrand(2, 5);
+			auto index = e.center();
+			for(auto i = 0; i < count; i++)
+				create_creature(index, Goblin);
+		}
+	}
+}
+
+void creature_human_turn() {
+	if(!human || !(*human))
+		return;
+	check_monster_encounters();
+}
+
 static void monsters_spawning() {
 }
 
@@ -392,6 +417,7 @@ int main(int argc, char* argv[]) {
 	put_item(apos(4, 4), LongSword);
 	put_item(apos(4, 4), LongSword);
 	put_item(apos(4, 4), LongBow);
+	area_set(apos(4, 3), Tree);
 	create_creature(apos(4, 3), Human);
 	item i1 = Spear; i1.magic = Blessed; // i1.known_magic = 1;
 	player->equip(i1);
@@ -403,6 +429,8 @@ int main(int argc, char* argv[]) {
 	human = player;
 	create_enemy(apos(7, 3), GiantAntWarrior);
 	create_enemy(apos(7, 4), GiantAntWarrior);
+	create_site(MonstersLair);
+	create_site(MonstersLair);
 	//create_enemy(apos(8, 3), Goblin);
 	//show_locations();
 	next_scene(play_game);

@@ -79,6 +79,8 @@ extern creature* opponent;
 extern bool need_update_creatures;
 extern bool need_end_turn;
 
+const int locale_remove_range = 17;
+
 struct creature : drawable, posable, statable, featable, spellable, wearable {
 	namen			custom_name; // Random name seed or 0xFF if no name
 	monstern		type; // Character or Monster type
@@ -159,6 +161,7 @@ void apply_monster(monstern type);
 void create_creature(short unsigned index_position, monstern type);
 void creature_every_minute();
 void creature_every_10_minutes();
+void creature_human_turn();
 bool is_free(short unsigned i);
 bool is_skill(unsigned char v);
 void logs(messagen v);

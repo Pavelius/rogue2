@@ -41,8 +41,6 @@ collectionv<creature> creatures, parcipants, enemies;
 bool need_update_creatures;
 bool need_end_turn;
 
-const int locale_remove_range = 17;
-
 static collection allowed_spells;
 static short unsigned compare_index;
 
@@ -206,7 +204,22 @@ static void random_name() {
 		player->custom_name = NoName;
 }
 
+static bool is_free_no_creature(short unsigned index) {
+	if(!is_free(area_tiles[index], false))
+		return false;
+	if(!is_free(area_features[index], false))
+		return false;
+	if(find_creature(index))
+		return false;
+	return true;
+}
+
 void create_creature(short unsigned index_position, monstern type) {
+	index_position = area_free(index_position, is_free_no_creature);
+	if(index_position == 0xFFFF) {
+		player = 0;
+		return;
+	}
 	player = bsdata<creature>::add();
 	player->clear();
 	player->type = type;
@@ -387,9 +400,6 @@ static void check_locale_remove() {
 	need_update_creatures = true;
 	remove_order(player);
 	player->clear();
-}
-
-void appear_local_monsters() {
 }
 
 static void check_corrosion() {
@@ -768,6 +778,7 @@ void make_move() {
 	check_burning();
 	check_freezing();
 	check_locale_remove();
+	creature_human_turn();
 	if(!player->operator bool())
 		return; // Dead from blooding, burning, cold or other bad
 	// check_levelup();

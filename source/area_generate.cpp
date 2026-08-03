@@ -2,6 +2,7 @@
 #include "area.h"
 #include "bsdata.h"
 #include "draw.h"
+#include "game.h"
 #include "rand.h"
 
 const int minimal_size = 10;
@@ -102,7 +103,7 @@ static int compare_location(const void* v1, const void* v2) {
 }
 
 void area_generate(landscapen type) {
-	area().type = type;
+	bsdata<areai>::elements[current_area].type = type;
 	create(type);
 	locations.clear();
 	add_locations();
@@ -110,11 +111,20 @@ void area_generate(landscapen type) {
 	current_box_index = 0;
 }
 
+static void create_content(const abox& rc, siten v) {
+	switch(v) {
+	case MonstersLair:
+		area_set(rc.center(), Statue);
+		break;
+	}
+}
+
 void create_site(siten type) {
 	last_site = bsdata<sitei>::add();
 	last_site->set(locations.data[current_box_index++]);
 	last_site->area_index = current_area;
 	last_site->type = type;
+	create_content(*last_site, last_site->type);
 }
 
 void show_locations() {
