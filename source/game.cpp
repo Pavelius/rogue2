@@ -66,18 +66,15 @@ static void check_monster_encounters() {
 	for(auto& e : bsdata<sitei>()) {
 		if(!e.ispresent())
 			continue;
-		if(!e.needspawn())
+		auto range = area_range(human->index, e.center());
+		if(range < locale_remove_range - 2 || range > locale_remove_range)
 			continue;
 		if(area_get_monsters(e.center(), 4) >= 6)
 			continue;
-		auto range = area_range(human->index, e.center());
-		if(range >= locale_remove_range - 2 && range <= locale_remove_range) {
-			e.spawn = game.minutes;
-			auto count = xrand(2, 5);
-			auto index = e.center();
-			for(auto i = 0; i < count; i++)
-				create_creature(index, Goblin);
-		}
+		auto count = xrand(2, 5);
+		auto index = e.center();
+		for(auto i = 0; i < count; i++)
+			create_monster(index, Goblin);
 	}
 }
 

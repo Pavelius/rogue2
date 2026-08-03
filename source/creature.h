@@ -159,6 +159,7 @@ int getv(monstern v, abilityn a);
 
 void apply_monster(monstern type);
 void create_creature(short unsigned index_position, monstern type);
+void create_monster(short unsigned index_position, monstern type, bool enemy = true);
 void creature_every_minute();
 void creature_every_10_minutes();
 void creature_human_turn();

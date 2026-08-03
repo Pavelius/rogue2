@@ -233,6 +233,15 @@ void create_creature(short unsigned index_position, monstern type) {
 	need_update_creatures = true;
 }
 
+void create_monster(short unsigned index, monstern type, bool enemy) {
+	create_creature(index, type);
+	if(!player)
+		return;
+	player->set(Local);
+	if(enemy)
+		player->set(Enemy);
+}
+
 void add_item(creature* p, item& v) {
 	if(!p)
 		return;
