@@ -67,11 +67,11 @@ static void check_monster_encounters() {
 		if(!e.ispresent())
 			continue;
 		auto range = area_range(human->index, e.center());
-		if(range < locale_remove_range - 2 || range > locale_remove_range)
+		if(range != locale_remove_range)
 			continue;
-		if(area_get_monsters(e.center(), 4) >= 6)
-			continue;
-		auto count = xrand(2, 5);
+		if(area_get_monsters(e.center(), 3))
+			continue; // If any monster present - not spawn any creatures
+		auto count = xrand(2, 4);
 		auto index = e.center();
 		for(auto i = 0; i < count; i++)
 			create_monster(index, Goblin);
@@ -357,11 +357,6 @@ static void initialize_strings() {
 	stringbuilder::custom = game_string;
 }
 
-static void create_enemy(short unsigned index, monstern type) {
-	create_creature(index, type);
-	player->set(Enemy);
-}
-
 bool game_chance(int v) {
 	if(v <= 0)
 		return false;
@@ -424,8 +419,8 @@ int main(int argc, char* argv[]) {
 	player->equip(LongBow);
 	player->update();
 	human = player;
-	create_enemy(apos(7, 3), GiantAntWarrior);
-	create_enemy(apos(7, 4), GiantAntWarrior);
+	create_monster(apos(7, 3), GiantAntWarrior);
+	create_monster(apos(7, 4), GiantAntWarrior);
 	create_site(MonstersLair);
 	create_site(MonstersLair);
 	//create_enemy(apos(8, 3), Goblin);

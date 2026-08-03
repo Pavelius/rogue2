@@ -220,7 +220,7 @@ void create_creature(short unsigned index_position, monstern type) {
 		player = 0;
 		return;
 	}
-	player = bsdata<creature>::add();
+	player = bsdata<creature>::addz();
 	player->clear();
 	player->type = type;
 	player->render = RenderCreature;
