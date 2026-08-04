@@ -113,6 +113,7 @@ void apply_monster(monstern type) {
 		player->basic.abilities[BalisticSkill] += imax(15, e.level * 5);
 		for(auto i = 0; i < lenghtof(player->feats); i++)
 			player->feats[i] = e.stats.feats[i];
+		player->spells = e.stats.spells;
 		for(auto i = 0; i < lenghtof(e.stats.abilities); i++)
 			player->basic.abilities[i] += e.stats.abilities[i];
 		for(auto v : e.stats.items) {

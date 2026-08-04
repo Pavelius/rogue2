@@ -49,10 +49,22 @@ bool spell_is_combat(unsigned char v) {
 static variantn get_target(spelln v) {
 	switch(v) {
 	case CureLightWounds: case CureSeriousWounds: case CureCriticalWounds:
-	case MageArmor: case MageShield: case LightSpell: case Sleep: case Web:
-		return Monster;
+	case MageArmor: case LightSpell: case Sleep: case Web:
+	case BurningHands: case FireBolt: case IceSpear:
+		return Monster; // Target creature
+	case MageShield:
+		return Spell; // Self only
+	case EnchantItem: case CreateArtifact: case UncurseItem:
+		return Item;
 	default:
 		return Variant;
+	}
+}
+
+static monstern get_minions(monstern v) {
+	switch(v) {
+	case GiantAntQueen: return GiantAnt;
+	default: (monstern)0;
 	}
 }
 
@@ -124,11 +136,11 @@ bool creature::apply(spelln v, bool run) {
 bool item::apply(spelln v, bool run) {
 	switch(v) {
 	case BlessItem:
-		if(magic >= Blessed)
+		if(magic != Mundane || !known_magic)
 			return false;
 		if(run) {
-			magic = Blessed;
 			known_magic = 1;
+			magic = Blessed;
 		}
 		break;
 	case DetectMagicItem:
@@ -138,7 +150,7 @@ bool item::apply(spelln v, bool run) {
 			known_magic = 1;
 		break;
 	case EnchantItem:
-		if(power)
+		if(power || !known_power)
 			return false;
 		if(run) {
 		}
@@ -158,7 +170,7 @@ bool item::apply(spelln v, bool run) {
 		}
 		break;
 	case CreateArtifact:
-		if(!known_magic || !known_power || !power || magic == Artifact)
+		if(!known_magic || !known_power || !power || magic != Blessed)
 			return false;
 		if(run) {
 			act(ItemGrowColor, GlowYellow);
