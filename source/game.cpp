@@ -337,7 +337,9 @@ void end_game() {
 }
 
 static void put_item(short unsigned i, itemn v) {
-	item it(v);
+	item it(v); it.create(20);
+	it.known_magic = 1;
+	it.known_power = 1;
 	add_item(current_area, i, it);
 }
 
@@ -410,6 +412,9 @@ int main(int argc, char* argv[]) {
 	put_item(apos(4, 4), LongSword);
 	put_item(apos(4, 4), LongBow);
 	area_set(apos(4, 3), Tree);
+	put_item(apos(5, 3), RedTome);
+	put_item(apos(6, 3), GreenTome);
+	put_item(apos(7, 3), BlueTome);
 	create_creature(apos(4, 3), Human);
 	item i1 = Spear; i1.magic = Blessed; // i1.known_magic = 1;
 	player->equip(i1);
@@ -419,8 +424,8 @@ int main(int argc, char* argv[]) {
 	player->equip(LongBow);
 	player->update();
 	human = player;
-	create_monster(apos(7, 3), GiantAntWarrior);
-	create_monster(apos(7, 4), GiantAntWarrior);
+	create_monster(apos(7, 3), Goblin);
+	// create_monster(apos(7, 4), GiantAntWarrior);
 	create_site(MonstersLair);
 	create_site(MonstersLair);
 	//create_enemy(apos(8, 3), Goblin);

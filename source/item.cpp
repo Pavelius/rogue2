@@ -19,6 +19,7 @@
 #include "collectiona.h"
 #include "itemlay.h"
 #include "feats.h"
+#include "game.h"
 #include "math.h"
 #include "message.h"
 #include "pushvalue.h"
@@ -51,6 +52,19 @@ static variant no_powers[] = {Variant};
 static variant blue_potion_powers[] = {
 	Hits, Mana, Strenght, Dexterity, Wits, Poison, Illness,
 };
+static variant red_tome[] = {
+	Alchemy, Alertness, Gemcutting, Riding, Dodge, Thievery, Literacy, Metallurgy, Mining,
+	Stealth, Survival, Haggling, History, Religion, Woodcutting
+};
+static variant green_tome[] = {
+	Strenght, Dexterity, Wits, Mana, Hits,
+};
+static variant blue_tome[] = {
+	CureLightWounds, CureDisease,
+	MageArmor, LightSpell, Mending, Sleep, Web,
+	SummonUndead,
+	BurningHands, IceSpear, MagicMissile, Entaglement, HorrorScare,
+};
 static variant potion_powers[] = {
 	Regenerating, Boosting, Poison, Illness, Experience,
 	WeaponSkill, BalisticSkill, Dodge, Armor,
@@ -64,6 +78,9 @@ static slice<variant> get_powers(itemn v) {
 	case Spear: return pierce_melee_weapon_powers;
 	case BluePotion: return blue_potion_powers;
 	case GreenPotion: case RedPotion: return potion_powers;
+	case RedTome: return red_tome;
+	case GreenTome: return green_tome;
+	case BlueTome: return blue_tome;
 	default: return no_powers;
 	}
 }
@@ -275,7 +292,7 @@ bool item::is(featn v) const {
 	switch(v) {
 	case BleedingHit: return (type >= ShortSword && type <= GreatSword);
 	case StunningHit: return type == Mace || type == GreatMace || type == WarHammer || type == Staff;
-	case PierceHit: return type == Dagger || type==Spear;
+	case PierceHit: return type == Dagger || type == Spear;
 	case RetaliateHit: return type == Spear;
 	case Large: return type == GreatAxe || type == GreatSword || type == Staff || type == Spear;
 	default: return false;
@@ -450,4 +467,17 @@ bool item::unequip() {
 void item::act(messagen v, glown glow) const {
 	pushvalue push(last_item, const_cast<item*>(this));
 	player->act(' ', getname(v), getname(glow));
+}
+
+void item::create(int chance_blessed, int chance_cursed, int chance_power) {
+	auto source = get_powers(type);
+	if((source && source[0]) || game_chance(chance_power))
+		setpower();
+	if(game_chance(chance_cursed))
+		magic = Cursed;
+	else if(game_chance(chance_blessed)) {
+		magic = Blessed;
+		if(game_chance(chance_blessed / 3))
+			magic = Artifact;
+	}
 }

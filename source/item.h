@@ -81,6 +81,7 @@ struct item {
 	bool apply(spelln v, bool run = true);
 	bool broke();
 	void clear() { count = 0; type = (itemn)0; properties = 0; }
+	void create(int chance_blessed = 10, int chance_cursed = 5, int chance_power = 20);
 	bool is(magicn v) const { return magic == v; }
 	bool is(wearn v) const;
 	bool is(featn v) const;

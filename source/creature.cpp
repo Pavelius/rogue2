@@ -1192,16 +1192,55 @@ static bool drink_potion(item& v, bool run) {
 	}
 }
 
+static void read_effect(abilityn v) {
+	player->act(' ', getname(TomeLearnSkill), getname(v));
+	if(v >= FirstSkill && v <= LastSkill) {
+		if(!player->basic.abilities[v])
+			player->basic.add(v, xrand(1, 6));
+	}
+	player->update();
+}
+
+static void read_effect(spelln v) {
+	player->act(' ', getname(TomeLearnSpell), getname(v));
+}
+
 static bool read_tome(item& v, bool run) {
-	if(player->roll(Literacy)) {
-		// Raise skills
-		// Learn spell
-		// Gain experience
-		// Change alignment
-	} else {
-		// Lose mana
-		// Lose hits
-		// Lose time
+	auto power = v.getpower();
+	if(!power)
+		return false;
+	auto literacy_bonus = 0;
+	auto maximum_try = 3;
+	switch(v.magic) {
+	case Cursed:
+		literacy_bonus -= 20;
+		break;
+	case Blessed:
+		literacy_bonus += 10;
+		maximum_try += 2;
+		break;
+	case Artifact:
+		literacy_bonus += 30;
+		maximum_try += 4;
+		break;
+	}
+	if(run) {
+		player->act(PlayerReadTome);
+		if(player->roll(Literacy, literacy_bonus)) {
+			switch(power.type) {
+			case Ability: read_effect((abilityn)power.value); break;
+			case Spell: read_effect((spelln)power.value); break;
+				// Gain experience
+				// Change alignment
+			default: break;
+			}
+		} else {
+			player->act(TomeLearnNothing);
+			// Lose mana
+			// Lose hits
+			// Lose time
+		}
+		player->wait(xrand(1000, 3000));
 	}
 	return true;
 }
@@ -1259,6 +1298,7 @@ static bool eat_edible(item& v, bool run) {
 }
 
 bool item::use(bool run) {
+	pushvalue push(last_item, this);
 	switch(type) {
 	case RedPotion: case BluePotion: case GreenPotion:
 		return drink_potion(*this, run);
