@@ -67,7 +67,7 @@ static void check_monster_encounters() {
 		if(!e.ispresent())
 			continue;
 		auto range = area_range(human->index, e.center());
-		if(range != locale_remove_range)
+		if(range != locale_remove_range - 2)
 			continue;
 		if(area_get_monsters(e.center(), 3))
 			continue; // If any monster present - not spawn any creatures

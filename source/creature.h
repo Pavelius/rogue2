@@ -79,7 +79,7 @@ extern creature* opponent;
 extern bool need_update_creatures;
 extern bool need_end_turn;
 
-const int locale_remove_range = 17;
+const int locale_remove_range = 19;
 
 struct creature : drawable, posable, statable, featable, spellable, wearable {
 	namen			custom_name; // Random name seed or 0xFF if no name

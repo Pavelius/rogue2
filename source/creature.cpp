@@ -1054,8 +1054,8 @@ int creature::getlos() const {
 }
 
 bool creature::canhear(short unsigned i) const {
-	auto n = 2 + get(Wits) / 10 + get(Dexterity) / 20;
-	return area_range(index, i) < n;
+	auto n = 3 + get(Wits) / 10 + get(Dexterity) / 20;
+	return area_range(index, i) <= n;
 }
 
 const char* creature::name() const {
