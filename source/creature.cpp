@@ -1192,6 +1192,20 @@ static bool drink_potion(item& v, bool run) {
 	}
 }
 
+static bool read_tome(item& v, bool run) {
+	if(player->roll(Literacy)) {
+		// Raise skills
+		// Learn spell
+		// Gain experience
+		// Change alignment
+	} else {
+		// Lose mana
+		// Lose hits
+		// Lose time
+	}
+	return true;
+}
+
 static bool eat_edible(item& v, bool run) {
 	int chance_disease = 0;
 	int chance_poison = 0;
@@ -1250,6 +1264,8 @@ bool item::use(bool run) {
 		return drink_potion(*this, run);
 	case Ration: case BloodyRemains:
 		return eat_edible(*this, run);
+	case RedTome: case BlueTome: case GreenTome:
+		return read_tome(*this, run);
 	default:
 		return false;
 	}
