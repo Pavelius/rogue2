@@ -42,6 +42,7 @@ enum itemn : unsigned char {
 	Robe, LeatherArmor, StuddedArmor, HideArmor, ScaleMail, ChainMail, PlateMail,
 	LeatherBoots, IronBoots,
 	BluePotion, GreenPotion, RedPotion,
+	BlueTome, GreenTome, RedTome,
 	Ration, Apple, Bread, Meat, Shell, Bones, BloodyRemains,
 	LastItem = BloodyRemains,
 };
