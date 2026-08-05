@@ -126,5 +126,6 @@ void apply_monster(monstern type) {
 		player->basic.abilities[BalisticSkill] += 15;
 		player->basic.abilities[Hits] += 10;
 		player->basic.abilities[Mana] += 10;
+		player->basic.abilities[Literacy] += xrand(3, 18);
 	}
 }
