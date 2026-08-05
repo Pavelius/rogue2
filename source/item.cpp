@@ -481,3 +481,8 @@ void item::create(int chance_blessed, int chance_cursed, int chance_power) {
 			magic = Artifact;
 	}
 }
+
+bool item::countable() const {
+	return (type >= CP && type <= GP)
+		|| (type >= Ration && type <= BloodyRemains);
+}

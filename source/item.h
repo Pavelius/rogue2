@@ -81,6 +81,7 @@ struct item {
 	bool apply(spelln v, bool run = true);
 	bool broke();
 	void clear() { count = 0; type = (itemn)0; properties = 0; }
+	bool countable() const;
 	void create(int chance_blessed = 10, int chance_cursed = 5, int chance_power = 20);
 	bool is(magicn v) const { return magic == v; }
 	bool is(wearn v) const;
@@ -94,7 +95,6 @@ struct item {
 	bool setpower();
 	bool setpower(variant v);
 	bool unequip();
-	void use();
 	bool use(bool run);
 };
 extern item* last_item;
