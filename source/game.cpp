@@ -339,7 +339,6 @@ void end_game() {
 static void put_item(short unsigned i, itemn v) {
 	item it(v); it.create(20);
 	it.known_magic = 1;
-	it.known_power = 1;
 	add_item(current_area, i, it);
 }
 
@@ -418,7 +417,7 @@ int main(int argc, char* argv[]) {
 	create_creature(apos(4, 3), Human);
 	item i1 = Spear; i1.magic = Blessed; // i1.known_magic = 1;
 	player->equip(i1);
-	item i2 = BluePotion; i2.setpower(Hits); i2.known_magic = 1; i2.known_power = 1;
+	item i2 = BluePotion; i2.setpower(Hits); i2.known_magic = 1;
 	player->additem(i2);
 	player->equip(LeatherArmor);
 	player->equip(LongBow);

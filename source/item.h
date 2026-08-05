@@ -35,7 +35,7 @@ enum magicn : unsigned char {
 	Mundane, Cursed, Blessed, Artifact,
 };
 enum itemn : unsigned char {
-	CP, SP, GP,
+	NoItem, CP, SP, GP,
 	Staff, Spear, Axe, Mace, WarHammer, GreatMace, GreatAxe,
 	Dagger, ShortSword, LongSword, Scimitar, GreatSword,
 	ShortBow, LongBow, Crossbow, HeavyCrossbow,
@@ -49,20 +49,18 @@ enum itemn : unsigned char {
 
 struct item {
 	itemn type;
-	unsigned char count;
 	union {
-		unsigned short properties;
+		unsigned char count;
 		struct {
-			unsigned char power : 5; // Item magical power index (1-31) or 0 - if no magical power
-			unsigned char broken : 3; // Charges or Broken status
-			magicn magic : 2;
-			unsigned char known_power : 1;
-			unsigned char known_magic : 1;
+			unsigned char power : 3; // Item magical power index (1-15) or 0 - if no magical power
+			unsigned char known_magic : 1; // Identified item
+			unsigned char hits : 2; // 0-1 undamaged, 2 damaged, 3 severe damaged
+			magicn magic : 2; // Mundane, Cursed, Blessed, Artifact
 		};
 	};
-	constexpr item() : type((itemn)0), count(0), properties(0) {}
-	constexpr item(itemn v, unsigned char count = 1) : type(v), count(count), properties(0) {}
-	explicit operator bool() const { return count != 0; }
+	constexpr item() : type((itemn)0), count(0) {}
+	constexpr item(itemn v) : type(v), count(0) {}
+	explicit operator bool() const { return type != (itemn)0; }
 	creature* owner() const;
 	wearn equiped() const;
 	wearn wear() const;
@@ -79,14 +77,14 @@ struct item {
 	int	weight() const;
 	void act(messagen v, glown glow) const;
 	bool apply(spelln v, bool run = true);
-	bool broke();
-	void clear() { count = 0; type = (itemn)0; properties = 0; }
+	bool broke(messagen msg = (messagen)0);
+	void clear() { count = 0; type = (itemn)0; }
 	bool countable() const;
 	void create(int chance_blessed = 10, int chance_cursed = 5, int chance_power = 20);
 	bool is(magicn v) const { return magic == v; }
 	bool is(wearn v) const;
 	bool is(featn v) const;
-	bool iscoins() const { return type == CP || type == SP || type == GP; }
+	bool iscoins() const { return type >= CP && type <= GP; }
 	bool ismagical() const;
 	bool ispower(variant v) const;
 	bool istwohanded() const { return is(Large); }

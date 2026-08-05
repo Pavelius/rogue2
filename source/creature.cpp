@@ -1210,18 +1210,15 @@ static bool read_tome(item& v, bool run) {
 	if(!power)
 		return false;
 	auto literacy_bonus = 0;
-	auto maximum_try = 3;
 	switch(v.magic) {
 	case Cursed:
 		literacy_bonus -= 20;
 		break;
 	case Blessed:
 		literacy_bonus += 10;
-		maximum_try += 2;
 		break;
 	case Artifact:
-		literacy_bonus += 30;
-		maximum_try += 4;
+		literacy_bonus += 40;
 		break;
 	}
 	if(run) {
@@ -1240,6 +1237,7 @@ static bool read_tome(item& v, bool run) {
 			// Lose hits
 			// Lose time
 		}
+		v.broke(TomeReaded);
 		player->wait(xrand(1000, 3000));
 	}
 	return true;

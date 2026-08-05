@@ -34,7 +34,7 @@ const int gp = 100;
 
 const int lb = 50;
 
-static_assert(sizeof(item) == 4, "Structure `item` must 4 bytes");
+static_assert(sizeof(item) == 2, "Structure `item` must 2 bytes");
 
 collectionv<itemlay> items;
 bool need_update_items;
@@ -237,11 +237,11 @@ bool item::is(wearn v) const {
 }
 
 int item::weight() const {
-	return get_weight(type) * count;
+	return get_weight(type) * (countable() ? 1 : count);
 }
 
 int item::cost() const {
-	return get_cost(type) * count;
+	return get_cost(type) * (countable() ? 1 : count);
 }
 
 int item::damage() const {
@@ -284,8 +284,31 @@ int item::block() const {
 	}
 }
 
-bool item::broke() {
-	return false;
+bool item::broke(messagen msg) {
+	switch(magic) {
+	case Blessed:
+		if(game_chance(25))
+			return false;
+		break;
+	case Artifact:
+		if(game_chance(60))
+			return false;
+		break;
+	default:
+		if(game_chance(10))
+			return false;
+		break;
+	}
+	if(hits == 3) {
+		if(msg && owner() == player)
+			act(msg, GlowBlack);
+		clear();
+		need_update_items = true;
+		return true;
+	} else {
+		hits++;
+		return false;
+	}
 }
 
 bool item::is(featn v) const {
@@ -304,24 +327,19 @@ void item::setslot(item& v) {
 	if(s == Ammunition || s == Backpack)
 		join(v);
 	else {
-		*this = v;
-		count = 1;
-		if(v.count == 1)
-			v.clear();
-		else
-			v.count -= 1;
+		iswap(*this, v);
 		last_item = this;
 		need_update_items = true;
 	}
 }
 
 void item::join(item& v) {
-	if(!count) {
+	if(!type) {
 		*this = v;
 		v.clear();
 		need_update_items = true;
 	} else {
-		if(type != v.type || properties != v.properties)
+		if(type != v.type || !v.countable())
 			return;
 		if(count >= 255)
 			return;
@@ -331,7 +349,7 @@ void item::join(item& v) {
 			count = 255;
 		} else {
 			count = (unsigned char)new_count;
-			v.count = 0;
+			v.clear();
 		}
 		need_update_items = true;
 	}
@@ -380,16 +398,22 @@ const char* item::name() const {
 	stringbuilder sb(temp);
 	auto pn = getname(type);
 	auto gi = gender_by_name(pn);
-	if(known_magic && magic)
-		sb.adds(getname((magicn)(gi * 4 + magic)));
-	sb.adds(getname(type));
-	if(known_power) {
-		auto pw = getpower();
-		if(pw)
-			sb.adds(get_power_name(pw));
+	if(countable()) {
+		sb.adds(pn);
+		if(countable() && count > 1)
+			sb.adds("x%1i", count);
+	} else {
+		if(known_magic) {
+			if(magic)
+				sb.adds(getname((magicn)(gi * 4 + magic)));
+		}
+		sb.adds(pn);
+		if(known_magic) {
+			auto pw = getpower();
+			if(pw)
+				sb.adds(get_power_name(pw));
+		}
 	}
-	if(count > 1)
-		sb.adds("x%1i", count);
 	sb.lower();
 	return temp;
 }

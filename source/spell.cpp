@@ -144,22 +144,22 @@ bool item::apply(spelln v, bool run) {
 		}
 		break;
 	case DetectMagicItem:
-		if(known_magic)
+		if(known_magic || magic != Blessed)
 			return false;
 		if(run)
 			known_magic = 1;
 		break;
 	case EnchantItem:
-		if(power || !known_power)
+		if(power || !known_magic)
 			return false;
 		if(run) {
 		}
 		break;
 	case IdentifyItem:
-		if(known_power)
+		if(known_magic)
 			return false;
 		if(run)
-			known_power = 1;
+			known_magic = 1;
 		break;
 	case UncurseItem:
 		if(!known_magic || magic != Cursed)
@@ -170,7 +170,7 @@ bool item::apply(spelln v, bool run) {
 		}
 		break;
 	case CreateArtifact:
-		if(!known_magic || !known_power || !power || magic != Blessed)
+		if(!known_magic || !getpower() || magic != Blessed)
 			return false;
 		if(run) {
 			act(ItemGrowColor, GlowYellow);

@@ -28,7 +28,7 @@ enum messagen : unsigned char {
 	ApplicationTitle,
 	Coins, Rounds,
 	MsgHeal, MsgCurePoison, MsgTwoHands,
-	TomeLearnNothing, TomeLearnSkill, TomeLearnSpell,
+	TomeLearnNothing, TomeLearnSkill, TomeLearnSpell, TomeReaded,
 	NotEnoughMana,
 	TasteBad, TasteNormal, TasteGood,
 	PlayerEat, PlayerReadTome, PlayerKilled, PlayerFoundSecretDoor, PlayerFoundTrap,
