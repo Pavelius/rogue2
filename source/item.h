@@ -43,6 +43,7 @@ enum itemn : unsigned char {
 	LeatherBoots, IronBoots,
 	BluePotion, GreenPotion, RedPotion,
 	BlueTome, GreenTome, RedTome,
+	BlueRod, GreenRod, RedRod,
 	Ration, Apple, Bread, Meat, Shell, Bones, BloodyRemains,
 	CP, SP, GP,
 	LastItem = GP,
@@ -82,7 +83,7 @@ struct item {
 	int getcount() const { return countable() ? count : 1; }
 	void act(messagen v, glown glow) const;
 	bool apply(spelln v, bool run = true);
-	bool broke(messagen msg = (messagen)0);
+	void broke(messagen msg = (messagen)0);
 	void clear() { count = 0; type = (itemn)0; }
 	bool countable() const { return type >= Ration; }
 	void create(int chance_blessed = 10, int chance_cursed = 5, int chance_power = 20);

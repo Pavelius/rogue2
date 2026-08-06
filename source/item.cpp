@@ -49,6 +49,9 @@ static variant green_potion_powers[8] = {Regenerating, Boosting, Experience, Aci
 static variant red_tome[8] = {Alchemy, Gemcutting, BalisticSkill, WeaponSkill, Mining, Stealth, History, Religion};
 static variant green_tome[8] = {Mana, Hits, Wits, Dexterity, Strenght, Literacy, Metallurgy};
 static variant blue_tome[8] = {CureLightWounds, MageArmor, LightSpell, Mending, Sleep, Web, BurningHands, HorrorScare};
+static variant blue_rod[8] = {CureSeriousWounds, CureDisease, CurePoison, IceSpear, HorrorScare, LightSpell, SummonUndead};
+static variant green_rod[8] = {Sleep, Entaglement, MageArmor, Web};
+static variant red_rod[8] = {BurningHands, FireBolt};
 
 static const variant* get_powers(itemn v) {
 	switch(v) {
@@ -60,6 +63,9 @@ static const variant* get_powers(itemn v) {
 	case RedTome: return red_tome;
 	case GreenTome: return green_tome;
 	case BlueTome: return blue_tome;
+	case BlueRod: return blue_rod;
+	case GreenRod: return green_rod;
+	case RedRod: return red_rod;
 	default: return no_powers;
 	}
 }
@@ -290,32 +296,41 @@ int item::block() const {
 	}
 }
 
-bool item::broke(messagen msg) {
+void item::broke(messagen msg) {
 	switch(magic) {
 	case Blessed:
-		// RULE: Blessed don't use charge in 25% of time
-		if(game_chance(25))
-			return false;
+		// RULE: Blessed don't always use charge
+		if(game_chance(30))
+			return;
 		break;
 	case Artifact:
-		// RULE: Artifact don't use charge in 60% of time
-		if(game_chance(60))
-			return false;
+		// RULE: Artifact don't always use charge
+		if(game_chance(70))
+			return;
 		break;
 	default:
+		// RULE: Mundane item don't always use charge
 		if(game_chance(10))
-			return false;
+			return;
 		break;
 	}
-	if(hits == 3) {
+	if(countable()) {
 		if(msg && owner() == player)
 			act(msg, GlowBlack);
-		clear();
-		need_update_items = true;
-		return true;
+		if(count)
+			count--;
+		else {
+			clear();
+			need_update_items = true;
+		}
 	} else {
-		hits++;
-		return false;
+		if(hits == 3) {
+			if(msg && owner() == player)
+				act(msg, GlowBlack);
+			clear();
+			need_update_items = true;
+		} else
+			hits++;
 	}
 }
 
