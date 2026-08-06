@@ -1244,30 +1244,16 @@ static bool read_tome(item& v, bool run) {
 }
 
 static bool eat_edible(item& v, bool run) {
-	int chance_disease = 0;
-	int chance_poison = 0;
-	int chance_raise_ability = 0;
-	int add_hits = 0;
-	int add_mana = 0;
+	auto chance_disease = 0;
+	auto chance_poison = 0;
+	auto chance_raise_ability = 0;
+	auto add_hits = 0;
+	auto add_mana = 0;
 	abilityn ability = Strenght;
 	player->actn(PlayerEat);
-	switch(v.magic) {
-	case Cursed:
-		player->actn(TasteBad);
-		player->damage(1);
-		chance_disease += 70;
-		add_hits -= xrand(1, 2);
-		break;
-	case Mundane:
-		player->actn(TasteNormal);
-		if(game_chance(40))
-			add_hits += 1;
-		break;
-	default:
-		player->actn(TasteGood);
-		add_hits += xrand(1, 3);
-		break;
-	}
+	player->actn(TasteNormal);
+	if(game_chance(40))
+		add_hits += 1;
 	switch(v.type) {
 	case BloodyRemains:
 		if(player->type != Goblin)

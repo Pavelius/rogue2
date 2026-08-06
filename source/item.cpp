@@ -40,44 +40,23 @@ collectionv<itemlay> items;
 bool need_update_items;
 item* last_item;
 
-static variant swords_powers[] = {
-	Variant,
-	WeaponSkill, DamageMelee, Dexterity,
-};
-static variant pierce_melee_weapon_powers[] = {
-	Variant,
-	WeaponSkill, DamageMelee, Dexterity,
-};
 static variant no_powers[] = {Variant};
-static variant blue_potion_powers[] = {
-	Hits, Mana, Strenght, Dexterity, Wits, Poison, Illness,
-};
-static variant red_tome[] = {
-	Alchemy, Alertness, Gemcutting, Riding, Dodge, Thievery, Literacy, Metallurgy, Mining,
-	Stealth, Survival, Haggling, History, Religion, Woodcutting
-};
-static variant green_tome[] = {
-	Strenght, Dexterity, Wits, Mana, Hits,
-};
-static variant blue_tome[] = {
-	CureLightWounds, CureDisease,
-	MageArmor, LightSpell, Mending, Sleep, Web,
-	SummonUndead,
-	BurningHands, IceSpear, MagicMissile, Entaglement, HorrorScare,
-};
-static variant potion_powers[] = {
-	Regenerating, Boosting, Poison, Illness, Experience,
-	WeaponSkill, BalisticSkill, Dodge, Armor,
-	AcidImmunity, ColdImmunity, DeathImmunity, DiseaseImmunity, FireImmunity, PoisonImmunity, StunImmunity,
-	Fly, FastMove, FastAttack,
-};
+static variant swords_powers[] = {Variant, WeaponSkill, DamageMelee, Dexterity};
+static variant pierce_melee_weapon_powers[] = {Variant, WeaponSkill, DamageMelee, Dexterity};
+static variant blue_potion_powers[] = {Hits, Mana, Strenght, Dexterity, Wits, Poison, Illness, Drunk};
+static variant red_potion_powers[] = {WeaponSkill, BalisticSkill, Dodge, Armor, FastMove, FastAttack, Fly, FireImmunity};
+static variant green_potion_powers[] = {Regenerating, Boosting, Experience, AcidImmunity, ColdImmunity, DeathImmunity, DiseaseImmunity, PoisonImmunity};
+static variant red_tome[] = {Alchemy, Gemcutting, BalisticSkill, WeaponSkill, Mining, Stealth, History, Religion};
+static variant green_tome[] = {Mana, Hits, Wits, Dexterity, Strenght, Literacy, Metallurgy};
+static variant blue_tome[] = {CureLightWounds, MageArmor, LightSpell, Mending, Sleep, Web, BurningHands, HorrorScare};
 
 static slice<variant> get_powers(itemn v) {
 	switch(v) {
 	case Dagger: case LongSword: case ShortSword: case GreatSword: return swords_powers;
 	case Spear: return pierce_melee_weapon_powers;
 	case BluePotion: return blue_potion_powers;
-	case GreenPotion: case RedPotion: return potion_powers;
+	case GreenPotion: return green_potion_powers;
+	case RedPotion: return red_potion_powers;
 	case RedTome: return red_tome;
 	case GreenTome: return green_tome;
 	case BlueTome: return blue_tome;
@@ -86,6 +65,8 @@ static slice<variant> get_powers(itemn v) {
 }
 
 variant item::getpower() const {
+	if(countable())
+		return Variant;
 	auto powers = get_powers(type);
 	if(!powers)
 		return variant();
@@ -101,6 +82,8 @@ static int find_power(slice<variant> source, variant v) {
 }
 
 bool item::setpower(variant v) {
+	if(countable())
+		return false;
 	auto n = find_power(get_powers(type), v);
 	if(n == -1)
 		return false;
@@ -109,6 +92,8 @@ bool item::setpower(variant v) {
 }
 
 bool item::setpower() {
+	if(countable())
+		return false;
 	auto source = get_powers(type);
 	if(!source)
 		return false;
@@ -155,13 +140,19 @@ static int get_cost(itemn v) {
 	case LongSword: return 15 * gp;
 	case Scimitar: return 25 * gp;
 	case GreatSword: return 50 * gp;
+	case RedPotion: return 15 * gp;
+	case GreenPotion: return 15 * gp;
+	case BluePotion: return 10 * gp;
+	case RedTome: return 30 * gp;
+	case BlueTome: return 30 * gp;
+	case GreenTome: return 30 * gp;
 	default: return 0;
 	}
 }
 
 static int get_damage(itemn v) {
 	switch(v) {
-	case CP: // Unarmed attack
+	case NoItem: // Unarmed attack
 		return 2;
 	case Dagger:
 		return 3;
@@ -175,6 +166,10 @@ static int get_damage(itemn v) {
 		return 8;
 	case GreatSword:
 		return 9;
+	case ShortBow:
+		return 4;
+	case LongBow:
+		return 5;
 	default:
 		return 0;
 	}
@@ -237,11 +232,11 @@ bool item::is(wearn v) const {
 }
 
 int item::weight() const {
-	return get_weight(type) * (countable() ? 1 : count);
+	return get_weight(type) * getcount();
 }
 
 int item::cost() const {
-	return get_cost(type) * (countable() ? 1 : count);
+	return get_cost(type) * getcount();
 }
 
 int item::damage() const {
@@ -287,10 +282,12 @@ int item::block() const {
 bool item::broke(messagen msg) {
 	switch(magic) {
 	case Blessed:
+		// RULE: Blessed don't use charge in 25% of time
 		if(game_chance(25))
 			return false;
 		break;
 	case Artifact:
+		// RULE: Artifact don't use charge in 60% of time
 		if(game_chance(60))
 			return false;
 		break;
@@ -504,9 +501,4 @@ void item::create(int chance_blessed, int chance_cursed, int chance_power) {
 		if(game_chance(chance_blessed / 3))
 			magic = Artifact;
 	}
-}
-
-bool item::countable() const {
-	return (type >= CP && type <= GP)
-		|| (type >= Ration && type <= BloodyRemains);
 }

@@ -35,7 +35,7 @@ enum magicn : unsigned char {
 	Mundane, Cursed, Blessed, Artifact,
 };
 enum itemn : unsigned char {
-	NoItem, CP, SP, GP,
+	NoItem,
 	Staff, Spear, Axe, Mace, WarHammer, GreatMace, GreatAxe,
 	Dagger, ShortSword, LongSword, Scimitar, GreatSword,
 	ShortBow, LongBow, Crossbow, HeavyCrossbow,
@@ -44,8 +44,12 @@ enum itemn : unsigned char {
 	BluePotion, GreenPotion, RedPotion,
 	BlueTome, GreenTome, RedTome,
 	Ration, Apple, Bread, Meat, Shell, Bones, BloodyRemains,
-	LastItem = BloodyRemains,
+	CP, SP, GP,
+	LastItem = GP,
 };
+
+extern const char* power_names[];
+extern const char* item_state_names[4 * 2]; // Status: used and damaged
 
 struct item {
 	itemn type;
@@ -54,7 +58,7 @@ struct item {
 		struct {
 			unsigned char power : 3; // Item magical power index (1-15) or 0 - if no magical power
 			unsigned char known_magic : 1; // Identified item
-			unsigned char hits : 2; // 0-1 undamaged, 2 damaged, 3 severe damaged
+			unsigned char hits : 2; // 0-1 undamaged, 2 used, 3 damaged
 			magicn magic : 2; // Mundane, Cursed, Blessed, Artifact
 		};
 	};
@@ -75,11 +79,12 @@ struct item {
 	int pierce() const;
 	int speed() const;
 	int	weight() const;
+	int getcount() const { return countable() ? count : 1; }
 	void act(messagen v, glown glow) const;
 	bool apply(spelln v, bool run = true);
 	bool broke(messagen msg = (messagen)0);
 	void clear() { count = 0; type = (itemn)0; }
-	bool countable() const;
+	bool countable() const { return type >= Ration; }
 	void create(int chance_blessed = 10, int chance_cursed = 5, int chance_power = 20);
 	bool is(magicn v) const { return magic == v; }
 	bool is(wearn v) const;
@@ -96,8 +101,6 @@ struct item {
 	bool use(bool run);
 };
 extern item* last_item;
-
-extern const char* power_names[];
 
 struct wearable {
 	item wears[Legs + 1];
