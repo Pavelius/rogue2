@@ -670,7 +670,7 @@
 
 1779890842 /home/user-331/projects/rogue2/source/rand.h
 
-1779949053 source:/home/user-331/projects/rogue2/source/area.cpp
+1786022032 source:/home/user-331/projects/rogue2/source/area.cpp
 	"area.h"
 	"bsdata.h"
 	"creature.h"
@@ -680,7 +680,7 @@
 	"rand.h"
 	"slice.h"
 
-1785237625 /home/user-331/projects/rogue2/source/area.h
+1786022032 /home/user-331/projects/rogue2/source/area.h
 
 1779890842 /home/user-331/projects/rogue2/source/bsdata.h
 	"array.h"
@@ -688,7 +688,7 @@
 1779890842 /home/user-331/projects/rogue2/source/array.h
 	"slice.h"
 
-1785421672 /home/user-331/projects/rogue2/source/creature.h
+1786022032 /home/user-331/projects/rogue2/source/creature.h
 	"direction.h"
 	"draw_object.h"
 	"draw_floatinfo.h"
@@ -707,21 +707,22 @@
 
 1779890842 /home/user-331/projects/rogue2/source/rect.h
 
-1779890842 /home/user-331/projects/rogue2/source/feats.h
+1786022032 /home/user-331/projects/rogue2/source/feats.h
 	"flagable.h"
 
 1785237598 /home/user-331/projects/rogue2/source/flagable.h
 
-1785319438 /home/user-331/projects/rogue2/source/item.h
+1786022032 /home/user-331/projects/rogue2/source/item.h
 	"variant.h"
 
-1781589869 /home/user-331/projects/rogue2/source/variant.h
+1786022032 /home/user-331/projects/rogue2/source/variant.h
 
 1779890842 /home/user-331/projects/rogue2/source/posable.h
 
-1780399629 /home/user-331/projects/rogue2/source/spell.h
+1786022032 /home/user-331/projects/rogue2/source/spell.h
 
-1785319438 /home/user-331/projects/rogue2/source/game.h
+1786022032 /home/user-331/projects/rogue2/source/game.h
+	"area.h"
 	"collectiona.h"
 	"indexa.h"
 
@@ -766,7 +767,7 @@
 
 1779890842 /home/user-331/projects/rogue2/source/color.h
 
-1785421672 source:/home/user-331/projects/rogue2/source/creature.cpp
+1786022032 source:/home/user-331/projects/rogue2/source/creature.cpp
 	"area.h"
 	"bsdata.h"
 	"collection.h"
@@ -785,7 +786,7 @@
 	"rand.h"
 	"stringbuilder.h"
 
-1779890842 /home/user-331/projects/rogue2/source/draw_effect.h
+1786022032 /home/user-331/projects/rogue2/source/draw_effect.h
 	"point.h"
 
 1785237598 /home/user-331/projects/rogue2/source/draw_floatinfo.h
@@ -798,7 +799,7 @@
 	"item.h"
 	"posable.h"
 
-1785319438 /home/user-331/projects/rogue2/source/message.h
+1786022032 /home/user-331/projects/rogue2/source/message.h
 
 1779890842 /home/user-331/projects/rogue2/source/print.h
 
@@ -819,7 +820,7 @@
 	"color.h"
 	"point.h"
 
-1779890842 source:/home/user-331/projects/rogue2/source/draw_effect.cpp
+1786022032 source:/home/user-331/projects/rogue2/source/draw_effect.cpp
 	"adat.h"
 	"area.h"
 	"draw.h"
@@ -867,7 +868,7 @@
 1779890842 source:/home/user-331/projects/rogue2/source/draw_theme.cpp
 	"draw.h"
 
-1785421672 source:/home/user-331/projects/rogue2/source/game.cpp
+1786022032 source:/home/user-331/projects/rogue2/source/game.cpp
 	"answers.h"
 	"area.h"
 	"bsdata.h"
@@ -887,7 +888,7 @@
 	"timer.h"
 	"variant.h"
 
-1779890842 /home/user-331/projects/rogue2/source/draw_column.h
+1786022032 /home/user-331/projects/rogue2/source/draw_column.h
 
 1785421672 /home/user-331/projects/rogue2/source/stringvar.h
 	"stringbuilder.h"
@@ -897,14 +898,14 @@
 	"indexa.h"
 	"rand.h"
 
-1779890842 source:/home/user-331/projects/rogue2/source/information.cpp
+1786022032 source:/home/user-331/projects/rogue2/source/information.cpp
 	"bsdata.h"
 	"creature.h"
 	"dice.h"
 	"stringbuilder.h"
 	"stringvar.h"
 
-1785421672 source:/home/user-331/projects/rogue2/source/interface.cpp
+1786022032 source:/home/user-331/projects/rogue2/source/interface.cpp
 	"answers.h"
 	"area.h"
 	"bsdata.h"
@@ -953,7 +954,7 @@
 	"draw.h"
 	"stringbuilder.h"
 
-1785421672 source:/home/user-331/projects/rogue2/source/locale_ru.cpp
+1786022032 source:/home/user-331/projects/rogue2/source/locale_ru.cpp
 	"bsdata.h"
 	"creature.h"
 	"game.h"
@@ -966,12 +967,13 @@
 1779890842 source:/home/user-331/projects/rogue2/source/math.cpp
 	"math.h"
 
-1785319438 source:/home/user-331/projects/rogue2/source/monster.cpp
+1786022032 source:/home/user-331/projects/rogue2/source/monster.cpp
 	"bsdata.h"
 	"creature.h"
 	"feats.h"
-	"slice.h"
 	"math.h"
+	"rand.h"
+	"slice.h"
 
 1779890842 source:/home/user-331/projects/rogue2/source/nix_draw3x.cpp
 	<X11/keysym.h>
@@ -1017,8 +1019,9 @@
 	"screenshoot.h"
 	"timer.h"
 
-1785237598 source:/home/user-331/projects/rogue2/source/spell.cpp
+1786022032 source:/home/user-331/projects/rogue2/source/spell.cpp
 	"area.h"
+	"collectiona.h"
 	"creature.h"
 	"game.h"
 	"message.h"
@@ -1027,6 +1030,7 @@
 	"slice.h"
 	"spell.h"
 	"stringbuilder.h"
+	"variant.h"
 
 1779890842 source:/home/user-331/projects/rogue2/source/stringbuilder.cpp
 	"stringbuilder.h"
@@ -1046,10 +1050,12 @@
 	"bstream.h"
 	"slice.h"
 
-1785237663 source:/home/user-331/projects/rogue2/source/area_generate.cpp
+1786022032 source:/home/user-331/projects/rogue2/source/area_generate.cpp
 	"adat.h"
 	"area.h"
+	"bsdata.h"
 	"draw.h"
+	"game.h"
 	"rand.h"
 
 1779890842 source:/home/user-331/projects/rogue2/source/enchant.cpp

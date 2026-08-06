@@ -40,17 +40,17 @@ collectionv<itemlay> items;
 bool need_update_items;
 item* last_item;
 
-static variant no_powers[] = {Variant};
-static variant swords_powers[] = {Variant, WeaponSkill, DamageMelee, Dexterity};
-static variant pierce_melee_weapon_powers[] = {Variant, WeaponSkill, DamageMelee, Dexterity};
-static variant blue_potion_powers[] = {Hits, Mana, Strenght, Dexterity, Wits, Poison, Illness, Drunk};
-static variant red_potion_powers[] = {WeaponSkill, BalisticSkill, Dodge, Armor, FastMove, FastAttack, Fly, FireImmunity};
-static variant green_potion_powers[] = {Regenerating, Boosting, Experience, AcidImmunity, ColdImmunity, DeathImmunity, DiseaseImmunity, PoisonImmunity};
-static variant red_tome[] = {Alchemy, Gemcutting, BalisticSkill, WeaponSkill, Mining, Stealth, History, Religion};
-static variant green_tome[] = {Mana, Hits, Wits, Dexterity, Strenght, Literacy, Metallurgy};
-static variant blue_tome[] = {CureLightWounds, MageArmor, LightSpell, Mending, Sleep, Web, BurningHands, HorrorScare};
+static variant no_powers[8] = {Variant};
+static variant swords_powers[8] = {Variant, WeaponSkill, DamageMelee, Dexterity};
+static variant pierce_melee_weapon_powers[8] = {Variant, WeaponSkill, DamageMelee, Dexterity};
+static variant blue_potion_powers[8] = {Hits, Mana, Strenght, Dexterity, Wits, Poison, Illness, Drunk};
+static variant red_potion_powers[8] = {WeaponSkill, BalisticSkill, Dodge, Armor, FastMove, FastAttack, Fly, FireImmunity};
+static variant green_potion_powers[8] = {Regenerating, Boosting, Experience, AcidImmunity, ColdImmunity, DeathImmunity, DiseaseImmunity, PoisonImmunity};
+static variant red_tome[8] = {Alchemy, Gemcutting, BalisticSkill, WeaponSkill, Mining, Stealth, History, Religion};
+static variant green_tome[8] = {Mana, Hits, Wits, Dexterity, Strenght, Literacy, Metallurgy};
+static variant blue_tome[8] = {CureLightWounds, MageArmor, LightSpell, Mending, Sleep, Web, BurningHands, HorrorScare};
 
-static slice<variant> get_powers(itemn v) {
+static const variant* get_powers(itemn v) {
 	switch(v) {
 	case Dagger: case LongSword: case ShortSword: case GreatSword: return swords_powers;
 	case Spear: return pierce_melee_weapon_powers;
@@ -64,6 +64,16 @@ static slice<variant> get_powers(itemn v) {
 	}
 }
 
+static int get_power_count(const variant* source) {
+	if(!source)
+		return 0;
+	for(auto i = 1; i < 8; i++) {
+		if(!source[i])
+			return i;
+	}
+	return 8;
+}
+
 variant item::getpower() const {
 	if(countable())
 		return Variant;
@@ -73,10 +83,10 @@ variant item::getpower() const {
 	return powers[power];
 }
 
-static int find_power(slice<variant> source, variant v) {
-	for(auto& e : source) {
-		if(e == v)
-			return &e - source.begin();
+static int find_power(const variant* source, variant v) {
+	for(auto i = 0; i < 8; i++) {
+		if(source[i] == v)
+			return i;
 	}
 	return -1;
 }
@@ -97,15 +107,16 @@ bool item::setpower() {
 	auto source = get_powers(type);
 	if(!source)
 		return false;
-	auto is_magical = source.data[0].operator bool();
+	auto is_magical = source[0].operator bool();
+	auto count = get_power_count(source);
 	if(!is_magical) {
 		// If first item is empthy power, then this is item, that can be powerless.
 		// Exclude this case.
-		if(source.size() == 1)
+		if(!source[1])
 			return false;
-		power = 1 + rand() % (source.size() - 1);
+		power = 1 + rand() % (count - 1);
 	} else
-		power = rand() % source.size();
+		power = rand() % count;
 	return true;
 }
 
@@ -219,7 +230,7 @@ bool item::ismagical() const {
 	auto source = get_powers(type);
 	if(!source)
 		return false;
-	return source.begin()[0].u != 0;
+	return source[0].u != 0;
 }
 
 bool item::is(wearn v) const {
