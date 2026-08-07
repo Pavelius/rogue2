@@ -141,15 +141,27 @@ bool creature::apply(spelln v, bool run) {
 		}
 		break;
 	case BurningHands:
+		if(is(FireImmunity))
+			return false;
 		if(run) {
 			fixact(FireVisual);
 			harm(xrand(1, 4), FireResistance);
 		}
 		break;
 	case FireBolt:
+		if(is(FireImmunity))
+			return false;
 		if(run) {
 			fixact(FireVisual);
 			harm(xrand(1, 6), FireResistance);
+		}
+		break;
+	case IceSpear:
+		if(is(ColdImmunity))
+			return false;
+		if(run) {
+			fixact(ColdVisual);
+			harm(xrand(1, 8), ColdResistance);
 		}
 		break;
 	case SummonAnimals:

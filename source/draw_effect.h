@@ -24,7 +24,7 @@ enum resid : unsigned char;
 
 enum visualn : unsigned char {
 	PoisonVisual, BloodVisual,
-	FireVisual, CorrosionVisual, SearchVisual,
+	FireVisual, ColdVisual, CorrosionVisual, SearchVisual,
 };
 
 void add_effect(point position, visualn id);
