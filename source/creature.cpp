@@ -1281,6 +1281,23 @@ static bool eat_edible(item& v, bool run) {
 	return true;
 }
 
+static bool rod_use(item& it, bool run) {
+	auto power = it.getpower();
+	if(!power)
+		return false;
+	switch(power.type) {
+	case Spell:
+		if(!player->cast((spelln)power.value, 0, run))
+			return false;
+		break;
+	default:
+		return false;
+	}
+	if(run)
+		it.broke(PlayerUseLastRodCharge);
+	return true;
+}
+
 bool item::use(bool run) {
 	pushvalue push(last_item, this);
 	switch(type) {
@@ -1290,6 +1307,8 @@ bool item::use(bool run) {
 		return eat_edible(*this, run);
 	case RedTome: case BlueTome: case GreenTome:
 		return read_tome(*this, run);
+	case RedRod: case BlueRod: case GreenRod:
+		return rod_use(*this, true);
 	default:
 		return false;
 	}

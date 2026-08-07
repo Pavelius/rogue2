@@ -73,7 +73,7 @@ static const variant* get_powers(itemn v) {
 static int get_power_count(const variant* source) {
 	if(!source)
 		return 0;
-	for(auto i = 1; i < 8; i++) {
+	for(auto i = 0; i < 8; i++) {
 		if(!source[i])
 			return i;
 	}
@@ -114,15 +114,15 @@ bool item::setpower() {
 	if(!source)
 		return false;
 	auto is_magical = source[0].operator bool();
-	auto count = get_power_count(source);
 	if(!is_magical) {
 		// If first item is empthy power, then this is item, that can be powerless.
 		// Exclude this case.
-		if(!source[1])
+		auto count = get_power_count(source + 1);
+		if(!count)
 			return false;
-		power = 1 + rand() % (count - 1);
+		power = 1 + rand() % count;
 	} else
-		power = rand() % count;
+		power = rand() % get_power_count(source);
 	return true;
 }
 
@@ -382,6 +382,7 @@ void item::join(item& v) {
 static const char* get_power_name(variant v) {
 	switch(v.type) {
 	case Ability: return power_names[v.value];
+	case Spell: return spell_power_names[v.value];
 	default: return power_names[0];
 	}
 }

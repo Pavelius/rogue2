@@ -34,6 +34,7 @@ enum messagen : unsigned char {
 	PlayerEat, PlayerReadTome, PlayerKilled, PlayerFoundSecretDoor, PlayerFoundTrap,
 	PlayerBlock, PlayerDodge,
 	PlayerPickUpItem, PlayerDropItem,
+	PlayerUseLastRodCharge,
 	ItemGrowColor, ItemWearTotal,
 	ItemDamaged, ItemBurnAway, ItemMeldDown, ItemCrumbleToDust, ItemCrushingOut,
 };

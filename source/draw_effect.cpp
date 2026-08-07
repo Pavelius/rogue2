@@ -52,6 +52,7 @@ void add_effect(point position, visualn id) {
 	switch(id) {
 	case BloodVisual: add_effect(position, ResConditions, 0, 500); break;
 	case CorrosionVisual: add_effect(position, ResSplash, 2, 500); break;
+	case FireVisual: add_effect(position, ResSplash, 0, 500); break;
 	case PoisonVisual: add_effect(position, ResConditions, 2, 500); break;
 	case SearchVisual: add_effect(position, ResSplash, 3, 500); break;
 	default: break;

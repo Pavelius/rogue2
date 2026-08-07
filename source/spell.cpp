@@ -1,6 +1,7 @@
 #include "area.h"
 #include "collectiona.h"
 #include "creature.h"
+#include "draw_effect.h"
 #include "game.h"
 #include "message.h"
 #include "pushvalue.h"
@@ -9,6 +10,8 @@
 #include "spell.h"
 #include "stringbuilder.h"
 #include "variant.h"
+
+static short unsigned start_index;
 
 int get_mana(spelln v) {
 	switch(v) {
@@ -43,6 +46,20 @@ bool spell_is_combat(unsigned char v) {
 		return true;
 	default:
 		return spell_is_hostile(v);
+	}
+}
+
+static bool is_close(unsigned char v) {
+	switch(v) {
+	case BurningHands:
+	case CureLightWounds:
+	case CureSeriousWounds:
+	case CureCriticalWounds:
+	case CureDisease:
+	case CurePoison:
+		return true;
+	default:
+		return false;
 	}
 }
 
@@ -123,6 +140,13 @@ bool creature::apply(spelln v, bool run) {
 			area_set_near(index, Webbed, 1 + player->get(Level) / 4);
 		}
 		break;
+	case BurningHands:
+	case FireBolt:
+		if(run) {
+			damage(xrand(1,6));
+			fixact(FireVisual);
+		}
+		break;
 	case SummonAnimals:
 	case SummonMinions:
 	case SummonUndead:
@@ -183,9 +207,17 @@ bool item::apply(spelln v, bool run) {
 	return true;
 }
 
+static bool match_close(const void* object) {
+	auto p = (creature*)object;
+	return area_range(start_index, p->index) <= 1;
+}
+
 void choose_spell_targets(spelln spell) {
+	pushvalue push_start(start_index, player->index);
+	auto close_range = is_close(spell);
+	auto target = get_target(spell);
 	targets.clear();
-	switch(spell) {
+	switch(target) {
 	case Tile:
 		break;
 	case Item:
@@ -208,10 +240,14 @@ void choose_spell_targets(spelln spell) {
 					targets.add(p);
 			}
 		}
+		if(close_range)
+			targets.match(match_close, true);
 		break;
 	case Spell:
 		if(player->apply(spell, false))
 			targets.add(player);
+		if(close_range)
+			targets.match(match_close, true);
 		break;
 	}
 }

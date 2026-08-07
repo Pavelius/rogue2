@@ -419,6 +419,8 @@ int main(int argc, char* argv[]) {
 	player->equip(i1);
 	item i2 = BluePotion; i2.setpower(Hits); i2.known_magic = 1;
 	player->additem(i2);
+	item i3 = RedRod; i3.setpower(); i3.known_magic = 1;
+	player->additem(i3);
 	player->equip(LeatherArmor);
 	player->equip(LongBow);
 	player->update();
