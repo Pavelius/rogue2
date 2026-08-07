@@ -1335,3 +1335,16 @@ void creature::heal(int v) {
 	if(hits > last_hits)
 		fixmsg("%1i", hits - last_hits, GlowGreen);
 }
+
+void creature::harm(int v, featn resistance) {
+	if(resistance) {
+		auto immunity = get_immunity(resistance);
+		if(is(immunity))
+			return;
+		if(is(resistance))
+			v /= 2;
+	}
+	v -= get(Armor);
+	if(v > 0)
+		damage(v);
+}

@@ -141,10 +141,15 @@ bool creature::apply(spelln v, bool run) {
 		}
 		break;
 	case BurningHands:
+		if(run) {
+			fixact(FireVisual);
+			harm(xrand(1, 4), FireResistance);
+		}
+		break;
 	case FireBolt:
 		if(run) {
-			damage(xrand(1,6));
 			fixact(FireVisual);
+			harm(xrand(1, 6), FireResistance);
 		}
 		break;
 	case SummonAnimals:

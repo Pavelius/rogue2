@@ -115,6 +115,7 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	void fixact(directionn d);
 	void fixact(visualn v);
 	void fixmsg(const char* format, int param, glown color);
+	void harm(int value, featn resistance);
 	void heal(int value);
 	bool is(abilityn v) const { return abilities[v] > 0; }
 	bool is(featn v) const { return featable::is(v); }
