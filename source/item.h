@@ -40,6 +40,7 @@ enum itemn : unsigned char {
 	Dagger, ShortSword, LongSword, Scimitar, GreatSword,
 	ShortBow, LongBow, Crossbow, HeavyCrossbow,
 	Robe, LeatherArmor, StuddedArmor, HideArmor, ScaleMail, ChainMail, PlateMail,
+	ShieldSmall, ShieldMedium, ShieldLarge, ShieldTower,
 	LeatherBoots, IronBoots,
 	BluePotion, GreenPotion, RedPotion,
 	BlueTome, GreenTome, RedTome,

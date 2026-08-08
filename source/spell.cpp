@@ -276,8 +276,13 @@ bool creature::cast(spelln spell, int mana_cost, bool run) {
 			return false;
 	}
 	choose_spell_targets(spell);
-	if(!targets)
+	if(!targets) {
+		if(run) {
+			if(player->ishuman())
+				act(MsgNoTargets);
+		}
 		return false;
+	}
 	auto maximum_targets = 1;
 	auto target = get_target(spell);
 	if(run) {

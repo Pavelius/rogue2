@@ -271,6 +271,10 @@ static int get_arms(itemn v) {
 	case Mace: return 45;
 	case Dagger: return 39;
 	case Scimitar: return 48;
+	case ShieldSmall: return 51;
+	case ShieldMedium: return 52;
+	case ShieldLarge: return 53;
+	case ShieldTower: return 54;
 	default: return 61;
 	}
 }
@@ -1483,7 +1487,7 @@ static void standart_keys() {
 	case 'D': execute(open_drop_item); break;
 	case 'I': execute(open_inventory); break;
 	case 'P': execute(open_ground); break;
-	case 'V': execute(open_backpack); break;
+	case 'U': execute(open_backpack); break;
 	case Ctrl + 'T': execute(test_scene); break;
 	default: break;
 	}

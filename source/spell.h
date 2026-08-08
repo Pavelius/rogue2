@@ -8,7 +8,7 @@ enum spelln : unsigned char {
 	MageArmor, MageShield, LightSpell, Mending, Sleep, Web,
 	SummonAnimals, SummonMinions, SummonUndead,
 	BlessItem, DetectMagicItem, IdentifyItem, UncurseItem, EnchantItem, CreateArtifact,
-	BurningHands, FireBolt, IceSpear, MagicMissile, Entaglement, HorrorScare,
+	BurningHands, FireBolt, IceSpear, MagicMissile, Entaglement, HorrorScare, TurnUndead,
 	Gate, Teleport,
 	FirstSpell = CureLightWounds, LastSpell = Teleport,
 };

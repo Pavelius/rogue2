@@ -409,6 +409,8 @@ int main(int argc, char* argv[]) {
 	area_set(apos(10 + 1, 10 + 3), ShapeCave, West, DeepWater, DeepWater, DeepWater);
 	put_item(apos(4, 4), LongSword);
 	put_item(apos(4, 4), LongSword);
+	put_item(apos(4, 4), ShieldLarge);
+	put_item(apos(4, 4), ShieldSmall);
 	put_item(apos(4, 4), LongBow);
 	area_set(apos(4, 3), Tree);
 	put_item(apos(5, 3), RedTome);

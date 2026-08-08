@@ -34,6 +34,19 @@ const int gp = 100;
 
 const int lb = 50;
 
+//struct itemi {
+//	struct armori {
+//		char armor, block, dodge;
+//	};
+//	struct weaponi {
+//		char tohit, damage, pierce;
+//	};
+//	int cost, weight;
+//	weaponi		weapor;
+//	armori		armor;
+//	variant*	powers;
+//};
+
 static_assert(sizeof(item) == 2, "Structure `item` must 2 bytes");
 
 collectionv<itemlay> items;
@@ -141,6 +154,10 @@ static int get_weight(itemn v) {
 	case ChainMail: return 40 * lb;
 	case LeatherArmor: return 15 * lb;
 	case StuddedArmor: return 25 * lb;
+	case ShieldSmall: return 5 * lb;
+	case ShieldMedium: return 10 * lb;
+	case ShieldLarge: return 15 * lb;
+	case ShieldTower: return 20 * lb;
 	default: return 1 * lb;
 	}
 }
@@ -163,6 +180,10 @@ static int get_cost(itemn v) {
 	case RedTome: return 30 * gp;
 	case BlueTome: return 30 * gp;
 	case GreenTome: return 30 * gp;
+	case ShieldSmall: return 5 * gp;
+	case ShieldMedium: return 10 * gp;
+	case ShieldLarge: return 15 * gp;
+	case ShieldTower: return 30 * gp;
 	default: return 0;
 	}
 }
@@ -220,6 +241,8 @@ wearn item::wear() const {
 		return Backpack;
 	else if(type >= Staff && type <= GreatSword)
 		return MeleeWeapon;
+	else if(type >= ShieldSmall && type <= ShieldTower)
+		return MeleeWeaponOffhand;
 	else if(type >= ShortBow && type <= HeavyCrossbow)
 		return RangedWeapon;
 	else if(type >= Robe && type <= PlateMail)
@@ -271,6 +294,7 @@ int item::dodge() const {
 	case ChainMail: return -15;
 	case ScaleMail: return -20;
 	case PlateMail: return -30;
+	case ShieldLarge: return -10;
 	default: return 0;
 	}
 }
@@ -284,6 +308,8 @@ int item::armor() const {
 	case ScaleMail: return 4;
 	case PlateMail: return 5;
 	case IronBoots: return 1;
+	case ShieldMedium: return 1;
+	case ShieldLarge: case ShieldTower: return 2;
 	default: return 0;
 	}
 }
@@ -292,6 +318,9 @@ int item::block() const {
 	switch(type) {
 	case StuddedArmor: return 1;
 	case LeatherBoots: return 1;
+	case ShieldSmall: return 2;
+	case ShieldMedium: return 1;
+	case ShieldTower: return 1;
 	default: return 0;
 	}
 }
@@ -393,8 +422,8 @@ static void add_weapon_info(stringbuilder& sb, const item& it) {
 		sb.adds(getname(MsgTwoHands));
 }
 
-static void add_armor_info(stringbuilder& sb, const item& it) {
-	sb.adds("(%1i,%2i)", it.armor(), it.block());
+static void add_info(stringbuilder& sb, int v1, int v2) {
+	sb.adds("(%1i,%2i)", v1, v2);
 }
 
 const char* item::description() const {
@@ -403,12 +432,15 @@ const char* item::description() const {
 	auto w = wear();
 	switch(w) {
 	case MeleeWeapon: case MeleeWeaponOffhand: case RangedWeapon:
-		add_weapon_info(sb, *this);
+		if(type >= ShieldSmall && type <= ShieldTower)
+			add_info(sb, armor(), block());
+		else
+			add_weapon_info(sb, *this);
 		break;
 	case Torso: case Head: case Neck: case Girdle:
 	case Backward: case Gloves: case Elbows:
 	case Legs:
-		add_armor_info(sb, *this);
+		add_info(sb, armor(), block());
 		break;
 	default:
 		break;
