@@ -158,6 +158,7 @@ point i2s(short unsigned i);
 
 int getv(monstern v, abilityn a);
 
+void add_equipment(itemn type);
 void apply_monster(monstern type);
 void create_creature(short unsigned index_position, monstern type);
 void create_monster(short unsigned index_position, monstern type, bool enemy = true);

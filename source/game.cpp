@@ -382,6 +382,20 @@ static void test_strings() {
 	print("“естова€ строка данных. Ёто %P1 и его атрибут это %P2.");
 }
 
+static void test_player() {
+	create_creature(apos(4, 3), Human);
+	add_equipment(Spear);
+	add_equipment(LeatherArmor);
+	add_equipment(LeatherBoots);
+	add_equipment(ShortBow);
+	item i2 = BluePotion; i2.setpower(Hits); i2.known_magic = 1;
+	player->additem(i2);
+	item i3 = RedRod; i3.setpower(); i3.known_magic = 1;
+	player->additem(i3);
+	player->update();
+	human = player;
+}
+
 int main(int argc, char* argv[]) {
 	initialize_strings();
 #ifdef _DEBUG
@@ -395,38 +409,13 @@ int main(int argc, char* argv[]) {
 	initialize_gui();
 	test_strings();
 	area_generate(Plains);
-	area_set(apos(3, 3), Grave);
-	area_set(apos(3, 4), Grave);
-	area_set(apos(6, 4), Tree);
-	area_set({5, 5, 4, 4}, WoodenFloor);
-	area_set({10, 10, 3, 4}, DeepWater);
-	area_hor(apos(5, 5), WallBuilding, 4);
-	area_ver(apos(5, 5), WallBuilding, 4);
-	area_ver(apos(5 + 4, 5), WallBuilding, 4);
-	area_set(apos(5 + 3, 5 + 3), WallBuilding);
-	area_set(apos(5 + 2, 5 + 3), WallBuilding);
-	area_set(apos(5 + 1, 5 + 3), Door);
-	area_set(apos(10 + 1, 10 + 3), ShapeCave, West, DeepWater, DeepWater, DeepWater);
-	put_item(apos(4, 4), LongSword);
-	put_item(apos(4, 4), LongSword);
-	put_item(apos(4, 4), ShieldLarge);
-	put_item(apos(4, 4), ShieldSmall);
-	put_item(apos(4, 4), LongBow);
-	area_set(apos(4, 3), Tree);
-	put_item(apos(5, 3), RedTome);
-	put_item(apos(6, 3), GreenTome);
-	put_item(apos(7, 3), BlueTome);
-	create_creature(apos(4, 3), Human);
-	item i1 = Spear; i1.magic = Blessed; // i1.known_magic = 1;
-	player->equip(i1);
-	item i2 = BluePotion; i2.setpower(Hits); i2.known_magic = 1;
-	player->additem(i2);
-	item i3 = RedRod; i3.setpower(); i3.known_magic = 1;
-	player->additem(i3);
-	player->equip(LeatherArmor);
-	player->equip(LongBow);
-	player->update();
-	human = player;
+	test_player();
+	//area_hor(apos(5, 5), WallBuilding, 4);
+	//area_ver(apos(5, 5), WallBuilding, 4);
+	//area_ver(apos(5 + 4, 5), WallBuilding, 4);
+	//area_set(apos(5 + 3, 5 + 3), WallBuilding);
+	//area_set(apos(5 + 2, 5 + 3), WallBuilding);
+	//area_set(apos(5 + 1, 5 + 3), Door);
 	create_monster(apos(7, 3), Goblin);
 	// create_monster(apos(7, 4), GiantAntWarrior);
 	create_site(MonstersLair);

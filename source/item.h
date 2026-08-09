@@ -46,6 +46,7 @@ enum itemn : unsigned char {
 	BlueTome, GreenTome, RedTome,
 	BlueRod, GreenRod, RedRod,
 	Ration, Apple, Bread, Meat, Shell, Bones, BloodyRemains,
+	Arrow, Bolt,
 	CP, SP, GP,
 	LastItem = GP,
 };
@@ -66,7 +67,9 @@ struct item {
 	};
 	constexpr item() : type((itemn)0), count(0) {}
 	constexpr item(itemn v) : type(v), count(0) {}
+	constexpr item(itemn v, unsigned char count) : type(v), count(count) {}
 	explicit operator bool() const { return type != (itemn)0; }
+	itemn ammo() const;
 	creature* owner() const;
 	wearn equiped() const;
 	wearn wear() const;

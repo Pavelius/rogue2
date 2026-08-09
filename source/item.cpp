@@ -145,6 +145,14 @@ bool item::ispower(variant v) const {
 	return getpower() == v;
 }
 
+static itemn get_ammo(itemn v) {
+	switch(v) {
+	case LongBow: case ShortBow: return Arrow;
+	case Crossbow: return Bolt;
+	default: return (itemn)0;
+	}
+}
+
 static int get_weight(itemn v) {
 	switch(v) {
 	case LongSword: return 3 * lb;
@@ -227,6 +235,10 @@ static int get_weapon_speed(itemn v) {
 	}
 }
 
+itemn item::ammo() const {
+	return get_ammo(type);
+}
+
 int item::pierce() const {
 	switch(type) {
 	case Axe: return 1;
@@ -247,6 +259,10 @@ wearn item::wear() const {
 		return RangedWeapon;
 	else if(type >= Robe && type <= PlateMail)
 		return Torso;
+	else if(type >= LeatherBoots && type <= IronBoots)
+		return Legs;
+	else if(type >= Arrow && type <= Bolt)
+		return Ammunition;
 	return Backpack;
 }
 
@@ -560,4 +576,16 @@ void item::create(int chance_blessed, int chance_cursed, int chance_power) {
 		if(game_chance(chance_blessed / 3))
 			magic = Artifact;
 	}
+}
+
+static void add_support(itemn type) {
+	auto ammo = get_ammo(type);
+	if(ammo)
+		player->equip(item(ammo, xrand(3, 18)));
+}
+
+void add_equipment(itemn type) {
+	item it(type); it.create(10, 0, 20);
+	player->equip(it);
+	add_support(type);
 }

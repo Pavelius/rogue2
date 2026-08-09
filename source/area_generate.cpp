@@ -120,6 +120,8 @@ static void create_content(const abox& rc, siten v) {
 }
 
 void create_site(siten type) {
+	if(current_box_index >= locations.count)
+		return; // Overflow locations.
 	last_site = bsdata<sitei>::add();
 	last_site->set(locations.data[current_box_index++]);
 	last_site->area_index = current_area;
