@@ -81,7 +81,6 @@ struct item {
 	int	cost() const;
 	int damage() const;
 	int dodge() const;
-	int pierce() const;
 	int speed() const;
 	int	weight() const;
 	int getcount() const { return countable() ? count : 1; }

@@ -446,12 +446,12 @@ static void attack_effect_stun(creature* opponent) {
 		opponent->set(Stun);
 }
 
-static void special_attack(item& weapon, creature* opponent, int& pierce, int& damage) {
+static void special_attack(item& weapon, creature* opponent, int& armor, int& damage) {
 	opponent->fixact(BloodVisual);
 	if(player->is(VorpalHit, weapon)) {
 		if(!opponent->resist(DeathResistance, DeathImmunity)) {
 			damage = 100;
-			pierce = 100;
+			armor = 0;
 		}
 	}
 	if(player->is(BleedingHit, weapon))
@@ -459,7 +459,7 @@ static void special_attack(item& weapon, creature* opponent, int& pierce, int& d
 	if(player->is(StunningHit, weapon))
 		attack_effect_stun(opponent);
 	if(player->is(PierceHit, weapon))
-		pierce += 3;
+		armor /= 2;
 	if(player->is(MightyHit, weapon))
 		damage += 2;
 	if(player->is(ColdDamage, weapon)) {
@@ -493,29 +493,23 @@ static void make_attack(item& weapon, int attack_skill, int damage_percent) {
 	if(!opponent)
 		return;
 	auto weapon_ability = weapon_skill(weapon);
-	auto weapon_damage = weapon.damage();
-	auto damage = weapon_damage;
+	auto damage = xrand(1, weapon.damage());
 	damage += player->get(damage_skill(weapon_ability));
 	damage += add_bonus_damage(player, opponent, weapon, FireDamage, 2, FireResistance, FireImmunity);
 	damage += add_bonus_damage(player, opponent, weapon, ColdDamage, 2, ColdResistance, ColdImmunity);
 	attack_skill += player->get(weapon_ability);
 	// Roll how match damage make
 	auto roll_result = d100();
-	if(roll_result <= attack_skill)
-		damage += xrand(0, 2); // Hit, gain random damage increment
-	else
-		damage -= xrand(1, 4); // Miss gain great damage reduction
-	if(roll_result <= attack_skill - 30)
-		damage += xrand(weapon_damage / 2, weapon_damage);
-	if(roll_result <= attack_skill - 60)
-		damage += xrand(weapon_damage / 2, weapon_damage);
+	if(roll_result > attack_skill) {
+		// Attack miss
+		// player->logs("AttackMiss", damage_result, opponent->getname(), roll_result, damage, -armor);
+		return;
+	}
 	if(damage_percent)
 		damage = damage * damage_percent / 100;
 	auto armor = opponent->get(Armor);
-	auto pierce = weapon.pierce();
 	if(player->roll(Dexterity))
-		special_attack(weapon, opponent, pierce, damage); // If hit critical
-	apply_pierce(armor, pierce);
+		special_attack(weapon, opponent, armor, damage); // If hit critical
 	auto block_damage = opponent->get(Block);
 	if(block_damage > 0 && armor < damage) {
 		armor += xrand(0, block_damage);
@@ -528,10 +522,6 @@ static void make_attack(item& weapon, int attack_skill, int damage_percent) {
 	auto damage_result = damage - armor;
 	if(damage_result > 0 && weapon.is(Cursed) && (d100() < 50)) // Cursed weapon miss half time
 		damage_result = 0;
-	if(damage_result <= 0) {
-		// player->logs("AttackMiss", damage_result, opponent->getname(), roll_result, damage, -armor);
-		return;
-	}
 	if(opponent->roll(Dodge)) {
 		// player->logs("AttackHitButEnemyDodge", opponent->getname());
 		opponent->fixmsg(getname(PlayerDodge), 0, GlowGreen);

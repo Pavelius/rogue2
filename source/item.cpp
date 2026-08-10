@@ -210,21 +210,21 @@ static int get_damage(itemn v) {
 	case NoItem: // Unarmed attack
 		return 2;
 	case Dagger:
-		return 3;
+		return 4;
 	case ShortSword: case Axe: case Spear: case Mace:
-		return 4;
-	case Scimitar: case WarHammer:
-		return 5;
-	case LongSword:
 		return 6;
-	case GreatAxe:
+	case Scimitar: case WarHammer:
+		return 7;
+	case LongSword:
 		return 8;
-	case GreatSword:
+	case GreatAxe:
 		return 9;
+	case GreatSword:
+		return 10;
 	case ShortBow:
-		return 4;
+		return 6;
 	case LongBow:
-		return 5;
+		return 8;
 	default:
 		return 0;
 	}
@@ -246,15 +246,6 @@ static int get_weapon_speed(itemn v) {
 
 itemn item::ammo() const {
 	return get_ammo(type);
-}
-
-int item::pierce() const {
-	switch(type) {
-	case Axe: return 1;
-	case GreatAxe: return 2;
-	case Spear: return 3;
-	default: return 0;
-	}
 }
 
 wearn item::wear() const {

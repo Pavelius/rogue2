@@ -109,8 +109,8 @@ void apply_monster(monstern type) {
 	player->basic.abilities[Dexterity] += e.dexterity;
 	player->basic.abilities[Wits] += e.wits;
 	if(type >= FirstMonster && type <= LastMonster) {
-		player->basic.abilities[WeaponSkill] += imax(15, e.level * 5);
-		player->basic.abilities[BalisticSkill] += imax(15, e.level * 5);
+		player->basic.abilities[WeaponSkill] += imax(30, e.level * 5);
+		player->basic.abilities[BalisticSkill] += imax(30, e.level * 5);
 		for(auto i = 0; i < lenghtof(player->feats); i++)
 			player->feats[i] = e.stats.feats[i];
 		player->spells = e.stats.spells;
@@ -122,8 +122,8 @@ void apply_monster(monstern type) {
 		}
 		player->set(Local);
 	} else {
-		player->basic.abilities[WeaponSkill] += 15;
-		player->basic.abilities[BalisticSkill] += 15;
+		player->basic.abilities[WeaponSkill] += 40;
+		player->basic.abilities[BalisticSkill] += 40;
 		player->basic.abilities[Hits] += 10;
 		player->basic.abilities[Mana] += 10;
 		player->basic.abilities[Literacy] += xrand(3, 18);
