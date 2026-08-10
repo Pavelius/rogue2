@@ -87,9 +87,6 @@ void creature_human_turn() {
 static void monsters_spawning() {
 }
 
-static void decoy_items() {
-}
-
 static void update_need() {
 }
 
@@ -254,6 +251,20 @@ void open_ground() {
 
 void drop_item(short unsigned index, item& v) {
 	add_item(current_area, index, v);
+}
+
+static void apply_decoy(item& e) {
+	e.broke(ItemDecoy);
+}
+
+static void decoy_items() {
+	for(auto& e : bsdata<itemlay>()) {
+		if(!e)
+			continue;
+		auto chance = decoy_chance(e.type);
+		if(game_chance(chance))
+			apply_decoy(e);
+	}
 }
 
 void pass_minute() {

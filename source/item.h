@@ -129,6 +129,8 @@ item* choose_backpack(wearn wear);
 item* choose_ground();
 item* choose_inventory();
 
+int decoy_chance(itemn v);
+
 void add_item(short unsigned area_index, short unsigned index, item& v);
 void add_item(creature* p, item& v);
 void drop_item(short unsigned index, item& v);

@@ -116,6 +116,8 @@ static void create_content(const abox& rc, siten v) {
 	case MonstersLair:
 		area_set(rc.center(), Statue);
 		break;
+	default:
+		break;
 	}
 }
 

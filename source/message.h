@@ -35,6 +35,6 @@ enum messagen : unsigned char {
 	PlayerBlock, PlayerDodge,
 	PlayerPickUpItem, PlayerDropItem,
 	PlayerUseLastRodCharge,
-	ItemGrowColor, ItemWearTotal,
+	ItemGrowColor, ItemWearTotal, ItemDecoy,
 	ItemDamaged, ItemBurnAway, ItemMeldDown, ItemCrumbleToDust, ItemCrushingOut,
 };

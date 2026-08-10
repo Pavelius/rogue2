@@ -153,6 +153,15 @@ static itemn get_ammo(itemn v) {
 	}
 }
 
+int decoy_chance(itemn v) {
+	switch(v) {
+	case Apple: return 5;
+	case BloodyRemains: return 30;
+	case Meat: return 20;
+	default: return 0;
+	}
+}
+
 static int get_weight(itemn v) {
 	switch(v) {
 	case LongSword: return 3 * lb;
