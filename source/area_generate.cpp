@@ -2,6 +2,7 @@
 #include "area.h"
 #include "bsdata.h"
 #include "draw.h"
+#include "item.h"
 #include "game.h"
 #include "rand.h"
 
@@ -10,6 +11,8 @@ const int minimal_size = 10;
 static unsigned char current_box_index;
 static adat<abox> locations;
 static abox crc = {0, 0, mps, mps};
+
+static itemn coin_items[] = {CP, CP, CP, SP, SP, GP};
 
 static abox* add(const abox& source) {
 	auto p = locations.add();
@@ -111,10 +114,27 @@ void area_generate(landscapen type) {
 	current_box_index = 0;
 }
 
+static itemn random_coins() {
+	return maprnd(coin_items);
+}
+
+static void set_treasure(short unsigned i) {
+	item it = random_coins();
+	it.count = xrand(3, 18);
+}
+
 static void create_content(const abox& rc, siten v) {
 	switch(v) {
 	case MonstersLair:
 		area_set(rc.center(), Statue);
+		break;
+	case HerbsPlace:
+		for(auto i = xrand(1, 3); i > 0; i--)
+			area_set(rc, Herbs);
+		break;
+	case TreasureRoom:
+		for(auto i = xrand(3, 8); i > 0; i--)
+			area_set(rc, set_treasure);
 		break;
 	default:
 		break;

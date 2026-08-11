@@ -17,6 +17,7 @@
 #pragma once
 
 typedef bool(*fnareais)(short unsigned i);
+typedef void(*fnarea)(short unsigned i);
 
 enum directionn : unsigned char;
 
@@ -58,7 +59,7 @@ enum featuren : unsigned char {
 };
 enum siten : unsigned char {
 	EmptyRoom,
-	MonstersLair, CursedGraveyard, DarkenedRoom, TreasureRoom,
+	MonstersLair, CursedGraveyard, DarkenedRoom, TreasureRoom, HerbsPlace,
 	LightTreeArea, DeepTreeArea,
 	Blacksmith, Temple, Barracs, Tavern,
 	Armory, WeaponSmith, Shop,
@@ -133,6 +134,8 @@ inline char unsigned* i2p(unsigned short v) { return (char unsigned*)area_tiles 
 
 short unsigned area_free(short unsigned index, fnareais test_free);
 
+apos random_pos(const abox& v);
+
 int area_get_monsters(short unsigned i1, int radius);
 int area_range(short unsigned i1, short unsigned i2);
 int get_move_cost(featuren v);
@@ -148,6 +151,8 @@ void area_remove(short unsigned i, areafn f);
 void area_set(short unsigned i, areafn f);
 void area_set(short unsigned i, tilen v);
 void area_set(short unsigned i, featuren v);
+void area_set(const abox& m, featuren v);
+void area_set(const abox& m, fnarea v);
 void area_set(const abox& m, tilen v);
 void area_set(const abox& m, tilen v, int chance);
 void area_set(const abox& m, areafn v);

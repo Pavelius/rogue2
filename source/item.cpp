@@ -434,7 +434,7 @@ static const char* get_power_name(variant v) {
 
 static void add_weapon_info(stringbuilder& sb, const item& it) {
 	sb.adds("(%1i)", it.damage());
-	if(it.istwohanded())
+	if(it.is(Large))
 		sb.adds(getname(MsgTwoHands));
 }
 

@@ -46,6 +46,12 @@ static const directionn orientations_7b7[49] = {
 };
 static directionn all_directions[] = {West, East, North, South, NorthWest, NorthEast, SouthWest, SouthEast};
 
+apos random_pos(const abox& v) {
+	if(v.x && v.y)
+		return apos(v.x + rand() % v.w, v.y + rand() % v.h);
+	return apos(v.x, v.y);
+}
+
 static void addwave(short unsigned v) {
 	*push_counter++ = v;
 	if(push_counter >= stack + sizeof(stack) / sizeof(stack[0]))
@@ -210,6 +216,14 @@ void area_set(short unsigned m, tilen v) {
 
 void area_set(short unsigned i, featuren v) {
 	area_features[i] = v;
+}
+
+void area_set(const abox& m, featuren v) {
+	area_features[random_pos(m)] = v;
+}
+
+void area_set(const abox& m, fnarea proc) {
+	proc(random_pos(m));
 }
 
 void area_set(const abox& m, tilen v) {

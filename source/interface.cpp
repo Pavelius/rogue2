@@ -319,14 +319,14 @@ static void paint_creature() {
 		if(p->wears[Backward])
 			paint_wear(pc, get_acc_back(p->wears[Backward].type), feats);
 		// Primary arm
-		if(p->wears[MeleeWeapon].istwohanded())
+		if(p->wears[MeleeWeapon].is(Large))
 			image(pa, 9, feats);
 		else
 			image(pa, get_arms(p->wears[MeleeWeapon].type), feats);
 		// Torso and armor
 		image(pb, get_avatar(p->type, p->isfemale(), get_armor(p->wears[Torso].type)), feats);
 		// Secondanary arm
-		if(p->wears[MeleeWeapon].istwohanded())
+		if(p->wears[MeleeWeapon].is(Large))
 			image(pa, get_arms(p->wears[MeleeWeapon].type), feats);
 		else
 			image(pa, get_arms(p->wears[MeleeWeaponOffhand].type) - 36 + 10, feats);
