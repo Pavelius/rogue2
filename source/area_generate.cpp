@@ -13,6 +13,11 @@ static adat<abox> locations;
 static abox crc = {0, 0, mps, mps};
 
 static itemn coin_items[] = {CP, CP, CP, SP, SP, GP};
+static itemn swords_items[] = {Dagger, ShortSword, ShortSword, LongSword, LongSword, GreatSword};
+
+static itemn random_coins() {
+	return maprnd(coin_items);
+}
 
 static abox* add(const abox& source) {
 	auto p = locations.add();
@@ -112,10 +117,6 @@ void area_generate(landscapen type) {
 	add_locations();
 	locations.sort(compare_location);
 	current_box_index = 0;
-}
-
-static itemn random_coins() {
-	return maprnd(coin_items);
 }
 
 static void set_treasure(short unsigned i) {
