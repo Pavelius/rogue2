@@ -12,13 +12,6 @@ static unsigned char current_box_index;
 static adat<abox> locations;
 static abox crc = {0, 0, mps, mps};
 
-static itemn coin_items[] = {CP, CP, CP, SP, SP, GP};
-static itemn swords_items[] = {Dagger, ShortSword, ShortSword, LongSword, LongSword, GreatSword};
-
-static itemn random_coins() {
-	return maprnd(coin_items);
-}
-
 static abox* add(const abox& source) {
 	auto p = locations.add();
 	*p = source;

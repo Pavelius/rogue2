@@ -96,7 +96,6 @@ struct item {
 	bool iscoins() const { return type >= CP && type <= GP; }
 	bool ismagical() const;
 	bool ispower(variant v) const;
-	//bool istwohanded() const { return is(Large); }
 	void join(item& v);
 	void setslot(item& v);
 	bool setpower();
@@ -122,6 +121,8 @@ struct wearable {
 };
 
 item random_item();
+
+itemn random_coins();
 
 item* choose_backpack();
 item* choose_backpack(wearn wear);

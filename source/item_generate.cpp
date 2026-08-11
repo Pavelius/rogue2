@@ -34,6 +34,7 @@ struct treasurei {
 	infoi cooper, silver, gold, platinum, gems, art, magic;
 };
 
+static itemn coins[] = {CP, CP, CP, SP, SP, GP};
 static itemn small_blades[] = {Dagger, Dagger, ShortSword, Scimitar};
 static itemn blades[] = {ShortSword, LongSword, GreatSword};
 static itemn weapons[] = {Staff, Spear, Spear, Axe, Axe, Mace, Mace, WarHammer, WarHammer, GreatMace, GreatAxe};
@@ -54,6 +55,10 @@ item random_item() {
 		armors, armors,
 	};
 	return random(maprnd(source));
+}
+
+itemn random_coins() {
+	return maprnd(coins);
 }
 
 BSDATA(treasurei) = {
