@@ -429,12 +429,14 @@ int main(int argc, char* argv[]) {
 	//area_set(apos(5 + 1, 5 + 3), Door);
 	create_monster(apos(7, 3), Wolf);
 	// create_monster(apos(7, 4), GiantAntWarrior);
-	create_site(MonstersLair);
+	create_site(MonstersLair); 
 	create_site(MonstersLair);
 	create_site(HerbsPlace);
-	create_site(TreasureRoom);
-	//create_enemy(apos(8, 3), Goblin);
-	//show_locations();
+	create_site(TreasureRoom); human->setindex(last_site->center());
+	create_site(LightTreeArea);
+	create_site(DeepTreeArea);
+	create_site(ThornedArea);
+	// 
 	next_scene(play_game);
 	start_scene();
 	return 0;

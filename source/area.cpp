@@ -222,8 +222,27 @@ void area_set(const abox& m, featuren v) {
 	area_features[random_pos(m)] = v;
 }
 
-void area_set(const abox& m, fnarea proc) {
-	proc(random_pos(m));
+static void area_set(indexa& indecies, const abox& m) {
+	auto x2 = m.x + m.w;
+	auto y2 = m.y + m.h;
+	for(auto y = m.y; y < y2; y++) {
+		for(auto x = m.x; x < x2; x++) {
+			short unsigned i = apos(x, y);
+			if(!is_free(area_tiles[i], false))
+				continue;
+			if(!is_free(area_features[i], false))
+				continue;
+			indecies.add(i);
+		}
+	}
+}
+
+void area_set(const abox& m, fnarea proc, int count) {
+	indexa source;
+	area_set(source, m);
+	source.shuffle();
+	for(auto i = 0; i < count; i++)
+		proc(source.data[i]);
 }
 
 void area_set(const abox& m, tilen v) {

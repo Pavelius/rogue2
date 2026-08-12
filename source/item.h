@@ -47,6 +47,7 @@ enum itemn : unsigned char {
 	BlueRod, GreenRod, RedRod,
 	Ration, Apple, Bread, Meat, Shell, Bones, BloodyRemains,
 	Arrow, Bolt,
+	BlueGem, WhiteGem, YellowGem, GreenGem, RedGem,
 	CP, SP, GP,
 	LastItem = GP,
 };
@@ -66,9 +67,10 @@ struct item {
 		};
 	};
 	constexpr item() : type((itemn)0), count(0) {}
-	constexpr item(itemn v) : type(v), count(0) {}
+	constexpr item(itemn v) : type(v), count(countable() ? 1 : 0) {}
 	constexpr item(itemn v, unsigned char count) : type(v), count(count) {}
 	explicit operator bool() const { return type != (itemn)0; }
+	constexpr bool countable() const { return type >= Ration; }
 	itemn ammo() const;
 	creature* owner() const;
 	wearn equiped() const;
@@ -88,7 +90,6 @@ struct item {
 	bool apply(spelln v, bool run = true);
 	void broke(messagen msg = (messagen)0);
 	void clear() { count = 0; type = (itemn)0; }
-	bool countable() const { return type >= Ration; }
 	void create(int chance_blessed = 10, int chance_cursed = 5, int chance_power = 20);
 	bool is(magicn v) const { return magic == v; }
 	bool is(wearn v) const;
@@ -123,6 +124,7 @@ struct wearable {
 item random_item();
 
 itemn random_coins();
+itemn random_gems();
 itemn random_swords();
 
 item* choose_backpack();

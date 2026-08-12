@@ -925,9 +925,9 @@ void creature::clear() {
 }
 
 void creature::setindex(short unsigned i) {
-	player->index = i;
-	player->area_index = current_area;
-	player->position = i2s(i);
+	index = i;
+	area_index = current_area;
+	position = i2s(i);
 }
 
 void creature::add(abilityn v, int i) {

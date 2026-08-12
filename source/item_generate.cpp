@@ -35,6 +35,7 @@ struct treasurei {
 };
 
 static itemn coins[] = {CP, CP, CP, SP, SP, GP};
+static itemn gems[] = {BlueGem, BlueGem, BlueGem, WhiteGem, WhiteGem, YellowGem, YellowGem, GreenGem, RedGem};
 static itemn small_blades[] = {Dagger, Dagger, ShortSword, Scimitar};
 static itemn blades[] = {ShortSword, LongSword, GreatSword};
 static itemn weapons[] = {Staff, Spear, Spear, Axe, Axe, Mace, Mace, WarHammer, WarHammer, GreatMace, GreatAxe};
@@ -59,6 +60,10 @@ item random_item() {
 
 itemn random_coins() {
 	return maprnd(coins);
+}
+
+itemn random_gems() {
+	return maprnd(gems);
 }
 
 itemn random_swords() {
