@@ -61,6 +61,12 @@ itemn random_coins() {
 	return maprnd(coins);
 }
 
+itemn random_swords() {
+	if(d100()<50)
+		return maprnd(small_blades);
+	return maprnd(blades);
+}
+
 BSDATA(treasurei) = {
 	{'A', {25, 1000, 3000}, {30, 200, 2000}, {40, 1000, 6000}, {35, 300, 1800}, {60, 10, 40}, {50, 2, 12}, {30, 3}},
 	{'B', {50}, {25}, {}, {}, {}, {}, {}},

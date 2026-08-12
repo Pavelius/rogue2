@@ -115,6 +115,7 @@ void area_generate(landscapen type) {
 static void set_treasure(short unsigned i) {
 	item it = random_coins();
 	it.count = xrand(3, 18);
+	add_item(current_area, i, it);
 }
 
 static void create_content(const abox& rc, siten v) {
@@ -129,6 +130,9 @@ static void create_content(const abox& rc, siten v) {
 	case TreasureRoom:
 		for(auto i = xrand(3, 8); i > 0; i--)
 			area_set(rc, set_treasure);
+		break;
+	case ThornGrovedRoom:
+		area_set(rc, ThornBush, 20);
 		break;
 	default:
 		break;

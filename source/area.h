@@ -60,6 +60,7 @@ enum featuren : unsigned char {
 enum siten : unsigned char {
 	EmptyRoom,
 	MonstersLair, CursedGraveyard, DarkenedRoom, TreasureRoom, HerbsPlace,
+	ThornGrovedRoom,
 	LightTreeArea, DeepTreeArea,
 	Blacksmith, Temple, Barracs, Tavern,
 	Armory, WeaponSmith, Shop,

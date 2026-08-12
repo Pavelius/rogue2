@@ -123,6 +123,7 @@ struct wearable {
 item random_item();
 
 itemn random_coins();
+itemn random_swords();
 
 item* choose_backpack();
 item* choose_backpack(wearn wear);
