@@ -244,7 +244,7 @@ void open_ground() {
 	auto p = choose_ground();
 	if(!p)
 		return;
-	add_item(player, *p);
+	player->additem(*p);
 	player->actn(PlayerPickUpItem);
 	update_player();
 }

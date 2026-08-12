@@ -502,6 +502,7 @@ void wearable::additem(item& it, bool try_equip) {
 	if(it.iscoins()) {
 		money += it.cost();
 		it.clear();
+		need_update_items = true;
 		return;
 	}
 	if(try_equip && equip(it))
