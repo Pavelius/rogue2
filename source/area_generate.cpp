@@ -113,14 +113,8 @@ void area_generate(landscapen type) {
 }
 
 static void set_treasure(short unsigned i) {
-	if(d100() < 90) {
-		item it = random_coins();
-		it.count = xrand(3, 18);
-		add_item(current_area, i, it);
-	} else {
-		item it = random_gems();
-		add_item(current_area, i, it);
-	}
+	auto it = citem(RandomTreasure);
+	add_item(current_area, i, it);
 }
 
 static void set_herbs(short unsigned i) {

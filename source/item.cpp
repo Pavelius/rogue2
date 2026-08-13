@@ -66,6 +66,31 @@ static variant blue_rod[8] = {CureSeriousWounds, CureDisease, CurePoison, IceSpe
 static variant green_rod[8] = {Sleep, Entaglement, MageArmor, Web};
 static variant red_rod[8] = {BurningHands, FireBolt};
 
+static itemn random_coins[] = {CP, CP, CP, SP, SP, GP};
+static itemn random_gems[] = {BlueGem, BlueGem, BlueGem, WhiteGem, WhiteGem, YellowGem, YellowGem, GreenGem, RedGem};
+static itemn small_blades[] = {Dagger, Dagger, ShortSword, Scimitar};
+static itemn blades[] = {ShortSword, LongSword, GreatSword};
+static itemn weapons[] = {Staff, Spear, Spear, Axe, Axe, Mace, Mace, WarHammer, WarHammer, GreatMace, GreatAxe};
+static itemn bows[] = {ShortBow, ShortBow, LongBow, Crossbow, HeavyCrossbow};
+static itemn armors[] = {Robe, LeatherArmor, LeatherArmor, LeatherArmor, StuddedArmor, StuddedArmor, HideArmor, HideArmor, ScaleMail, ChainMail, PlateMail};
+
+template<unsigned N>
+static itemn random(itemn(&source)[N]) {
+	return random(source[rand() % N]);
+}
+
+itemn random(itemn v) {
+	switch(v) {
+	case RandomGems: return random(random_gems);
+	case RandomCoins: return random(random_coins);
+	case RandomTreasure:
+		if(game_chance(90))
+			return random(random_coins);
+		return random(random_gems);
+	default: return v;
+	}
+}
+
 static const variant* get_powers(itemn v) {
 	switch(v) {
 	case Dagger: case LongSword: case ShortSword: case GreatSword: return swords_powers;
@@ -567,6 +592,8 @@ void item::act(messagen v, glown glow) const {
 }
 
 void item::create(int chance_blessed, int chance_cursed, int chance_power) {
+	if(countable())
+		return;
 	auto source = get_powers(type);
 	if((source && source[0]) || game_chance(chance_power))
 		setpower();
@@ -589,4 +616,12 @@ void add_equipment(itemn type) {
 	item it(type); it.create(10, 0, 20);
 	player->equip(it);
 	add_support(type);
+}
+
+item citem(itemn v) {
+	v = random(v);
+	item it(v); it.create();
+	if(it.iscoins())
+		it.count = xrand(3, 18);
+	return it;
 }

@@ -58,14 +58,6 @@ item random_item() {
 	return random(maprnd(source));
 }
 
-itemn random_coins() {
-	return maprnd(coins);
-}
-
-itemn random_gems() {
-	return maprnd(gems);
-}
-
 itemn random_swords() {
 	if(d100()<50)
 		return maprnd(small_blades);

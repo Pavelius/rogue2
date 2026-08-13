@@ -50,6 +50,7 @@ enum itemn : unsigned char {
 	BlueGem, WhiteGem, YellowGem, GreenGem, RedGem,
 	CP, SP, GP,
 	LastItem = GP,
+	RandomTreasure, RandomCoins, RandomGems,
 };
 
 extern const char* power_names[];
@@ -121,11 +122,9 @@ struct wearable {
 	int totalweight() const;
 };
 
-item random_item();
+item citem(itemn v);
 
-itemn random_coins();
-itemn random_gems();
-itemn random_swords();
+itemn random(itemn v);
 
 item* choose_backpack();
 item* choose_backpack(wearn wear);
