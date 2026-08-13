@@ -45,6 +45,7 @@ enum itemn : unsigned char {
 	BluePotion, GreenPotion, RedPotion,
 	BlueTome, GreenTome, RedTome,
 	BlueRod, GreenRod, RedRod,
+	// Countable items start here
 	Ration, Apple, Bread, Meat, Shell, Bones, BloodyRemains,
 	Arrow, Bolt,
 	BlueGem, WhiteGem, YellowGem, GreenGem, RedGem,
