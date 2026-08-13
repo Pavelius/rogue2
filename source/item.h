@@ -50,7 +50,10 @@ enum itemn : unsigned char {
 	BlueGem, WhiteGem, YellowGem, GreenGem, RedGem,
 	CP, SP, GP,
 	LastItem = GP,
+	// Random items set
 	RandomTreasure, RandomCoins, RandomGems,
+	RandomBlades, RandomBladesSmall, RandomMartialWeapon, RandomMissileWeapon,
+	RandomArmor, RandomWeapon
 };
 
 extern const char* power_names[];

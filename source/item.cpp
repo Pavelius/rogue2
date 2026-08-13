@@ -66,13 +66,15 @@ static variant blue_rod[8] = {CureSeriousWounds, CureDisease, CurePoison, IceSpe
 static variant green_rod[8] = {Sleep, Entaglement, MageArmor, Web};
 static variant red_rod[8] = {BurningHands, FireBolt};
 
-static itemn random_coins[] = {CP, CP, CP, SP, SP, GP};
+static itemn random_coins[] = {CP, CP, CP, CP, SP, SP, SP, GP};
 static itemn random_gems[] = {BlueGem, BlueGem, BlueGem, WhiteGem, WhiteGem, YellowGem, YellowGem, GreenGem, RedGem};
-static itemn small_blades[] = {Dagger, Dagger, ShortSword, Scimitar};
-static itemn blades[] = {ShortSword, LongSword, GreatSword};
-static itemn weapons[] = {Staff, Spear, Spear, Axe, Axe, Mace, Mace, WarHammer, WarHammer, GreatMace, GreatAxe};
-static itemn bows[] = {ShortBow, ShortBow, LongBow, Crossbow, HeavyCrossbow};
-static itemn armors[] = {Robe, LeatherArmor, LeatherArmor, LeatherArmor, StuddedArmor, StuddedArmor, HideArmor, HideArmor, ScaleMail, ChainMail, PlateMail};
+static itemn random_treasure[] = {RandomCoins, RandomCoins, RandomCoins, RandomCoins, RandomCoins, RandomCoins, RandomCoins, RandomCoins, RandomCoins, RandomGems};
+static itemn random_small_blades[] = {Dagger, Dagger, ShortSword, Scimitar};
+static itemn random_blades[] = {ShortSword, LongSword, GreatSword};
+static itemn random_martial_weapons[] = {Staff, Spear, Spear, Axe, Axe, Mace, Mace, WarHammer, WarHammer, GreatMace, GreatAxe};
+static itemn random_missile_weapons[] = {ShortBow, ShortBow, LongBow, Crossbow, HeavyCrossbow};
+static itemn random_armors[] = {Robe, LeatherArmor, LeatherArmor, LeatherArmor, StuddedArmor, StuddedArmor, HideArmor, HideArmor, ScaleMail, ChainMail, PlateMail};
+static itemn random_weapon[] = {RandomBladesSmall, RandomBlades, RandomMartialWeapon, RandomMartialWeapon, RandomMissileWeapon};
 
 template<unsigned N>
 static itemn random(itemn(&source)[N]) {
@@ -81,12 +83,15 @@ static itemn random(itemn(&source)[N]) {
 
 itemn random(itemn v) {
 	switch(v) {
-	case RandomGems: return random(random_gems);
+	case RandomArmor: return random(random_armors);
+	case RandomBlades: return random(random_blades);
+	case RandomBladesSmall: return random(random_small_blades);
 	case RandomCoins: return random(random_coins);
-	case RandomTreasure:
-		if(game_chance(90))
-			return random(random_coins);
-		return random(random_gems);
+	case RandomGems: return random(random_gems);
+	case RandomMartialWeapon: return random(random_martial_weapons);
+	case RandomMissileWeapon: return random(random_missile_weapons);
+	case RandomTreasure: return random(random_treasure);
+	case RandomWeapon: return random(random_weapon);
 	default: return v;
 	}
 }

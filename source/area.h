@@ -68,6 +68,7 @@ enum siten : unsigned char {
 enum shapen : unsigned char {
 	ShapeCave,
 };
+enum itemn : unsigned char;
 
 const short mps = 64;
 
@@ -156,6 +157,7 @@ void area_set(const abox& m, fnarea v, int count);
 void area_set(const abox& m, tilen v);
 void area_set(const abox& m, tilen v, int chance);
 void area_set(const abox& m, featuren v, int chance);
+void area_set(const abox& m, itemn v, int count);
 void area_set(short unsigned i, shapen e, directionn d, tilen floor, tilen wall, tilen door);
 void area_set(short unsigned i, shapen e, directionn d, char symbol, tilen value);
 void area_set(short unsigned i, shapen e, directionn d, char symbol, featuren value);

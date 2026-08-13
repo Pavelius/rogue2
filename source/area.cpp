@@ -245,6 +245,16 @@ void area_set(const abox& m, fnarea proc, int count) {
 		proc(source.data[i]);
 }
 
+void area_set(const abox& m, itemn type, int count) {
+	indexa source;
+	area_set(source, m);
+	source.shuffle();
+	for(auto i = 0; i < count; i++) {
+		auto it = citem(type);
+		add_item(current_area, source.data[i], it);
+	}
+}
+
 void area_set(const abox& m, tilen v) {
 	auto y2 = m.y + m.h;
 	for(auto y = m.y; y < y2; y++) {

@@ -112,11 +112,6 @@ void area_generate(landscapen type) {
 	current_box_index = 0;
 }
 
-static void set_treasure(short unsigned i) {
-	auto it = citem(RandomTreasure);
-	add_item(current_area, i, it);
-}
-
 static void set_herbs(short unsigned i) {
 	area_set(i, Herbs);
 }
@@ -130,7 +125,7 @@ static void create_content(const abox& rc, siten v) {
 		area_set(rc, set_herbs, xrand(2, 4));
 		break;
 	case TreasureRoom:
-		area_set(rc, set_treasure, xrand(3, 8));
+		area_set(rc, RandomTreasure, xrand(3, 8));
 		break;
 	case ThornedArea:
 		area_set(rc, ThornBush, 20);
@@ -140,6 +135,9 @@ static void create_content(const abox& rc, siten v) {
 		break;
 	case LightTreeArea:
 		area_set(rc, Tree, 10);
+		break;
+	case WeaponSmith:
+		area_set(rc, RandomWeapon, xrand(3, 18));
 		break;
 	default:
 		break;

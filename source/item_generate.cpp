@@ -14,17 +14,6 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-#include "bsdata.h"
-#include "creature.h"
-#include "collectiona.h"
-#include "itemlay.h"
-#include "feats.h"
-#include "math.h"
-#include "rand.h"
-#include "slice.h"
-#include "stringbuilder.h"
-#include "variant.h"
-
 struct treasurei {
 	struct infoi {
 		char chance;
@@ -34,37 +23,7 @@ struct treasurei {
 	infoi cooper, silver, gold, platinum, gems, art, magic;
 };
 
-static itemn coins[] = {CP, CP, CP, SP, SP, GP};
-static itemn gems[] = {BlueGem, BlueGem, BlueGem, WhiteGem, WhiteGem, YellowGem, YellowGem, GreenGem, RedGem};
-static itemn small_blades[] = {Dagger, Dagger, ShortSword, Scimitar};
-static itemn blades[] = {ShortSword, LongSword, GreatSword};
-static itemn weapons[] = {Staff, Spear, Spear, Axe, Axe, Mace, Mace, WarHammer, WarHammer, GreatMace, GreatAxe};
-static itemn bows[] = {ShortBow, ShortBow, LongBow, Crossbow, HeavyCrossbow};
-static itemn armors[] = {Robe, LeatherArmor, LeatherArmor, LeatherArmor, StuddedArmor, StuddedArmor, HideArmor, HideArmor, ScaleMail, ChainMail, PlateMail};
-
-static itemn random(const slice<itemn>& source) {
-	return source.begin()[rand() % source.count];
-}
-
-static slice<itemn> random(const slice<slice<itemn>>& source) {
-	return source.begin()[rand() % source.count];
-}
-
-item random_item() {
-	static slice<itemn> source[] = {
-		small_blades, blades, weapons, bows,
-		armors, armors,
-	};
-	return random(maprnd(source));
-}
-
-itemn random_swords() {
-	if(d100()<50)
-		return maprnd(small_blades);
-	return maprnd(blades);
-}
-
-BSDATA(treasurei) = {
+static treasurei treasure_table[] = {
 	{'A', {25, 1000, 3000}, {30, 200, 2000}, {40, 1000, 6000}, {35, 300, 1800}, {60, 10, 40}, {50, 2, 12}, {30, 3}},
 	{'B', {50}, {25}, {}, {}, {}, {}, {}},
 	{'C', {20}, {30}, {}, {}, {}, {}, {}},

@@ -241,11 +241,12 @@ void open_drop_item() {
 }
 
 void open_ground() {
-	auto p = choose_ground();
-	if(!p)
+	pushvalue push(last_item);
+	last_item = choose_ground();
+	if(!last_item)
 		return;
-	player->additem(*p);
 	player->actn(PlayerPickUpItem);
+	player->additem(*last_item);
 	update_player();
 }
 
@@ -432,10 +433,11 @@ int main(int argc, char* argv[]) {
 	create_site(MonstersLair); 
 	create_site(MonstersLair);
 	create_site(HerbsPlace);
-	create_site(TreasureRoom); human->setindex(last_site->center());
+	create_site(TreasureRoom);
 	create_site(LightTreeArea);
 	create_site(DeepTreeArea);
 	create_site(ThornedArea);
+	create_site(WeaponSmith); human->setindex(last_site->center());
 	// 
 	next_scene(play_game);
 	start_scene();
