@@ -45,6 +45,7 @@ BSDATA(residi) = {
 	{"status"},
 	{"conditions"},
 	{"splash"},
+	{"missiles"},
 	{"walls"},
 	{"shadows"},
 };

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// 
+//
 //  Copyright 2026 by Pavel Chistyakov
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,15 +16,14 @@
 
 #pragma once
 
-struct sprite;
+#include "point.h"
 
-enum resid : unsigned char {
-	FontT, Font1, Font2, Font3,
-	ResPCBody, ResPCArms, ResPCAccessories,
-	ResFow, ResLos, ResCursors,
-	ResFloor, ResBorders, ResDecals, ResFeatures, ResItems, ResMonsters,
-	ResStatus, ResConditions, ResSplash, ResMissile,
-	ResWalls, ResShadows,
+enum moveablen : unsigned char {
+	ShootArrow, ShootBolt,
 };
 
-sprite* gres(resid id);
+void add_effect(point position, point target, moveablen id, int duration);
+
+bool have_move_effects();
+void paint_move_effects();
+void update_move_effects();

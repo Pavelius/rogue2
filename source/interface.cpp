@@ -22,6 +22,7 @@
 #include "draw.h"
 #include "draw_column.h"
 #include "draw_effect.h"
+#include "draw_move.h"
 #include "draw_object.h"
 #include "draw_floatinfo.h"
 #include "game.h"
@@ -1386,6 +1387,7 @@ static void paint_area_noclip() {
 	sort_objects();
 	paint_objects();
 	paint_effects();
+	paint_move_effects();
 	paint_los();
 	paint_fow();
 	for_each_object(paint_health_bar);
@@ -1422,9 +1424,7 @@ static void player_move_cmd() {
 }
 
 static void test_scene() {
-	auto p = player->wears + MeleeWeapon;
-	p->apply(CreateArtifact);
-	p->apply(IdentifyItem);
+	add_effect(player->position, player->position + point(300, 0), ShootArrow, 500);
 }
 
 void set_item_color(const item& it) {
@@ -1468,6 +1468,7 @@ static void play_game_animate() {
 	update_time();
 	update_floatinfo();
 	update_effects();
+	update_move_effects();
 	update_object_orders();
 	paint_status();
 	link_camera();
@@ -1480,6 +1481,7 @@ void wait_all() {
 	sync_scene(play_game_animate, have_orders);
 	sync_scene(play_game_animate, have_floatinfo);
 	sync_scene(play_game_animate, have_effects);
+	sync_scene(play_game_animate, have_move_effects);
 }
 
 static void standart_keys() {

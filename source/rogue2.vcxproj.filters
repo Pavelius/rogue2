@@ -171,6 +171,9 @@
     <ClCompile Include="stringlocale.cpp">
       <Filter>Support</Filter>
     </ClCompile>
+    <ClCompile Include="draw_move.cpp">
+      <Filter>Interface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sprite_util.h">
@@ -310,6 +313,9 @@
     </ClInclude>
     <ClInclude Include="variant.h">
       <Filter>Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="draw_move.h">
+      <Filter>Interface</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

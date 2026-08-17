@@ -31,6 +31,7 @@
     <ClCompile Include="direction.cpp" />
     <ClCompile Include="draw.cpp" />
     <ClCompile Include="draw_effect.cpp" />
+    <ClCompile Include="draw_move.cpp" />
     <ClCompile Include="draw_object.cpp" />
     <ClCompile Include="draw_surface.cpp" />
     <ClCompile Include="draw_text.cpp" />
@@ -87,6 +88,7 @@
     <ClInclude Include="drawable.h" />
     <ClInclude Include="draw_column.h" />
     <ClInclude Include="draw_effect.h" />
+    <ClInclude Include="draw_move.h" />
     <ClInclude Include="draw_object.h" />
     <ClInclude Include="enchant.h" />
     <ClInclude Include="feats.h" />
