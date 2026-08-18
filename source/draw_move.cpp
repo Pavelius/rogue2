@@ -1,5 +1,6 @@
 #include "adat.h"
 #include "area.h"
+#include "direction.h"
 #include "draw.h"
 #include "draw_move.h"
 #include "draw_object.h"
@@ -43,7 +44,7 @@ void update_move_effects() {
 	for(auto& e : objects) {
 		if(!e || e.start > animation_tick)
 			continue;
-		else if(e.finish <= animation_tick || e.start==e.finish)
+		else if(e.finish <= animation_tick || e.start == e.finish)
 			e.clear();
 		else {
 			int m = e.finish - e.start;
@@ -71,7 +72,7 @@ static void paint_effect(const drawmove* p) {
 			per_frame = 1;
 		frame = (short unsigned)(pc->start + ((animation_tick - p->start) / per_frame));
 	}
-	image(ps, frame, 0);
+	image(ps, frame, p->flags);
 }
 
 void paint_move_effects() {
@@ -101,10 +102,27 @@ static void add_effect(point position, point target, int duration, resid res, in
 	p->finish = p->start + duration;
 }
 
+directionn lookat(point from, point to);
+
+static void add_effect(point position, point target, int duration, resid res, int frame) {
+	auto d = lookat(position, target);
+	switch(d) {
+	case North: add_effect(position, target, duration, res, frame + 0, 0); break;
+	case South: add_effect(position, target, duration, res, frame + 0, ImageMirrorV); break;
+	case East: add_effect(position, target, duration, res, frame + 1, ImageMirrorH); break;
+	case West: add_effect(position, target, duration, res, frame + 1, 0); break;
+	case NorthEast: add_effect(position, target, duration, res, frame + 2, 0); break;
+	case SouthEast: add_effect(position, target, duration, res, frame + 2, ImageMirrorV); break;
+	case NorthWest: add_effect(position, target, duration, res, frame + 2, ImageMirrorH); break;
+	case SouthWest: add_effect(position, target, duration, res, frame + 2, ImageMirrorH | ImageMirrorV); break;
+	default: break;
+	}
+}
+
 void add_effect(point position, point target, moveablen type, int duration) {
 	switch(type) {
-	case ShootArrow: add_effect(position, target, duration, ResMissile, 0, 0);
-	case ShootBolt: add_effect(position, target, duration, ResMissile, 3, 0);  break;
+	case ShootArrow: add_effect(position, target, duration, ResMissile, 0); break;
+	case ShootBolt: add_effect(position, target, duration, ResMissile, 3);  break;
 	default: break;
 	}
 }

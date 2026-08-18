@@ -46,6 +46,18 @@ static const directionn orientations_7b7[49] = {
 };
 static directionn all_directions[] = {West, East, North, South, NorthWest, NorthEast, SouthWest, SouthEast};
 
+directionn lookat(point s, point d) {
+	const int osize = 7;
+	int dx = d.x - s.x;
+	int dy = d.y - s.y;
+	int st = (2 * imax(iabs(dx), iabs(dy)) + osize - 1) / osize;
+	if(!st)
+		return Center;
+	int ax = dx / st;
+	int ay = dy / st;
+	return orientations_7b7[(ay + (osize / 2)) * osize + ax + (osize / 2)];
+}
+
 apos random_pos(const abox& v) {
 	if(v.x && v.y)
 		return apos(v.x + rand() % v.w, v.y + rand() % v.h);
