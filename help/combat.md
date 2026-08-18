@@ -1,8 +1,8 @@
-### Combat skills
+### Using abilities in combat
 
-- Melee: represent chance to hit in close combat.
-- Missile: represent chance to hot in distance combat.
-- Dodge: value from this skill decrease of attacking chance to hit. Heavy armor lower this skill. Light armor raise this skill.
+- **Strenght**: test for recover from poison, disease, drunk. Roll twice if resist feat is active.
+- **Wits**: test for recover from confusion. Roll twice if resist feat is active.
+- **Dexterity**: chance to special damage.
 
 ### Skill Raise
 
@@ -13,24 +13,15 @@
 
 ## Skills list
 
-### Melee
+- **Melee**: Chance to hit enemy in melee.
+- **Range**: Chance to hot enemy on distance.
+- **Dodge**: Substract from melee or ranged skills of attacker. Light armor can raise this value. Heavy armor can decrease.
+- **History**: Chance to get knowledge from statue in dungeon. See ancient art.
+- **Herbalism**: Chance to gain positive effect in herbs use.
+- **Literacy**: Chance to gain positive effect in tome use.
+- **Mining**: Chance to gain expensive gems when mining with pick in dungeon or caves.
 
-Chance to hit enemy in melee.
-
-### Range
-
-Chance to hot enemy on distance.
-
-### Dodge
-
-Substract from melee or ranged skills of attacker. Can't be raised - use only use as equipment bonus.
-
-### History
-
-Gain a forgotten knowledge.
-- Chance to get knowledge from statue in dungeon. See ancient art.
-
-#Special
+# Special
 
 ## Ancient art
 
