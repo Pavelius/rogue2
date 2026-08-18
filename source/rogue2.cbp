@@ -65,6 +65,8 @@
 		<Unit filename="draw_effect.h" />
 		<Unit filename="draw_floatinfo.cpp" />
 		<Unit filename="draw_floatinfo.h" />
+		<Unit filename="draw_move.cpp" />
+		<Unit filename="draw_move.h" />
 		<Unit filename="draw_object.cpp" />
 		<Unit filename="draw_object.h" />
 		<Unit filename="draw_surface.cpp" />
