@@ -807,10 +807,6 @@ static bool can_shoot() {
 	return true;
 }
 
-static bool can_throw() {
-	return false;
-}
-
 static bool use_items() {
 	return false;
 }
@@ -821,7 +817,7 @@ void make_move() {
 		player->wait_seconds -= 25;
 		return;
 	}
-	pushvalue push_player(opponent);
+	pushvalue push_opponent(opponent);
 	pushvalue push_site(last_site, player->getsite());
 	player->set(EnemyAttacks, 0);
 	player->update();
@@ -855,16 +851,12 @@ void make_move() {
 			player->cast(n, get_mana(n), true);
 		} else if(make_attack_missile(false))
 			make_attack_missile(true);
-		else if(can_throw() && d100() < 60)
-			attack_throw(0);
 		else if(d100() < 20 && use_items()) {
 			// Nothing to do
 		} else
 			player->moveto(opponent->index);
 	} else {
-		//allowed_spells.match(spell_isnotcombat, true);
-		//allowed_spells.match(spell_allowmana, true);
-		//allowed_spells.match(spell_allowuse, true);
+		allowed_spells.match(spell_is_combat, false);
 		//if(player->isfollowmaster())
 		//	player->moveto(player->getowner()->getposition());
 		//else if(d100() < 20)
