@@ -1182,6 +1182,17 @@ static void update_message() {
 	}
 }
 
+static void set_ld_position() {
+	caret.y = getheight() - height - metrics::padding * 2;
+	caret.x = metrics::padding * 2;
+	if(!player)
+		return;
+	auto x = player->position.x - camera.x;
+	auto y = player->position.y - camera.y;
+	if(y >= caret.y && x >= caret.x && x <= caret.x)
+		caret.x = getwidth() - width - metrics::padding * 4 - panel_width;
+}
+
 /*
 
 static void paint_action(const void* p, int index, unsigned key, fnevent proc) {
@@ -1202,20 +1213,6 @@ static int get_maximum_width(const collectiona& source) {
 			result = w;
 	}
 	return result;
-}
-
-static void set_ld_position() {
-	caret.y = getheight() - height - metrics::padding * 2;
-	caret.x = metrics::padding * 2;
-	if(!player)
-		return;
-	auto po = findobject(player);
-	if(!po)
-		return;
-	auto x = po->position.x - camera.x;
-	auto y = po->position.y - camera.y;
-	if(y >= caret.y && x >= caret.x && x <= caret.x)
-		caret.x = getwidth() - width - metrics::padding * 4 - panel_width;
 }
 
 static unsigned get_action_key(const void* pv, int index) {
