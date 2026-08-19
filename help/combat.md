@@ -6,8 +6,8 @@
 
 ### Skill Raise
 
-- Each skill raise by [1-3] points.
-- If character is particually well-suited to the skill raise by [2-3] points.
+- Each skill raise by `1-3` points.
+- If character is particually well-suited to the skill raise by `2-3` points.
 - Each skill can be raised only one time per level.
 - Every character can raise 3 skills. If `Wits` is 40+ there is another one check. If `Wits` is 70+ there is one more.
 

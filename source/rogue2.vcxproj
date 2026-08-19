@@ -120,6 +120,9 @@
     <ClInclude Include="variant.h" />
     <ClInclude Include="win.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\help\combat.md" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>

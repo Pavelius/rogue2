@@ -372,23 +372,6 @@ int item::block() const {
 }
 
 void item::broke(messagen msg) {
-	switch(magic) {
-	case Blessed:
-		// RULE: Blessed don't always use charge
-		if(game_chance(30))
-			return;
-		break;
-	case Artifact:
-		// RULE: Artifact don't always use charge
-		if(game_chance(70))
-			return;
-		break;
-	default:
-		// RULE: Mundane item don't always use charge
-		if(game_chance(10))
-			return;
-		break;
-	}
 	if(countable()) {
 		if(msg && owner() == player)
 			act(msg, GlowBlack);
@@ -399,6 +382,23 @@ void item::broke(messagen msg) {
 			need_update_items = true;
 		}
 	} else {
+		switch(magic) {
+		case Blessed:
+			// RULE: Blessed don't always use charge
+			if(game_chance(30))
+				return;
+			break;
+		case Artifact:
+			// RULE: Artifact don't always use charge
+			if(game_chance(70))
+				return;
+			break;
+		default:
+			// RULE: Mundane item don't always use charge
+			if(game_chance(10))
+				return;
+			break;
+		}
 		if(hits == 3) {
 			if(msg && owner() == player)
 				act(msg, GlowBlack);

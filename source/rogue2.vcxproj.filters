@@ -19,6 +19,9 @@
     <Filter Include="Formats">
       <UniqueIdentifier>{97ba888a-1c98-472d-87e4-11949469df2a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="help">
+      <UniqueIdentifier>{6d0da46e-22be-4429-a7d7-9f3fb2afd850}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sprite_util.cpp">
@@ -317,5 +320,10 @@
     <ClInclude Include="draw_move.h">
       <Filter>Interface</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\help\combat.md">
+      <Filter>help</Filter>
+    </None>
   </ItemGroup>
 </Project>

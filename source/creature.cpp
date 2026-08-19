@@ -21,6 +21,7 @@
 #include "creature.h"
 #include "draw_effect.h"
 #include "draw_floatinfo.h"
+#include "draw_move.h"
 #include "enchant.h"
 #include "itemlay.h"
 #include "indexa.h"
@@ -489,6 +490,26 @@ static int add_bonus_damage(creature* player, creature* enemy, const item& weapo
 	return bonus_damage;
 }
 
+static void fix_shoot_ammo() {
+	if(!player->isvisible() && !opponent->isvisible())
+		return;
+	auto ammo = player->wears[Ammunition];
+	if(!ammo)
+		return;
+	auto range = area_range(player->index, opponent->index);
+	switch(ammo.type) {
+	case Arrow: add_effect(player->position, opponent->position, ShootArrow, 250 * range); break;
+	case Bolt: add_effect(player->position, opponent->position, ShootArrow, 250 * range); break;
+	default: break;
+	}
+}
+
+static bool failmsg(messagen id, bool run) {
+	if(run)
+		player->act(id);
+	return false;
+}
+
 static void make_attack(item& weapon, int attack_skill, int damage_percent) {
 	if(!opponent)
 		return;
@@ -540,7 +561,32 @@ static void make_attack(item& weapon, int attack_skill, int damage_percent) {
 		weapon.broke();
 }
 
-static void attack_range(int bonus) {
+static bool make_attack_missile(bool run) {
+	if(!opponent || !player)
+		return failmsg(MsgNoTargets, run);
+	if(!player->wears[RangedWeapon])
+		return failmsg(MsgNoRangedWeapon, run);
+	auto ammo = player->wears[RangedWeapon].ammo();
+	if(ammo) {
+		if(player->wears[Ammunition].type != ammo)
+			return failmsg(MsgNoRangedWeapon, run);
+	}
+	auto target_index = opponent->index;
+	if(run) {
+		fix_shoot_ammo();
+		make_attack(player->wears[RangedWeapon], 0, 100);
+		pay_attack(player->wears[RangedWeapon]);
+		if(ammo) {
+			player->wears[Ammunition].broke();
+			if(game_chance(35))
+				drop_item(target_index, player->wears[Ammunition].type);
+		}
+	}
+	return true;
+}
+
+void player_shoot() {
+	make_attack_missile(true);
 }
 
 static void attack_throw(int bonus) {
@@ -751,7 +797,14 @@ static void ready_actions() {
 }
 
 static bool can_shoot() {
-	return false;
+	if(!player->wears[RangedWeapon])
+		return false;
+	auto ammo = player->wears[RangedWeapon].ammo();
+	if(ammo) {
+		if(player->wears[Ammunition].type != ammo)
+			return false;
+	}
+	return true;
 }
 
 static bool can_throw() {
@@ -800,8 +853,8 @@ void make_move() {
 		if(allowed_spells && d100() < 70) {
 			auto n = (spelln)allowed_spells.random();
 			player->cast(n, get_mana(n), true);
-		} else if(can_shoot())
-			attack_range(0);
+		} else if(make_attack_missile(false))
+			make_attack_missile(true);
 		else if(can_throw() && d100() < 60)
 			attack_throw(0);
 		else if(d100() < 20 && use_items()) {

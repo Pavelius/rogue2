@@ -1490,6 +1490,7 @@ static void standart_keys() {
 	case 'I': execute(open_inventory); break;
 	case 'P': execute(open_ground); break;
 	case 'U': execute(open_backpack); break;
+	case 'S': execute(player_shoot); break;
 	case Ctrl + 'T': execute(test_scene); break;
 	default: break;
 	}

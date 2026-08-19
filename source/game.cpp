@@ -254,6 +254,11 @@ void drop_item(short unsigned index, item& v) {
 	add_item(current_area, index, v);
 }
 
+void drop_item(short unsigned index, itemn v) {
+	item it(v); it.create();
+	add_item(current_area, index, it);
+}
+
 static void apply_decoy(item& e) {
 	e.broke(ItemDecoy);
 }
@@ -428,7 +433,7 @@ int main(int argc, char* argv[]) {
 	//area_set(apos(5 + 3, 5 + 3), WallBuilding);
 	//area_set(apos(5 + 2, 5 + 3), WallBuilding);
 	//area_set(apos(5 + 1, 5 + 3), Door);
-	create_monster(apos(7, 3), Wolf);
+	create_monster(human->index + 3, Wolf);
 	// create_monster(apos(7, 4), GiantAntWarrior);
 	create_site(MonstersLair); 
 	create_site(MonstersLair);
