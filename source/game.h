@@ -36,8 +36,8 @@ struct gamei {
 };
 extern gamei game;
 struct sitei : abox {
-	short unsigned	area_index;
 	siten			type;
+	short unsigned	area_index;
 	bool			ispresent() const { return area_index == current_area; }
 };
 extern sitei* last_site;
