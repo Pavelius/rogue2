@@ -75,7 +75,7 @@ static int get_bonus(magicn v) {
 
 static void update_derived() {
 	player->hits_maximum = player->abilities[Hits];
-	player->hits_maximum += player->abilities[Strenght] / 4;
+	player->hits_maximum += player->abilities[Strenght] / 3;
 	player->hits_maximum += player->abilities[Level] * 5;
 }
 
@@ -145,7 +145,6 @@ static void update_abilities() {
 	add_value(Block, player->wears[Elbows].block());
 	add_value(Block, player->wears[Legs].block());
 	// Dodge bonuses
-	add_value(Dodge, player->abilities[Dexterity] / 3);
 	add_value(Dodge, player->wears[Torso].dodge());
 	add_value(Dodge, player->wears[Elbows].dodge());
 	add_value(Dodge, player->wears[Backward].dodge());

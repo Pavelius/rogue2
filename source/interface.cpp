@@ -748,19 +748,6 @@ static void paint_health_bar() {
 	}
 }
 
-//static void fieldh(const char* format) {
-//	char temp[260]; stringbuilder sb(temp);
-//	sb.add("%1:", format);
-//	text(temp);
-//}
-
-//static void field(const char* id, int width, const char* format) {
-//	fieldh(id);
-//	caret.x += width;
-//	text(format);
-//	caret.x += width;
-//}
-
 static void paint_button(const char* format, bool pressed) {
 	auto push_caret = caret;
 	height = texth() + 1;
@@ -1193,6 +1180,67 @@ static void set_ld_position() {
 		caret.x = getwidth() - width - metrics::padding * 4 - panel_width;
 }
 
+void show_scene(fnevent proc, const char* header, const char* cancel) {
+	pushrect push;
+	pushfore push_fore;
+	while(ismodal()) {
+		fore = colors::form; rectf();
+		setoffset(metrics::padding, metrics::padding);
+		if(header) {
+			pushfont push(metrics::h1);
+			fore = colors::header;
+			texta(header, AlignCenter);
+			caret.y += texth();
+			height -= texth();
+		}
+		fore = push_fore.fore;
+		proc();
+		setpos(metrics::padding, getheight() - texth() - 4);
+		if(cancel) {
+			button(cancel, KeyEscape, -1); fire(buttoncancel);
+		}
+		domodal();
+	}
+}
+
+static void paint_text(const char* format, sprite* text_font, color text_fore, unsigned flags) {
+	if(!format)
+		return;
+	pushfont push(text_font);
+	pushfore push_fore(text_fore);
+	texta(format, flags);
+	caret.y += texth() + metrics::padding;
+	height -= texth() + metrics::padding;
+}
+
+void show_message(const char* header, const char* subheader, const char* message, const char* cancel) {
+	pushrect push;
+	pushfore push_fore(colors::text);
+	const char* cashe_string = 0;
+	int cashe_origin = -1;
+	textfs(message);
+	auto maximum = height;
+	while(ismodal()) {
+		fore = colors::form; rectf(); fore = push_fore.fore;
+		setoffset(metrics::padding * 2, metrics::padding * 2);
+		paint_text(header, metrics::h3, colors::header, AlignCenter);
+		paint_text(subheader, metrics::h1, colors::header, AlignCenter);
+		auto push_clip = clipping; setclipall();
+		if(cashe_string) {
+			caret.y -= cashe_origin;
+			textf(cashe_string);
+		} else
+			textf(message, cashe_string, cashe_origin);
+		clipping = push_clip;
+		setpos(metrics::padding, getheight() - texth() - 4);
+		if(cancel) {
+			button(cancel, KeyEscape, -1);
+			fire(buttoncancel);
+		}
+		domodal();
+	}
+}
+
 /*
 
 static void paint_action(const void* p, int index, unsigned key, fnevent proc) {
@@ -1360,10 +1408,10 @@ static void show_charsheet() {
 
 */
 
-//static void pause_keys() {
-//	if(hkey == KeySpace || hkey == KeyEscape)
-//		execute(buttoncancel);
-//}
+static void pause_keys() {
+	if(hkey == KeySpace || hkey == KeyEscape)
+		execute(buttoncancel);
+}
 
 static void add_creatures() {
 	update_creatures();
@@ -1421,7 +1469,9 @@ static void player_move_cmd() {
 }
 
 static void test_scene() {
-	add_effect(player->position, player->position + point(300, 0), ShootArrow, 500);
+	static const char* format =
+		"—ила €вл€етс€ физической векторной величиной, котора€ мера воздействи€ на тело со стороны других тел или внешнего пол€. ѕриложение силы может привести к изменению скорости тела или к деформаци€м и механическим напр€жени€м. —ила выражаетс€ как произведение массы на ускорение согласно второму закону Ќьютона или как произведение коэффициента упругости на деформацию согласно закону √ука. —ила €вл€етс€ векторной величиной, характеризующей модулем, направлением и точку приложени€.\n\n* \tƒобавл€ет единицу брони за каждые [20] значений силы.\n* \tƒобавл€ет единицу урона в рукопашном бою за каждые [15] значений силы.\n* \tƒобавл€ет один хит за каждые [3] значени€ силы.";
+	show_message("Manual", "Show manual string", format, getname(Cancel));
 }
 
 void set_item_color(const item& it) {
