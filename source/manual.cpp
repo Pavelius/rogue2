@@ -1,5 +1,6 @@
 #include "answers.h"
 #include "creature.h"
+#include "draw.h"
 #include "game.h"
 #include "manual.h"
 #include "message.h"
@@ -20,8 +21,20 @@ static void add_content(topicn page) {
 	}
 }
 
+void open_manual(abilityn page) {
+	show_message(getname(page), 0, getinfo(page), getname(Cancel));
+}
+
 void open_manual(topicn page) {
-	an.clear();
-	add_content(page);
-	show_message(getname(page), 0, bsenum<topicn>::info[page], getname(Cancel));
+	while(true) {
+		add_content(page);
+		show_message(getname(page), 0, getinfo(page), getname(Cancel));
+		an.clear();
+		auto next = getresult();
+		if(!next)
+			break;
+		switch(page) {
+		case SkillList: open_manual((abilityn)next); break;
+		}
+	}
 }

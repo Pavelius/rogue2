@@ -149,3 +149,4 @@ struct bsenum {
 	static const int count;
 };
 template<typename T> const char* getname(T v) { return bsenum<T>::names[v]; }
+template<typename T> const char* getinfo(T v) { return bsenum<T>::info[v]; }

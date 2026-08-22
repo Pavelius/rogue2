@@ -1236,20 +1236,24 @@ void show_message(const char* header, const char* subheader, const char* message
 	pushfore push_fore(colors::text);
 	const char* cashe_string = 0;
 	int cashe_origin = -1;
-	textfs(message);
+	height = 0;
+	if(message)
+		textfs(message);
 	auto maximum = height;
 	while(ismodal()) {
 		fore = colors::form; rectf(); fore = push_fore.fore;
 		setoffset(metrics::padding * 2, metrics::padding * 2);
 		paint_text(header, metrics::h3, colors::header, AlignCenter);
 		paint_text(subheader, metrics::h1, colors::header, AlignCenter);
-		auto push_clip = clipping; setclipall();
-		if(cashe_string) {
-			caret.y -= cashe_origin;
-			textf(cashe_string);
-		} else
-			textf(message, cashe_string, cashe_origin);
-		clipping = push_clip;
+		if(message) {
+			auto push_clip = clipping; setclipall();
+			if(cashe_string) {
+				caret.y -= cashe_origin;
+				textf(cashe_string);
+			} else
+				textf(message, cashe_string, cashe_origin);
+			clipping = push_clip;
+		}
 		setoffset(metrics::border * 2, 0);
 		if(an) {
 			caret.y += metrics::border;
