@@ -49,6 +49,7 @@
     <ClCompile Include="keyname.cpp" />
     <ClCompile Include="locale_ru.cpp" />
     <ClCompile Include="main_util.cpp" />
+    <ClCompile Include="manual.cpp" />
     <ClCompile Include="math.cpp" />
     <ClCompile Include="monster.cpp" />
     <ClCompile Include="png.cpp" />
@@ -100,6 +101,7 @@
     <ClInclude Include="item.h" />
     <ClInclude Include="itemlay.h" />
     <ClInclude Include="keyname.h" />
+    <ClInclude Include="manual.h" />
     <ClInclude Include="math.h" />
     <ClInclude Include="message.h" />
     <ClInclude Include="point.h" />

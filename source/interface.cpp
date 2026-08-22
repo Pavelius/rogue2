@@ -29,6 +29,7 @@
 #include "io_stream.h"
 #include "itemlay.h"
 #include "keyname.h"
+#include "manual.h"
 #include "message.h"
 #include "print.h"
 #include "pushvalue.h"
@@ -896,6 +897,23 @@ static void paint_answers() {
 		answer_paint_cell_small(index++, e.value, e.text, buttonparam);
 }
 
+static void paint_answers(int columns, int column_width) {
+	if(!columns)
+		columns = 1;
+	auto push_caret = caret;
+	auto index = 0;
+	auto per_column = an.getcount() / columns;
+	if(!per_column)
+		per_column = an.getcount();
+	for(auto& e : an) {
+		answer_paint_cell_small(index++, e.value, e.text, buttonparam);
+		if((index % per_column) == 0) {
+			caret.y = push_caret.y;
+			caret.x += column_width;
+		}
+	}
+}
+
 static void paint_message_answers(int window_width) {
 	if(!console_text[0])
 		return;
@@ -1232,6 +1250,11 @@ void show_message(const char* header, const char* subheader, const char* message
 		} else
 			textf(message, cashe_string, cashe_origin);
 		clipping = push_clip;
+		setoffset(metrics::border * 2, 0);
+		if(an) {
+			caret.y += metrics::border;
+			paint_answers(2, 200);
+		}
 		setpos(metrics::padding, getheight() - texth() - 4);
 		if(cancel) {
 			button(cancel, KeyEscape, -1);
@@ -1469,9 +1492,10 @@ static void player_move_cmd() {
 }
 
 static void test_scene() {
-	static const char* format =
-		"—ила €вл€етс€ физической векторной величиной, котора€ мера воздействи€ на тело со стороны других тел или внешнего пол€. ѕриложение силы может привести к изменению скорости тела или к деформаци€м и механическим напр€жени€м. —ила выражаетс€ как произведение массы на ускорение согласно второму закону Ќьютона или как произведение коэффициента упругости на деформацию согласно закону √ука. —ила €вл€етс€ векторной величиной, характеризующей модулем, направлением и точку приложени€.\n\n* \tƒобавл€ет единицу брони за каждые [20] значений силы.\n* \tƒобавл€ет единицу урона в рукопашном бою за каждые [15] значений силы.\n* \tƒобавл€ет один хит за каждые [3] значени€ силы.";
-	show_message("Manual", "Show manual string", format, getname(Cancel));
+	//	static const char* format =
+	//		"—ила €вл€етс€ физической векторной величиной, котора€ мера воздействи€ на тело со стороны других тел или внешнего пол€. ѕриложение силы может привести к изменению скорости тела или к деформаци€м и механическим напр€жени€м. —ила выражаетс€ как произведение массы на ускорение согласно второму закону Ќьютона или как произведение коэффициента упругости на деформацию согласно закону √ука. —ила €вл€етс€ векторной величиной, характеризующей модулем, направлением и точку приложени€.\n";
+	//	show_message("Manual", "Show manual string", format, getname(Cancel));
+	open_manual(SkillList);
 }
 
 void set_item_color(const item& it) {

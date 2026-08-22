@@ -177,6 +177,9 @@
     <ClCompile Include="draw_move.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
+    <ClCompile Include="manual.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sprite_util.h">
@@ -319,6 +322,9 @@
     </ClInclude>
     <ClInclude Include="draw_move.h">
       <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="manual.h">
+      <Filter>Logic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
