@@ -5,9 +5,27 @@
 #include "manual.h"
 #include "message.h"
 
+struct topici {
+	topicn	parent;
+	topicn	element;
+};
+
+static topici topics[] = {
+	{Manual, SkillsGeneral},
+	{SkillsGeneral, SkillAddNew},
+	{SkillsGeneral, SkillList},
+};
+
 static void add_answers(unsigned char f1, unsigned char f2, const char** names) {
 	for(auto i = f1; i <= f2; i++)
 		an.add(i, names[i]);
+}
+
+static void add_answers(topicn parent) {
+	for(auto& e : topics) {
+		if(e.parent==parent)
+			an.add(e.element, getname(e.element));
+	}
 }
 
 static void add_content(topicn page) {
@@ -17,6 +35,7 @@ static void add_content(topicn page) {
 		add_answers(FirstSkill, LastSkill, bsenum<abilityn>::names);
 		break;
 	default:
+		add_answers(page);
 		break;
 	}
 }
@@ -33,8 +52,14 @@ void open_manual(topicn page) {
 		auto next = getresult();
 		if(!next)
 			break;
+		// Open next page in stack
 		switch(page) {
 		case SkillList: open_manual((abilityn)next); break;
+		default: open_manual((topicn)next); break;
 		}
 	}
+}
+
+void open_manual() {
+	open_manual(Manual);
 }

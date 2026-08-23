@@ -2,8 +2,9 @@
 
 enum abilityn : unsigned char;
 enum topicn : unsigned char {
-	Manual, SkillList,
+	Manual, SkillsGeneral, SkillList, SkillAddNew,
 };
 
+void open_manual();
 void open_manual(abilityn page);
 void open_manual(topicn page);

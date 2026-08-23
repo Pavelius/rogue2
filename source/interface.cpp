@@ -902,7 +902,7 @@ static void paint_answers(int columns, int column_width) {
 		columns = 1;
 	auto push_caret = caret;
 	auto index = 0;
-	auto per_column = an.getcount() / columns;
+	auto per_column = (an.getcount() + columns - 1) / columns;
 	if(!per_column)
 		per_column = an.getcount();
 	for(auto& e : an) {
@@ -1231,33 +1231,49 @@ static void paint_text(const char* format, sprite* text_font, color text_fore, u
 	height -= texth() + metrics::padding;
 }
 
+static void paint_scroll_text(const char* format, int& format_height) {
+	static const char* cashe_string;
+	static int cashe_origin;
+	if(!format)
+		return;
+	if(format_height == -1) {
+		textfs(format);
+		format_height = height;
+		cashe_string = 0;
+		cashe_origin = 0;
+	}
+	auto push_clip = clipping; setclipall();
+	if(cashe_string) {
+		caret.y -= cashe_origin;
+		textf(cashe_string);
+	} else
+		textf(format, cashe_string, cashe_origin);
+	clipping = push_clip;
+}
+
+static int get_default_columns() {
+	auto n = an.getcount();
+	if(n < 5)
+		return 1;
+	else if(n < 10)
+		return 2;
+	return 3;
+}
+
 void show_message(const char* header, const char* subheader, const char* message, const char* cancel) {
 	pushrect push;
 	pushfore push_fore(colors::text);
-	const char* cashe_string = 0;
-	int cashe_origin = -1;
-	height = 0;
-	if(message)
-		textfs(message);
-	auto maximum = height;
+	int maximum = -1;
 	while(ismodal()) {
 		fore = colors::form; rectf(); fore = push_fore.fore;
 		setoffset(metrics::padding * 2, metrics::padding * 2);
 		paint_text(header, metrics::h3, colors::header, AlignCenter);
 		paint_text(subheader, metrics::h1, colors::header, AlignCenter);
-		if(message) {
-			auto push_clip = clipping; setclipall();
-			if(cashe_string) {
-				caret.y -= cashe_origin;
-				textf(cashe_string);
-			} else
-				textf(message, cashe_string, cashe_origin);
-			clipping = push_clip;
-		}
+		paint_scroll_text(message, maximum);
 		setoffset(metrics::border * 2, 0);
 		if(an) {
 			caret.y += metrics::border;
-			paint_answers(2, 200);
+			paint_answers(get_default_columns(), 180);
 		}
 		setpos(metrics::padding, getheight() - texth() - 4);
 		if(cancel) {
@@ -1499,7 +1515,7 @@ static void test_scene() {
 	//	static const char* format =
 	//		"—ила €вл€етс€ физической векторной величиной, котора€ мера воздействи€ на тело со стороны других тел или внешнего пол€. ѕриложение силы может привести к изменению скорости тела или к деформаци€м и механическим напр€жени€м. —ила выражаетс€ как произведение массы на ускорение согласно второму закону Ќьютона или как произведение коэффициента упругости на деформацию согласно закону √ука. —ила €вл€етс€ векторной величиной, характеризующей модулем, направлением и точку приложени€.\n";
 	//	show_message("Manual", "Show manual string", format, getname(Cancel));
-	open_manual(SkillList);
+	open_manual(Manual);
 }
 
 void set_item_color(const item& it) {
@@ -1566,6 +1582,7 @@ static void standart_keys() {
 	case 'P': execute(open_ground); break;
 	case 'U': execute(open_backpack); break;
 	case 'S': execute(player_shoot); break;
+	case Ctrl + 'M': execute(open_manual); break;
 	case Ctrl + 'T': execute(test_scene); break;
 	default: break;
 	}
