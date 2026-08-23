@@ -1,6 +1,7 @@
 #include "adat.h"
 #include "area.h"
 #include "bsdata.h"
+#include "direction.h"
 #include "draw.h"
 #include "item.h"
 #include "game.h"
@@ -11,6 +12,7 @@ const int minimal_size = 10;
 static unsigned char current_box_index;
 static adat<abox> locations;
 static abox crc = {0, 0, mps, mps};
+static directionn strait_direction[] = {North, South, West, East};
 
 static abox* add(const abox& source) {
 	auto p = locations.add();
@@ -116,6 +118,32 @@ static void set_herbs(short unsigned i) {
 	area_set(i, Herbs);
 }
 
+static apos side(const abox& rc, directionn dir) {
+	switch(dir) {
+	case North: return (rc.w < 2) ? apos() : apos(rc.x + 1 + rand() % (rc.w - 2), rc.y);
+	case South: return (rc.w < 2) ? apos() : apos(rc.x + 1 + rand() % (rc.w - 2), rc.y + rc.h - 1);
+	case West: return (rc.h < 2) ? apos() : apos(rc.x, rc.y + 1 + rand() % (rc.h - 2));
+	case East: return (rc.h < 2) ? apos() : apos(rc.x + rc.w - 1, rc.y + 1 + rand() % (rc.h - 2));
+	default: return apos();
+	}
+}
+
+static void place_door(const abox& rc, directionn dir) {
+	auto pt = side(rc, dir);
+	if(!pt)
+		return;
+	area_set(pt, WoodenFloor);
+	area_set(pt, Door);
+}
+
+static void place_house(const abox& rc) {
+	area_hor(rc.lu(), WallBuilding, rc.w);
+	area_hor(rc.ld(), WallBuilding, rc.w);
+	area_ver(rc.lu().to(0, 1), WallBuilding, rc.h - 2);
+	area_ver(rc.ru().to(0, 1), WallBuilding, rc.h - 2);
+	place_door(rc, maprnd(strait_direction));
+}
+
 static void create_content(const abox& rc, siten v) {
 	switch(v) {
 	case MonstersLair:
@@ -128,7 +156,7 @@ static void create_content(const abox& rc, siten v) {
 		area_set(rc, RandomTreasure, xrand(3, 8));
 		break;
 	case ThornedArea:
-		area_set(rc, ThornBush, 20);
+		area_set(rc, ThornBush, 15);
 		break;
 	case DeepTreeArea:
 		area_set(rc, Tree, 20);
@@ -137,7 +165,9 @@ static void create_content(const abox& rc, siten v) {
 		area_set(rc, Tree, 10);
 		break;
 	case WeaponSmith:
-		area_set(rc, RandomWeapon, xrand(3, 18));
+		area_set(rc, WoodenFloor);
+		place_house(rc);
+		area_set(rc.resize(1, 1), RandomWeapon, xrand(3, 18));
 		break;
 	default:
 		break;

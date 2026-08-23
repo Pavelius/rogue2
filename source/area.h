@@ -113,6 +113,7 @@ struct abox : apos {
 	constexpr apos center() const { return apos(x + w / 2, y + h / 2); }
 	constexpr apos ru() const { return apos(x + w - 1, y); }
 	constexpr apos rd() const { return apos(x + w - 1, y + h - 1); }
+	constexpr apos lu() const { return apos(x, y); }
 	constexpr apos ld() const { return apos(x, y + h - 1); }
 	constexpr int area() const { return h * w; }
 	constexpr int maximum() const { return (w > h) ? w : h; }

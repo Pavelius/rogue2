@@ -427,12 +427,6 @@ int main(int argc, char* argv[]) {
 	test_strings();
 	area_generate(Plains);
 	test_player();
-	//area_hor(apos(5, 5), WallBuilding, 4);
-	//area_ver(apos(5, 5), WallBuilding, 4);
-	//area_ver(apos(5 + 4, 5), WallBuilding, 4);
-	//area_set(apos(5 + 3, 5 + 3), WallBuilding);
-	//area_set(apos(5 + 2, 5 + 3), WallBuilding);
-	//area_set(apos(5 + 1, 5 + 3), Door);
 	create_monster(human->index + 3, Wolf);
 	// create_monster(apos(7, 4), GiantAntWarrior);
 	create_site(MonstersLair); 
