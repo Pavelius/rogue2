@@ -75,6 +75,7 @@ static itemn random_martial_weapons[] = {Staff, Spear, Spear, Axe, Axe, Mace, Ma
 static itemn random_missile_weapons[] = {ShortBow, ShortBow, LongBow, Crossbow, HeavyCrossbow};
 static itemn random_armors[] = {Robe, LeatherArmor, LeatherArmor, LeatherArmor, StuddedArmor, StuddedArmor, HideArmor, HideArmor, ScaleMail, ChainMail, PlateMail};
 static itemn random_weapon[] = {RandomBladesSmall, RandomBlades, RandomMartialWeapon, RandomMartialWeapon, RandomMissileWeapon};
+static itemn random_food[] = {Meat, Ration, Bread};
 
 template<unsigned N>
 static itemn random(itemn(&source)[N]) {

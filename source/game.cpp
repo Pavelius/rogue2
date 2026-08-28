@@ -425,7 +425,7 @@ int main(int argc, char* argv[]) {
 	area_clear();
 	initialize_gui();
 	test_strings();
-	area_generate(Plains);
+	area_generate(Village);
 	test_player();
 	create_monster(human->index + 3, Wolf);
 	// create_monster(apos(7, 4), GiantAntWarrior);

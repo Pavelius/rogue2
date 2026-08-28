@@ -54,7 +54,7 @@ enum itemn : unsigned char {
 	// Random items set
 	RandomTreasure, RandomCoins, RandomGems,
 	RandomBlades, RandomBladesSmall, RandomMartialWeapon, RandomMissileWeapon,
-	RandomArmor, RandomWeapon
+	RandomArmor, RandomWeapon, RandomFood
 };
 
 extern const char* power_names[];

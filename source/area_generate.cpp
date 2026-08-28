@@ -76,6 +76,74 @@ static void place(tilen v, int chance) {
 	area_set(crc, v);
 }
 
+static void create_road(abox rc) {
+	if(rc.w > rc.h) {
+		if(rc.x <= 6)
+			rc.x = 0;
+		if(rc.x >= mps - 6)
+			rc.x = mps - 1;
+	} else {
+		if(rc.y >= 1 && rc.y <= 6)
+			rc.y = 0;
+		if(rc.y >= mps - 6)
+			rc.y = mps - 1;
+	}
+	area_set(rc, Rock);
+}
+
+static void create_city_level(const abox& rc, int level) {
+	const int min_building_size = 5;
+	const int max_building_size = 8;
+	auto w = rc.w;
+	auto h = rc.h;
+	if(w <= max_building_size + 1 || h <= max_building_size + 1) {
+		auto x1 = rc.x;
+		auto y1 = rc.y;
+		if(w > h)
+			w = h;
+		if(h > w)
+			h = w;
+		if(h > max_building_size)
+			h = max_building_size;
+		if(h != rc.h)
+			y1 += rand() % (rc.h - h);
+		if(w > max_building_size)
+			w = max_building_size;
+		if(w != rc.w)
+			x1 += rand() % (rc.w - w);
+		locations.add({x1 + 1, y1 + 1, w - 1, h - 1});
+		return;
+	}
+	auto m = xrand(40, 60);
+	auto r = (d100() < 50) ? 0 : 1;
+	if(w > h)
+		r = 0;
+	else if(h > w)
+		r = 1;
+	auto rd = 2;
+	if(level == 2)
+		rd = 1;
+	else if(level > 2)
+		rd = 0;
+	if(r == 0) {
+		auto w1 = (w * m) / 100; // horizontal
+		if(w1 < min_building_size)
+			w1 = min_building_size;
+		create_city_level({rc.x, rc.y, w1 - rd - 1, rc.h}, level + 1);
+		create_city_level({rc.x + w1, rc.y, rc.w - (w1 - rd - 1), rc.h}, level + 1);
+		if(rd)
+			create_road({rc.x + w1 - rd, rc.y, w1 - 1, rc.h});
+	} else {
+		auto h1 = (h * m) / 100; // vertial
+		if(h1 < min_building_size)
+			h1 = min_building_size;
+		create_city_level({rc.x, rc.y, rc.w, h1 - rd - 1}, level + 1);
+		create_city_level({rc.x, rc.y + h1, rc.w, rc.h - (h1 - rd - 1)}, level + 1);
+		if(rd)
+			create_road({rc.x, rc.y + h1 - rd, rc.w, h1 - 1});
+	}
+}
+
 static void create(landscapen type) {
 	switch(type) {
 	case Plains:
@@ -93,6 +161,13 @@ static void create(landscapen type) {
 		place(Grass);
 		place(FootHill, 3);
 		place(Tree, 20);
+		break;
+	case Village:
+		place(Grass);
+		place(FootHill, 3);
+		place(FootMud, 2);
+		place(Tree, 2);
+		create_city_level({0, 0, mps - 1, mps - 1}, 1);
 		break;
 	default:
 		break;
@@ -137,6 +212,7 @@ static void place_door(const abox& rc, directionn dir) {
 }
 
 static void place_house(const abox& rc) {
+	area_set(rc, WoodenFloor);
 	area_hor(rc.lu(), WallBuilding, rc.w);
 	area_hor(rc.ld(), WallBuilding, rc.w);
 	area_ver(rc.lu().to(0, 1), WallBuilding, rc.h - 2);
@@ -165,9 +241,12 @@ static void create_content(const abox& rc, siten v) {
 		area_set(rc, Tree, 10);
 		break;
 	case WeaponSmith:
-		area_set(rc, WoodenFloor);
 		place_house(rc);
-		area_set(rc.resize(1, 1), RandomWeapon, xrand(3, 18));
+		area_set(rc.resize(1, 1), RandomWeapon, xrand(3, 12));
+		break;
+	case Shop:
+		place_house(rc);
+		area_set(rc.resize(1, 1), RandomFood, xrand(3, 12));
 		break;
 	default:
 		break;
