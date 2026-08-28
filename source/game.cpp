@@ -427,17 +427,8 @@ int main(int argc, char* argv[]) {
 	test_strings();
 	area_generate(Village);
 	test_player();
-	create_monster(human->index + 3, Wolf);
-	// create_monster(apos(7, 4), GiantAntWarrior);
-	create_site(MonstersLair); 
-	create_site(MonstersLair);
-	create_site(HerbsPlace);
-	create_site(TreasureRoom);
-	create_site(LightTreeArea);
-	create_site(DeepTreeArea);
-	create_site(ThornedArea);
-	create_site(WeaponSmith); human->setindex(last_site->center());
-	// 
+	for(auto i = 0; i < 20; i++)
+		create_site(random(RandomHouse));
 	next_scene(play_game);
 	start_scene();
 	return 0;

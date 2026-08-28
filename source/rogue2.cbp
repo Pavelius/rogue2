@@ -93,6 +93,8 @@
 		<Unit filename="keyname.cpp" />
 		<Unit filename="keyname.h" />
 		<Unit filename="locale_ru.cpp" />
+		<Unit filename="manual.cpp" />
+		<Unit filename="manual.h" />
 		<Unit filename="math.cpp" />
 		<Unit filename="math.h" />
 		<Unit filename="message.h" />

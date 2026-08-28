@@ -62,8 +62,9 @@ enum siten : unsigned char {
 	MonstersLair, CursedGraveyard, DarkenedRoom, TreasureRoom, HerbsPlace,
 	ThornedArea, LightTreeArea, DeepTreeArea,
 	Blacksmith, Temple, Barracs, Tavern,
-	Armory, WeaponSmith, Shop,
+	Armory, WeaponSmith, Shop, PeasantHouse,
 	HerdAnimals,
+	RandomHouse,
 };
 enum shapen : unsigned char {
 	ShapeCave,
@@ -135,6 +136,8 @@ inline short unsigned p2i(unsigned char* v) { return (tilen*)v - area_tiles; }
 inline char unsigned* i2p(unsigned short v) { return (char unsigned*)area_tiles + v; }
 
 short unsigned area_free(short unsigned index, fnareais test_free);
+
+siten random(siten v);
 
 apos random_pos(const abox& v);
 

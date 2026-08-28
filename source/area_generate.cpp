@@ -14,6 +14,20 @@ static adat<abox> locations;
 static abox crc = {0, 0, mps, mps};
 static directionn strait_direction[] = {North, South, West, East};
 
+static siten random_house[] = {PeasantHouse};
+
+template<unsigned N>
+static siten random(siten(&source)[N]) {
+	return random(source[rand() % N]);
+}
+
+siten random(siten v) {
+	switch(v) {
+	case RandomHouse: return random(random_house);
+	default: return v;
+	}
+}
+
 static abox* add(const abox& source) {
 	auto p = locations.add();
 	*p = source;
@@ -112,9 +126,10 @@ static void create_city_level(const abox& rc, int level) {
 		if(w != rc.w)
 			x1 += rand() % (rc.w - w);
 		locations.add({x1 + 1, y1 + 1, w - 1, h - 1});
+		// show_locations();
 		return;
 	}
-	auto m = xrand(40, 60);
+	auto m = xrand(35, 65);
 	auto r = (d100() < 50) ? 0 : 1;
 	if(w > h)
 		r = 0;
@@ -130,17 +145,17 @@ static void create_city_level(const abox& rc, int level) {
 		if(w1 < min_building_size)
 			w1 = min_building_size;
 		create_city_level({rc.x, rc.y, w1 - rd - 1, rc.h}, level + 1);
-		create_city_level({rc.x + w1, rc.y, rc.w - (w1 - rd - 1), rc.h}, level + 1);
+		create_city_level({rc.x + w1, rc.y, rc.w - w1, rc.h}, level + 1);
 		if(rd)
-			create_road({rc.x + w1 - rd, rc.y, w1 - 1, rc.h});
+			create_road({rc.x + w1 - rd, rc.y, rd, rc.h});
 	} else {
 		auto h1 = (h * m) / 100; // vertial
 		if(h1 < min_building_size)
 			h1 = min_building_size;
 		create_city_level({rc.x, rc.y, rc.w, h1 - rd - 1}, level + 1);
-		create_city_level({rc.x, rc.y + h1, rc.w, rc.h - (h1 - rd - 1)}, level + 1);
+		create_city_level({rc.x, rc.y + h1, rc.w, rc.h - h1}, level + 1);
 		if(rd)
-			create_road({rc.x, rc.y + h1 - rd, rc.w, h1 - 1});
+			create_road({rc.x, rc.y + h1 - rd, rc.w, rd});
 	}
 }
 
@@ -248,6 +263,9 @@ static void create_content(const abox& rc, siten v) {
 		place_house(rc);
 		area_set(rc.resize(1, 1), RandomFood, xrand(3, 12));
 		break;
+	case PeasantHouse:
+		place_house(rc);
+		break;
 	default:
 		break;
 	}
@@ -269,7 +287,7 @@ void show_locations() {
 		fore = colors::black;
 		rectf();
 		fore = colors::white;
-		const auto z = 3;
+		const auto z = 6;
 		point pt = {20, 20};
 		for(auto& e : locations) {
 			caret.x = pt.x + e.x * z;

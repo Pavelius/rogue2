@@ -34,19 +34,6 @@ const int gp = 100;
 
 const int lb = 50;
 
-//struct itemi {
-//	struct armori {
-//		char armor, block, dodge;
-//	};
-//	struct weaponi {
-//		char tohit, damage, pierce;
-//	};
-//	int cost, weight;
-//	weaponi		weapor;
-//	armori		armor;
-//	variant*	powers;
-//};
-
 static_assert(sizeof(item) == 2, "Structure `item` must 2 bytes");
 
 collectionv<itemlay> items;
