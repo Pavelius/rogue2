@@ -144,18 +144,18 @@ static void create_city_level(const abox& rc, int level) {
 		auto w1 = (w * m) / 100; // horizontal
 		if(w1 < min_building_size)
 			w1 = min_building_size;
-		create_city_level({rc.x, rc.y, w1 - rd - 1, rc.h}, level + 1);
-		create_city_level({rc.x + w1, rc.y, rc.w - w1, rc.h}, level + 1);
+		create_city_level({rc.x, rc.y, w1 - rd - 1, h}, level + 1);
+		create_city_level({rc.x + w1, rc.y, w - w1, h}, level + 1);
 		if(rd)
-			create_road({rc.x + w1 - rd, rc.y, rd, rc.h});
+			create_road({rc.x + w1 - rd, rc.y, rd, h});
 	} else {
 		auto h1 = (h * m) / 100; // vertial
 		if(h1 < min_building_size)
 			h1 = min_building_size;
-		create_city_level({rc.x, rc.y, rc.w, h1 - rd - 1}, level + 1);
-		create_city_level({rc.x, rc.y + h1, rc.w, rc.h - h1}, level + 1);
+		create_city_level({rc.x, rc.y, w, h1 - rd - 1}, level + 1);
+		create_city_level({rc.x, rc.y + h1, w, h - h1}, level + 1);
 		if(rd)
-			create_road({rc.x, rc.y + h1 - rd, rc.w, rd});
+			create_road({rc.x, rc.y + h1 - rd, w, rd});
 	}
 }
 
