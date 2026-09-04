@@ -16,7 +16,6 @@
 
 #include "bsdata.h"
 #include "creature.h"
-#include "feats.h"
 #include "math.h"
 #include "rand.h"
 #include "slice.h"
@@ -29,7 +28,7 @@ struct statblock : featable, statable, spellable {
 		set(v);
 	}
 	constexpr void set(featn v) {
-		feats[v / 32] = 1 << (v % 32);
+		featable::set(v);
 	}
 	constexpr void set(spelln v) {
 		spellable::set(v);
@@ -111,8 +110,7 @@ void apply_monster(monstern type) {
 	if(type >= FirstMonster && type <= LastMonster) {
 		player->basic.abilities[WeaponSkill] += imax(30, e.level * 5);
 		player->basic.abilities[BalisticSkill] += imax(30, e.level * 5);
-		for(auto i = 0; i < lenghtof(player->feats); i++)
-			player->feats[i] = e.stats.feats[i];
+		player->featable::add(e.stats);
 		player->spells = e.stats.spells;
 		for(auto i = 0; i < lenghtof(e.stats.abilities); i++)
 			player->basic.abilities[i] += e.stats.abilities[i];

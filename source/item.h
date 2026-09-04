@@ -16,13 +16,13 @@
 
 #pragma once
 
+#include "flagable.h"
 #include "variant.h"
 
 struct creature;
 
 extern bool need_update_items;
 
-enum featn : unsigned char;
 enum messagen : unsigned char;
 enum glown : unsigned char;
 
@@ -56,9 +56,36 @@ enum itemn : unsigned char {
 	RandomBlades, RandomBladesSmall, RandomMartialWeapon, RandomMissileWeapon,
 	RandomArmor, RandomWeapon, RandomFood
 };
+enum featn : unsigned char {
+	Female, DarkVision, Large,
+	BleedingHit, CorrozionHit, MightyHit, ParalizeHit, PierceHit, StunningHit, PushHit, VorpalHit, RetaliateHit,
+	WeakPoison, StrongPoison, DeathPoison, ColdDamage, FireDamage,
+	AcidResistance, ColdResistance, DeathResistance, DiseaseResist, FireResistance, PoisonResistance, StunResistance,
+	AcidImmunity, ColdImmunity, DeathImmunity, DiseaseImmunity, FireImmunity, PoisonImmunity, StunImmunity,
+	Fly, FastMove, SlowMove, FastAttack, SlowAttack,
+	Blooding, Regenerating, Boosting, Stun,
+	Mirrorred, Enemy, Local,
+	LastFeat = Local,
+};
 
 extern const char* power_names[];
 extern const char* item_state_names[4 * 2]; // Status: used and damaged
+
+typedef flagable<1 + LastFeat / 32, unsigned> featable;
+
+struct attacki {
+	char		attack, damage, parry, armor;
+	itemn		ammo;
+};
+
+struct itemi {
+	const char* id; // Avatar
+	wearn		wear;
+	int			weight, cost;
+	featable	feats;
+	attacki		combat;
+};
+extern itemi item_data[LastItem + 1];
 
 struct item {
 	itemn type;
@@ -76,10 +103,11 @@ struct item {
 	constexpr item(itemn v, unsigned char count) : type(v), count(count) {}
 	explicit operator bool() const { return type != (itemn)0; }
 	constexpr bool countable() const { return type >= Ration; }
-	itemn ammo() const;
+	constexpr const itemi& geti() const { return item_data[type]; }
+	constexpr itemn ammo() const { return geti().combat.ammo; }
+	constexpr wearn wear() const { return geti().wear; }
 	creature* owner() const;
 	wearn equiped() const;
-	wearn wear() const;
 	const char* description() const;
 	const char* name() const;
 	variant getpower() const;

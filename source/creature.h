@@ -19,7 +19,6 @@
 #include "direction.h"
 #include "draw_object.h"
 #include "draw_floatinfo.h"
-#include "feats.h"
 #include "item.h"
 #include "posable.h"
 #include "spell.h"
@@ -92,6 +91,7 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	short			hits, hits_maximum, mana;
 	int				experience;
 	int				wait_seconds;
+	constexpr explicit operator bool() const { return hits > 0; }
 	const char* name() const;
 	creature* getboss() const;
 	creature* getfear() const;

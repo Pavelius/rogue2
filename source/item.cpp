@@ -18,7 +18,6 @@
 #include "creature.h"
 #include "collectiona.h"
 #include "itemlay.h"
-#include "feats.h"
 #include "game.h"
 #include "math.h"
 #include "message.h"
@@ -64,22 +63,76 @@ static itemn random_armors[] = {Robe, LeatherArmor, LeatherArmor, LeatherArmor, 
 static itemn random_weapon[] = {RandomBladesSmall, RandomBlades, RandomMartialWeapon, RandomMartialWeapon, RandomMissileWeapon};
 static itemn random_food[] = {Meat, Ration, Bread};
 
-template<unsigned N>
-static itemn random(itemn(&source)[N]) {
-	return random(source[rand() % N]);
-}
+itemi item_data[LastItem + 1] = {
+	{"item-1"},
+	{"item6", MeleeWeapon, 4 * lb, 2 * gp}, // Staff
+	{"item60", MeleeWeapon, 4 * lb, 2 * gp}, // Spear
+	{"item3", MeleeWeapon, 2 * lb, 5 * gp, {MightyHit}}, // Axe
+	{"item7", MeleeWeapon, 5 * lb, 1 * gp, {StunningHit}}, // Mace
+	{"item42", MeleeWeapon, 5 * lb, 4 * gp, {MightyHit}}, // WarHammer
+	{"item24", MeleeWeapon, 10 * lb, 20 * gp, {StunningHit, Large}}, // GreatMace
+	{"item189", MeleeWeapon, 7 * lb, 30 * gp, {MightyHit, Large}}, // GreatAxe
+	{"item0", MeleeWeapon, 1 * lb, 5 * gp, {PierceHit}}, // Dagger
+	{"item2", MeleeWeapon, 2 * lb, 5 * gp, {}}, // ShortSword
+	{"item4", MeleeWeapon, 3 * lb, 5 * gp, {}}, // LongSword
+	{"item36", MeleeWeapon, 2 * lb, 6 * gp, {}}, // Scimitar
+	{"item190", MeleeWeapon, 10 * lb, 40 * gp, {BleedingHit, Large}}, // GreatSword
+	{"item50", RangedWeapon, 1 * lb, 10 * gp, {Large}}, // ShortBow
+	{"item76", RangedWeapon, 2 * lb, 20 * gp, {Large}}, // LongBow
+	{"item67", RangedWeapon, 3 * lb, 20 * gp, {Large}}, // Crossbow
+	{"item77", RangedWeapon, 5 * lb, 30 * gp, {Large}}, // HeavyCrossbow
+	{"item8", Torso}, // Robe
+	{"item29", Torso}, // LeatherArmor
+	{"item43", Torso}, // StuddedArmor
+	{"item10", Torso}, // HideArmor
+	{"item11", Torso}, // ScaleMail
+	{"item12", Torso}, // ChainMail
+	{"item13", Torso}, // PlateMail
+	{"item16", MeleeWeaponOffhand}, // Shield small
+	{"item17", MeleeWeaponOffhand},
+	{"item18", MeleeWeaponOffhand},
+	{"item19", MeleeWeaponOffhand},
+	{"item40", Legs}, // LeatherBoots
+	{"item58", Legs},
+	{"item488", Backpack}, // Blue Potions
+	{"item482", Backpack},
+	{"item567", Backpack},
+	{"item682", Backpack}, // Blue tome
+	{"item450", Backpack},
+	{"item88", Backpack},
+	{"item230", Backpack}, // Blue rod
+	{"item364", Backpack},
+	{"item231", Backpack},
+	{"item21", Backpack}, // Rations
+	{"item55", Backpack},
+	{"item240", Backpack},
+	{"item22", Backpack},
+	{"item258", Backpack},
+	{"items383", Backpack},
+	{"item103", Backpack},
+	{"item51", Ammunition}, // Arrow
+	{"item34", Ammunition},
+	{"item404", Backpack}, // Blue gem
+	{"item402", Backpack},
+	{"item406", Backpack},
+	{"item405", Backpack},
+	{"item403", Backpack},
+	{"items37", Backpack}, // CP
+	{"items37", Backpack},
+	{"items37", Backpack},
+};
 
 itemn random(itemn v) {
 	switch(v) {
-	case RandomArmor: return random(random_armors);
-	case RandomBlades: return random(random_blades);
-	case RandomBladesSmall: return random(random_small_blades);
-	case RandomCoins: return random(random_coins);
-	case RandomGems: return random(random_gems);
-	case RandomMartialWeapon: return random(random_martial_weapons);
-	case RandomMissileWeapon: return random(random_missile_weapons);
-	case RandomTreasure: return random(random_treasure);
-	case RandomWeapon: return random(random_weapon);
+	case RandomArmor: return random(maprnd(random_armors));
+	case RandomBlades: return random(maprnd(random_blades));
+	case RandomBladesSmall: return random(maprnd(random_small_blades));
+	case RandomCoins: return random(maprnd(random_coins));
+	case RandomGems: return random(maprnd(random_gems));
+	case RandomMartialWeapon: return random(maprnd(random_martial_weapons));
+	case RandomMissileWeapon: return random(maprnd(random_missile_weapons));
+	case RandomTreasure: return random(maprnd(random_treasure));
+	case RandomWeapon: return random(maprnd(random_weapon));
 	default: return v;
 	}
 }
@@ -262,27 +315,23 @@ static int get_weapon_speed(itemn v) {
 	}
 }
 
-itemn item::ammo() const {
-	return get_ammo(type);
-}
-
-wearn item::wear() const {
-	if(type >= CP && type <= GP)
-		return Backpack;
-	else if(type >= Staff && type <= GreatSword)
-		return MeleeWeapon;
-	else if(type >= ShieldSmall && type <= ShieldTower)
-		return MeleeWeaponOffhand;
-	else if(type >= ShortBow && type <= HeavyCrossbow)
-		return RangedWeapon;
-	else if(type >= Robe && type <= PlateMail)
-		return Torso;
-	else if(type >= LeatherBoots && type <= IronBoots)
-		return Legs;
-	else if(type >= Arrow && type <= Bolt)
-		return Ammunition;
-	return Backpack;
-}
+//wearn item::wear() const {
+//	if(type >= CP && type <= GP)
+//		return Backpack;
+//	else if(type >= Staff && type <= GreatSword)
+//		return MeleeWeapon;
+//	else if(type >= ShieldSmall && type <= ShieldTower)
+//		return MeleeWeaponOffhand;
+//	else if(type >= ShortBow && type <= HeavyCrossbow)
+//		return RangedWeapon;
+//	else if(type >= Robe && type <= PlateMail)
+//		return Torso;
+//	else if(type >= LeatherBoots && type <= IronBoots)
+//		return Legs;
+//	else if(type >= Arrow && type <= Bolt)
+//		return Ammunition;
+//	return Backpack;
+//}
 
 bool item::ismagical() const {
 	// Item is magical if is not mudane, if power filled and if power zero and no empty power.

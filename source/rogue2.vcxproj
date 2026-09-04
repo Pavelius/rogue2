@@ -114,7 +114,6 @@
     <ClInclude Include="draw_move.h" />
     <ClInclude Include="draw_object.h" />
     <ClInclude Include="enchant.h" />
-    <ClInclude Include="feats.h" />
     <ClInclude Include="flagable.h" />
     <ClInclude Include="draw_floatinfo.h" />
     <ClInclude Include="game.h" />

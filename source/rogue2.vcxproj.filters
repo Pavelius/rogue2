@@ -16,9 +16,6 @@
     <Filter Include="Util">
       <UniqueIdentifier>{c24bbc81-8637-42f7-904e-3e742552b0cd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Formats">
-      <UniqueIdentifier>{97ba888a-1c98-472d-87e4-11949469df2a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="help">
       <UniqueIdentifier>{6d0da46e-22be-4429-a7d7-9f3fb2afd850}</UniqueIdentifier>
     </Filter>
@@ -138,12 +135,6 @@
     <ClCompile Include="keyname.cpp">
       <Filter>Support</Filter>
     </ClCompile>
-    <ClCompile Include="png.cpp">
-      <Filter>Formats</Filter>
-    </ClCompile>
-    <ClCompile Include="zip.cpp">
-      <Filter>Formats</Filter>
-    </ClCompile>
     <ClCompile Include="screenshoot.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
@@ -249,6 +240,12 @@
     <ClCompile Include="bin_shadows.cpp">
       <Filter>Binary</Filter>
     </ClCompile>
+    <ClCompile Include="png.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="zip.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sprite_util.h">
@@ -270,9 +267,6 @@
       <Filter>Logic</Filter>
     </ClInclude>
     <ClInclude Include="direction.h">
-      <Filter>Logic</Filter>
-    </ClInclude>
-    <ClInclude Include="feats.h">
       <Filter>Logic</Filter>
     </ClInclude>
     <ClInclude Include="game.h">
