@@ -111,7 +111,7 @@ struct item {
 	constexpr int block() const { return geti().combat.block; }
 	constexpr int cost() const { return geti().cost * getcount(); }
 	constexpr int damage() const { return geti().combat.damage; }
-	constexpr int dodge() const { return geti().combat.dodge; }
+	constexpr int dodge() const { return geti().combat.dodge*5; }
 	constexpr int speed() const { return geti().combat.speed; }
 	constexpr int weight() const { return geti().weight * getcount(); }
 	constexpr int getcount() const { return countable() ? count : 1; }

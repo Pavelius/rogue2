@@ -517,7 +517,7 @@ static void make_attack(item& weapon, int attack_skill, int damage_percent) {
 	damage += player->get(damage_skill(weapon_ability));
 	damage += add_bonus_damage(player, opponent, weapon, FireDamage, 2, FireResistance, FireImmunity);
 	damage += add_bonus_damage(player, opponent, weapon, ColdDamage, 2, ColdResistance, ColdImmunity);
-	attack_skill += player->get(weapon_ability);
+	attack_skill += player->get(weapon_ability) + weapon.geti().combat.attack * 5;
 	// Roll how match damage make
 	auto roll_result = d100();
 	if(roll_result > attack_skill) {
