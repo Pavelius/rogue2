@@ -84,6 +84,7 @@ struct itemi {
 	const char* id; // Avatar
 	featable	feats;
 	attacki		combat;
+	variant*	powers;
 };
 extern itemi item_data[LastItem + 1];
 
@@ -114,6 +115,7 @@ struct item {
 	constexpr int speed() const { return geti().combat.speed; }
 	constexpr int weight() const { return geti().weight * getcount(); }
 	constexpr int getcount() const { return countable() ? count : 1; }
+	constexpr variant* powers() const { return geti().powers; }
 	creature* owner() const;
 	wearn equiped() const;
 	const char* description() const;

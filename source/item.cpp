@@ -33,24 +33,26 @@ const int gp = 100;
 
 const int lb = 50;
 
+const int mp = 8;
+
 static_assert(sizeof(item) == 2, "Structure `item` must 2 bytes");
 
 collectionv<itemlay> items;
 bool need_update_items;
 item* last_item;
 
-static variant no_powers[8] = {Variant};
-static variant swords_powers[8] = {Variant, WeaponSkill, DamageMelee, Dexterity};
-static variant pierce_melee_weapon_powers[8] = {Variant, WeaponSkill, DamageMelee, Dexterity};
-static variant blue_potion_powers[8] = {Hits, Mana, Strenght, Dexterity, Wits, Poison, Illness, Drunk};
-static variant red_potion_powers[8] = {WeaponSkill, BalisticSkill, Dodge, Armor, FastMove, FastAttack, Fly, FireImmunity};
-static variant green_potion_powers[8] = {Regenerating, Boosting, Experience, AcidImmunity, ColdImmunity, DeathImmunity, DiseaseImmunity, PoisonImmunity};
-static variant red_tome[8] = {Alchemy, Gemcutting, BalisticSkill, WeaponSkill, Mining, Stealth, History, Religion};
-static variant green_tome[8] = {Mana, Hits, Wits, Dexterity, Strenght, Literacy, Metallurgy};
-static variant blue_tome[8] = {CureLightWounds, MageArmor, LightSpell, Mending, Sleep, Web, BurningHands, HorrorScare};
-static variant blue_rod[8] = {CureSeriousWounds, CureDisease, CurePoison, IceSpear, HorrorScare, LightSpell, SummonUndead};
-static variant green_rod[8] = {Sleep, Entaglement, MageArmor, Web};
-static variant red_rod[8] = {BurningHands, FireBolt};
+static variant no_powers[mp] = {Variant};
+static variant swords_powers[mp] = {Variant, WeaponSkill, DamageMelee, Dexterity};
+static variant pierce_melee_weapon_powers[mp] = {Variant, WeaponSkill, DamageMelee, Dexterity};
+static variant blue_potion_powers[mp] = {Hits, Mana, Strenght, Dexterity, Wits, Poison, Illness, Drunk};
+static variant red_potion_powers[mp] = {WeaponSkill, BalisticSkill, Dodge, Armor, FastMove, FastAttack, Fly, FireImmunity};
+static variant green_potion_powers[mp] = {Regenerating, Boosting, Experience, AcidImmunity, ColdImmunity, DeathImmunity, DiseaseImmunity, PoisonImmunity};
+static variant red_tome[mp] = {Alchemy, Gemcutting, BalisticSkill, WeaponSkill, Mining, Stealth, History, Religion};
+static variant green_tome[mp] = {Mana, Hits, Wits, Dexterity, Strenght, Literacy, Metallurgy};
+static variant blue_tome[mp] = {CureLightWounds, MageArmor, LightSpell, Mending, Sleep, Web, BurningHands, HorrorScare};
+static variant blue_rod[mp] = {CureSeriousWounds, CureDisease, CurePoison, IceSpear, HorrorScare, LightSpell, SummonUndead};
+static variant green_rod[mp] = {Sleep, Entaglement, MageArmor, Web};
+static variant red_rod[mp] = {BurningHands, FireBolt};
 
 static itemn random_coins[] = {CP, CP, CP, CP, SP, SP, SP, GP};
 static itemn random_gems[] = {BlueGem, BlueGem, BlueGem, WhiteGem, WhiteGem, YellowGem, YellowGem, GreenGem, RedGem};
@@ -63,50 +65,24 @@ static itemn random_armors[] = {Robe, LeatherArmor, LeatherArmor, LeatherArmor, 
 static itemn random_weapon[] = {RandomBladesSmall, RandomBlades, RandomMartialWeapon, RandomMartialWeapon, RandomMissileWeapon};
 static itemn random_food[] = {Meat, Ration, Bread};
 
-/*
-static int get_damage(itemn v) {
-	switch(v) {
-	case NoItem: // Unarmed attack
-		return 2;
-	case Dagger:
-		return 4;
-	case ShortSword: case Axe: case Spear: case Mace:
-		return 6;
-	case Scimitar: case WarHammer:
-		return 7;
-	case LongSword:
-		return 8;
-	case GreatAxe:
-		return 9;
-	case GreatSword:
-		return 10;
-	case ShortBow:
-		return 6;
-	case LongBow:
-		return 8;
-	default:
-		return 0;
-	}
-}*/
-
 itemi item_data[LastItem + 1] = {
 	{Backpack, 0, 0, "item-1", {}, {0, 2}},
-	{MeleeWeapon, 4 * lb, 2 * gp, "item6", {StunningHit, Large}, {0, 5, 7}}, // Staff
-	{MeleeWeapon, 4 * lb, 2 * gp, "item60", {PierceHit, RetaliateHit, Large}, {0, 6, 7}}, // Spear
-	{MeleeWeapon, 2 * lb, 5 * gp, "item3", {MightyHit}, {0, 6, 7}}, // Axe
-	{MeleeWeapon, 5 * lb, 1 * gp, "item7", {StunningHit}, {0, 6, 7}}, // Mace
-	{MeleeWeapon, 5 * lb, 4 * gp, "item42", {StunningHit}, {0, 7, 7}}, // WarHammer
-	{MeleeWeapon, 10 * lb, 20 * gp, "item24", {StunningHit, Large}, {0, 9, 10}}, // GreatMace
-	{MeleeWeapon, 7 * lb, 30 * gp, "item189", {MightyHit, Large}, {0, 9, 10}}, // GreatAxe
-	{MeleeWeapon, 1 * lb, 5 * gp, "item0", {PierceHit}, {0, 4, 2}}, // Dagger
-	{MeleeWeapon, 2 * lb, 5 * gp, "item2", {}, {0, 6, 6}}, // ShortSword
-	{MeleeWeapon, 3 * lb, 5 * gp, "item4", {}, {0, 8, 7}}, // LongSword
-	{MeleeWeapon, 2 * lb, 6 * gp, "item36", {}, {0, 7, 7}}, // Scimitar
-	{MeleeWeapon, 10 * lb, 40 * gp, "item190", {BleedingHit, Large}, {0, 10, 10}}, // GreatSword
-	{RangedWeapon, 1 * lb, 10 * gp, "item50", {Large}, {0, 6, 0, 0, 0, Arrow}}, // ShortBow
-	{RangedWeapon, 2 * lb, 20 * gp, "item76", {Large}, {0, 7, 0, 0, 0, Arrow}}, // LongBow
-	{RangedWeapon, 3 * lb, 20 * gp, "item67", {Large}, {0, 7, 0, 0, 0, Bolt}}, // Crossbow
-	{RangedWeapon, 5 * lb, 30 * gp, "item77", {Large}, {0, 10, 0, 0, 0, Bolt}}, // HeavyCrossbow
+	{MeleeWeapon, 4 * lb, 2 * gp, "item6", {StunningHit, Large}, {0, 5, 7}, swords_powers}, // Staff
+	{MeleeWeapon, 4 * lb, 2 * gp, "item60", {PierceHit, RetaliateHit, Large}, {0, 6, 7}, pierce_melee_weapon_powers}, // Spear
+	{MeleeWeapon, 2 * lb, 5 * gp, "item3", {MightyHit}, {0, 6, 7}, swords_powers}, // Axe
+	{MeleeWeapon, 5 * lb, 1 * gp, "item7", {StunningHit}, {0, 6, 7}, swords_powers}, // Mace
+	{MeleeWeapon, 5 * lb, 4 * gp, "item42", {StunningHit}, {0, 7, 7}, swords_powers}, // WarHammer
+	{MeleeWeapon, 10 * lb, 20 * gp, "item24", {StunningHit, Large}, {-1, 9, 10}, swords_powers}, // GreatMace
+	{MeleeWeapon, 7 * lb, 30 * gp, "item189", {MightyHit, Large}, {-1, 9, 10}, swords_powers}, // GreatAxe
+	{MeleeWeapon, 1 * lb, 5 * gp, "item0", {PierceHit}, {0, 4, 2}, swords_powers}, // Dagger
+	{MeleeWeapon, 2 * lb, 5 * gp, "item2", {}, {0, 6, 6}, swords_powers}, // ShortSword
+	{MeleeWeapon, 3 * lb, 5 * gp, "item4", {}, {0, 8, 7}, swords_powers}, // LongSword
+	{MeleeWeapon, 2 * lb, 6 * gp, "item36", {}, {0, 7, 7}, swords_powers}, // Scimitar
+	{MeleeWeapon, 10 * lb, 40 * gp, "item190", {BleedingHit, Large}, {-1, 10, 10}, swords_powers}, // GreatSword
+	{RangedWeapon, 1 * lb, 10 * gp, "item50", {Large}, {0, 6, 0, 0, 0, Arrow}, pierce_melee_weapon_powers}, // ShortBow
+	{RangedWeapon, 2 * lb, 20 * gp, "item76", {Large}, {0, 7, 0, 0, 0, Arrow}, pierce_melee_weapon_powers}, // LongBow
+	{RangedWeapon, 3 * lb, 20 * gp, "item67", {Large}, {0, 7, 0, 0, 0, Bolt}, pierce_melee_weapon_powers}, // Crossbow
+	{RangedWeapon, 5 * lb, 30 * gp, "item77", {Large}, {0, 10, 0, 0, 0, Bolt}, pierce_melee_weapon_powers}, // HeavyCrossbow
 	{Torso, 10 * lb, 5 * gp, "item8", {}, {0, 0, 0, 0, 0}}, // Robe
 	{Torso, 15 * lb, 10 * gp, "item29", {}, {0, 0, 0, 1, 0}}, // LeatherArmor
 	{Torso, 25 * lb, 15 * gp, "item43", {}, {0, 0, -1, 1, 1}}, // StuddedArmor
@@ -120,15 +96,15 @@ itemi item_data[LastItem + 1] = {
 	{MeleeWeaponOffhand, 20 * lb, 10 * gp, "item19", {}, {0, 0, -1, 1, 2}},
 	{Legs, 3 * lb, 10 * gp, "item40", {}, {0, 0, 0, 0, 1}}, // LeatherBoots
 	{Legs, 7 * lb, 10 * gp, "item58", {}, {0, 0, 0, 1, 0}},
-	{Backpack, 1 * lb, 10 * gp, "item488"}, // Blue Potions
-	{Backpack, 1 * lb, 10 * gp, "item482"},
-	{Backpack, 1 * lb, 10 * gp, "item567"},
-	{Backpack, 2 * lb, 10 * gp, "item682"}, // Blue tome
-	{Backpack, 3 * lb, 10 * gp, "item450"},
-	{Backpack, 3 * lb, 10 * gp, "item88"},
-	{Backpack, 1 * lb, 10 * gp, "item230"}, // Blue rod
-	{Backpack, 1 * lb, 10 * gp, "item364"},
-	{Backpack, 1 * lb, 10 * gp, "item231"},
+	{Backpack, 1 * lb, 10 * gp, "item488", {}, {}, blue_potion_powers}, // Blue Potions
+	{Backpack, 1 * lb, 10 * gp, "item482", {}, {}, green_potion_powers},
+	{Backpack, 1 * lb, 10 * gp, "item567", {}, {}, red_potion_powers},
+	{Backpack, 2 * lb, 10 * gp, "item682", {}, {}, blue_tome}, // Blue tome
+	{Backpack, 3 * lb, 10 * gp, "item450", {}, {}, green_tome},
+	{Backpack, 3 * lb, 10 * gp, "item88", {}, {}, red_tome},
+	{Backpack, 1 * lb, 10 * gp, "item230", {}, {}, blue_rod}, // Blue rod
+	{Backpack, 1 * lb, 10 * gp, "item364", {}, {}, green_rod},
+	{Backpack, 1 * lb, 10 * gp, "item231", {}, {}, red_rod},
 	// Countable
 	{Backpack, 1 * lb, 10 * gp, "item21"}, // Rations
 	{Backpack, 1 * lb, 10 * gp, "item55"},
@@ -164,23 +140,6 @@ itemn random(itemn v) {
 	}
 }
 
-static const variant* get_powers(itemn v) {
-	switch(v) {
-	case Dagger: case LongSword: case ShortSword: case GreatSword: return swords_powers;
-	case Spear: return pierce_melee_weapon_powers;
-	case BluePotion: return blue_potion_powers;
-	case GreenPotion: return green_potion_powers;
-	case RedPotion: return red_potion_powers;
-	case RedTome: return red_tome;
-	case GreenTome: return green_tome;
-	case BlueTome: return blue_tome;
-	case BlueRod: return blue_rod;
-	case GreenRod: return green_rod;
-	case RedRod: return red_rod;
-	default: return no_powers;
-	}
-}
-
 static int get_power_count(const variant* source) {
 	if(!source)
 		return 0;
@@ -194,10 +153,10 @@ static int get_power_count(const variant* source) {
 variant item::getpower() const {
 	if(countable())
 		return Variant;
-	auto powers = get_powers(type);
-	if(!powers)
+	auto pv = powers();
+	if(!pv)
 		return variant();
-	return powers[power];
+	return pv[power];
 }
 
 static int find_power(const variant* source, variant v) {
@@ -211,7 +170,7 @@ static int find_power(const variant* source, variant v) {
 bool item::setpower(variant v) {
 	if(countable())
 		return false;
-	auto n = find_power(get_powers(type), v);
+	auto n = find_power(powers(), v);
 	if(n == -1)
 		return false;
 	power = n;
@@ -221,7 +180,7 @@ bool item::setpower(variant v) {
 bool item::setpower() {
 	if(countable())
 		return false;
-	auto source = get_powers(type);
+	auto source = powers();
 	if(!source)
 		return false;
 	auto is_magical = source[0].operator bool();
@@ -281,7 +240,7 @@ bool item::ismagical() const {
 		return true;
 	if(power)
 		return true;
-	auto source = get_powers(type);
+	auto source = powers();
 	if(!source)
 		return false;
 	return source[0].u != 0;
@@ -524,7 +483,7 @@ void item::act(messagen v, glown glow) const {
 void item::create(int chance_blessed, int chance_cursed, int chance_power) {
 	if(countable())
 		return;
-	auto source = get_powers(type);
+	auto source = powers();
 	if((source && source[0]) || game_chance(chance_power))
 		setpower();
 	if(game_chance(chance_cursed))
