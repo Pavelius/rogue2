@@ -74,14 +74,14 @@ extern const char* item_state_names[4 * 2]; // Status: used and damaged
 typedef flagable<1 + LastFeat / 32, unsigned> featable;
 
 struct attacki {
-	char		attack, damage, parry, armor;
+	char		attack, damage, speed, dodge, armor, block;
 	itemn		ammo;
 };
 
 struct itemi {
-	const char* id; // Avatar
 	wearn		wear;
 	int			weight, cost;
+	const char* id; // Avatar
 	featable	feats;
 	attacki		combat;
 };
@@ -106,19 +106,19 @@ struct item {
 	constexpr const itemi& geti() const { return item_data[type]; }
 	constexpr itemn ammo() const { return geti().combat.ammo; }
 	constexpr wearn wear() const { return geti().wear; }
+	constexpr int armor() const { return geti().combat.armor; }
+	constexpr int block() const { return geti().combat.block; }
+	constexpr int cost() const { return geti().cost * getcount(); }
+	constexpr int damage() const { return geti().combat.damage; }
+	constexpr int dodge() const { return geti().combat.dodge; }
+	constexpr int speed() const { return geti().combat.speed; }
+	constexpr int weight() const { return geti().weight * getcount(); }
+	constexpr int getcount() const { return countable() ? count : 1; }
 	creature* owner() const;
 	wearn equiped() const;
 	const char* description() const;
 	const char* name() const;
 	variant getpower() const;
-	int	armor() const;
-	int	block() const;
-	int	cost() const;
-	int damage() const;
-	int dodge() const;
-	int speed() const;
-	int	weight() const;
-	int getcount() const { return countable() ? count : 1; }
 	void act(messagen v, glown glow) const;
 	bool apply(spelln v, bool run = true);
 	void broke(messagen msg = (messagen)0);

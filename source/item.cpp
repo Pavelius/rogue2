@@ -63,63 +63,90 @@ static itemn random_armors[] = {Robe, LeatherArmor, LeatherArmor, LeatherArmor, 
 static itemn random_weapon[] = {RandomBladesSmall, RandomBlades, RandomMartialWeapon, RandomMartialWeapon, RandomMissileWeapon};
 static itemn random_food[] = {Meat, Ration, Bread};
 
+/*
+static int get_damage(itemn v) {
+	switch(v) {
+	case NoItem: // Unarmed attack
+		return 2;
+	case Dagger:
+		return 4;
+	case ShortSword: case Axe: case Spear: case Mace:
+		return 6;
+	case Scimitar: case WarHammer:
+		return 7;
+	case LongSword:
+		return 8;
+	case GreatAxe:
+		return 9;
+	case GreatSword:
+		return 10;
+	case ShortBow:
+		return 6;
+	case LongBow:
+		return 8;
+	default:
+		return 0;
+	}
+}*/
+
 itemi item_data[LastItem + 1] = {
-	{"item-1"},
-	{"item6", MeleeWeapon, 4 * lb, 2 * gp}, // Staff
-	{"item60", MeleeWeapon, 4 * lb, 2 * gp}, // Spear
-	{"item3", MeleeWeapon, 2 * lb, 5 * gp, {MightyHit}}, // Axe
-	{"item7", MeleeWeapon, 5 * lb, 1 * gp, {StunningHit}}, // Mace
-	{"item42", MeleeWeapon, 5 * lb, 4 * gp, {MightyHit}}, // WarHammer
-	{"item24", MeleeWeapon, 10 * lb, 20 * gp, {StunningHit, Large}}, // GreatMace
-	{"item189", MeleeWeapon, 7 * lb, 30 * gp, {MightyHit, Large}}, // GreatAxe
-	{"item0", MeleeWeapon, 1 * lb, 5 * gp, {PierceHit}}, // Dagger
-	{"item2", MeleeWeapon, 2 * lb, 5 * gp, {}}, // ShortSword
-	{"item4", MeleeWeapon, 3 * lb, 5 * gp, {}}, // LongSword
-	{"item36", MeleeWeapon, 2 * lb, 6 * gp, {}}, // Scimitar
-	{"item190", MeleeWeapon, 10 * lb, 40 * gp, {BleedingHit, Large}}, // GreatSword
-	{"item50", RangedWeapon, 1 * lb, 10 * gp, {Large}}, // ShortBow
-	{"item76", RangedWeapon, 2 * lb, 20 * gp, {Large}}, // LongBow
-	{"item67", RangedWeapon, 3 * lb, 20 * gp, {Large}}, // Crossbow
-	{"item77", RangedWeapon, 5 * lb, 30 * gp, {Large}}, // HeavyCrossbow
-	{"item8", Torso}, // Robe
-	{"item29", Torso}, // LeatherArmor
-	{"item43", Torso}, // StuddedArmor
-	{"item10", Torso}, // HideArmor
-	{"item11", Torso}, // ScaleMail
-	{"item12", Torso}, // ChainMail
-	{"item13", Torso}, // PlateMail
-	{"item16", MeleeWeaponOffhand}, // Shield small
-	{"item17", MeleeWeaponOffhand},
-	{"item18", MeleeWeaponOffhand},
-	{"item19", MeleeWeaponOffhand},
-	{"item40", Legs}, // LeatherBoots
-	{"item58", Legs},
-	{"item488", Backpack}, // Blue Potions
-	{"item482", Backpack},
-	{"item567", Backpack},
-	{"item682", Backpack}, // Blue tome
-	{"item450", Backpack},
-	{"item88", Backpack},
-	{"item230", Backpack}, // Blue rod
-	{"item364", Backpack},
-	{"item231", Backpack},
-	{"item21", Backpack}, // Rations
-	{"item55", Backpack},
-	{"item240", Backpack},
-	{"item22", Backpack},
-	{"item258", Backpack},
-	{"items383", Backpack},
-	{"item103", Backpack},
-	{"item51", Ammunition}, // Arrow
-	{"item34", Ammunition},
-	{"item404", Backpack}, // Blue gem
-	{"item402", Backpack},
-	{"item406", Backpack},
-	{"item405", Backpack},
-	{"item403", Backpack},
-	{"items37", Backpack}, // CP
-	{"items37", Backpack},
-	{"items37", Backpack},
+	{Backpack, 0, 0, "item-1", {}, {0, 2}},
+	{MeleeWeapon, 4 * lb, 2 * gp, "item6", {StunningHit, Large}, {0, 5, 7}}, // Staff
+	{MeleeWeapon, 4 * lb, 2 * gp, "item60", {PierceHit, RetaliateHit, Large}, {0, 6, 7}}, // Spear
+	{MeleeWeapon, 2 * lb, 5 * gp, "item3", {MightyHit}, {0, 6, 7}}, // Axe
+	{MeleeWeapon, 5 * lb, 1 * gp, "item7", {StunningHit}, {0, 6, 7}}, // Mace
+	{MeleeWeapon, 5 * lb, 4 * gp, "item42", {StunningHit}, {0, 7, 7}}, // WarHammer
+	{MeleeWeapon, 10 * lb, 20 * gp, "item24", {StunningHit, Large}, {0, 9, 10}}, // GreatMace
+	{MeleeWeapon, 7 * lb, 30 * gp, "item189", {MightyHit, Large}, {0, 9, 10}}, // GreatAxe
+	{MeleeWeapon, 1 * lb, 5 * gp, "item0", {PierceHit}, {0, 4, 2}}, // Dagger
+	{MeleeWeapon, 2 * lb, 5 * gp, "item2", {}, {0, 6, 6}}, // ShortSword
+	{MeleeWeapon, 3 * lb, 5 * gp, "item4", {}, {0, 8, 7}}, // LongSword
+	{MeleeWeapon, 2 * lb, 6 * gp, "item36", {}, {0, 7, 7}}, // Scimitar
+	{MeleeWeapon, 10 * lb, 40 * gp, "item190", {BleedingHit, Large}, {0, 10, 10}}, // GreatSword
+	{RangedWeapon, 1 * lb, 10 * gp, "item50", {Large}, {0, 6, 0, 0, 0, Arrow}}, // ShortBow
+	{RangedWeapon, 2 * lb, 20 * gp, "item76", {Large}, {0, 7, 0, 0, 0, Arrow}}, // LongBow
+	{RangedWeapon, 3 * lb, 20 * gp, "item67", {Large}, {0, 7, 0, 0, 0, Bolt}}, // Crossbow
+	{RangedWeapon, 5 * lb, 30 * gp, "item77", {Large}, {0, 10, 0, 0, 0, Bolt}}, // HeavyCrossbow
+	{Torso, 10 * lb, 5 * gp, "item8", {}, {0, 0, 0, 0, 0}}, // Robe
+	{Torso, 15 * lb, 10 * gp, "item29", {}, {0, 0, 0, 1, 0}}, // LeatherArmor
+	{Torso, 25 * lb, 15 * gp, "item43", {}, {0, 0, -1, 1, 1}}, // StuddedArmor
+	{Torso, 30 * lb, 30 * gp, "item10", {}, {0, 0, -2, 2, 0}}, // HideArmor
+	{Torso, 45 * lb, 70 * gp, "item11", {}, {0, 0, -4, 3, 1}}, // ScaleMail
+	{Torso, 40 * lb, 100 * gp, "item12", {}, {0, 0, -3, 3, 0}}, // ChainMail
+	{Torso, 50 * lb, 300 * gp, "item13", {}, {0, 0, -6, 4, 0}}, // PlateMail
+	{MeleeWeaponOffhand, 5 * lb, 10 * gp, "item16", {}, {0, 0, 0, 0, 1}}, // Shield small
+	{MeleeWeaponOffhand, 10 * lb, 10 * gp, "item17", {}, {0, 0, 0, 0, 2}},
+	{MeleeWeaponOffhand, 15 * lb, 10 * gp, "item18", {}, {0, 0, 0, 1, 1}},
+	{MeleeWeaponOffhand, 20 * lb, 10 * gp, "item19", {}, {0, 0, -1, 1, 2}},
+	{Legs, 3 * lb, 10 * gp, "item40", {}, {0, 0, 0, 0, 1}}, // LeatherBoots
+	{Legs, 7 * lb, 10 * gp, "item58", {}, {0, 0, 0, 1, 0}},
+	{Backpack, 1 * lb, 10 * gp, "item488"}, // Blue Potions
+	{Backpack, 1 * lb, 10 * gp, "item482"},
+	{Backpack, 1 * lb, 10 * gp, "item567"},
+	{Backpack, 2 * lb, 10 * gp, "item682"}, // Blue tome
+	{Backpack, 3 * lb, 10 * gp, "item450"},
+	{Backpack, 3 * lb, 10 * gp, "item88"},
+	{Backpack, 1 * lb, 10 * gp, "item230"}, // Blue rod
+	{Backpack, 1 * lb, 10 * gp, "item364"},
+	{Backpack, 1 * lb, 10 * gp, "item231"},
+	// Countable
+	{Backpack, 1 * lb, 10 * gp, "item21"}, // Rations
+	{Backpack, 1 * lb, 10 * gp, "item55"},
+	{Backpack, 1 * lb, 10 * gp, "item240"},
+	{Backpack, 1 * lb, 10 * gp, "item22"},
+	{Backpack, 1 * lb, 10 * gp, "item258"},
+	{Backpack, 1 * lb, 10 * gp, "items383"},
+	{Backpack, 1 * lb, 10 * gp, "item103"},
+	{Ammunition, 1 * lb, 10 * gp, "item51"}, // Arrow
+	{Ammunition, 1 * lb, 10 * gp, "item34"},
+	{Backpack, 1 * lb, 10 * gp, "item404"}, // Blue gem
+	{Backpack, 1 * lb, 10 * gp, "item402"},
+	{Backpack, 1 * lb, 10 * gp, "item406"},
+	{Backpack, 1 * lb, 10 * gp, "item405"},
+	{Backpack, 1 * lb, 10 * gp, "item403"},
+	{Backpack, 1 * lb, 10 * gp, "items37"}, // CP
+	{Backpack, 1 * lb, 10 * gp, "items37"},
+	{Backpack, 1 * lb, 10 * gp, "items37"},
 };
 
 itemn random(itemn v) {
@@ -233,74 +260,7 @@ int decoy_chance(itemn v) {
 	}
 }
 
-static int get_weight(itemn v) {
-	switch(v) {
-	case LongSword: return 3 * lb;
-	case ShortSword: return 2 * lb;
-	case GreatAxe: return 7 * lb;
-	case GreatSword: return 6 * lb;
-	case ChainMail: return 40 * lb;
-	case LeatherArmor: return 15 * lb;
-	case StuddedArmor: return 25 * lb;
-	case ShieldSmall: return 5 * lb;
-	case ShieldMedium: return 10 * lb;
-	case ShieldLarge: return 15 * lb;
-	case ShieldTower: return 20 * lb;
-	default: return 1 * lb;
-	}
-}
-
-static int get_cost(itemn v) {
-	switch(v) {
-	case CP: return cp;
-	case SP: return sp;
-	case GP: return gp;
-	case Axe: return 5 * gp;
-	case GreatAxe: return 30 * gp;
-	case Dagger: return 2 * gp;
-	case ShortSword: return 10 * gp;
-	case LongSword: return 15 * gp;
-	case Scimitar: return 25 * gp;
-	case GreatSword: return 50 * gp;
-	case RedPotion: return 15 * gp;
-	case GreenPotion: return 15 * gp;
-	case BluePotion: return 10 * gp;
-	case RedTome: return 30 * gp;
-	case BlueTome: return 30 * gp;
-	case GreenTome: return 30 * gp;
-	case ShieldSmall: return 5 * gp;
-	case ShieldMedium: return 10 * gp;
-	case ShieldLarge: return 15 * gp;
-	case ShieldTower: return 30 * gp;
-	default: return 0;
-	}
-}
-
-static int get_damage(itemn v) {
-	switch(v) {
-	case NoItem: // Unarmed attack
-		return 2;
-	case Dagger:
-		return 4;
-	case ShortSword: case Axe: case Spear: case Mace:
-		return 6;
-	case Scimitar: case WarHammer:
-		return 7;
-	case LongSword:
-		return 8;
-	case GreatAxe:
-		return 9;
-	case GreatSword:
-		return 10;
-	case ShortBow:
-		return 6;
-	case LongBow:
-		return 8;
-	default:
-		return 0;
-	}
-}
-
+/*
 static int get_weapon_speed(itemn v) {
 	switch(v) {
 	case LongSword: return 7;
@@ -313,25 +273,7 @@ static int get_weapon_speed(itemn v) {
 	case Axe: return 6;
 	default: return 10;
 	}
-}
-
-//wearn item::wear() const {
-//	if(type >= CP && type <= GP)
-//		return Backpack;
-//	else if(type >= Staff && type <= GreatSword)
-//		return MeleeWeapon;
-//	else if(type >= ShieldSmall && type <= ShieldTower)
-//		return MeleeWeaponOffhand;
-//	else if(type >= ShortBow && type <= HeavyCrossbow)
-//		return RangedWeapon;
-//	else if(type >= Robe && type <= PlateMail)
-//		return Torso;
-//	else if(type >= LeatherBoots && type <= IronBoots)
-//		return Legs;
-//	else if(type >= Arrow && type <= Bolt)
-//		return Ammunition;
-//	return Backpack;
-//}
+}*/
 
 bool item::ismagical() const {
 	// Item is magical if is not mudane, if power filled and if power zero and no empty power.
@@ -351,60 +293,6 @@ bool item::is(wearn v) const {
 		return wear() == FingerRight;
 	default:
 		return wear() == v;
-	}
-}
-
-int item::weight() const {
-	return get_weight(type) * getcount();
-}
-
-int item::cost() const {
-	return get_cost(type) * getcount();
-}
-
-int item::damage() const {
-	return get_damage(type);
-}
-
-int item::speed() const {
-	return get_weapon_speed(type);
-}
-
-int item::dodge() const {
-	switch(type) {
-	case StuddedArmor: return -5;
-	case HideArmor: return -10;
-	case ChainMail: return -15;
-	case ScaleMail: return -20;
-	case PlateMail: return -30;
-	case ShieldLarge: return -10;
-	default: return 0;
-	}
-}
-
-int item::armor() const {
-	switch(type) {
-	case LeatherArmor: return 1;
-	case StuddedArmor: return 1;
-	case HideArmor: return 2;
-	case ChainMail: return 3;
-	case ScaleMail: return 4;
-	case PlateMail: return 5;
-	case IronBoots: return 1;
-	case ShieldMedium: return 1;
-	case ShieldLarge: case ShieldTower: return 2;
-	default: return 0;
-	}
-}
-
-int item::block() const {
-	switch(type) {
-	case StuddedArmor: return 1;
-	case LeatherBoots: return 1;
-	case ShieldSmall: return 2;
-	case ShieldMedium: return 1;
-	case ShieldTower: return 1;
-	default: return 0;
 	}
 }
 
