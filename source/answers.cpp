@@ -74,13 +74,6 @@ void answers::add(long value, const char* name, ...) {
 	addv(value, name, format_param);
 }
 
-int	answers::totalweight() const {
-	auto n = 0;
-	for(auto& e : elements)
-		n += e.weight;
-	return n;
-}
-
 void answers::sort() {
 	qsort(elements.data, elements.count, sizeof(elements.data[0]), compare);
 }
@@ -89,21 +82,6 @@ long answers::random() const {
 	if(!elements.count)
 		return 0;
 	return elements.data[rand() % elements.count].value;
-}
-
-long answers::randomweight() const {
-	if(!elements.count)
-		return 0;
-	auto n = totalweight();
-	if(!n)
-		return 0;
-	auto m = rand() % n;
-	for(auto& e : elements) {
-		m -= e.weight;
-		if(m <= 0)
-			return e.value;
-	}
-	return 0;
 }
 
 const char* answers::getname(long v) {

@@ -648,12 +648,12 @@
 
 1779433834 /home/user-331/projects/rogue2/variant.h
 
-1779890842 source:/home/user-331/projects/rogue2/source/answers.cpp
+1789540071 source:/home/user-331/projects/rogue2/source/answers.cpp
 	"answers.h"
 	"pushvalue.h"
 	"rand.h"
 
-1779890842 /home/user-331/projects/rogue2/source/answers.h
+1789540056 /home/user-331/projects/rogue2/source/answers.h
 	"adat.h"
 	"stringbuilder.h"
 
@@ -767,7 +767,7 @@
 
 1779890842 /home/user-331/projects/rogue2/source/color.h
 
-1787581247 source:/home/user-331/projects/rogue2/source/creature.cpp
+1788529178 source:/home/user-331/projects/rogue2/source/creature.cpp
 	"area.h"
 	"bsdata.h"
 	"collection.h"
@@ -906,7 +906,7 @@
 	"stringbuilder.h"
 	"stringvar.h"
 
-1787581247 source:/home/user-331/projects/rogue2/source/interface.cpp
+1788962109 source:/home/user-331/projects/rogue2/source/interface.cpp
 	"answers.h"
 	"area.h"
 	"bsdata.h"

@@ -42,7 +42,7 @@ bool need_update_items;
 item* last_item;
 
 static variant no_powers[mp] = {Variant};
-static variant swords_powers[mp] = {Variant, WeaponSkill, DamageMelee, Dexterity};
+static variant swords_powers[mp] = {Variant, WeaponSkill, DamageMelee, Dexterity, ColdDamage, FireDamage, StrongPoison, VorpalHit};
 static variant pierce_melee_weapon_powers[mp] = {Variant, WeaponSkill, DamageMelee, Dexterity};
 static variant blue_potion_powers[mp] = {Hits, Mana, Strenght, Dexterity, Wits, Poison, Illness, Drunk};
 static variant red_potion_powers[mp] = {WeaponSkill, BalisticSkill, Dodge, Armor, FastMove, FastAttack, Fly, FireImmunity};

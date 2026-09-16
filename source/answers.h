@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// 
+//
 //  Copyright 2026 by Pavel Chistyakov
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,7 +25,6 @@ struct answers {
 	struct element {
 		long 		value;
 		const char* text;
-		int			weight;
 	};
 	char buffer[2048];
 	stringbuilder sc;
