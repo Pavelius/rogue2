@@ -95,16 +95,16 @@ itemi item_data[LastItem + 1] = {
 	{MeleeWeaponOffhand, 15 * lb, 10 * gp, "item18", {}, {0, 0, 0, 1, 1}},
 	{MeleeWeaponOffhand, 20 * lb, 10 * gp, "item19", {}, {0, 0, -1, 1, 2}},
 	{Legs, 3 * lb, 10 * gp, "item40", {}, {0, 0, 0, 0, 1}}, // LeatherBoots
-	{Legs, 7 * lb, 10 * gp, "item58", {}, {0, 0, 0, 1, 0}},
+	{Legs, 7 * lb, 10 * gp, "item58", {}, {0, 0, 0, 1, 0}}, // Iron boots
 	{Backpack, 1 * lb, 10 * gp, "item488", {}, {}, blue_potion_powers}, // Blue Potions
-	{Backpack, 1 * lb, 10 * gp, "item482", {}, {}, green_potion_powers},
-	{Backpack, 1 * lb, 10 * gp, "item567", {}, {}, red_potion_powers},
+	{Backpack, 1 * lb, 10 * gp, "item482", {}, {}, green_potion_powers}, // Green Potions
+	{Backpack, 1 * lb, 10 * gp, "item567", {}, {}, red_potion_powers}, // Red Potions
 	{Backpack, 2 * lb, 10 * gp, "item682", {}, {}, blue_tome}, // Blue tome
-	{Backpack, 3 * lb, 10 * gp, "item450", {}, {}, green_tome},
-	{Backpack, 3 * lb, 10 * gp, "item88", {}, {}, red_tome},
+	{Backpack, 3 * lb, 10 * gp, "item450", {}, {}, green_tome}, // Green tome
+	{Backpack, 3 * lb, 10 * gp, "item88", {}, {}, red_tome}, // Red tome
 	{Backpack, 1 * lb, 10 * gp, "item230", {}, {}, blue_rod}, // Blue rod
-	{Backpack, 1 * lb, 10 * gp, "item364", {}, {}, green_rod},
-	{Backpack, 1 * lb, 10 * gp, "item231", {}, {}, red_rod},
+	{Backpack, 1 * lb, 10 * gp, "item364", {}, {}, green_rod}, // Green rod
+	{Backpack, 1 * lb, 10 * gp, "item231", {}, {}, red_rod}, // Red rod
 	// Countable
 	{Backpack, 1 * lb, 10 * gp, "item21"}, // Rations
 	{Backpack, 1 * lb, 10 * gp, "item55"},

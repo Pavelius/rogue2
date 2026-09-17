@@ -39,7 +39,7 @@ extern unsigned char bin_splash[];
 extern unsigned char bin_status[];
 extern unsigned char bin_walls[];
 
-static sprite* resid_data[] = {
+sprite* resid_data[] = {
 	(sprite*)bin_font,
 	(sprite*)bin_h1,
 	(sprite*)bin_h2,
@@ -64,7 +64,3 @@ static sprite* resid_data[] = {
 	(sprite*)bin_shadows,
 };
 static_assert((sizeof(resid_data) / sizeof(resid_data[0])) == (ResShadows + 1), "Invalid resources count");
-
-sprite* gres(resid v) {
-	return resid_data[v];
-}

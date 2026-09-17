@@ -102,9 +102,9 @@ struct item {
 	constexpr item() : type((itemn)0), count(0) {}
 	constexpr item(itemn v) : type(v), count(countable() ? 1 : 0) {}
 	constexpr item(itemn v, unsigned char count) : type(v), count(count) {}
-	explicit operator bool() const { return type != (itemn)0; }
-	constexpr bool countable() const { return type >= Ration; }
-	constexpr const itemi& geti() const { return item_data[type]; }
+	explicit inline operator bool() const { return type != (itemn)0; }
+	inline constexpr bool countable() const { return type >= Ration; }
+	inline constexpr const itemi& geti() const { return item_data[type]; }
 	constexpr itemn ammo() const { return geti().combat.ammo; }
 	constexpr wearn wear() const { return geti().wear; }
 	constexpr int armor() const { return geti().combat.armor; }

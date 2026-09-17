@@ -456,18 +456,18 @@ static void paint_wall(sprite* pw, point pt, unsigned short i, int bf, int bs) {
 		ss = true;
 	}
 	if(!ww) {
-		add_object(RenderShadow, right(pt), bw + 2, 6);
+		add_object(RenderShadow, left(pt), bw + 2, 6);
 		if(ss)
-			add_object(RenderShadow, right(pu), bw + 6, 6);
+			add_object(RenderShadow, left(pu), bw + 6, 6);
 		if(sn)
-			add_object(RenderShadow, right(down(pt)), bw + 4, 6);
+			add_object(RenderShadow, left(down(pt)), bw + 4, 6);
 	}
 	if(!we) {
-		add_object(RenderShadow, left(pt), bw + 3, 6);
+		add_object(RenderShadow, right(pt), bw + 3, 6);
 		if(ss)
-			add_object(RenderShadow, left(pu), bw + 7, 6);
+			add_object(RenderShadow, right(pu), bw + 7, 6);
 		if(sn)
-			add_object(RenderShadow, left(down(pt)), bw + 5, 6);
+			add_object(RenderShadow, right(down(pt)), bw + 5, 6);
 	}
 }
 

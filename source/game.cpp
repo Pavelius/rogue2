@@ -421,7 +421,8 @@ int main(int argc, char* argv[]) {
 #endif
 	// write_locale("test.loc");
 	// read_locale("test.loc");
-	srand(srand_time());
+	// srand(srand_time());
+	srand(201902);
 	area_clear();
 	initialize_gui();
 	test_strings();
