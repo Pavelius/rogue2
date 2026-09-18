@@ -73,6 +73,10 @@ static int get_bonus(magicn v) {
 	return 0;
 }
 
+static int get_experience_need(int level) {
+	return (level * (level - 1) / 2) * 1000;
+}
+
 static void update_derived() {
 	player->hits_maximum = player->abilities[Hits];
 	player->hits_maximum += player->abilities[Strenght] / 3;
@@ -400,7 +404,7 @@ static void damage_equipment(int value) {
 }
 
 static void check_locale_remove() {
-	if(!human || human==player || !player->is(Local))
+	if(!human || human == player || !player->is(Local))
 		return;
 	if(human->area_index != player->area_index)
 		return;
@@ -810,13 +814,29 @@ static bool use_items() {
 	return false;
 }
 
+static void skills_level_up() {
+	char skills[LastSkill + 1] = {0};
+}
+
+static void check_level_up() {
+	auto next = get_experience_need(player->abilities[Level] + 1);
+	while(player->experience < next) {
+		if(player->ishuman()) {
+			skills_level_up();
+		} else {
+			// TODO: auto level up.
+		}
+		player->abilities[Level]++;
+	}
+}
+
 void make_move() {
 	// Recoil form action
 	if(player->wait_seconds > 0) {
 		player->wait_seconds -= 25;
 		return;
 	}
-	pushvalue push_opponent(opponent);
+	pushvalue push_opponent(opponent, (creature*)0);
 	pushvalue push_site(last_site, player->getsite());
 	player->set(EnemyAttacks, 0);
 	player->update();
@@ -829,7 +849,7 @@ void make_move() {
 	creature_human_turn();
 	if(!player->operator bool())
 		return; // Dead from blooding, burning, cold or other bad
-	// check_levelup();
+	check_level_up();
 	ready_actions();
 	ready_spells();
 	// check_horror();
