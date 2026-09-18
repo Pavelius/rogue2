@@ -255,10 +255,10 @@ bool item::is(wearn v) const {
 	}
 }
 
-void item::broke(messagen msg) {
+void item::broke(messagen msg_broke_away) {
 	if(countable()) {
-		if(msg && owner() == player)
-			act(msg, GlowBlack);
+		if(msg_broke_away && owner() == player)
+			act(msg_broke_away, GlowBlack);
 		if(count)
 			count--;
 		else {
@@ -284,8 +284,8 @@ void item::broke(messagen msg) {
 			break;
 		}
 		if(hits == 3) {
-			if(msg && owner() == player)
-				act(msg, GlowBlack);
+			if(msg_broke_away && owner() == player)
+				act(msg_broke_away, GlowBlack);
 			clear();
 			need_update_items = true;
 		} else

@@ -1238,6 +1238,7 @@ static void read_effect(abilityn v) {
 
 static void read_effect(spelln v) {
 	player->act(' ', getname(TomeLearnSpell), getname(v));
+	player->known.set(v);
 }
 
 static bool read_tome(item& v, bool run) {

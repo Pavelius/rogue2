@@ -263,8 +263,8 @@ void choose_spell_targets(spelln spell) {
 	case Spell:
 		if(player->apply(spell, false))
 			targets.add(player);
-		if(close_range)
-			targets.match(match_close, true);
+		//if(close_range)
+		//	targets.match(match_close, true);
 		break;
 	}
 }
@@ -298,6 +298,7 @@ bool creature::cast(spelln spell, int mana_cost, bool run) {
 		case Feature:
 			for(auto p : targets.records<unsigned char>()) {
 				auto index = p2i(p);
+				area_apply(index, spell, true);
 			}
 			break;
 		default:
