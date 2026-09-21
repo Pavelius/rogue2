@@ -143,6 +143,18 @@ static const char* inventory_item(int index, long value, const char* format) {
 	return 0;
 }
 
+static const char* levelup_name(int index, long value, const char* format) {
+	return getname((abilityn)value);
+}
+
+static const char* levelup_current(int index, long value, const char* format) {
+	return str("%1i%%", player->abilities[value]);
+}
+
+static const char* levelup_add(int index, long value, const char* format) {
+	return str("%1i%%", levelup_skills[value]);
+}
+
 static drawcolumn backpack_columns[] = {
 	{inventory_item, 352, 0},
 	{inventory_item_weight, 30, AlignCenter},
@@ -151,6 +163,11 @@ static drawcolumn inventory_columns[] = {
 	{inventory_wear_name, 72, 0},
 	{inventory_item, 280, 0},
 	{inventory_item_weight, 30, AlignCenter},
+	{}};
+static drawcolumn levelup_columns[] = {
+	{levelup_name, 160, 0},
+	{levelup_current, 32, 0},
+	{levelup_add, 32, 0},
 	{}};
 
 item* choose_inventory() {
@@ -162,6 +179,19 @@ item* choose_inventory() {
 	char footer[260]; stringbuilder sb(footer); sb.clear();
 	sb.add(getname(ItemWearTotal), str_weight(player->totalweight(), "0"));
 	return (item*)choose_menu(getname(Cancel), footer);
+}
+
+abilityn choose_levelup_skill() {
+	pushvalue push(answers::header, getname(LevelUp));
+	pushvalue push_columns(last_columns, levelup_columns);
+	an.clear();
+	for(auto v = Strenght; v <= LastSkill; v = (abilityn)(v + 1)) {
+		if(levelup_skills[v])
+			an.add(v, getname(v));
+	}
+	//char footer[260]; stringbuilder sb(footer); sb.clear();
+	//sb.add(getname(ItemWearTotal), str_weight(player->totalweight(), "0"));
+	return (abilityn)choose_menu(0, 0);
 }
 
 void add_answer_items(short unsigned area_index, short unsigned index, fnvisible filter) {

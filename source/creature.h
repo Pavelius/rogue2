@@ -71,6 +71,8 @@ struct statable {
 	void add(abilityn v, int i) { abilities[v] += i; }
 };
 
+extern char levelup_skills[LastSkill + 1];
+
 extern creature* human;
 extern creature* player;
 extern creature* opponent;
@@ -147,6 +149,8 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	void wait(int v) { wait_seconds += v; need_end_turn = true; }
 	void wait() { wait(100); }
 };
+
+abilityn choose_levelup_skill();
 
 creature* find_creature(short unsigned i);
 

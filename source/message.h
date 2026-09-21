@@ -27,6 +27,7 @@ enum glown : unsigned char {
 enum messagen : unsigned char {
 	ApplicationTitle,
 	Coins, Rounds,
+	LevelUp,
 	MsgHeal, MsgCurePoison, MsgTwoHands,
 	TomeLearnNothing, TomeLearnSkill, TomeLearnSpell, TomeReaded,
 	NotEnoughMana, MsgNoTargets, MsgNoRangedWeapon, MsgNoAmmo,

@@ -41,6 +41,7 @@ static int roll_result, last_value;
 collectionv<creature> creatures, parcipants, enemies;
 bool need_update_creatures;
 bool need_end_turn;
+char levelup_skills[LastSkill + 1];
 
 static collection allowed_spells;
 static short unsigned compare_index;
@@ -814,13 +815,31 @@ static bool use_items() {
 	return false;
 }
 
+static void initialize_levelup_skills() {
+	memset(levelup_skills, 0, sizeof(levelup_skills));
+	for(auto i = Strenght; i<=LastSkill; i = (abilityn)(i+1)) {
+		if(!player->basic.abilities[i])
+			continue;
+		if(i>=DamageMelee && i<=EnemyAttacks)
+			continue;
+		levelup_skills[i] = xrand(1, 3);
+	}
+}
+
 static void skills_level_up() {
-	char skills[LastSkill + 1] = {0};
+	int count = 3;
+	while(count > 0) {
+		auto skill = choose_levelup_skill();
+		player->basic.abilities[skill] += levelup_skills[skill];
+		levelup_skills[skill] = 0;
+		count++;
+	}
 }
 
 static void check_level_up() {
 	auto next = get_experience_need(player->abilities[Level] + 1);
 	while(player->experience < next) {
+		initialize_levelup_skills();
 		if(player->ishuman()) {
 			skills_level_up();
 		} else {
