@@ -837,8 +837,7 @@ static void skills_level_up() {
 }
 
 static void check_level_up() {
-	auto next = get_experience_need(player->abilities[Level] + 1);
-	while(player->experience < next) {
+	while(player->experience >= get_experience_need(player->abilities[Level] + 1)) {
 		initialize_levelup_skills();
 		if(player->ishuman()) {
 			skills_level_up();
