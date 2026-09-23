@@ -817,10 +817,10 @@ static bool use_items() {
 
 static void initialize_levelup_skills() {
 	memset(levelup_skills, 0, sizeof(levelup_skills));
-	for(auto i = Strenght; i<=LastSkill; i = (abilityn)(i+1)) {
-		if(!player->basic.abilities[i])
+	for(auto i = Strenght; i <= LastSkill; i = (abilityn)(i + 1)) {
+		if(i >= DamageMelee && i <= EnemyAttacks)
 			continue;
-		if(i>=DamageMelee && i<=EnemyAttacks)
+		if(!player->basic.abilities[i])
 			continue;
 		levelup_skills[i] = xrand(1, 3);
 	}
@@ -829,10 +829,13 @@ static void initialize_levelup_skills() {
 static void skills_level_up() {
 	int count = 3;
 	while(count > 0) {
-		auto skill = choose_levelup_skill();
+		auto skill = choose_levelup_skill(count);
+		if(!levelup_skills[skill])
+			continue;
 		player->basic.abilities[skill] += levelup_skills[skill];
 		levelup_skills[skill] = 0;
-		count++;
+		update_player();
+		count--;
 	}
 }
 

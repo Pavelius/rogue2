@@ -104,6 +104,8 @@ itemn get_remains(monstern type) {
 void apply_monster(monstern type) {
 	auto& e = monsters[type];
 	player->abilities[Level] += e.level;
+	if(!player->abilities[Level])
+		player->abilities[Level] = 1;
 	player->basic.abilities[Strenght] += e.strenght;
 	player->basic.abilities[Dexterity] += e.dexterity;
 	player->basic.abilities[Wits] += e.wits;

@@ -27,7 +27,7 @@ enum glown : unsigned char {
 enum messagen : unsigned char {
 	ApplicationTitle,
 	Coins, Rounds,
-	LevelUp,
+	LevelUp, MsgMultiplyChoose,
 	MsgHeal, MsgCurePoison, MsgTwoHands,
 	TomeLearnNothing, TomeLearnSkill, TomeLearnSpell, TomeReaded,
 	NotEnoughMana, MsgNoTargets, MsgNoRangedWeapon, MsgNoAmmo,
@@ -36,6 +36,7 @@ enum messagen : unsigned char {
 	PlayerBlock, PlayerDodge,
 	PlayerPickUpItem, PlayerDropItem,
 	PlayerUseLastRodCharge,
+	MsgSkillFooter,
 	ItemGrowColor, ItemWearTotal, ItemDecoy,
 	ItemDamaged, ItemBurnAway, ItemMeldDown, ItemCrumbleToDust, ItemCrushingOut,
 };

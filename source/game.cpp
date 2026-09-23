@@ -152,7 +152,10 @@ static const char* levelup_current(int index, long value, const char* format) {
 }
 
 static const char* levelup_add(int index, long value, const char* format) {
-	return str("%1i%%", levelup_skills[value]);
+	fore = colors::green;
+	if(!levelup_skills[value])
+		return 0;
+	return str("+%1i%%", levelup_skills[value]);
 }
 
 static drawcolumn backpack_columns[] = {
@@ -181,17 +184,21 @@ item* choose_inventory() {
 	return (item*)choose_menu(getname(Cancel), footer);
 }
 
-abilityn choose_levelup_skill() {
+abilityn choose_levelup_skill(int times) {
 	pushvalue push(answers::header, getname(LevelUp));
 	pushvalue push_columns(last_columns, levelup_columns);
 	an.clear();
 	for(auto v = Strenght; v <= LastSkill; v = (abilityn)(v + 1)) {
-		if(levelup_skills[v])
+		if(player->basic.abilities[v])
 			an.add(v, getname(v));
 	}
-	//char footer[260]; stringbuilder sb(footer); sb.clear();
-	//sb.add(getname(ItemWearTotal), str_weight(player->totalweight(), "0"));
-	return (abilityn)choose_menu(0, 0);
+	char footer[250]; stringbuilder sb(footer);
+	sb.add(getname(MsgSkillFooter));
+	if(times) {
+		sb.adds(getname(MsgMultiplyChoose), times);
+		sb.add(".");
+	}
+	return (abilityn)choose_menu(0, footer);
 }
 
 void add_answer_items(short unsigned area_index, short unsigned index, fnvisible filter) {
@@ -424,11 +431,6 @@ static bool test_array() {
 	return source.count == 3;
 }
 
-static void test_strings() {
-	pushstring param(getname(Elf), getname(Strenght));
-	print("“естова€ строка данных. Ёто %P1 и его атрибут это %P2.");
-}
-
 static void test_player() {
 	create_creature(apos(4, 3), Human);
 	add_equipment(Spear);
@@ -441,6 +443,7 @@ static void test_player() {
 	player->additem(i3);
 	player->update();
 	human = player;
+	player->experience += 1500;
 }
 
 int main(int argc, char* argv[]) {
@@ -455,7 +458,6 @@ int main(int argc, char* argv[]) {
 	// srand(201902);
 	area_clear();
 	initialize_gui();
-	test_strings();
 	area_generate(Village);
 	test_player();
 	for(auto i = 0; i < 20; i++)

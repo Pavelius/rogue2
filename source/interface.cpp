@@ -842,6 +842,10 @@ color get_color(glown v) {
 	}
 }
 
+void set_disabled_fore() {
+	fore = fore.mix(colors::form);
+}
+
 static void answer_paint_cell_small(int index, long value, const char* format, fnevent proc) {
 	pushfore push_fore;
 	auto push_caret = caret;
@@ -1512,7 +1516,6 @@ static void player_move_cmd() {
 }
 
 static void test_scene() {
-	choose_levelup_skill();
 }
 
 void set_item_color(const item& it) {

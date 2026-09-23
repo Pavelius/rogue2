@@ -150,7 +150,7 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	void wait() { wait(100); }
 };
 
-abilityn choose_levelup_skill();
+abilityn choose_levelup_skill(int times);
 
 creature* find_creature(short unsigned i);
 
