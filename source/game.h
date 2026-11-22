@@ -1,32 +1,46 @@
-///////////////////////////////////////////////////////////////////////////
-//
-//  Copyright 2026 by Pavel Chistyakov
-//
-//  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
-//
-//  http ://www.apache.org/licenses/LICENSE-2.0
-//
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
+/*
+	Copyright 2026 by Pavel Chistyakov
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.77
+*/
 
 #pragma once
 
-#include "collectiona.h"
-#include "indexa.h"
-
-struct creature;
-struct itemlay;
-
-extern collectionv<creature> creatures, parcipants, enemies;
-extern collectionv<itemlay> items;
-
 enum durationn : unsigned {
 	Minute = 1, Hour = 60 * Minute, Day = 24 * Hour,
+};
+enum glown : unsigned char {
+	GlowGray, GlowBlack, GlowWhite,
+	GlowRed, GlowGreen, GlowBlue,
+	GlowBrown, GlowYellow,
+	LastGlow = GlowYellow,
+};
+enum messagen : unsigned char {
+	ApplicationTitle, Cancel, Apply, PickUp, DropDown, Inventory,
+	Coins, Rounds,
+	LevelUp, MsgMultiplyChoose,
+	MsgHeal, MsgCurePoison, MsgTwoHands,
+	TomeLearnNothing, TomeLearnSkill, TomeLearnSpell, TomeReaded,
+	NotEnoughMana, MsgNoTargets, MsgNoRangedWeapon, MsgNoAmmo,
+	TasteBad, TasteNormal, TasteGood,
+	PlayerEat, PlayerReadTome, PlayerKilled, PlayerFoundSecretDoor, PlayerFoundTrap,
+	PlayerBlock, PlayerDodge,
+	PlayerPickUpItem, PlayerDropItem,
+	PlayerUseLastRodCharge,
+	MsgSkillFooter,
+	ItemGrowColor, ItemWearTotal, ItemDecoy,
+	ItemDamaged, ItemBurnAway, ItemMeldDown, ItemCrumbleToDust, ItemCrushingOut,
+	LastMessage = ItemCrushingOut,
 };
 
 struct gamei {

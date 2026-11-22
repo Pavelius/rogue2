@@ -105,6 +105,7 @@
     <ClInclude Include="collectiona.h" />
     <ClInclude Include="color.h" />
     <ClInclude Include="creature.h" />
+    <ClInclude Include="creaturea.h" />
     <ClInclude Include="dice.h" />
     <ClInclude Include="direction.h" />
     <ClInclude Include="draw.h" />
@@ -124,7 +125,6 @@
     <ClInclude Include="keyname.h" />
     <ClInclude Include="manual.h" />
     <ClInclude Include="math.h" />
-    <ClInclude Include="message.h" />
     <ClInclude Include="point.h" />
     <ClInclude Include="posable.h" />
     <ClInclude Include="print.h" />

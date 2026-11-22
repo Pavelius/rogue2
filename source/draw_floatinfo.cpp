@@ -2,7 +2,7 @@
 #include "color.h"
 #include "draw.h"
 #include "draw_floatinfo.h"
-#include "message.h"
+#include "game.h"
 #include "stringbuilder.h"
 #include "timer.h"
 

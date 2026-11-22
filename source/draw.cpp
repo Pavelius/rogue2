@@ -78,7 +78,7 @@ sprite* metrics::icons;
 static bool	break_modal;
 static long break_result;
 static bool drag_active;
-static fnevent next_proc;
+static fnevent next_scene_proc;
 
 extern rect	sys_static_area;
 
@@ -2037,22 +2037,21 @@ void set(int x, int y) {
 }
 
 bool running_scene() {
-	return next_proc == 0;
+	return next_scene_proc == 0;
 }
 
 void next_scene(fnevent v) {
-	next_proc = v;
+	next_scene_proc = v;
 }
 
 void start_scene() {
-	while(next_proc) {
-		auto p = next_proc;
-		next_proc = 0; p();
+	while(next_scene_proc) {
+		auto p = next_scene_proc;
+		next_scene_proc = 0; p();
 	}
 }
 
 long scene(fnevent proc) {
-	pushscene push(proc);
 	while(ismodal()) {
 		proc();
 		domodal();
@@ -2115,7 +2114,7 @@ bool ismodal() {
 	beforemodal();
 	if(pbeforemodal)
 		pbeforemodal();
-	if(!next_proc && !break_modal)
+	if(!next_scene_proc && !break_modal)
 		return true;
 	break_modal = false;
 	if(pleavemodal)

@@ -29,7 +29,7 @@ struct sprite;
 struct drawable { // Abstract game obbject
 	point			position;
 	unsigned char	priority; // Priority for sort
-	rendern			render; // Render type
+	rendern			render; // Render type. Can't be proc, because of serialization.
 	constexpr explicit operator bool() const { return priority != 0; }
 	void fixmove(point v, unsigned long duration);
 	bool onscreen() const;

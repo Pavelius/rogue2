@@ -3,7 +3,6 @@
 #include "draw.h"
 #include "game.h"
 #include "manual.h"
-#include "message.h"
 
 struct topici {
 	topicn	parent;

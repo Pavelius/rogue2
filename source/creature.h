@@ -67,6 +67,7 @@ enum speechn : unsigned char {
 	SayHello,
 	SayItsMine,
 };
+
 struct statable {
 	char abilities[Drunk + 1];
 	void add(abilityn v, int i) { abilities[v] += i; }

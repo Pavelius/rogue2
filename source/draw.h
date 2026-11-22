@@ -209,11 +209,6 @@ struct pushrect {
 	pushrect() : caret(::caret), width(::width), height(::height) {}
 	~pushrect() { ::caret = caret; ::width = width; ::height = height; }
 };
-struct pushscene {
-	fnevent scene;
-	pushscene(fnevent v) : scene(last_scene) { last_scene = v; }
-	~pushscene() { last_scene = scene; }
-};
 
 int	aligned(int x, int width, unsigned state, int string_width);
 int	alignedh(const rect& rc, const char* string, unsigned state);

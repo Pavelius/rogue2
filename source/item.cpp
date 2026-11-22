@@ -20,7 +20,6 @@
 #include "itemlay.h"
 #include "game.h"
 #include "math.h"
-#include "message.h"
 #include "pushvalue.h"
 #include "rand.h"
 #include "slice.h"
