@@ -49,6 +49,8 @@ struct gamei {
 };
 extern gamei game;
 
+extern bool interactive;
+
 short unsigned choose_indecies(const char* header, bool can_cancel = true);
 
 void add_answer_items(short unsigned area_index, short unsigned index, fnvisible filter);

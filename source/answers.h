@@ -30,8 +30,6 @@ struct answers {
 	stringbuilder sc;
 	adat<element, 32> elements;
 	static const answers* last;
-	static bool			interactive;
-//	static int			column_count;
 	static const char*	header;
 	static const char*	string;
 	answers() : sc(buffer) {}
@@ -44,7 +42,7 @@ struct answers {
 	static int			compare(const void* v1, const void* v2);
 	const element*		end() const { return elements.end(); }
 	const element*		find(long value) const;
-	int					getcount() const { return elements.getcount(); }
+	int					getcount() const { return elements.lenght(); }
 	const char*			getnm(long v);
 	int					indexof(const void* v) const { return elements.indexof(v); }
 	bool				makeweight();
@@ -57,6 +55,7 @@ struct answers {
 	int					totalweight() const;
 };
 extern answers an;
+extern bool	interactive;
 
 unsigned anhotkey(int index);
 

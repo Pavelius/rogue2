@@ -1,3 +1,18 @@
+/*
+	Copyright 2026 by Pavel Chistyakov
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.77
+*/
 
 #pragma once
 
@@ -22,10 +37,11 @@ extern "C" void exit(int exit_code) noexcept(true);
 extern "C" void* bsearch(const void* key, const void* base, size_t num, size_t size, fncompare proc) noexcept(true);
 extern "C" void* memchr(const void* ptr, int value, long unsigned num) noexcept(true);
 extern "C" void* memcpy(void* destination, const void* source, size_t size) noexcept(true);
-extern "C" int memcmp(const void* p1, const void* p2, size_t size) noexcept(true);
 extern "C" void* memmove(void* destination, const void* source, size_t size) noexcept(true);
 extern "C" void* memset(void* destination, int value, size_t size) noexcept(true);
 extern "C" void	qsort(void* base, size_t num, size_t size, fncompare proc) noexcept(true);
+
+extern "C" int memcmp(const void* p1, const void* p2, size_t size) noexcept(true);
 
 template<class T>
 struct slice {
@@ -42,8 +58,3 @@ struct slice {
 	constexpr T& operator[](int n) const { return data[n]; }
 	constexpr unsigned size() const { return count; }
 };
-
-template<typename T> bool fiallow(const void* object, int index);
-template<typename T> void fiscript(int index, int bonus);
-template<typename T> bool fiallowdef(const void* object, int index) { fiscript<T>(index, 0); return true; }
-template<typename T> void clearobject(T* p) { memset((void*)p, 0, sizeof(*p)); }

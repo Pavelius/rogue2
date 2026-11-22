@@ -162,9 +162,6 @@
     <ClCompile Include="area_generate.cpp">
       <Filter>Logic</Filter>
     </ClCompile>
-    <ClCompile Include="item_generate.cpp">
-      <Filter>Logic</Filter>
-    </ClCompile>
     <ClCompile Include="stringlocale.cpp">
       <Filter>Support</Filter>
     </ClCompile>

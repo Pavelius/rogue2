@@ -53,21 +53,16 @@ static int compare_distace(const void* v1, const void* v2) {
 	return d1 - d2;
 }
 
-bool roll(int chance) {
-	roll_result = d100();
-	return roll_result < chance;
-}
-
 bool is_skill(unsigned char v) {
 	return v >= FirstSkill && v <= LastSkill;
 }
 
-int damage_mode(abilityn mode) {
+/*int damage_mode(abilityn mode) {
 	switch(mode) {
 	case BalisticSkill: return DamageRanged;
 	default: return DamageMelee;
 	}
-}
+}*/
 
 static int get_bonus(magicn v) {
 	return 0;
@@ -428,13 +423,15 @@ static void check_corrosion() {
 
 static void check_poison() {
 	if(player->is(Poison)) {
-		if(!player->resist(PoisonResistance) && !roll(Strenght))
+		if(!player->resist(PoisonResistance) && !player->roll(Strenght))
 			player->damage(1);
 		player->add(Poison, -1);
 	}
 }
 
 static abilityn weapon_skill(const item& weapon) {
+	if(weapon.geti().wear == RangedWeapon)
+		return BalisticSkill;
 	return WeaponSkill;
 }
 
@@ -821,14 +818,33 @@ static void initialize_levelup_skills() {
 			continue;
 		if(!player->basic.abilities[i])
 			continue;
-		levelup_skills[i] = xrand(1, 3);
+		if(i >= FirstSkill && i <= LastSkill)
+			levelup_skills[i] = xrand(1, 4);
+		else
+			levelup_skills[i] = xrand(1, 3);
 	}
 }
 
+static abilityn maximum_levelup_skill() {
+	abilityn r = Strenght;
+	auto v = 0;
+	for(auto n = Strenght; n <= LastSkill; n = (abilityn)(n + 1)) {
+		if(levelup_skills[n] > v) {
+			r = n;
+			v = levelup_skills[n];
+		}
+	}
+	return r;
+}
+
 static void skills_level_up() {
-	int count = 3;
+	auto count = 3;
 	while(count > 0) {
-		auto skill = choose_levelup_skill(count);
+		abilityn skill = Strenght;
+		if(player->ishuman() && interactive)
+			skill = choose_levelup_skill(count);
+		else
+			skill = maximum_levelup_skill();
 		if(!levelup_skills[skill])
 			continue;
 		player->basic.abilities[skill] += levelup_skills[skill];
@@ -838,14 +854,10 @@ static void skills_level_up() {
 	}
 }
 
-static void check_level_up() {
+void check_level_up() {
 	while(player->experience >= get_experience_need(player->abilities[Level] + 1)) {
 		initialize_levelup_skills();
-		if(player->ishuman()) {
-			skills_level_up();
-		} else {
-			// TODO: auto level up.
-		}
+		skills_level_up();
 		player->abilities[Level]++;
 	}
 }

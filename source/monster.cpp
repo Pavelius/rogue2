@@ -24,15 +24,9 @@ struct statblock : featable, statable, spellable {
 	itemn items[4];
 	constexpr statblock() : featable(), statable(), items{} {}
 	template<typename T, typename... Ts>
-	constexpr statblock(T v, Ts... args) : statblock(args...) {
-		set(v);
-	}
-	constexpr void set(featn v) {
-		featable::set(v);
-	}
-	constexpr void set(spelln v) {
-		spellable::set(v);
-	}
+	constexpr statblock(T v, Ts... args) : statblock(args...) { set(v); }
+	constexpr void set(featn v) { featable::set(v); }
+	constexpr void set(spelln v) { spellable::set(v); }
 	constexpr void set(itemn v) {
 		for(auto& e : items) {
 			if(!e) {
@@ -91,7 +85,7 @@ static monsteri monsters[] = {
 	{1, Skeleton, 20, 20, 10, Bones, "8", {Armor, Block, Spear}}, // Skeleton
 	{2, Zombie, 30, 10, 8, Bones, "16", {Dagger}}, // Zombie
 };
-static_assert(lenghtof(monsters) == (LastMonster + 1), "Invalid tile frames data count");
+static_assert(lenghtof(monsters) == (LastMonster + 1), "Invalid monsters count");
 
 const char* get_avatar(monstern v) {
 	return monsters[v].avatar;

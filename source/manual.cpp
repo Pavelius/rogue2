@@ -11,6 +11,7 @@ struct topici {
 
 static topici topics[] = {
 	{Manual, SkillsGeneral},
+	{Manual, RaceGeneral},
 	{SkillsGeneral, SkillAddNew},
 	{SkillsGeneral, SkillList},
 };
@@ -32,6 +33,9 @@ static void add_content(topicn page) {
 	case SkillList:
 		add_answers(Strenght, BalisticSkill, bsenum<abilityn>::names);
 		add_answers(FirstSkill, LastSkill, bsenum<abilityn>::names);
+		break;
+	case RaceGeneral:
+		add_answers(Human, Elf, bsenum<monstern>::names);
 		break;
 	default:
 		add_answers(page);

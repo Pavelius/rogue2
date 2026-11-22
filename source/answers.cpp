@@ -18,10 +18,10 @@
 #include "pushvalue.h"
 #include "rand.h"
 
+bool interactive = true;
+
 const char* answers::header;
 const char* answers::string;
-
-bool answers::interactive = true;
 
 const answers* answers::last;
 
