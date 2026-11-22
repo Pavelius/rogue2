@@ -19,4 +19,7 @@
 class stringbuilder;
 
 void key2str(stringbuilder& sb, unsigned key);
+
 unsigned find_key_by_name(const char* name);
+
+const char* find_name_by_key(unsigned key);

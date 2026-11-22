@@ -75,6 +75,7 @@ struct statable {
 
 extern char levelup_skills[LastSkill + 1];
 extern const char* ability_info[LastAbility + 1];
+extern const char* creature_names[4 * 50];
 
 extern creature* human;
 extern creature* player;

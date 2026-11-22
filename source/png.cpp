@@ -80,8 +80,8 @@ static int read_idat(unsigned char* out, const unsigned char* p, const unsigned 
 	int blocks = 0;
 	if(single_input)
 		*single_input = 0;
-	/*loop through the chunks, ignoring unknown chunks and stopping at IEND chunk.
-	IDAT data is put at the start of the in buffer*/
+	/* loop through the chunks, ignoring unknown chunks and stopping at IEND chunk.
+	IDAT data is put at the start of the in buffer */
 	while(p < pe) {
 		unsigned p_size = pe - p;
 		/*error: size of the in buffer too small to contain next chunk*/

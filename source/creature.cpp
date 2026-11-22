@@ -1134,9 +1134,7 @@ bool creature::canhear(short unsigned i) const {
 }
 
 const char* creature::name() const {
-	if(custom_name == NoName)
-		return getnm(type);
-	return getnm(custom_name);
+	return (custom_name == NoName) ? getnm(type) : creature_names[custom_name];
 }
 
 creature* wearable::owner() const {

@@ -12,7 +12,6 @@ enum spelln : unsigned char {
 	Gate, Teleport,
 	FirstSpell = CureLightWounds, LastSpell = Teleport,
 };
-
 extern const char* spell_power_names[LastSpell + 1];
 
 struct spellable {

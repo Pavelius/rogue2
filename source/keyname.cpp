@@ -22,7 +22,7 @@ struct hotname {
 	const char*	id;
 	unsigned	key;
 };
-hotname names[] = {
+static hotname names[] = {
 	{"Backspace", KeyBackspace},
 	{"Down", KeyDown},
 	{"End", KeyEnd},
@@ -55,11 +55,8 @@ static const hotname* find_hot(unsigned key) {
 //}
 
 const char* find_name_by_key(unsigned key) {
-	for(auto& e : names) {
-		if(e.key == key)
-			return e.id;
-	}
-	return 0;
+	auto p = find_hot(key);
+	return p ? p->id : 0;
 }
 
 static void add_prefix_key(stringbuilder& sb, unsigned& key, int prefix) {
