@@ -137,7 +137,6 @@
     <ClInclude Include="spell.h" />
     <ClInclude Include="sprite_util.h" />
     <ClInclude Include="stringbuilder.h" />
-    <ClInclude Include="stringlocale.h" />
     <ClInclude Include="stringvar.h" />
     <ClInclude Include="timer.h" />
     <ClInclude Include="variant.h" />

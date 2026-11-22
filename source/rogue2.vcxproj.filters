@@ -347,9 +347,6 @@
     <ClInclude Include="stringbuilder.h">
       <Filter>Support</Filter>
     </ClInclude>
-    <ClInclude Include="stringlocale.h">
-      <Filter>Support</Filter>
-    </ClInclude>
     <ClInclude Include="stringvar.h">
       <Filter>Support</Filter>
     </ClInclude>
