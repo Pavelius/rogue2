@@ -304,8 +304,8 @@ static void decoy_items() {
 	for(auto& e : bsdata<itemlay>()) {
 		if(!e)
 			continue;
-		auto chance = decoy_chance(e.type);
-		if(game_chance(chance))
+		auto percent = decoy_chance(e.type);
+		if(chance(percent))
 			apply_decoy(e);
 	}
 }
@@ -410,14 +410,6 @@ static void initialize_strings() {
 	metrics::h2 = gres(Font2);
 	metrics::h3 = gres(Font3);
 	stringbuilder::custom = game_string;
-}
-
-bool game_chance(int v) {
-	if(v <= 0)
-		return false;
-	if(v > 95)
-		v = 95;
-	return d100() < v;
 }
 
 #ifdef _DEBUG

@@ -59,9 +59,9 @@ struct monsteri {
 	statblock	stats;
 };
 static monsteri monsters[] = {
-	{0, Human, 20, 20, 20, BloodyRemains, "", {Religion}}, // Human
-	{0, Dwarf, 25, 15, 20, BloodyRemains, "", {PoisonResistance, Mining}}, // Dwarf
-	{0, Elf, 15, 25, 20, BloodyRemains, "", {Alertness, Stealth}}, // Elf
+	{0, Human, 20, 20, 20, BloodyRemains, "human", {Religion, Haggling}}, // Human
+	{0, Dwarf, 25, 15, 20, BloodyRemains, "dwarf", {PoisonResistance, Mining}}, // Dwarf
+	{0, Elf, 15, 25, 20, BloodyRemains, "gelf", {Alertness, Stealth}}, // Elf
 	{1, Goblin, 10, 30, 10, BloodyRemains, "0", {Dagger, Dodge}}, // Goblin
 	{1, Goblin, 8, 32, 11, BloodyRemains, "0_f", {Female, Dagger, Dodge}}, // Goblin Female
 	{8, Bear, 50, 20, 4, Meat, "347"}, // Bear

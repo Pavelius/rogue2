@@ -54,14 +54,11 @@ enum monstern : unsigned char {
 	GiantAnt, GiantAntWarrior, GiantAntQueen,
 	Rabbit, RabbitFemale, Racoon, Rat,
 	Skeleton, Zombie,
+	FirstRace = Human, LastRace = Elf,
 	FirstMonster = Goblin, LastMonster = Zombie,
 };
-enum namen : unsigned short {
-	HumanNames,
-	ElfNames = HumanNames + 50,
-	DwarfNames = ElfNames + 50,
-	OrcNames = DwarfNames + 50,
-	NoName = 0xFFFF
+enum namen : unsigned char {
+	NoName = 0xFF
 };
 enum speechn : unsigned char {
 	SayHello,

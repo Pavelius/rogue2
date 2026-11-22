@@ -268,17 +268,17 @@ void item::broke(messagen msg_broke_away) {
 		switch(magic) {
 		case Blessed:
 			// RULE: Blessed don't always use charge
-			if(game_chance(30))
+			if(chance(30))
 				return;
 			break;
 		case Artifact:
 			// RULE: Artifact don't always use charge
-			if(game_chance(70))
+			if(chance(70))
 				return;
 			break;
 		default:
 			// RULE: Mundane item don't always use charge
-			if(game_chance(10))
+			if(chance(10))
 				return;
 			break;
 		}
@@ -483,13 +483,13 @@ void item::create(int chance_blessed, int chance_cursed, int chance_power) {
 	if(countable())
 		return;
 	auto source = powers();
-	if((source && source[0]) || game_chance(chance_power))
+	if((source && source[0]) || chance(chance_power))
 		setpower();
-	if(game_chance(chance_cursed))
+	if(chance(chance_cursed))
 		magic = Cursed;
-	else if(game_chance(chance_blessed)) {
+	else if(chance(chance_blessed)) {
 		magic = Blessed;
-		if(game_chance(chance_blessed / 3))
+		if(chance(chance_blessed / 3))
 			magic = Artifact;
 	}
 }

@@ -29,7 +29,7 @@ inline int d6() { return 1 + xrand() % 6; }
 inline int d20() { return 1 + xrand() % 20; }
 inline int d100() { return xrand() % 100; }
 
-inline bool chance(int value) { return (xrand() % 100) < value; }
+inline bool chance(int value) { return xrand(100) < value; }
 
 template<class T>
 inline void zshuffle(T* p, int count) {

@@ -578,7 +578,7 @@ static bool make_attack_missile(bool run) {
 		pay_attack(player->wears[RangedWeapon]);
 		if(ammo) {
 			player->wears[Ammunition].broke();
-			if(game_chance(35))
+			if(chance(35))
 				drop_item(target_index, player->wears[Ammunition].type);
 		}
 	}
@@ -1029,10 +1029,20 @@ void creature::setindex(short unsigned i) {
 void creature::add(abilityn v, int i) {
 	if(v < sizeof(abilities) / sizeof(abilities[0])) {
 		i += abilities[v];
-		if(i > 120)
-			i = 120;
-		else if(i < 0)
-			i = 0;
+		switch(v) {
+		case DamageMelee: case DamageRanged: case DamageThrown:
+			if(i > 120)
+				i = 120;
+			else if(i < -120)
+				i = -120;
+			break;
+		default:
+			if(i > 120)
+				i = 120;
+			else if(i < 0)
+				i = 0;
+			break;
+		}
 		abilities[v] = (char)i;
 	} else if(v == Experience)
 		experience += i;
@@ -1044,19 +1054,19 @@ void creature::update() {
 	player = push;
 }
 
-static void drop_throphy(creature* player, int chance) {
+static void drop_throphy(creature* player, int percent) {
 	for(auto& e : player->wears) {
 		if(!e)
 			continue;
-		if(!game_chance(chance))
+		if(!chance(percent))
 			continue;
 		drop_item(player->index, e);
 	}
 }
 
 static void drop_remains(creature* player) {
-	auto chance = 15; // Default chance leave remains
-	if(game_chance(chance)) {
+	auto percent = 15; // Default chance leave remains
+	if(chance(percent)) {
 		item it = get_remains(player->type);
 		drop_item(player->index, it);
 	}
@@ -1338,7 +1348,7 @@ static bool eat_edible(item& v, bool run) {
 	abilityn ability = Strenght;
 	player->actn(PlayerEat);
 	player->actn(TasteNormal);
-	if(game_chance(40))
+	if(chance(40))
 		add_hits += 1;
 	switch(v.type) {
 	case BloodyRemains:
@@ -1358,9 +1368,9 @@ static bool eat_edible(item& v, bool run) {
 	default:
 		break;
 	}
-	if(game_chance(chance_disease) && !player->resist(DiseaseResist))
+	if(chance(chance_disease) && !player->resist(DiseaseResist))
 		player->add(Illness, 1); // Catch disease
-	if(game_chance(chance_poison) && !player->resist(PoisonResistance))
+	if(chance(chance_poison) && !player->resist(PoisonResistance))
 		player->add(Poison, 1); // Catch poison
 	player->addhits(add_hits);
 	v.clear();
