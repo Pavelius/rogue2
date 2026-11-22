@@ -3,7 +3,7 @@
 #include "draw.h"
 #include "draw_object.h"
 #include "draw_effect.h"
-#include "resid.h"
+#include "game.h"
 #include "timer.h"
 
 struct draweffect {

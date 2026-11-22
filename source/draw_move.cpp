@@ -4,7 +4,7 @@
 #include "draw.h"
 #include "draw_move.h"
 #include "draw_object.h"
-#include "resid.h"
+#include "game.h"
 #include "timer.h"
 
 struct drawmove {

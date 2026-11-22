@@ -77,7 +77,7 @@
     <ClCompile Include="point.cpp" />
     <ClCompile Include="print.cpp" />
     <ClCompile Include="rand.cpp" />
-    <ClCompile Include="resid.cpp" />
+    <ClCompile Include="resources.cpp" />
     <ClCompile Include="scale2x.cpp" />
     <ClCompile Include="screenshoot.cpp" />
     <ClCompile Include="area_shape.cpp" />
@@ -131,7 +131,6 @@
     <ClInclude Include="pushvalue.h" />
     <ClInclude Include="rand.h" />
     <ClInclude Include="rect.h" />
-    <ClInclude Include="resid.h" />
     <ClInclude Include="screenshoot.h" />
     <ClInclude Include="slice.h" />
     <ClInclude Include="spell.h" />

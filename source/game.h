@@ -16,6 +16,17 @@
 
 #pragma once
 
+typedef void(*fnevent)(); // Callback function of any command executing
+typedef bool(*fnvisible)(const void* object);
+
+enum resid : unsigned char {
+	FontT, Font1, Font2, Font3,
+	ResPCBody, ResPCArms, ResPCAccessories,
+	ResFow, ResLos, ResCursors,
+	ResFloor, ResBorders, ResDecals, ResFeatures, ResItems, ResMonsters,
+	ResStatus, ResConditions, ResSplash, ResMissile,
+	ResWalls, ResShadows,
+};
 enum durationn : unsigned {
 	Minute = 1, Hour = 60 * Minute, Day = 24 * Hour,
 };
@@ -43,15 +54,19 @@ enum messagen : unsigned char {
 	LastMessage = ItemCrushingOut,
 };
 
+struct sprite;
 struct gamei {
 	unsigned restore_half_turn, restore_turn, restore_hour, restore_day_part, restore_day, restore_several_days;
 	unsigned minutes;
 };
-extern gamei game;
 
+extern gamei game;
+extern sprite* resid_data[];
 extern bool interactive;
 
 short unsigned choose_indecies(const char* header, bool can_cancel = true);
+
+inline sprite* gres(resid id) { return resid_data[id]; }
 
 void add_answer_items(short unsigned area_index, short unsigned index, fnvisible filter);
 void choose_player_move();

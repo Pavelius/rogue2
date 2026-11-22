@@ -27,7 +27,6 @@
 #include "print.h"
 #include "pushvalue.h"
 #include "rand.h"
-#include "resid.h"
 #include "stringbuilder.h"
 #include "stringvar.h"
 #include "timer.h"

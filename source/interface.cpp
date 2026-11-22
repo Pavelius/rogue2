@@ -35,7 +35,6 @@
 #include "print.h"
 #include "pushvalue.h"
 #include "screenshoot.h"
-#include "resid.h"
 #include "timer.h"
 
 const int tsx = 64;

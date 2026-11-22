@@ -81,9 +81,6 @@
     <ClCompile Include="monster.cpp">
       <Filter>Logic</Filter>
     </ClCompile>
-    <ClCompile Include="resid.cpp">
-      <Filter>Logic</Filter>
-    </ClCompile>
     <ClCompile Include="area_shape.cpp">
       <Filter>Logic</Filter>
     </ClCompile>
@@ -246,6 +243,9 @@
     <ClCompile Include="rand.cpp">
       <Filter>Support</Filter>
     </ClCompile>
+    <ClCompile Include="resources.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sprite_util.h">
@@ -279,9 +279,6 @@
       <Filter>Logic</Filter>
     </ClInclude>
     <ClInclude Include="posable.h">
-      <Filter>Logic</Filter>
-    </ClInclude>
-    <ClInclude Include="resid.h">
       <Filter>Logic</Filter>
     </ClInclude>
     <ClInclude Include="adat.h">
