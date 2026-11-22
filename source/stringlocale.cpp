@@ -38,7 +38,7 @@ static int total_size() {
 
 static void clear_locale() {
 	if(loc)
-		delete[] (char*)loc;
+		free(loc);
 	for(auto p = locale_data; *p; p++) {
 		for(unsigned i = 0; i < p->count; i++)
 			p->data[i] = 0;

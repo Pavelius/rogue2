@@ -16,6 +16,7 @@
 
 #include "draw.h"
 #include "io_stream.h"
+#include "slice.h"
 
 #pragma pack(push)
 #pragma pack(1)
@@ -117,7 +118,7 @@ bool surface::read(const char* url, color* pallette, int need_bpp) {
 			break;
 		}
 	}
-	delete pin;
+	free(pin);
 	return result;
 }
 

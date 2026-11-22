@@ -16,11 +16,11 @@
     <Filter Include="Util">
       <UniqueIdentifier>{c24bbc81-8637-42f7-904e-3e742552b0cd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="help">
-      <UniqueIdentifier>{6d0da46e-22be-4429-a7d7-9f3fb2afd850}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Binary">
+    <Filter Include="Resources">
       <UniqueIdentifier>{7b995da4-3508-4a8d-9fa4-c89eda6d8613}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Help">
+      <UniqueIdentifier>{6d0da46e-22be-4429-a7d7-9f3fb2afd850}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -172,70 +172,70 @@
       <Filter>Logic</Filter>
     </ClCompile>
     <ClCompile Include="bin_font.cpp">
-      <Filter>Binary</Filter>
+      <Filter>Resources</Filter>
     </ClCompile>
     <ClCompile Include="bin_h1.cpp">
-      <Filter>Binary</Filter>
+      <Filter>Resources</Filter>
     </ClCompile>
     <ClCompile Include="bin_h2.cpp">
-      <Filter>Binary</Filter>
+      <Filter>Resources</Filter>
     </ClCompile>
     <ClCompile Include="bin_h3.cpp">
-      <Filter>Binary</Filter>
+      <Filter>Resources</Filter>
     </ClCompile>
     <ClCompile Include="bin_status.cpp">
-      <Filter>Binary</Filter>
+      <Filter>Resources</Filter>
     </ClCompile>
     <ClCompile Include="bin_monsters.cpp">
-      <Filter>Binary</Filter>
+      <Filter>Resources</Filter>
     </ClCompile>
     <ClCompile Include="bin_items.cpp">
-      <Filter>Binary</Filter>
+      <Filter>Resources</Filter>
     </ClCompile>
     <ClCompile Include="bin_borders.cpp">
-      <Filter>Binary</Filter>
+      <Filter>Resources</Filter>
     </ClCompile>
     <ClCompile Include="bin_conditions.cpp">
-      <Filter>Binary</Filter>
+      <Filter>Resources</Filter>
     </ClCompile>
     <ClCompile Include="bin_decals.cpp">
-      <Filter>Binary</Filter>
+      <Filter>Resources</Filter>
     </ClCompile>
     <ClCompile Include="bin_features.cpp">
-      <Filter>Binary</Filter>
+      <Filter>Resources</Filter>
     </ClCompile>
     <ClCompile Include="bin_fow.cpp">
-      <Filter>Binary</Filter>
+      <Filter>Resources</Filter>
     </ClCompile>
     <ClCompile Include="bin_los.cpp">
-      <Filter>Binary</Filter>
+      <Filter>Resources</Filter>
     </ClCompile>
     <ClCompile Include="bin_missiles.cpp">
-      <Filter>Binary</Filter>
+      <Filter>Resources</Filter>
     </ClCompile>
     <ClCompile Include="bin_pc_accessories.cpp">
-      <Filter>Binary</Filter>
+      <Filter>Resources</Filter>
     </ClCompile>
     <ClCompile Include="bin_pc_arms.cpp">
-      <Filter>Binary</Filter>
+      <Filter>Resources</Filter>
     </ClCompile>
     <ClCompile Include="bin_pc_body.cpp">
-      <Filter>Binary</Filter>
+      <Filter>Resources</Filter>
     </ClCompile>
     <ClCompile Include="bin_splash.cpp">
-      <Filter>Binary</Filter>
+      <Filter>Resources</Filter>
     </ClCompile>
     <ClCompile Include="bin_walls.cpp">
-      <Filter>Binary</Filter>
+      <Filter>Resources</Filter>
     </ClCompile>
     <ClCompile Include="bin_cursor.cpp">
-      <Filter>Binary</Filter>
+      <Filter>Resources</Filter>
     </ClCompile>
     <ClCompile Include="bin_floor.cpp">
-      <Filter>Binary</Filter>
+      <Filter>Resources</Filter>
     </ClCompile>
     <ClCompile Include="bin_shadows.cpp">
-      <Filter>Binary</Filter>
+      <Filter>Resources</Filter>
     </ClCompile>
     <ClCompile Include="png.cpp">
       <Filter>Util</Filter>
@@ -389,7 +389,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\help\combat.md">
-      <Filter>help</Filter>
+      <Filter>Help</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -1517,6 +1517,8 @@ static void player_move_cmd() {
 }
 
 static void test_scene() {
+	indecies.select(player->index, 3, area_iswall, false);
+	choose_indecies("Test", false);
 }
 
 void set_item_color(const item& it) {

@@ -40,6 +40,9 @@ extern "C" void* memcpy(void* destination, const void* source, size_t size) noex
 extern "C" void* memmove(void* destination, const void* source, size_t size) noexcept(true);
 extern "C" void* memset(void* destination, int value, size_t size) noexcept(true);
 extern "C" void	qsort(void* base, size_t num, size_t size, fncompare proc) noexcept(true);
+extern "C" void* malloc(long unsigned size);
+extern "C" void* realloc(void *ptr, long unsigned size);
+extern "C" void	free(void* pointer);
 
 extern "C" int memcmp(const void* p1, const void* p2, size_t size) noexcept(true);
 

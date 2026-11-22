@@ -18,10 +18,6 @@
 #include "math.h"
 #include "stringbuilder.h"
 
-extern "C" void* malloc(long unsigned size);
-extern "C" void* realloc(void *ptr, long unsigned size);
-extern "C" void	free(void* pointer);
-
 unsigned rmoptimal(unsigned need_count) {
 	const unsigned mc = 4 * 256 * 256;
 	unsigned m = 8;

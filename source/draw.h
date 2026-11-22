@@ -104,8 +104,6 @@ struct sprite : pma {
 		short unsigned	count;
 	};
 	short int			width, height; // common size of all frames (if applicable)
-	short int			ascend, descend; // top or down ascend
-	short unsigned		flags; // must be zero
 	unsigned			cicles; // count of anim structure
 	unsigned			cicles_offset;
 	frame				frames[1];

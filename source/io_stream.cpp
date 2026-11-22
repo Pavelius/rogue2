@@ -71,7 +71,7 @@ void* loadb(const char* url, int* size, int additional) {
 		return 0;
 	int s = file.seek(0, SeekEnd) + additional;
 	file.seek(0, SeekSet);
-	p = new char[s];
+	p = malloc(s);
 	memset(p, 0, s);
 	file.read(p, s);
 	if(size)
