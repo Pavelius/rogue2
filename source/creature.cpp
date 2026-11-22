@@ -195,6 +195,13 @@ void update_player() {
 	update_skills();
 }
 
+void update_player_full_hits() {
+	auto full_hits = (player->hits == player->hits_maximum);
+	update_player();
+	if(full_hits)
+		player->hits = player->hits_maximum;
+}
+
 static void random_name() {
 	if(player->ischaracter()) {
 		player->custom_name = namen(2 * (xrand() % 25));
@@ -849,7 +856,7 @@ static void skills_level_up() {
 			continue;
 		player->basic.abilities[skill] += levelup_skills[skill];
 		levelup_skills[skill] = 0;
-		update_player();
+		update_player_full_hits();
 		count--;
 	}
 }

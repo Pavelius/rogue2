@@ -180,4 +180,5 @@ bool player_move(directionn d);
 void player_shoot();
 void update_creatures();
 void update_player();
+void update_player_full_hits();
 bool use_area(short unsigned i);
