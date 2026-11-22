@@ -45,7 +45,7 @@ struct answers {
 	const element*		end() const { return elements.end(); }
 	const element*		find(long value) const;
 	int					getcount() const { return elements.getcount(); }
-	const char*			getname(long v);
+	const char*			getnm(long v);
 	int					indexof(const void* v) const { return elements.indexof(v); }
 	bool				makeweight();
 	bool				modal(const char* title, const char* cancel) const;

@@ -24,7 +24,7 @@ static void add_answers(unsigned char f1, unsigned char f2, const char** names) 
 static void add_answers(topicn parent) {
 	for(auto& e : topics) {
 		if(e.parent==parent)
-			an.add(e.element, getname(e.element));
+			an.add(e.element, getnm(e.element));
 	}
 }
 
@@ -41,13 +41,13 @@ static void add_content(topicn page) {
 }
 
 void open_manual(abilityn page) {
-	show_message(getname(page), 0, getinfo(page), getname(Cancel));
+	show_message(getnm(page), 0, ability_info[page], getnm(Cancel));
 }
 
 void open_manual(topicn page) {
 	while(true) {
 		add_content(page);
-		show_message(getname(page), 0, getinfo(page), getname(Cancel));
+		show_message(getnm(page), 0, topic_info[page], getnm(Cancel));
 		an.clear();
 		auto next = getresult();
 		if(!next)

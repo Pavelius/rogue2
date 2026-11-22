@@ -1095,31 +1095,31 @@ static void paint_field(const char* value) {
 static void paint_field(abilityn v) {
 	switch(v) {
 	case WeaponSkill:
-		paint_field(getname(v), str("%1i%%(%2i)", player->abilities[v], player->abilities[DamageMelee] + player->wears[MeleeWeapon].damage()));
+		paint_field(getnm(v), str("%1i%%(%2i)", player->abilities[v], player->abilities[DamageMelee] + player->wears[MeleeWeapon].damage()));
 		break;
 	case BalisticSkill:
-		paint_field(getname(v), str("%1i%%(%2i)", player->abilities[v], player->abilities[DamageRanged] + player->wears[RangedWeapon].damage()));
+		paint_field(getnm(v), str("%1i%%(%2i)", player->abilities[v], player->abilities[DamageRanged] + player->wears[RangedWeapon].damage()));
 		break;
 	case Dodge:
-		paint_field(getname(v), str("%1i%%", player->abilities[v]));
+		paint_field(getnm(v), str("%1i%%", player->abilities[v]));
 		break;
 	case Hits:
-		paint_field(getname(v), str("%1i/%2i", player->hits, player->hits_maximum));
+		paint_field(getnm(v), str("%1i/%2i", player->hits, player->hits_maximum));
 		break;
 	case Mana:
-		paint_field(getname(v), str("%1i/%2i", player->mana, player->abilities[Mana]));
+		paint_field(getnm(v), str("%1i/%2i", player->mana, player->abilities[Mana]));
 		break;
 	case Experience:
-		paint_field(getname(v), str("%1i", player->experience));
+		paint_field(getnm(v), str("%1i", player->experience));
 		break;
 	case Armor:
 		if(player->abilities[Block])
-			paint_field(getname(v), str("%1i-%2i", player->abilities[Armor], player->abilities[Armor] + player->abilities[Block]));
+			paint_field(getnm(v), str("%1i-%2i", player->abilities[Armor], player->abilities[Armor] + player->abilities[Block]));
 		else
-			paint_field(getname(v), str("%1i", player->abilities[v]));
+			paint_field(getnm(v), str("%1i", player->abilities[v]));
 		break;
 	default:
-		paint_field(getname(v), str("%1i", player->abilities[v]));
+		paint_field(getnm(v), str("%1i", player->abilities[v]));
 		break;
 	}
 }
@@ -1136,7 +1136,7 @@ static void paint_separator() {
 
 static void paint_player_status() {
 	paint_field(player->name());
-	paint_field(getname(player->type));
+	paint_field(getnm(player->type));
 	paint_separator();
 	paint_field(Strenght);
 	paint_field(Dexterity);
@@ -1151,8 +1151,8 @@ static void paint_player_status() {
 	paint_field(Mana);
 	paint_separator();
 	paint_field(Experience);
-	paint_field(getname(Coins), str("%1i", player->money));
-	paint_field(getname(Rounds), str("%1i", game.minutes));
+	paint_field(getnm(Coins), str("%1i", player->money));
+	paint_field(getnm(Rounds), str("%1i", game.minutes));
 }
 
 static void paint_status() {
@@ -1399,7 +1399,7 @@ static void paint_legends_text(point origin) {
 		sb.clear(); sb.add("%1i.", index);
 		text(temp);
 		caret.x += 18;
-		text(e.getname());
+		text(e.getnm());
 		caret.y += texth();
 		index++;
 	}
@@ -1410,9 +1410,9 @@ static void paint_legends_text(point origin) {
 
 static void show_area() {
 	if(game.level)
-		text_header(str("%1 (%Level %2i)", last_location->getname(), game.level));
+		text_header(str("%1 (%Level %2i)", last_location->getnm(), game.level));
 	else
-		text_header(last_location->getname());
+		text_header(last_location->getnm());
 	small_header(str(getnm("GlobalMapPosition"), game.position.x, game.position.y));
 	const int z = 4;
 	point origin;
@@ -1674,7 +1674,7 @@ void initialize_gui() {
 	metrics::padding = 4;
 	camera_initialize();
 	sys_create_window(window_width, window_height);
-	sys_caption(getname(ApplicationTitle));
+	sys_caption(getnm(ApplicationTitle));
 	camera_set_screen(478, 376);
 }
 

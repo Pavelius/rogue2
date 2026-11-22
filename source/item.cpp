@@ -349,7 +349,7 @@ static const char* get_power_name(variant v) {
 static void add_weapon_info(stringbuilder& sb, const item& it) {
 	sb.adds("(%1i)", it.damage());
 	if(it.is(Large))
-		sb.adds(getname(MsgTwoHands));
+		sb.adds(getnm(MsgTwoHands));
 }
 
 static void add_info(stringbuilder& sb, int v1, int v2) {
@@ -382,7 +382,7 @@ const char* item::description() const {
 const char* item::name() const {
 	static char temp[160];
 	stringbuilder sb(temp);
-	auto pn = getname(type);
+	auto pn = getnm(type);
 	auto gi = gender_by_name(pn);
 	if(countable()) {
 		sb.adds(pn);
@@ -391,7 +391,7 @@ const char* item::name() const {
 	} else {
 		if(known_magic) {
 			if(magic)
-				sb.adds(getname((magicn)(gi * 4 + magic)));
+				sb.adds(getnm((magicn)(gi * 4 + magic)));
 		}
 		sb.adds(pn);
 		if(known_magic) {
@@ -477,7 +477,7 @@ bool item::unequip() {
 
 void item::act(messagen v, glown glow) const {
 	pushvalue push(last_item, const_cast<item*>(this));
-	player->act(' ', getname(v), getname(glow));
+	player->act(' ', getnm(v), getnm(glow));
 }
 
 void item::create(int chance_blessed, int chance_cursed, int chance_power) {

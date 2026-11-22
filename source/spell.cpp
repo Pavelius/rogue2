@@ -125,7 +125,7 @@ bool creature::apply(spelln v, bool run) {
 			return false;
 		if(run) {
 			auto v = xrand(2, 12);
-			fixmsg(getname(MsgCurePoison), v, GlowGreen);
+			fixmsg(getnm(MsgCurePoison), v, GlowGreen);
 		}
 		break;
 	case MageArmor:

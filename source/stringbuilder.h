@@ -140,13 +140,8 @@ const char*	psidf(const char* p, stringbuilder& result);
 
 void default_string(stringbuilder& sb, const char* id);
 
-template<class T> void fistatus(const void* object, stringbuilder& sb);
-
 template<typename T>
 struct bsenum {
 	static const char* names[];
-	static const char* info[];
-	static const int count;
 };
-template<typename T> const char* getname(T v) { return bsenum<T>::names[v]; }
-template<typename T> const char* getinfo(T v) { return bsenum<T>::info[v]; }
+template<typename T> const char* getnm(T v) { return bsenum<T>::names[v]; }

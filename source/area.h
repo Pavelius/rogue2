@@ -128,6 +128,12 @@ struct areai {
 	unsigned char	level; // Current level of dungeon. 0 is overland.
 	constexpr explicit operator bool() const { return index != 0xFFFF; }
 };
+struct sitei : abox {
+	siten			type;
+	short unsigned	area_index;
+	bool			ispresent() const { return area_index == current_area; }
+};
+extern sitei* last_site;
 
 directionn move_lower(short unsigned start, short unsigned goal);
 directionn move_greater(short unsigned start, short unsigned goal);

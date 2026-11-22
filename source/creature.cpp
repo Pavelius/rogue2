@@ -527,7 +527,7 @@ static void make_attack(item& weapon, int attack_skill, int damage_percent) {
 	auto roll_result = d100();
 	if(roll_result > attack_skill) {
 		// Attack miss
-		// player->logs("AttackMiss", damage_result, opponent->getname(), roll_result, damage, -armor);
+		// player->logs("AttackMiss", damage_result, opponent->getnm(), roll_result, damage, -armor);
 		return;
 	}
 	if(damage_percent)
@@ -539,8 +539,8 @@ static void make_attack(item& weapon, int attack_skill, int damage_percent) {
 	if(block_damage > 0 && armor < damage) {
 		armor += xrand(0, block_damage);
 		if(armor >= damage) {
-			//player->logs("AttackBlocked", damage - armor, opponent->getname(), roll_result, damage, -armor);
-			opponent->fixmsg(getname(PlayerBlock), 0, GlowGreen);
+			//player->logs("AttackBlocked", damage - armor, opponent->getnm(), roll_result, damage, -armor);
+			opponent->fixmsg(getnm(PlayerBlock), 0, GlowGreen);
 			return;
 		}
 	}
@@ -548,10 +548,10 @@ static void make_attack(item& weapon, int attack_skill, int damage_percent) {
 	if(damage_result > 0 && weapon.is(Cursed) && (d100() < 50)) // Cursed weapon miss half time
 		damage_result = 0;
 	if(opponent->roll(Dodge)) {
-		// player->logs("AttackHitButEnemyDodge", opponent->getname());
-		opponent->fixmsg(getname(PlayerDodge), 0, GlowGreen);
+		// player->logs("AttackHitButEnemyDodge", opponent->getnm());
+		opponent->fixmsg(getnm(PlayerDodge), 0, GlowGreen);
 	} else {
-		// player->logs("AttackHit", damage_result, opponent->getname(), roll_result, damage, -armor);
+		// player->logs("AttackHit", damage_result, opponent->getnm(), roll_result, damage, -armor);
 		opponent->damage(damage_result);
 		poison_attack(weapon);
 		if(player->is(CorrozionHit, weapon))
@@ -1136,8 +1136,8 @@ bool creature::canhear(short unsigned i) const {
 
 const char* creature::name() const {
 	if(custom_name == NoName)
-		return getname(type);
-	return getname(custom_name);
+		return getnm(type);
+	return getnm(custom_name);
 }
 
 creature* wearable::owner() const {
@@ -1186,7 +1186,7 @@ bool creature::isvisible() const {
 }
 
 void creature::act(messagen v) const {
-	act(' ', getname(v));
+	act(' ', getnm(v));
 }
 
 void logs(char separator, const char* format, ...) {
@@ -1195,7 +1195,7 @@ void logs(char separator, const char* format, ...) {
 }
 
 void logs(messagen v) {
-	logs(' ', getname(v));
+	logs(' ', getnm(v));
 }
 
 void creature::act(char separator, const char* format, ...) const {
@@ -1206,7 +1206,7 @@ void creature::act(char separator, const char* format, ...) const {
 }
 
 void creature::actn(messagen v) const {
-	act('\n', getname(v));
+	act('\n', getnm(v));
 }
 
 bool creature::moveto(short unsigned ni) {
@@ -1256,7 +1256,7 @@ void creature::say(speechn v) const {
 	if(!isvisible())
 		return;
 	auto n = speechn(v * 3 + rand() % 3);
-	println("[%1:] \"%2\"", name(), getname(n));
+	println("[%1:] \"%2\"", name(), getnm(n));
 }
 
 static bool drink_potion(item& v, bool run) {
@@ -1269,7 +1269,7 @@ static bool drink_potion(item& v, bool run) {
 }
 
 static void read_effect(abilityn v) {
-	player->act(' ', getname(TomeLearnSkill), getname(v));
+	player->act(' ', getnm(TomeLearnSkill), getnm(v));
 	if(v >= FirstSkill && v <= LastSkill) {
 		if(!player->basic.abilities[v])
 			player->basic.add(v, xrand(1, 6));
@@ -1278,7 +1278,7 @@ static void read_effect(abilityn v) {
 }
 
 static void read_effect(spelln v) {
-	player->act(' ', getname(TomeLearnSpell), getname(v));
+	player->act(' ', getnm(TomeLearnSpell), getnm(v));
 	player->known.set(v);
 }
 
@@ -1394,7 +1394,7 @@ bool item::use(bool run) {
 }
 
 void creature::enchant(spelln spell, unsigned duration) {
-	fixmsg(getname(spell), 0, GlowGreen);
+	fixmsg(getnm(spell), 0, GlowGreen);
 	add_enchant(bsi(), spell, game.minutes + duration);
 	update();
 }

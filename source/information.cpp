@@ -36,7 +36,7 @@ static void addv(stringbuilder& sb, const char* header, int value) {
 }
 
 static void addv(stringbuilder& sb, abilityn id) {
-	addv(sb, getname(id), player->abilities[id]);
+	addv(sb, getnm(id), player->abilities[id]);
 }
 
 BSDATA(stringvari) = {

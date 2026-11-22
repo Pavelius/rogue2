@@ -42,6 +42,7 @@ enum abilityn : unsigned char {
 	Hits, Mana, Faith, Mood, Reputation,
 	Poison, Illness, Corrosion, Burning, Freezing, Drunk,
 	Experience,
+	LastAbility = Experience,
 	FirstSkill = Alchemy, LastSkill = Woodcutting,
 };
 enum monstern : unsigned char {
@@ -72,6 +73,7 @@ struct statable {
 };
 
 extern char levelup_skills[LastSkill + 1];
+extern const char* ability_info[LastAbility + 1];
 
 extern creature* human;
 extern creature* player;

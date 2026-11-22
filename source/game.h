@@ -16,7 +16,6 @@
 
 #pragma once
 
-#include "area.h"
 #include "collectiona.h"
 #include "indexa.h"
 
@@ -35,12 +34,6 @@ struct gamei {
 	unsigned minutes;
 };
 extern gamei game;
-struct sitei : abox {
-	siten			type;
-	short unsigned	area_index;
-	bool			ispresent() const { return area_index == current_area; }
-};
-extern sitei* last_site;
 
 short unsigned choose_indecies(const char* header, bool can_cancel = true);
 

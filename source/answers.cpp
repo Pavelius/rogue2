@@ -84,7 +84,7 @@ long answers::random() const {
 	return elements.data[rand() % elements.count].value;
 }
 
-const char* answers::getname(long v) {
+const char* answers::getnm(long v) {
 	for(auto& e : elements) {
 		if(e.value == v)
 			return e.text;

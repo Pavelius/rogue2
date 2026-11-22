@@ -115,7 +115,7 @@ static void auto_activate_features() {
 
 static const char* inventory_wear_name(int index, long value, const char* format) {
 	auto w = (wearn)((item*)value - player->wears);
-	return str("%1:", getname(w));
+	return str("%1:", getnm(w));
 }
 
 static const char* str_weight(long n, const char* zero = "-") {
@@ -144,7 +144,7 @@ static const char* inventory_item(int index, long value, const char* format) {
 }
 
 static const char* levelup_name(int index, long value, const char* format) {
-	return getname((abilityn)value);
+	return getnm((abilityn)value);
 }
 
 static const char* levelup_current(int index, long value, const char* format) {
@@ -174,28 +174,28 @@ static drawcolumn levelup_columns[] = {
 	{}};
 
 item* choose_inventory() {
-	pushvalue push(answers::header, getname(Inventory));
+	pushvalue push(answers::header, getnm(Inventory));
 	pushvalue push_columns(last_columns, inventory_columns);
 	an.clear();
 	for(auto v = MeleeWeapon; v < Backpack; v = (wearn)(v + 1))
-		an.add((long)(player->wears + v), getname(v));
+		an.add((long)(player->wears + v), getnm(v));
 	char footer[260]; stringbuilder sb(footer); sb.clear();
-	sb.add(getname(ItemWearTotal), str_weight(player->totalweight(), "0"));
-	return (item*)choose_menu(getname(Cancel), footer);
+	sb.add(getnm(ItemWearTotal), str_weight(player->totalweight(), "0"));
+	return (item*)choose_menu(getnm(Cancel), footer);
 }
 
 abilityn choose_levelup_skill(int times) {
-	pushvalue push(answers::header, getname(LevelUp));
+	pushvalue push(answers::header, getnm(LevelUp));
 	pushvalue push_columns(last_columns, levelup_columns);
 	an.clear();
 	for(auto v = Strenght; v <= LastSkill; v = (abilityn)(v + 1)) {
 		if(player->basic.abilities[v])
-			an.add(v, getname(v));
+			an.add(v, getnm(v));
 	}
 	char footer[250]; stringbuilder sb(footer);
-	sb.add(getname(MsgSkillFooter));
+	sb.add(getnm(MsgSkillFooter));
 	if(times) {
-		sb.adds(getname(MsgMultiplyChoose), times);
+		sb.adds(getnm(MsgMultiplyChoose), times);
 		sb.add(".");
 	}
 	return (abilityn)choose_menu(0, footer);
@@ -216,12 +216,12 @@ static bool filter_wear(const void* object) {
 }
 
 item* choose_backpack(wearn wear) {
-	pushvalue push(answers::header, getname(wear));
+	pushvalue push(answers::header, getnm(wear));
 	pushvalue push_columns(last_columns, backpack_columns);
 	an.clear();
 	last_wear = wear;
 	add_answer_items(0xFFFF, player - bsdata<creature>::elements, filter_wear);
-	return (item*)choose_menu(getname(Cancel), 0);
+	return (item*)choose_menu(getnm(Cancel), 0);
 }
 
 item* choose_backpack(const char* header) {
@@ -229,11 +229,11 @@ item* choose_backpack(const char* header) {
 	pushvalue push_columns(last_columns, backpack_columns);
 	an.clear();
 	add_answer_items(0xFFFF, player - bsdata<creature>::elements, 0);
-	return (item*)choose_menu(getname(Cancel), 0);
+	return (item*)choose_menu(getnm(Cancel), 0);
 }
 
 item* choose_ground() {
-	pushvalue push(answers::header, getname(PickUp));
+	pushvalue push(answers::header, getnm(PickUp));
 	pushvalue push_columns(last_columns, backpack_columns);
 	an.clear();
 	add_answer_items(current_area, player->index, 0);
@@ -241,7 +241,7 @@ item* choose_ground() {
 		return 0;
 	if(an.elements.count == 1)
 		return (item*)an.elements[0].value;
-	return (item*)choose_menu(getname(Cancel), 0);
+	return (item*)choose_menu(getnm(Cancel), 0);
 }
 
 void open_inventory() {
@@ -263,13 +263,13 @@ void open_inventory() {
 
 void open_backpack() {
 	pushvalue push(last_item);
-	last_item = choose_backpack(getname(Backpack));
+	last_item = choose_backpack(getnm(Backpack));
 	if(last_item)
 		last_item->use(true);
 }
 
 void open_drop_item() {
-	auto p = choose_backpack(getname(DropDown));
+	auto p = choose_backpack(getnm(DropDown));
 	if(!p)
 		return;
 	add_item(current_area, player->index, *p);
