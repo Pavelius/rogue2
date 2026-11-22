@@ -18,7 +18,7 @@ static siten random_house[] = {PeasantHouse};
 
 template<unsigned N>
 static siten random(siten(&source)[N]) {
-	return random(source[rand() % N]);
+	return random(source[xrand(N)]);
 }
 
 siten random(siten v) {
@@ -39,10 +39,10 @@ static abox random(abox e) {
 	if(n == e.w && n == e.h)
 		return e;
 	else if(n == e.w) {
-		e.y += (rand() % (e.h - n));
+		e.y += (xrand(e.h - n));
 		e.h = n;
 	} else {
-		e.x += (rand() % (e.w - n));
+		e.x += (xrand(e.w - n));
 		e.w = n;
 	}
 	return e;
@@ -120,11 +120,11 @@ static void create_city_level(const abox& rc, int level) {
 		if(h > max_building_size)
 			h = max_building_size;
 		if(h != rc.h)
-			y1 += rand() % (rc.h - h);
+			y1 += xrand(rc.h - h);
 		if(w > max_building_size)
 			w = max_building_size;
 		if(w != rc.w)
-			x1 += rand() % (rc.w - w);
+			x1 += xrand(rc.w - w);
 		locations.add({x1 + 1, y1 + 1, w - 1, h - 1});
 		// show_locations();
 		return;
@@ -210,10 +210,10 @@ static void set_herbs(short unsigned i) {
 
 static apos side(const abox& rc, directionn dir) {
 	switch(dir) {
-	case North: return (rc.w < 2) ? apos() : apos(rc.x + 1 + rand() % (rc.w - 2), rc.y);
-	case South: return (rc.w < 2) ? apos() : apos(rc.x + 1 + rand() % (rc.w - 2), rc.y + rc.h - 1);
-	case West: return (rc.h < 2) ? apos() : apos(rc.x, rc.y + 1 + rand() % (rc.h - 2));
-	case East: return (rc.h < 2) ? apos() : apos(rc.x + rc.w - 1, rc.y + 1 + rand() % (rc.h - 2));
+	case North: return (rc.w < 2) ? apos() : apos(rc.x + 1 + xrand(rc.w - 2), rc.y);
+	case South: return (rc.w < 2) ? apos() : apos(rc.x + 1 + xrand(rc.w - 2), rc.y + rc.h - 1);
+	case West: return (rc.h < 2) ? apos() : apos(rc.x, rc.y + 1 + xrand(rc.h - 2));
+	case East: return (rc.h < 2) ? apos() : apos(rc.x + rc.w - 1, rc.y + 1 + xrand(rc.h - 2));
 	default: return apos();
 	}
 }

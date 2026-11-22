@@ -58,7 +58,7 @@ void collectiona::match(fnvfilter proc, bool keep) {
 void* collectiona::random() const {
 	if(!count)
 		return 0;
-	return data[rand() % count];
+	return data[xrand() % count];
 }
 
 void collectiona::shuffle() {

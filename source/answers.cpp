@@ -81,7 +81,7 @@ void answers::sort() {
 long answers::random() const {
 	if(!elements.count)
 		return 0;
-	return elements.data[rand() % elements.count].value;
+	return elements.data[xrand() % elements.count].value;
 }
 
 const char* answers::getnm(long v) {

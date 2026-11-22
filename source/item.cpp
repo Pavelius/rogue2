@@ -189,9 +189,9 @@ bool item::setpower() {
 		auto count = get_power_count(source + 1);
 		if(!count)
 			return false;
-		power = 1 + rand() % count;
+		power = 1 + xrand(count);
 	} else
-		power = rand() % get_power_count(source);
+		power = xrand(get_power_count(source));
 	return true;
 }
 

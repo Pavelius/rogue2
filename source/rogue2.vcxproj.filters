@@ -246,6 +246,9 @@
     <ClCompile Include="zip.cpp">
       <Filter>Util</Filter>
     </ClCompile>
+    <ClCompile Include="rand.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sprite_util.h">

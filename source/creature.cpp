@@ -202,7 +202,7 @@ void update_player() {
 
 static void random_name() {
 	if(player->ischaracter()) {
-		player->custom_name = namen(2 * (rand() % 25));
+		player->custom_name = namen(2 * (xrand() % 25));
 		if(player->isfemale())
 			player->custom_name = namen(player->custom_name + 1);
 	} else
@@ -1254,7 +1254,7 @@ void creature::damage(int v) {
 void creature::say(speechn v) const {
 	if(!isvisible())
 		return;
-	auto n = speechn(v * 3 + rand() % 3);
+	auto n = speechn(v * 3 + xrand() % 3);
 	println("[%1:] \"%2\"", name(), getnm(n));
 }
 

@@ -86,7 +86,7 @@ void collection::match(fncfilter proc, bool keep) {
 unsigned char collection::random() const {
 	if(!count)
 		return 0;
-	return data[rand() % count];
+	return data[xrand() % count];
 }
 
 void collection::shuffle() {

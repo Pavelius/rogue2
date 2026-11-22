@@ -62,7 +62,7 @@ directionn lookat(point s, point d) {
 
 apos random_pos(const abox& v) {
 	if(v.x && v.y)
-		return apos(v.x + rand() % v.w, v.y + rand() % v.h);
+		return apos(v.x + xrand() % v.w, v.y + xrand() % v.h);
 	return apos(v.x, v.y);
 }
 
@@ -140,7 +140,7 @@ void area_clear() {
 	memset(area_features, 0, sizeof(area_features));
 	memset(area_flags, 0, sizeof(area_flags));
 	for(auto& e : area_params)
-		e = (unsigned char)(rand() % 256);
+		e = (unsigned char)(xrand() % 256);
 }
 
 void clear_path() {
@@ -490,7 +490,7 @@ short unsigned area_free(short unsigned index, fnareais test_free) {
 		auto y2 = m.y + radius;
 		if(y2 > mps)
 			y2 = mps;
-		if((rand() % 2) != 0) {
+		if((xrand() % 2) != 0) {
 			auto n = area_free_horz(apos(x1, y1), x2 - x1 + 1, test_free);
 			if(n != 0xFFFF)
 				return n;
@@ -505,7 +505,7 @@ short unsigned area_free(short unsigned index, fnareais test_free) {
 			if(n != 0xFFFF)
 				return n;
 		}
-		if((rand() % 2) != 0) {
+		if((xrand() % 2) != 0) {
 			auto n = area_free_vert(apos(x1, y1 + 1), y2 - y1 - 2 + 1, test_free);
 			if(n != 0xFFFF)
 				return n;

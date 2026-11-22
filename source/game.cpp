@@ -324,17 +324,17 @@ void pass_minute() {
 		game.restore_turn += 10;
 	}
 	while(game.restore_hour < game.minutes) {
-		game.restore_hour = (game.restore_hour / Hour + 1) * Hour + rand() % Hour;
+		game.restore_hour = (game.restore_hour / Hour + 1) * Hour + xrand(Hour);
 		update_need();
 	}
 	while(game.restore_day_part < game.minutes) {
 		all(creature_every_day_part);
 		decoy_items();
-		game.restore_day_part = (game.restore_day_part / (60 * 4) + 1) * (60 * 4) + rand() % (60 * 4);
+		game.restore_day_part = (game.restore_day_part / (60 * 4) + 1) * (60 * 4) + xrand(60 * 4);
 	}
 	while(game.restore_day < game.minutes) {
 		auto_activate_features();
-		game.restore_day = (game.restore_day / (60 * 24) + 1) * (60 * 24) + rand() % (60 * 24);
+		game.restore_day = (game.restore_day / (60 * 24) + 1) * (60 * 24) + xrand(60 * 24);
 	}
 	while(game.restore_several_days < game.minutes) {
 		update_every_serveral_days();
@@ -454,7 +454,7 @@ int main(int argc, char* argv[]) {
 #endif
 	// write_locale("test.loc");
 	// read_locale("test.loc");
-	srand(srand_time());
+	xrand_seed = srand_time();
 	// srand(201902);
 	area_clear();
 	initialize_gui();
