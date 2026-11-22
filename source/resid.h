@@ -26,7 +26,6 @@ enum resid : unsigned char {
 	ResStatus, ResConditions, ResSplash, ResMissile,
 	ResWalls, ResShadows,
 };
-
 extern sprite* resid_data[];
 
 inline sprite* gres(resid id) { return resid_data[id]; }
