@@ -1292,6 +1292,10 @@ bool creature::roll(abilityn v, int bonus) const {
 	return roll_result < last_value;
 }
 
+bool creature::roll(abilityfnn v) const {
+	return d100() < get(v);
+}
+
 void creature::damage(int v) {
 	if(v <= 0)
 		return;

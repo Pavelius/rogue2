@@ -95,7 +95,7 @@ void collection::shuffle() {
 
 unsigned char collection::pick() {
 	auto result = (count > 0) ? data[0] : 0;
-	remove(0, 1);
+	remove(0);
 	return result;
 }
 

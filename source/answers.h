@@ -50,7 +50,7 @@ struct answers {
 	void				paintanswers(fnabutton proc, int columns, const char* cancel_text) const;
 	long				random() const;
 	long				randomweight() const;
-	void				remove(int index) { elements.remove(index, 1); }
+	void				remove(int index) { elements.remove(index); }
 	void				sort();
 	int					totalweight() const;
 };

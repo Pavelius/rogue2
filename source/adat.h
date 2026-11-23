@@ -22,9 +22,8 @@ template<class T, size_t count_max = 128>
 struct adat {
 	typedef T data_type;
 	size_t count = 0;
-	T data[count_max];
+	T data[count_max] = {};
 	constexpr adat() = default;
-	constexpr adat(T v) : adat() { data[count++] = v; }
 	template<typename... Ts> constexpr adat(T v, Ts... args) : adat(args...) { data[count++] = v; }
 	constexpr const T& operator[](size_t index) const { return data[index]; }
 	constexpr T& operator[](size_t index) { return data[index]; }
@@ -44,10 +43,8 @@ struct adat {
 	void add(const T& e) { if(count < count_max) data[count++] = e; }
 	void addu(const T& e) { if(!have(e)) add(e); }
 	void clear() { count = 0; }
-	bool have(const T t) const { return find(t) != -1; }
 	bool have(const void* e) const { return e >= data && e < (data + count); }
-	void remove(size_t index, int remove_count = 1) { if(index < size_t(count - 1)) memcpy(data + index, data + index + 1, sizeof(data[0]) * (count - index - 1)); count--; }
-	void remove(const T t) { remove(find(t), 1); }
+	void remove(size_t index) { if(index >= count) return; if(index < count - 1) memmove(data + index, data + index + 1, sizeof(data[0]) * (count - index - 1)); count--; }
 	void sort(fncompare proc) { qsort(data, count, sizeof(data[0]), proc); }
 	void top(unsigned v) { if(count > v) count = v; }
 };

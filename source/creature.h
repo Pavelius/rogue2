@@ -156,6 +156,7 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	bool resist(featn resistane, featn immunity) const;
 	bool resist(featn resistane) const;
 	bool roll(abilityn v, int bonus = 0) const;
+	bool roll(abilityfnn v) const;
 	void say(speechn v) const;
 	void set(abilityn v, int i) { if(v<=Drunk) abilities[v] = (char)i; }
 	void set(featn v) { featable::set(v); }
