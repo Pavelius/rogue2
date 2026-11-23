@@ -383,4 +383,9 @@
       <Filter>Help</Filter>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\LICENSE.txt">
+      <Filter>Help</Filter>
+    </Text>
+  </ItemGroup>
 </Project>
