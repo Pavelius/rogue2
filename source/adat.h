@@ -32,20 +32,19 @@ struct adat {
 		((data[count++] = static_cast<T>(args)), ...); }
 	constexpr const T& operator[](size_t index) const { return data[index]; }
 	constexpr T& operator[](size_t index) { return data[index]; }
-	explicit operator bool() const { return count != 0; }
+	constexpr explicit operator bool() const { return count != 0; }
 	constexpr size_t lenght() const { return count; }
 	constexpr size_t maximum() const { return count_max; }
 	T* add() { if(count < count_max) return data + (count++); return data; }
 	T* addz() { for(auto& e : *this) if(!e) return &e; return add(); }
-	T* begin() { return data; }
-	T* end() { return data + count; }
-	const T* begin() const { return data; }
-	const T* end() const { return data + count; }
-	const T* endof() const { return data + count_max; }
+	constexpr T* begin() { return data; }
+	constexpr T* end() { return data + count; }
+	constexpr const T* begin() const { return data; }
+	constexpr const T* end() const { return data + count; }
+	constexpr const T* endof() const { return data + count_max; }
 	size_t find(const T t) const { for(auto& e : *this) if(e == t) return &e - data; return -1; }
 	size_t indexof(const void* e) const { if(e >= data && e < data + count) return (T*)e - data; return -1; }
 	void add(const T& e) { if(count < count_max) data[count++] = e; }
-	void addu(const T& e) { if(!have(e)) add(e); }
 	void clear() { count = 0; }
 	bool have(const void* e) const { return e >= data && e < (data + count); }
 	void remove(size_t index) { if(index >= count) return; if(index < count - 1) memmove(data + index, data + index + 1, sizeof(data[0]) * (count - index - 1)); count--; }
