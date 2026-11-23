@@ -501,6 +501,8 @@ static struct png_bitmap_plugin : public surface::plugin {
 	}
 
 	bool inspect(int& w, int& h, int& bpp, const unsigned char* input, unsigned size) override {
+		if(!input || size < 33)
+			return false;
 		if(input[0] != 137 || input[1] != 80 || input[2] != 78 || input[3] != 71
 			|| input[4] != 13 || input[5] != 10 || input[6] != 26 || input[7] != 10)
 			return false;

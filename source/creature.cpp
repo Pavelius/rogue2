@@ -864,9 +864,19 @@ static abilityn maximum_levelup_skill() {
 	return r;
 }
 
+static bool check_levelup_possible() {
+	for(auto n : levelup_skills) {
+		if(n)
+			return true;
+	}
+	return false;
+}
+
 static void skills_level_up() {
 	auto count = 3;
 	while(count > 0) {
+		if(!check_levelup_possible())
+			break; // No allowed variants present
 		abilityn skill = Strenght;
 		if(player->ishuman() && interactive)
 			skill = choose_levelup_skill(count);
@@ -884,8 +894,8 @@ static void skills_level_up() {
 void check_level_up() {
 	while(player->experience >= get_experience_need(player->abilities[Level] + 1)) {
 		initialize_levelup_skills();
-		skills_level_up();
 		player->abilities[Level]++;
+		skills_level_up();
 	}
 }
 
