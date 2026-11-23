@@ -26,7 +26,7 @@ struct bsdata {
 	static constexpr void clear() { count = 0; }
 	static constexpr bool have(const void* p) { return p >= elements && p < elements + count; }
 	static constexpr unsigned indexof(const void* p) { return have(p) ? ((unsigned char*)p - (unsigned char*)elements) / sizeof(T) : -1; }
-	static constexpr T* add() { return (count < count_max) ? elements + (count++) : elements; }
+	static constexpr T* add() { return (count < count_max) ? elements + (count++) : 0; }
 	static constexpr T* addz() { for(auto& e : bsdata<T>()) if(!e) return &e; return add(); }
 	static constexpr T*	get(const void* p) { return have(p) ? elements + indexof(p) : 0; }
 	static constexpr T*	begin() { return elements; }
