@@ -1,5 +1,6 @@
 #include "bsdata.h"
 #include "enchant.h"
+#include "slice.h"
 
 static enchanti* find(short unsigned parent, variant value) {
 	for(auto& e : bsdata<enchanti>()) {
@@ -26,7 +27,7 @@ static void shrink() {
 		pe--;
 		if(*pe)
 			break;
-		bsdata<enchanti>::source.count--;
+		bsdata<enchanti>::count--;
 	}
 }
 

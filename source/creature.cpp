@@ -422,9 +422,6 @@ static void illness_attack(creature* player, int value) {
 static void damage_player_items(itemn v, int chance) {
 }
 
-static bool can_damage(item& v) {
-}
-
 static void damage_equipment(int value) {
 }
 

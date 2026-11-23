@@ -124,7 +124,7 @@ void sort_objects() {
 }
 
 void clear_drawobjects() {
-	bsdata<drawobject>::source.clear();
+	bsdata<drawobject>::clear();
 }
 
 void clear_objects() {

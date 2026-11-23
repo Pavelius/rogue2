@@ -19,8 +19,16 @@
 
 const char* string_params[4];
 
+static const stringvari* find_var(const char* id) {
+	for(auto& e : bsdata<stringvari>()) {
+		if(equal(e.id, id))
+			return &e;
+	}
+	return 0;
+}
+
 bool stringvar_identifier(stringbuilder& sb, const char* identifier) {
-	auto pn = bsdata<stringvari>::find(identifier);
+	auto pn = find_var(identifier);
 	if(pn) {
 		pn->proc(sb);
 		return true;

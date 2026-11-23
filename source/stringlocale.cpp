@@ -22,6 +22,7 @@ namespace {
 struct locfile {
 	char		signature[4];
 	unsigned	count;
+	unsigned	checksum;
 };
 }
 

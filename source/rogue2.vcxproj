@@ -21,7 +21,6 @@
   <ItemGroup>
     <ClCompile Include="answers.cpp" />
     <ClCompile Include="area.cpp" />
-    <ClCompile Include="array.cpp" />
     <ClCompile Include="bin_borders.cpp" />
     <ClCompile Include="bin_conditions.cpp" />
     <ClCompile Include="bin_cursor.cpp" />
@@ -98,7 +97,6 @@
     <ClInclude Include="adat.h" />
     <ClInclude Include="answers.h" />
     <ClInclude Include="area.h" />
-    <ClInclude Include="array.h" />
     <ClInclude Include="bsdata.h" />
     <ClInclude Include="bstream.h" />
     <ClInclude Include="collection.h" />

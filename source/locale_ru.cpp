@@ -18,6 +18,7 @@
 #include "creature.h"
 #include "game.h"
 #include "manual.h"
+#include "slice.h"
 #include "stringbuilder.h"
 
 #define BSENUM(T) template<> const char* bsenum<T>::names[]

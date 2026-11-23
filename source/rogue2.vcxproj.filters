@@ -90,9 +90,6 @@
     <ClCompile Include="answers.cpp">
       <Filter>Support</Filter>
     </ClCompile>
-    <ClCompile Include="array.cpp">
-      <Filter>Support</Filter>
-    </ClCompile>
     <ClCompile Include="bstream.cpp">
       <Filter>Support</Filter>
     </ClCompile>
@@ -285,9 +282,6 @@
       <Filter>Support</Filter>
     </ClInclude>
     <ClInclude Include="answers.h">
-      <Filter>Support</Filter>
-    </ClInclude>
-    <ClInclude Include="array.h">
       <Filter>Support</Filter>
     </ClInclude>
     <ClInclude Include="bsdata.h">

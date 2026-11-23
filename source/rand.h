@@ -22,14 +22,14 @@ extern unsigned int xrand_seed;
 
 int xrand();
 
-inline int xrand(int n1) { return xrand() % n1; }
+inline int xrand(int n1) { return n1 ? xrand() % n1 : 0; }
 inline int xrand(int n1, int n2) { return n1 + xrand() % (n2 - n1 + 1); }
 
 inline int d6() { return 1 + xrand() % 6; }
 inline int d20() { return 1 + xrand() % 20; }
 inline int d100() { return xrand() % 100; }
 
-inline bool chance(int value) { return xrand(100) < value; }
+inline bool chance(int value) { return d100() < value; }
 
 template<class T>
 void zshuffle(T* data, int count) {
