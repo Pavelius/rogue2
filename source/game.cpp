@@ -418,8 +418,11 @@ void main_util();
 void write_locale(const char* url);
 
 static bool test_array() {
-	adat<abilityn> source = {Strenght, Dexterity, Wits};
-	return source.count == 3;
+	adat<abilityn, 8> source = {Strenght, Dexterity, Wits};
+	return source.count == 3
+		&& source[0] == Strenght
+		&& source[1] == Dexterity
+		&& source[2] == Wits;
 }
 
 static void test_player() {

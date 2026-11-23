@@ -24,7 +24,7 @@ struct adat {
 	size_t count = 0;
 	T data[count_max] = {};
 	constexpr adat() = default;
-	template<typename... Ts> constexpr adat(T v, Ts... args) : adat(args...) { data[count++] = v; }
+	template<typename... Ts> constexpr adat(Ts... args) { ((data[count++] = static_cast<T>(args)), ...); }
 	constexpr const T& operator[](size_t index) const { return data[index]; }
 	constexpr T& operator[](size_t index) { return data[index]; }
 	explicit operator bool() const { return count != 0; }
