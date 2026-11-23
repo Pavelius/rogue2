@@ -6,6 +6,7 @@
 #include "draw_object.h"
 #include "game.h"
 #include "timer.h"
+#include "slice.h"
 
 struct drawmove {
 	point			position, position_start, position_target;

@@ -5,6 +5,7 @@
 #include "draw_effect.h"
 #include "game.h"
 #include "timer.h"
+#include "slice.h"
 
 struct draweffect {
 	point			position;

@@ -16,7 +16,10 @@
 
 #pragma once
 
-#include "slice.h"
+typedef int(*fncompare)(const void*, const void*);
+
+extern "C" void* memmove(void* destination, const void* source, size_t size) noexcept(true);
+extern "C" void	qsort(void* base, size_t num, size_t size, fncompare proc) noexcept(true);
 
 template<class T, size_t count_max = 128>
 struct adat {
@@ -24,11 +27,12 @@ struct adat {
 	size_t count = 0;
 	T data[count_max] = {};
 	constexpr adat() = default;
-	template<typename... Ts> constexpr adat(Ts... args) { ((data[count++] = static_cast<T>(args)), ...); }
+	template<typename... Ts> constexpr adat(Ts... args) {
+		static_assert(sizeof...(args) <= count_max, "Too many adat initializer values");
+		((data[count++] = static_cast<T>(args)), ...); }
 	constexpr const T& operator[](size_t index) const { return data[index]; }
 	constexpr T& operator[](size_t index) { return data[index]; }
 	explicit operator bool() const { return count != 0; }
-	constexpr operator slice<T>() { return slice<T>(data, count); }
 	constexpr size_t lenght() const { return count; }
 	constexpr size_t maximum() const { return count_max; }
 	T* add() { if(count < count_max) return data + (count++); return data; }

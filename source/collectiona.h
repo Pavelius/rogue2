@@ -17,6 +17,7 @@
 #pragma once
 
 #include "adat.h"
+#include "slice.h"
 
 typedef void* (*fnvgroup)(void* v);
 typedef bool (*fnvfilter)(const void* v);
