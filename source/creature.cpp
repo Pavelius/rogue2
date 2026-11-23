@@ -1170,7 +1170,7 @@ bool creature::resist(featn v) const {
 }
 
 int creature::getlos() const {
-	auto darkness = 0;
+	int darkness = 0;
 	if(is(DarkVision))
 		darkness--;
 	if(darkness > 4)
@@ -1181,7 +1181,7 @@ int creature::getlos() const {
 }
 
 bool creature::canhear(short unsigned i) const {
-	auto n = 3 + get(Wits) / 10 + get(Dexterity) / 20;
+	auto n = 3 + get(Wits) / 7;
 	return area_range(index, i) <= n;
 }
 

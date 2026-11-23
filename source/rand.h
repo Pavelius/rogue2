@@ -32,11 +32,11 @@ inline int d100() { return xrand() % 100; }
 inline bool chance(int value) { return xrand(100) < value; }
 
 template<class T>
-inline void zshuffle(T* p, int count) {
-	for(int i = 0; i < count; i++) {
-		auto j = xrand() % count;
-		auto v = p[i];
-		p[i] = p[j];
-		p[j] = v;
+void zshuffle(T* data, int count) {
+	for(int i = count - 1; i > 0; --i) {
+		int j = xrand(i + 1);
+		auto temporary = data[i];
+		data[i] = data[j];
+		data[j] = temporary;
 	}
 }
