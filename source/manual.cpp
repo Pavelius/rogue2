@@ -44,8 +44,21 @@ static void add_content(topicn page) {
 }
 
 void open_manual(abilityn page) {
-	show_message(getnm(page), 0, ability_info[page], getnm(Cancel));
+	char temp[2048]; stringbuilder sb(temp);
+	for(auto i = (abilityfnn)0; i <= LastAbilityFormula; i = (abilityfnn)(i+1)) {
+		auto& e = ability_formula[i];
+		if(e.ability == page) {
+			sb.addn("* ");
+			sb.add(ability_formula_names[i]);
+			sb.add(".");
+		}
+	}
+	show_message(getnm(page), 0, temp, getnm(Cancel));
 }
+
+//void open_manual(abilityn page) {
+//	show_message(getnm(page), 0, ability_info[page], getnm(Cancel));
+//}
 
 void open_manual(topicn page) {
 	while(true) {
