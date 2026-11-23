@@ -77,7 +77,6 @@ struct statable {
 };
 struct abilityfni {
 	abilityn ability;
-	int base = 0;
 	int multiplier = 1;
 	int divider = 1;
 };
@@ -85,7 +84,8 @@ struct abilityfni {
 extern char levelup_skills[LastSkill + 1];
 extern const char* ability_info[LastAbility + 1];
 extern const char* creature_names[4 * 50];
-extern abilityfni ability_functions[];
+extern const char* ability_formula_names[LastAbilityFormula + 1];
+extern abilityfni ability_formula[LastAbilityFormula + 1];
 
 extern creature* human;
 extern creature* player;
@@ -114,7 +114,7 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	sitei* getsite() const;
 	short unsigned bsi() const;
 	int	get(abilityn v) const { return (v < sizeof(abilities) / sizeof(abilities[0])) ? abilities[v] : 0; }
-	int	get(abilityfnn v) const { auto& e = ability_functions[v]; return e.base + get(e.ability) * e.multiplier / e.divider; }
+	int	get(abilityfnn v) const { auto& e = ability_formula[v]; return get(e.ability) * e.multiplier / e.divider; }
 	int getlos() const;
 	void act(messagen v) const;
 	void act(char separator, const char* format, ...) const;
@@ -158,7 +158,7 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	bool roll(abilityn v, int bonus = 0) const;
 	bool roll(abilityfnn v) const;
 	void say(speechn v) const;
-	void set(abilityn v, int i) { if(v<=Drunk) abilities[v] = (char)i; }
+	void set(abilityn v, int i) { if(v <= Drunk) abilities[v] = (char)i; }
 	void set(featn v) { featable::set(v); }
 	void setindex(short unsigned i);
 	void update();

@@ -45,16 +45,16 @@ char levelup_skills[LastSkill + 1];
 static collection allowed_spells;
 static short unsigned compare_index;
 
-abilityfni ability_functions[LastAbilityFormula+1] = {
-	{Level, 10, 5}, // BaseHitPoints
-	{Strenght, 0, 1, 3}, // AdditionalHitPoints
-	{Wits, 5, 1, 2}, // BaseManaPoints
+abilityfni ability_formula[LastAbilityFormula+1] = {
+	{Level, 5}, // BaseHitPoints
+	{Strenght, 1, 3}, // AdditionalHitPoints
+	{Wits, 1, 2}, // BaseManaPoints
 	{Level}, // AdditionalManaPoints
-	{Dodge, 0, 1, 2}, // ChanceDodgeTraps
+	{Dodge, 1, 2}, // ChanceDodgeTraps
 	{Dodge}, // ChanceDodgeVisibleTraps
-	{Dodge, 0, 1, 3}, // ChanceDodgeBlow
-	{Dexterity, 0, 1, 4}, // BaseDexteritySkill
-	{Wits, 0, 1, 4}, // BaseWitsSkill
+	{Dodge, 1, 3}, // ChanceDodgeBlow
+	{Dexterity, 1, 4}, // BaseDexteritySkill
+	{Wits, 1, 4}, // BaseWitsSkill
 };
 
 static int compare_distace(const void* v1, const void* v2) {

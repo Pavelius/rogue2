@@ -426,7 +426,6 @@ static bool test_array() {
 }
 
 static void test_player() {
-	// pushvalue push(interactive, false);
 	create_creature(apos(4, 3), Human);
 	add_equipment(Spear);
 	add_equipment(LeatherArmor);
@@ -438,7 +437,7 @@ static void test_player() {
 	player->additem(i3);
 	player->update();
 	human = player;
-	player->experience += 1500;
+	player->experience += 950;
 }
 
 int main(int argc, char* argv[]) {

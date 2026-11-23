@@ -48,7 +48,7 @@ enum itemn : unsigned char {
 	// Countable items start here
 	Ration, Apple, Bread, Meat, Shell, Bones, BloodyRemains,
 	Arrow, Bolt,
-	BlueGem, WhiteGem, YellowGem, GreenGem, RedGem,
+	WhiteGem, YellowGem, BlueGem, GreenGem, RedGem,
 	CP, SP, GP,
 	LastItem = GP,
 	// Random items set
