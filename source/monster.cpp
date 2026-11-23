@@ -120,8 +120,6 @@ void apply_monster(monstern type) {
 		player->spells = e.stats.spells;
 		player->basic.abilities[WeaponSkill] += 40;
 		player->basic.abilities[BalisticSkill] += 40;
-		player->basic.abilities[Hits] += 10;
-		player->basic.abilities[Mana] += 10;
 		player->basic.abilities[Literacy] += xrand(3, 18);
 		for(auto i = 0; i < lenghtof(e.stats.abilities); i++)
 			player->basic.abilities[i] += e.stats.abilities[i];

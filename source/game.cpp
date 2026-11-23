@@ -391,7 +391,7 @@ void end_game() {
 
 static void put_item(short unsigned i, itemn v) {
 	item it(v); it.create(20);
-	it.known_magic = 1;
+	it.identified = 1;
 	add_item(current_area, i, it);
 }
 
@@ -429,9 +429,9 @@ static void test_player() {
 	add_equipment(LeatherArmor);
 	add_equipment(LeatherBoots);
 	add_equipment(ShortBow);
-	item i2 = BluePotion; i2.setpower(Hits); i2.known_magic = 1;
+	item i2 = BluePotion; i2.setpower(Hits); i2.identified = 1;
 	player->additem(i2);
-	item i3 = RedRod; i3.setpower(); i3.known_magic = 1;
+	item i3 = RedRod; i3.setpower(); i3.identified = 1;
 	player->additem(i3);
 	player->update();
 	human = player;
@@ -444,8 +444,6 @@ int main(int argc, char* argv[]) {
 	main_util();
 	test_array();
 #endif
-	// write_locale("test.loc");
-	// read_locale("test.loc");
 	xrand_seed = srand_time();
 	// srand(201902);
 	area_clear();

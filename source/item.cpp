@@ -388,12 +388,12 @@ const char* item::name() const {
 		if(countable() && count > 1)
 			sb.adds("x%1i", count);
 	} else {
-		if(known_magic) {
+		if(identified) {
 			if(magic)
 				sb.adds(getnm((magicn)(gi * 4 + magic)));
 		}
 		sb.adds(pn);
-		if(known_magic) {
+		if(identified) {
 			auto pw = getpower();
 			if(pw)
 				sb.adds(get_power_name(pw));
@@ -466,7 +466,7 @@ bool item::unequip() {
 	if(!p)
 		return false;
 	if(is(Cursed)) {
-		known_magic = 1;
+		identified = 1;
 		p->say(SayItsMine);
 		return false;
 	}

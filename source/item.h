@@ -93,8 +93,8 @@ struct item {
 	union {
 		unsigned char count;
 		struct {
+			unsigned char identified : 1; // Identified item
 			unsigned char power : 3; // Item magical power index (1-15) or 0 - if no magical power
-			unsigned char known_magic : 1; // Identified item
 			unsigned char hits : 2; // 0-1 undamaged, 2 used, 3 damaged
 			magicn magic : 2; // Mundane, Cursed, Blessed, Artifact
 		};
@@ -102,9 +102,9 @@ struct item {
 	constexpr item() : type((itemn)0), count(0) {}
 	constexpr item(itemn v) : type(v), count(countable() ? 1 : 0) {}
 	constexpr item(itemn v, unsigned char count) : type(v), count(count) {}
-	explicit inline operator bool() const { return type != (itemn)0; }
-	inline constexpr bool countable() const { return type >= Ration; }
-	inline constexpr const itemi& geti() const { return item_data[type]; }
+	explicit operator bool() const { return type != (itemn)0; }
+	constexpr bool countable() const { return type >= Ration; }
+	constexpr const itemi& geti() const { return item_data[type]; }
 	constexpr itemn ammo() const { return geti().combat.ammo; }
 	constexpr wearn wear() const { return geti().wear; }
 	constexpr int armor() const { return geti().combat.armor; }

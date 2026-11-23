@@ -45,6 +45,12 @@ enum abilityn : unsigned char {
 	LastAbility = Experience,
 	FirstSkill = Alchemy, LastSkill = Woodcutting,
 };
+enum abilityfnn : unsigned char {
+	BaseHitPoints, AdditionalHitPoints, BaseManaPoints, AdditionalManaPoints,
+	ChanceDodgeTraps, ChanceDodgeVisibleTraps, ChanceDodgeBlow,
+	BaseDexteritySkill, BaseWitsSkill,
+	LastAbilityFormula = BaseWitsSkill,
+};
 enum monstern : unsigned char {
 	Human, Dwarf, Elf,
 	Goblin, GoblinFemale,
@@ -69,10 +75,17 @@ struct statable {
 	char abilities[Drunk + 1];
 	void add(abilityn v, int i) { abilities[v] += i; }
 };
+struct abilityfni {
+	abilityn ability;
+	int base = 0;
+	int multiplier = 1;
+	int divider = 1;
+};
 
 extern char levelup_skills[LastSkill + 1];
 extern const char* ability_info[LastAbility + 1];
 extern const char* creature_names[4 * 50];
+extern abilityfni ability_functions[];
 
 extern creature* human;
 extern creature* player;
@@ -91,7 +104,7 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	short unsigned	fear_id, boss_id;
 	short unsigned	site_id; // Current site of 0xFFFF
 	short unsigned	move_index; // Move to this point
-	short			hits, hits_maximum, mana;
+	short			hits, hits_maximum, mana, mana_maximum;
 	int				experience;
 	int				wait_seconds;
 	constexpr explicit operator bool() const { return hits > 0; }
@@ -101,6 +114,7 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	sitei* getsite() const;
 	short unsigned bsi() const;
 	int	get(abilityn v) const { return (v < sizeof(abilities) / sizeof(abilities[0])) ? abilities[v] : 0; }
+	int	get(abilityfnn v) const { auto& e = ability_functions[v]; return e.base + get(e.ability) * e.multiplier / e.divider; }
 	int getlos() const;
 	void act(messagen v) const;
 	void act(char separator, const char* format, ...) const;

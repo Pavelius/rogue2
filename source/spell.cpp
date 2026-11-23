@@ -177,33 +177,33 @@ bool creature::apply(spelln v, bool run) {
 bool item::apply(spelln v, bool run) {
 	switch(v) {
 	case BlessItem:
-		if(magic != Mundane || !known_magic)
+		if(magic != Mundane || !identified)
 			return false;
 		if(run) {
-			known_magic = 1;
+			identified = 1;
 			magic = Blessed;
 		}
 		break;
 	case DetectMagicItem:
-		if(known_magic || magic != Blessed)
+		if(identified || magic != Blessed)
 			return false;
 		if(run)
-			known_magic = 1;
+			identified = 1;
 		break;
 	case EnchantItem:
-		if(power || !known_magic)
+		if(power || !identified)
 			return false;
 		if(run) {
 		}
 		break;
 	case IdentifyItem:
-		if(known_magic)
+		if(identified)
 			return false;
 		if(run)
-			known_magic = 1;
+			identified = 1;
 		break;
 	case UncurseItem:
-		if(!known_magic || magic != Cursed)
+		if(!identified || magic != Cursed)
 			return false;
 		if(run) {
 			act(ItemGrowColor, GlowBlue);
@@ -211,7 +211,7 @@ bool item::apply(spelln v, bool run) {
 		}
 		break;
 	case CreateArtifact:
-		if(!known_magic || !getpower() || magic != Blessed)
+		if(!identified || !getpower() || magic != Blessed)
 			return false;
 		if(run) {
 			act(ItemGrowColor, GlowYellow);

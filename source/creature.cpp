@@ -45,6 +45,18 @@ char levelup_skills[LastSkill + 1];
 static collection allowed_spells;
 static short unsigned compare_index;
 
+abilityfni ability_functions[LastAbilityFormula+1] = {
+	{Level, 10, 5}, // BaseHitPoints
+	{Strenght, 0, 1, 3}, // AdditionalHitPoints
+	{Wits, 5, 1, 2}, // BaseManaPoints
+	{Level}, // AdditionalManaPoints
+	{Dodge, 0, 1, 2}, // ChanceDodgeTraps
+	{Dodge}, // ChanceDodgeVisibleTraps
+	{Dodge, 0, 1, 3}, // ChanceDodgeBlow
+	{Dexterity, 0, 1, 4}, // BaseDexteritySkill
+	{Wits, 0, 1, 4}, // BaseWitsSkill
+};
+
 static int compare_distace(const void* v1, const void* v2) {
 	auto p1 = (*((creature**)v1))->index;
 	auto p2 = (*((creature**)v2))->index;
@@ -74,8 +86,11 @@ static int get_experience_need(int level) {
 
 static void update_derived() {
 	player->hits_maximum = player->abilities[Hits];
-	player->hits_maximum += player->abilities[Strenght] / 3;
-	player->hits_maximum += player->abilities[Level] * 5;
+	player->hits_maximum += player->get(BaseHitPoints);
+	player->hits_maximum += player->get(AdditionalHitPoints);;
+	player->mana_maximum = player->abilities[Mana];
+	player->mana_maximum += player->get(BaseManaPoints);
+	player->mana_maximum += player->get(AdditionalManaPoints);;
 }
 
 static void add_value(abilityn v, int value) {
@@ -116,7 +131,7 @@ static void apply_boost(variant v, magicn magic) {
 
 static void update_wear_items() {
 	for(auto& e : player->wears) {
-		if(!e || !e.known_magic)
+		if(!e || !e.identified)
 			continue;
 		apply_boost(e.getpower(), e.magic);
 	}
@@ -152,7 +167,7 @@ static void update_abilities() {
 
 static void create_finish() {
 	player->hits = player->hits_maximum;
-	player->mana = player->abilities[Mana];
+	player->mana = player->mana_maximum;
 }
 
 static void copy_stats(statable& v1, const statable& v2, abilityn from, abilityn to) {
@@ -181,8 +196,13 @@ static abilityn get_skill_base(abilityn v) {
 
 static void update_skills() {
 	for(auto i = FirstSkill; i <= LastSkill; i = (abilityn)(i + 1)) {
-		if(player->basic.abilities[i])
-			add_value(i, player->abilities[get_skill_base(i)] / 3);
+		if(player->basic.abilities[i]) {
+			auto base = get_skill_base(i);
+			if(base==Wits)
+				add_value(i, player->get(BaseWitsSkill));
+			else
+				add_value(i, player->get(BaseDexteritySkill));
+		}
 	}
 }
 
@@ -197,9 +217,12 @@ void update_player() {
 
 void update_player_full_hits() {
 	auto full_hits = (player->hits == player->hits_maximum);
+	auto full_mana = (player->mana == player->mana_maximum);
 	update_player();
 	if(full_hits)
 		player->hits = player->hits_maximum;
+	if(full_mana)
+		player->mana = player->mana_maximum;
 }
 
 static void random_name() {
@@ -989,8 +1012,8 @@ bool creature::apply(abilityn v, magicn magic, bool run) {
 				return false;
 			if(run) {
 				mana += xrand(3, 18) * multiply;
-				if(mana > get(Mana))
-					mana = get(Mana);
+				if(mana > mana_maximum)
+					mana = mana_maximum;
 			}
 			break;
 		default:

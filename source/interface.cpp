@@ -1107,7 +1107,7 @@ static void paint_field(abilityn v) {
 		paint_field(getnm(v), str("%1i/%2i", player->hits, player->hits_maximum));
 		break;
 	case Mana:
-		paint_field(getnm(v), str("%1i/%2i", player->mana, player->abilities[Mana]));
+		paint_field(getnm(v), str("%1i/%2i", player->mana, player->mana_maximum));
 		break;
 	case Experience:
 		paint_field(getnm(v), str("%1i", player->experience));
@@ -1521,7 +1521,7 @@ static void test_scene() {
 }
 
 void set_item_color(const item& it) {
-	if(!it.known_magic)
+	if(!it.identified)
 		return;
 	if(it.is(Cursed))
 		fore = fore.mix(colors::red, 128);
