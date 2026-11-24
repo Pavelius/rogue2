@@ -20,6 +20,8 @@
 #include "rand.h"
 #include "slice.h"
 
+static abilityn random_skills[] = {Haggling, Alertness, Literacy, Riding, Religion};
+
 struct statblock : featable, statable, spellable {
 	itemn items[4];
 	constexpr statblock() : featable(), statable(), items{} {}
@@ -95,6 +97,13 @@ itemn get_remains(monstern type) {
 	return monsters[type].remains;
 }
 
+static void raise_ability(abilityn v) {
+	if(player->basic.abilities[v])
+		player->basic.abilities[v] += 5;
+	else
+		player->basic.abilities[v] += d6();
+}
+
 void apply_monster(monstern type) {
 	auto& e = monsters[type];
 	player->abilities[Level] += e.level;
@@ -103,25 +112,25 @@ void apply_monster(monstern type) {
 	player->basic.abilities[Strenght] += e.strenght;
 	player->basic.abilities[Dexterity] += e.dexterity;
 	player->basic.abilities[Wits] += e.wits;
+	for(auto i = 0; i < lenghtof(e.stats.abilities); i++)
+		player->basic.abilities[i] += e.stats.abilities[i];
 	if(type >= FirstMonster && type <= LastMonster) {
 		player->basic.abilities[WeaponSkill] += imax(30, e.level * 5);
 		player->basic.abilities[BalisticSkill] += imax(30, e.level * 5);
 		player->featable::add(e.stats);
 		player->spells = e.stats.spells;
-		for(auto i = 0; i < lenghtof(e.stats.abilities); i++)
-			player->basic.abilities[i] += e.stats.abilities[i];
 		for(auto v : e.stats.items) {
 			if(v)
 				player->equip(v);
 		}
 		player->set(Local);
 	} else {
-		player->featable::add(e.stats);
-		player->spells = e.stats.spells;
 		player->basic.abilities[WeaponSkill] += 40;
 		player->basic.abilities[BalisticSkill] += 40;
 		player->basic.abilities[Literacy] += xrand(3, 18);
-		for(auto i = 0; i < lenghtof(e.stats.abilities); i++)
-			player->basic.abilities[i] += e.stats.abilities[i];
+		player->featable::add(e.stats);
+		player->spells = e.stats.spells;
+		for(auto i = 0; i < 3; i++) // Additional skills
+			raise_ability(maprnd(random_skills));
 	}
 }

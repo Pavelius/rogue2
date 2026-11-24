@@ -48,7 +48,12 @@ enum itemn : unsigned char {
 	// Countable items start here
 	Ration, Apple, Bread, Meat, Shell, Bones, BloodyRemains,
 	Arrow, Bolt,
-	WhiteGem, YellowGem, BlueGem, GreenGem, RedGem,
+	WhiteGem, YellowGem, BlueGem, GreenGem, RedGem, // Not identified gems (mostly found in dungeons)
+	RockCrystal, MilkyQuartz, WhiteAgate, Moonstone, WhiteOpal, // White gems
+	YellowJasper, Citrine, YellowGarnet, GoldenTopaz, Heliodor, // Yellow gems
+	Sodalite, LapisLazuli, Aquamarine, Tanzanite, BlueSapphire, // Blue gems
+	GreenAventurine, Malachite, Peridot, Jadeite, Emerald, // Green gems
+	RedJasper, Carnelian, RedGarnet, RedSpinel, Ruby, // Red gems
 	CP, SP, GP,
 	LastItem = GP,
 	// Random items set

@@ -167,7 +167,7 @@ static drawcolumn inventory_columns[] = {
 	{inventory_item_weight, 30, AlignCenter},
 	{}};
 static drawcolumn levelup_columns[] = {
-	{levelup_name, 160, 0},
+	{levelup_name, 140, 0},
 	{levelup_current, 32, 0},
 	{levelup_add, 32, 0},
 	{}};
@@ -197,7 +197,7 @@ abilityn choose_levelup_skill(int times) {
 		sb.adds(getnm(MsgMultiplyChoose), times);
 		sb.add(".");
 	}
-	return (abilityn)choose_menu(0, footer);
+	return (abilityn)choose_menu(0, footer, 280);
 }
 
 void add_answer_items(short unsigned area_index, short unsigned index, fnvisible filter) {
@@ -437,7 +437,7 @@ static void test_player() {
 	player->additem(i3);
 	player->update();
 	human = player;
-	player->experience += 950;
+	player->experience += 1500;
 }
 
 int main(int argc, char* argv[]) {

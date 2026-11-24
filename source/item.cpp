@@ -114,11 +114,32 @@ itemi item_data[LastItem + 1] = {
 	{Backpack, 1 * lb, 10 * gp, "item103"},
 	{Ammunition, 1 * lb, 10 * gp, "item51"}, // Arrow
 	{Ammunition, 1 * lb, 10 * gp, "item34"},
-	{Backpack, 1 * lb, 10 * gp, "item404"}, // Blue gem
+	{Backpack, 1 * lb, 10 * gp, "item404"}, // White gem
 	{Backpack, 1 * lb, 10 * gp, "item402"},
 	{Backpack, 1 * lb, 10 * gp, "item406"},
 	{Backpack, 1 * lb, 10 * gp, "item405"},
 	{Backpack, 1 * lb, 10 * gp, "item403"},
+	{Backpack, 1 * lb, 10 * gp, "item404"}, // RockCrystal
+	{Backpack, 1 * lb, 10 * gp, "item404"}, // MilkyQuartz
+	{Backpack, 1 * lb, 10 * gp, "item404"}, // WhiteAgate
+	{Backpack, 1 * lb, 10 * gp, "item404"}, // Moonstone
+	{Backpack, 1 * lb, 10 * gp, "item404"}, // WhiteOpal
+	{Backpack, 1 * lb, 10 * gp, "item402"}, // YellowJasper
+	{Backpack, 1 * lb, 10 * gp, "item402"},
+	{Backpack, 1 * lb, 10 * gp, "item402"},
+	{Backpack, 1 * lb, 10 * gp, "item402"},
+	{Backpack, 1 * lb, 10 * gp, "item402"},
+	{Backpack, 1 * lb, 10 * gp, "item406"}, // Sodalite
+	{Backpack, 1 * lb, 10 * gp, "item406"},
+	{Backpack, 1 * lb, 10 * gp, "item406"},
+	{Backpack, 1 * lb, 10 * gp, "item406"},
+	{Backpack, 1 * lb, 10 * gp, "item406"},
+	{Backpack, 1 * lb, 10 * gp, "item405"}, // GreenAventurine
+	{Backpack, 1 * lb, 10 * gp, "item405"},
+	{Backpack, 1 * lb, 10 * gp, "item405"},
+	{Backpack, 1 * lb, 10 * gp, "item405"},
+	{Backpack, 1 * lb, 10 * gp, "item405"},
+	{Backpack, 1 * lb, 10 * gp, "item403"}, // RedJasper
 	{Backpack, 1 * lb, 10 * gp, "items37"}, // CP
 	{Backpack, 1 * lb, 10 * gp, "items37"},
 	{Backpack, 1 * lb, 10 * gp, "items37"},

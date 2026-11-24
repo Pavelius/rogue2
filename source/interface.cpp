@@ -1608,12 +1608,12 @@ void choose_player_move() {
 	}
 }
 
-long choose_menu(const char* cancel, const char* footer) {
+long choose_menu(const char* cancel, const char* footer, int menu_width, int menu_height) {
 	pushrect push;
 	while(ismodal()) {
 		paint_status();
 		paint_area();
-		paint_window(answers::header, 420, 280);
+		paint_window(answers::header, menu_width, menu_height);
 		paint_answers();
 		paint_answer_footer(footer, cancel);
 		paint_message(console_text);
