@@ -31,7 +31,7 @@ static void add_answers(topicn parent) {
 static void add_content(topicn page) {
 	switch(page) {
 	case SkillList:
-		add_answers(Strenght, BalisticSkill, bsenum<abilityn>::names);
+		add_answers(WeaponSkill, BalisticSkill, bsenum<abilityn>::names);
 		add_answers(FirstSkill, LastSkill, bsenum<abilityn>::names);
 		break;
 	case RaceGeneral:
@@ -72,10 +72,6 @@ void open_manual(abilityn page) {
 	}
 	show_message(getnm(page), 0, temp, getnm(Cancel));
 }
-
-//void open_manual(abilityn page) {
-//	show_message(getnm(page), 0, ability_info[page], getnm(Cancel));
-//}
 
 void open_manual(topicn page) {
 	while(true) {

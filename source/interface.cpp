@@ -1241,6 +1241,7 @@ static void paint_scroll_text(const char* format, int& format_height) {
 	if(!format)
 		return;
 	if(format_height == -1) {
+		pushrect push;
 		textfs(format);
 		format_height = height;
 		cashe_string = 0;
