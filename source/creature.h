@@ -48,6 +48,9 @@ enum abilityn : unsigned char {
 enum abilityfnn : unsigned char {
 	BaseHitPoints, AdditionalHitPoints, BaseManaPoints, AdditionalManaPoints,
 	ChanceDodgeTraps, ChanceDodgeVisibleTraps, ChanceDodgeBlow,
+	ChanceFindTraps, ChanceFindSecretDoor,
+	ChanceHitMelee, ChanceHitShooting,
+	FaithMaximum, ChanceGodBlessing,
 	BaseDexteritySkill, BaseWitsSkill,
 	LastAbilityFormula = BaseWitsSkill,
 };

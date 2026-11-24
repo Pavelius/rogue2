@@ -53,6 +53,12 @@ abilityfni ability_formula[LastAbilityFormula+1] = {
 	{Dodge, 1, 2}, // ChanceDodgeTraps
 	{Dodge}, // ChanceDodgeVisibleTraps
 	{Dodge, 1, 3}, // ChanceDodgeBlow
+	{Alertness}, // ChanceFindTraps
+	{Alertness, 1, 2}, // ChanceFindSecretDoor
+	{WeaponSkill}, // ChanceHitMelee
+	{BalisticSkill}, // ChanceHitShooting
+	{Religion, 1, 10}, // FaithMaximum
+	{Religion}, // ChanceGodBlessing
 	{Dexterity, 1, 4}, // BaseDexteritySkill
 	{Wits, 1, 4}, // BaseWitsSkill
 };

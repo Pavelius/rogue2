@@ -23,7 +23,7 @@ static void add_answers(unsigned char f1, unsigned char f2, const char** names) 
 
 static void add_answers(topicn parent) {
 	for(auto& e : topics) {
-		if(e.parent==parent)
+		if(e.parent == parent)
 			an.add(e.element, getnm(e.element));
 	}
 }
@@ -43,14 +43,31 @@ static void add_content(topicn page) {
 	}
 }
 
+static void add(stringbuilder& sb, const abilityfni& v) {
+	if(v.multiplier == 1 && v.divider == 1)
+		return;
+	sb.add("[~");
+	sb.adds(getnm(v.ability));
+	if(v.multiplier != 1)
+		sb.add(" x %1i", v.multiplier);
+	if(v.divider != 1)
+		sb.add("/%1i", v.divider);
+	sb.add("]");
+}
+
 void open_manual(abilityn page) {
 	char temp[2048]; stringbuilder sb(temp);
-	for(auto i = (abilityfnn)0; i <= LastAbilityFormula; i = (abilityfnn)(i+1)) {
+	if(ability_info[page]) {
+		sb.addn(ability_info[page]);
+		sb.add("\n\n");
+	}
+	for(auto i = (abilityfnn)0; i <= LastAbilityFormula; i = (abilityfnn)(i + 1)) {
 		auto& e = ability_formula[i];
 		if(e.ability == page) {
-			sb.addn("* ");
+			sb.addn("* \t");
 			sb.add(ability_formula_names[i]);
 			sb.add(".");
+			add(sb, e);
 		}
 	}
 	show_message(getnm(page), 0, temp, getnm(Cancel));
