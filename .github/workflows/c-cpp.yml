@@ -19,7 +19,7 @@ jobs:
         uses: microsoft/setup-msbuild@v3
 
       - name: Build
-        run: msbuild rogue2/rogue2.vcxproj  /m /p:Configuration=Release /p:Platform=Win32
+        run: msbuild source/rogue2.vcxproj  /m /p:Configuration=Release /p:Platform=Win32
 
       - name: Package
         shell: pwsh
