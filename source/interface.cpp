@@ -897,6 +897,8 @@ static void get_total_height(const answers& source) {
 
 static void paint_answers() {
 	auto index = 0;
+	auto push_height = height;
+	height = texth() + 2;
 	for(auto& e : an)
 		answer_paint_cell_small(index++, e.value, e.text, buttonparam);
 }
