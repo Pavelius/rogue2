@@ -382,6 +382,12 @@
     <None Include="..\help\combat.md">
       <Filter>Help</Filter>
     </None>
+    <None Include="..\help\quest.md">
+      <Filter>Help</Filter>
+    </None>
+    <None Include="..\help\sites.md">
+      <Filter>Help</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\LICENSE.txt">

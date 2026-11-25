@@ -60,7 +60,9 @@
     <ClCompile Include="draw_theme.cpp" />
     <ClCompile Include="draw_floatinfo.cpp" />
     <ClCompile Include="enchant.cpp" />
-    <ClCompile Include="font_util.cpp" />
+    <ClCompile Include="font_util.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="game.cpp" />
     <ClCompile Include="indexa.cpp" />
     <ClCompile Include="information.cpp" />
@@ -68,11 +70,15 @@
     <ClCompile Include="item.cpp" />
     <ClCompile Include="keyname.cpp" />
     <ClCompile Include="locale_ru.cpp" />
-    <ClCompile Include="main_util.cpp" />
+    <ClCompile Include="main_util.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="manual.cpp" />
     <ClCompile Include="math.cpp" />
     <ClCompile Include="monster.cpp" />
-    <ClCompile Include="png.cpp" />
+    <ClCompile Include="png.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="point.cpp" />
     <ClCompile Include="print.cpp" />
     <ClCompile Include="rand.cpp" />
@@ -82,7 +88,9 @@
     <ClCompile Include="area_shape.cpp" />
     <ClCompile Include="area_generate.cpp" />
     <ClCompile Include="spell.cpp" />
-    <ClCompile Include="sprite_util.cpp" />
+    <ClCompile Include="sprite_util.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="stringbuilder.cpp" />
     <ClCompile Include="stringlocale.cpp" />
     <ClCompile Include="stringvar.cpp" />
@@ -91,7 +99,9 @@
     <ClCompile Include="win_draw.cpp" />
     <ClCompile Include="win_io_file.cpp" />
     <ClCompile Include="win_time.cpp" />
-    <ClCompile Include="zip.cpp" />
+    <ClCompile Include="zip.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="adat.h" />
@@ -132,7 +142,9 @@
     <ClInclude Include="screenshoot.h" />
     <ClInclude Include="slice.h" />
     <ClInclude Include="spell.h" />
-    <ClInclude Include="sprite_util.h" />
+    <ClInclude Include="sprite_util.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="stringbuilder.h" />
     <ClInclude Include="stringvar.h" />
     <ClInclude Include="timer.h" />
@@ -141,6 +153,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\help\combat.md" />
+    <None Include="..\help\quest.md" />
+    <None Include="..\help\sites.md" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\LICENSE.txt" />
