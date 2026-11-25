@@ -166,11 +166,6 @@ static drawcolumn inventory_columns[] = {
 	{inventory_item, 280, 0},
 	{inventory_item_weight, 30, AlignCenter},
 	{}};
-static drawcolumn levelup_columns[] = {
-	{levelup_name, 140, 0},
-	{levelup_current, 32, 0},
-	{levelup_add, 32, 0},
-	{}};
 
 item* choose_inventory() {
 	pushvalue push(answers::header, getnm(Inventory));
@@ -184,8 +179,13 @@ item* choose_inventory() {
 }
 
 abilityn choose_levelup_skill(int times) {
+	static drawcolumn columns[] = {
+		{levelup_name, 140, 0},
+		{levelup_current, 32, 0},
+		{levelup_add, 32, 0},
+		{}};
 	pushvalue push(answers::header, getnm(LevelUp));
-	pushvalue push_columns(last_columns, levelup_columns);
+	pushvalue push_columns(last_columns, columns);
 	an.clear();
 	for(auto v = Strenght; v <= LastSkill; v = (abilityn)(v + 1)) {
 		if(player->basic.abilities[v])
@@ -197,7 +197,7 @@ abilityn choose_levelup_skill(int times) {
 		sb.adds(getnm(MsgMultiplyChoose), times);
 		sb.add(".");
 	}
-	return (abilityn)choose_menu(0, footer, 280);
+	return (abilityn)choose_menu(0, footer, 240);
 }
 
 void add_answer_items(short unsigned area_index, short unsigned index, fnvisible filter) {

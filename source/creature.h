@@ -46,6 +46,7 @@ enum abilityn : unsigned char {
 	FirstSkill = Alchemy, LastSkill = Woodcutting,
 };
 enum abilityfnn : unsigned char {
+	AdditionalArmor, AdditionalDamageMelee,
 	BaseHitPoints, AdditionalHitPoints, BaseManaPoints, AdditionalManaPoints,
 	ChanceDodgeTraps, ChanceDodgeVisibleTraps, ChanceDodgeBlow,
 	ChanceFindTraps, ChanceFindSecretDoor,

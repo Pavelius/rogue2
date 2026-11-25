@@ -503,15 +503,15 @@ void item::act(messagen v, glown glow) const {
 void item::create(int chance_blessed, int chance_cursed, int chance_power) {
 	if(countable())
 		return;
-	auto source = powers();
-	if((source && source[0]) || chance(chance_power))
+	auto ps = powers();
+	if(ps && (ps[0] || chance(chance_power)))
 		setpower();
 	if(chance(chance_cursed))
 		magic = Cursed;
 	else if(chance(chance_blessed)) {
 		magic = Blessed;
 		if(chance(chance_blessed / 3))
-			magic = Artifact;
+			magic = Artifact; // Very rare item
 	}
 }
 

@@ -1620,6 +1620,7 @@ long choose_menu(const char* cancel, const char* footer, int menu_width, int men
 		domodal();
 		update_message();
 	}
+	an.clear();
 	return getresult();
 }
 

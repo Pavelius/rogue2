@@ -46,6 +46,8 @@ static collection allowed_spells;
 static short unsigned compare_index;
 
 abilityfni ability_formula[LastAbilityFormula+1] = {
+	{Strenght, 1, 20}, // AdditionalArmor
+	{Strenght, 1, 15}, // AdditionalDamageMelee
 	{Level, 5}, // BaseHitPoints
 	{Strenght, 1, 3}, // AdditionalHitPoints
 	{Wits, 1, 2}, // BaseManaPoints
@@ -150,7 +152,7 @@ static void update_abilities() {
 		add_value(BalisticSkill, -10);
 	}
 	// Armor
-	add_value(Armor, player->abilities[Strenght] / 15);
+	add_value(Armor, player->get(AdditionalArmor));
 	add_value(Armor, player->wears[Torso].armor());
 	add_value(Armor, player->wears[Backward].armor());
 	add_value(Armor, player->wears[MeleeWeaponOffhand].armor());
@@ -166,9 +168,13 @@ static void update_abilities() {
 	add_value(Block, player->wears[Legs].block());
 	// Dodge bonuses
 	add_value(Dodge, player->wears[Torso].dodge());
-	add_value(Dodge, player->wears[Elbows].dodge());
 	add_value(Dodge, player->wears[Backward].dodge());
-	add_value(Armor, player->wears[MeleeWeaponOffhand].dodge());
+	add_value(Dodge, player->wears[MeleeWeaponOffhand].dodge());
+	add_value(Dodge, player->wears[Head].dodge());
+	add_value(Dodge, player->wears[Elbows].dodge());
+	add_value(Dodge, player->wears[Legs].dodge());
+	// Damage bonus
+	add_value(DamageMelee, player->get(AdditionalDamageMelee));
 }
 
 static void create_finish() {
