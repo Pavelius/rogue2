@@ -64,6 +64,12 @@ static itemn random_armors[] = {Robe, LeatherArmor, LeatherArmor, LeatherArmor, 
 static itemn random_weapon[] = {RandomBladesSmall, RandomBlades, RandomMartialWeapon, RandomMartialWeapon, RandomMissileWeapon};
 static itemn random_food[] = {Meat, Ration, Bread};
 
+static itemn gems_white[] = {RockCrystal, RockCrystal, RockCrystal, MilkyQuartz, MilkyQuartz, WhiteAgate, WhiteAgate, Moonstone, WhiteOpal};
+static itemn gems_yellow[] = {YellowJasper, YellowJasper, YellowJasper, Citrine, Citrine, YellowGarnet, YellowGarnet, GoldenTopaz, Heliodor};
+static itemn gems_blue[] = {Sodalite, Sodalite, Sodalite, LapisLazuli, LapisLazuli, Aquamarine, Aquamarine, Tanzanite, BlueSapphire};
+static itemn gems_green[] = {GreenAventurine, GreenAventurine, GreenAventurine, Malachite, Malachite, Peridot, Peridot, Jadeite, Emerald};
+static itemn gems_red[] = {RedJasper, RedJasper, RedJasper, Carnelian, Carnelian, RedGarnet, RedGarnet, RedSpinel, Ruby};
+
 itemi item_data[LastItem + 1] = {
 	{Backpack, 0, 0, "item-1", {}, {0, 2}},
 	{MeleeWeapon, 4 * lb, 2 * gp, "item6", {StunningHit, Large}, {0, 5, 7}, swords_powers}, // Staff
@@ -160,6 +166,48 @@ itemn random(itemn v) {
 	}
 }
 
+static itemn random_upgrade(itemn v) {
+	switch(v) {
+	case WhiteGem: return maprnd(gems_white);
+	case YellowGem: return maprnd(gems_yellow);
+	case BlueGem: return maprnd(gems_blue);
+	case GreenGem: return maprnd(gems_green);
+	case RedGem: return maprnd(gems_red);
+	default: return NoItem;
+	}
+}
+
+static itemn lower_upgrade(itemn v) {
+	switch(v) {
+	case WhiteGem: return gems_white[0];
+	case YellowGem: return gems_yellow[0];
+	case BlueGem: return gems_blue[0];
+	case GreenGem: return gems_green[0];
+	case RedGem: return gems_red[0];
+	default: return NoItem;
+	}
+}
+
+static itemn next_group(itemn v) {
+	switch(v) {
+	case WhiteGem: return YellowGem;
+	case YellowGem: return BlueGem;
+	case BlueGem: return GreenGem;
+	case GreenGem: return RedGem;
+	default: return NoItem;
+	}
+}
+
+static itemn prev_group(itemn v) {
+	switch(v) {
+	case YellowGem: return WhiteGem;
+	case BlueGem: return YellowGem;
+	case GreenGem: return BlueGem;
+	case RedGem: return GreenGem;
+	default: return NoItem;
+	}
+}
+
 static int get_power_count(const variant* source) {
 	if(!source)
 		return 0;
@@ -168,6 +216,23 @@ static int get_power_count(const variant* source) {
 			return i;
 	}
 	return 8;
+}
+
+itemn use_upgrade_skill(itemn type, int skill, int skill_next_group) {
+	itemn result = NoItem;
+	if(chance(skill)) {
+		if(chance(skill_next_group)) {
+			auto next = next_group(type);
+			if(next)
+				type = next;
+		}
+	} else {
+		if(!chance(skill_next_group))
+			type = prev_group(type);
+		else
+			return lower_upgrade(type);
+	}
+	return random_upgrade(type);
 }
 
 variant item::getpower() const {

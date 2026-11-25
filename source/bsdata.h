@@ -16,8 +16,6 @@
 
 #pragma once
 
-#define	FO(T,R) ((unsigned)&((T*)0)->R)
-
 template<typename T>
 struct bsdata {
 	static T elements[]; // External initialize

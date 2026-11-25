@@ -164,6 +164,7 @@ struct wearable {
 item citem(itemn v);
 
 itemn random(itemn v);
+itemn use_upgrade_skill(itemn type, int skill, int skill_next_group);
 
 item* choose_backpack();
 item* choose_backpack(wearn wear);
