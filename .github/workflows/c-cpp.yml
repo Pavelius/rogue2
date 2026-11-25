@@ -23,7 +23,7 @@ jobs:
 
       - name: Package
         shell: pwsh
-        run: Compress-Archive -Path rogue2/Release/rogue2.exe -DestinationPath rogue2-win32.zip
+        run: Compress-Archive -Path rogue2/source/Release/rogue2.exe -DestinationPath rogue2-win32.zip
         
       - name: Publish release
         env:
