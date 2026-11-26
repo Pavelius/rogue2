@@ -16,8 +16,8 @@ Download [`rogue2-win32.zip`](https://github.com/Pavelius/rogue2/releases/downlo
 | Home / Page Up | Move northwest / northeast |
 | End / Page Down | Move southwest / southeast |
 | I | Open inventory |
-| U | Open backpack |
-| P | View and pick up items on the ground |
+| U | Use item from backpack |
+| P | Pick up items on the ground |
 | D | Drop an item |
 | S | Shoot |
 | Ctrl+M | Open the in-game manual |

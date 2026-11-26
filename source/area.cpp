@@ -28,11 +28,11 @@
 unsigned short current_area;
 sitei* last_site;
 
-static unsigned char area_flags[mps * mps];
-tilen area_tiles[mps * mps];
-featuren area_features[mps * mps];
-unsigned char area_params[mps * mps];
-short unsigned movement_rate[mps * mps];
+static unsigned char	area_flags[mps * mps];
+tilen					area_tiles[mps * mps];
+featuren				area_features[mps * mps];
+unsigned char			area_params[mps * mps];
+short unsigned			movement_rate[mps * mps];
 
 static short unsigned stack[128 * 128];
 static short unsigned* push_counter;
@@ -77,10 +77,6 @@ static short unsigned getwave() {
 	if(pop_counter >= stack + sizeof(stack) / sizeof(stack[0]))
 		pop_counter = stack;
 	return index;
-}
-
-areai& area() {
-	return bsdata<areai>::elements[current_area];
 }
 
 bool is_wall(tilen v) {

@@ -155,6 +155,7 @@
     <None Include="..\help\combat.md" />
     <None Include="..\help\quest.md" />
     <None Include="..\help\sites.md" />
+    <None Include="..\README.md" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\LICENSE.txt" />

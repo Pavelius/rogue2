@@ -437,7 +437,7 @@ static void test_player() {
 	player->additem(i3);
 	player->update();
 	human = player;
-	player->experience += 1500;
+	player->experience += 950;
 }
 
 int main(int argc, char* argv[]) {

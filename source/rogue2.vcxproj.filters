@@ -388,6 +388,9 @@
     <None Include="..\help\sites.md">
       <Filter>Help</Filter>
     </None>
+    <None Include="..\README.md">
+      <Filter>Help</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\LICENSE.txt">

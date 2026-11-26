@@ -132,6 +132,7 @@ struct sitei : abox {
 	siten			type;
 	short unsigned	area_index;
 	bool			ispresent() const { return area_index == current_area; }
+	bool			ismarkable() const { return true; }
 };
 extern sitei* last_site;
 
@@ -162,6 +163,7 @@ void area_remove(short unsigned i, areafn f);
 void area_set(short unsigned i, areafn f);
 void area_set(short unsigned i, tilen v);
 void area_set(short unsigned i, featuren v);
+void area_set(const abox& m, areafn v);
 void area_set(const abox& m, featuren v);
 void area_set(const abox& m, fnarea v, int count);
 void area_set(const abox& m, tilen v);
@@ -175,6 +177,7 @@ void area_ver(short unsigned i, tilen v, short unsigned count);
 void block_creatures(const creature* ignore);
 void block_features(bool ignore_doors);
 void block_tiles(bool ignore_water);
+void block_tiles(tilen v);
 void block_zero();
 void clear_path();
 void create_site(siten type);

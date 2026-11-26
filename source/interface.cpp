@@ -1351,84 +1351,6 @@ static void execute_hotkey() {
 		bsdata<script>::elements[pn->data.value].proc(pn->data.counter);
 }
 
-static void presskey() {
-	for(auto& e : bsdata<hotkey>()) {
-		if(e.key && hot.key == e.key) {
-			execute(execute_hotkey, 0, 0, &e);
-			return;
-		}
-	}
-}
-
-static void paint_legends(point origin, int z) {
-	auto push_caret = caret;
-	auto push_fore = fore;
-	auto push_font = font;
-	font = metrics::font;
-	auto index = 1;
-	for(auto& e : area->rooms) {
-		if(!e.ismarkable())
-			continue;
-		caret.x = origin.x + center(e.rc).x * z + z / 2;
-		caret.y = origin.y + center(e.rc).y * z + z / 2;
-		fore = colors::white;
-		circlef(7);
-		fore = colors::black;
-		circle(7);
-		char temp[260]; stringbuilder sb(temp);
-		sb.add("%1i", index);
-		caret.y -= texth() / 2;
-		caret.x -= textw(temp) / 2;
-		text(temp);
-		index++;
-	}
-	font = push_font;
-	fore = push_fore;
-	caret = push_caret;
-}
-
-static void paint_legends_text(point origin) {
-	auto push_caret = caret;
-	auto push_fore = fore;
-	auto push_font = font;
-	font = metrics::font;
-	caret = origin;
-	auto index = 1;
-	char temp[260]; stringbuilder sb(temp);
-	for(auto& e : area->rooms) {
-		if(!e.ismarkable())
-			continue;
-		caret.x = origin.x;
-		sb.clear(); sb.add("%1i.", index);
-		text(temp);
-		caret.x += 18;
-		text(e.getnm());
-		caret.y += texth();
-		index++;
-	}
-	font = push_font;
-	fore = push_fore;
-	caret = push_caret;
-}
-
-static void show_area() {
-	if(game.level)
-		text_header(str("%1 (%Level %2i)", last_location->getnm(), game.level));
-	else
-		text_header(last_location->getnm());
-	small_header(str(getnm("GlobalMapPosition"), game.position.x, game.position.y));
-	const int z = 4;
-	point origin;
-	origin.x = 16;
-	origin.y = (height - area->mps * z) / 2;
-	paint_area(origin, z);
-	paint_minimap_creatures(origin, z, true);
-	paint_minimap_items(origin, z);
-	paint_legends(origin, z);
-	paint_legends_text({(short)(16 + area->mps * z + 16), origin.y});
-	paint_area_screen(origin, z);
-}
-
 static void right_border() {
 	pushrect push;
 	pushvalue push_fore(fore, colors::border);
@@ -1457,6 +1379,83 @@ static void show_charsheet() {
 }
 
 */
+
+static void paint_legends(point origin, int z) {
+	auto push_caret = caret;
+	auto push_fore = fore;
+	auto push_font = font;
+	font = metrics::font;
+	auto index = 1;
+	for(auto& e : bsdata<sitei>()) {
+		if(!e.ispresent())
+			continue;
+		if(!e.ismarkable())
+			continue;
+		caret.x = origin.x + e.center().x * z + z / 2;
+		caret.y = origin.y + e.center().y * z + z / 2;
+		fore = colors::white;
+		circlef(7);
+		fore = colors::black;
+		circle(7);
+		char temp[260]; stringbuilder sb(temp);
+		sb.add("%1i", index);
+		caret.y -= texth() / 2;
+		caret.x -= textw(temp) / 2;
+		text(temp);
+		index++;
+	}
+	font = push_font;
+	fore = push_fore;
+	caret = push_caret;
+}
+
+static void paint_legends_text(point origin) {
+	auto push_caret = caret;
+	auto push_fore = fore;
+	auto push_font = font;
+	font = metrics::font;
+	caret = origin;
+	auto index = 1;
+	char temp[260]; stringbuilder sb(temp);
+	for(auto& e : bsdata<sitei>()) {
+		if(!e.ismarkable())
+			continue;
+		caret.x = origin.x;
+		sb.clear(); sb.add("%1i.", index);
+		text(temp);
+		caret.x += 18;
+		text(getnm(e.type));
+		caret.y += texth();
+		index++;
+	}
+	font = push_font;
+	fore = push_fore;
+	caret = push_caret;
+}
+
+static void press_key_exit() {
+	if(hkey == KeyEscape)
+		execute(buttoncancel);
+}
+
+static void paint_area_map() {
+	/*if(game.level)
+		text_header(str("%1 (%Level %2i)", last_location->getnm(), game.level));
+	else
+		text_header(last_location->getnm());*/
+	// small_header(str(getnm("GlobalMapPosition"), game.position.x, game.position.y));
+	const int z = 4;
+	point origin;
+	origin.x = 16;
+	origin.y = (height - mps * z) / 2;
+	paint_area(origin, z);
+	paint_minimap_creatures(origin, z, true);
+	paint_minimap_items(origin, z);
+	paint_legends(origin, z);
+	paint_legends_text({(short)(16 + mps * z + 16), origin.y});
+	paint_area_screen(origin, z);
+	press_key_exit();
+}
 
 static void pause_keys() {
 	if(hkey == KeySpace || hkey == KeyEscape)
@@ -1519,8 +1518,7 @@ static void player_move_cmd() {
 }
 
 static void test_scene() {
-	indecies.select(player->index, 3, area_iswall, false);
-	choose_indecies("Test", false);
+	show_area_map();
 }
 
 void set_item_color(const item& it) {
@@ -1536,6 +1534,10 @@ void set_item_color(const item& it) {
 		fore = fore.mix(colors::form, 196);
 }
 
+static void turn_player() {
+	player->is(Mirrorred) ? player->remove(Mirrorred) : player->set(Mirrorred);
+}
+
 static void direction_keys() {
 	switch(hkey) {
 	case KeyUp: execute(player_move_cmd, North); break;
@@ -1546,7 +1548,7 @@ static void direction_keys() {
 	case KeyRight: execute(player_move_cmd, East); break;
 	case KeyPageDown: execute(player_move_cmd, SouthEast); break;
 	case KeyEnd: execute(player_move_cmd, SouthWest); break;
-	case 'T': player->is(Mirrorred) ? player->remove(Mirrorred) : player->set(Mirrorred); break;
+	case 'T': execute(turn_player); break;
 	default: break;
 	}
 }
@@ -1580,6 +1582,10 @@ void wait_all() {
 	sync_scene(play_game_animate, have_move_effects);
 }
 
+static void explore_all_area() {
+	area_set({0, 0, mps, mps}, Explored);
+}
+
 static void standart_keys() {
 	switch(hkey) {
 	case 'D': execute(open_drop_item); break;
@@ -1589,8 +1595,22 @@ static void standart_keys() {
 	case 'S': execute(player_shoot); break;
 	case Ctrl + 'M': execute(open_manual); break;
 	case Ctrl + 'T': execute(test_scene); break;
+	case Ctrl + 'E': execute(explore_all_area); break;
 	default: break;
 	}
+}
+
+static void show_game(fnevent proc) {
+	while(ismodal()) {
+		paint_status();
+		fillform();
+		proc();
+		domodal();
+	}
+}
+
+void show_area_map() {
+	show_game(paint_area_map);
 }
 
 void choose_player_move() {

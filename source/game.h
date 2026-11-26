@@ -80,6 +80,7 @@ void open_ground();
 void pass_minute();
 void paint_item_description(int index, long value, const char* format);
 void set_disabled_fore();
+void show_area_map();
 void show_message(const char* header, const char* subheader, const char* message, const char* cancel);
 void show_scene(fnevent proc, const char* header, const char* cancel);
 void skip_long_time();
