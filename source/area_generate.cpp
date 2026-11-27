@@ -3,9 +3,12 @@
 #include "bsdata.h"
 #include "direction.h"
 #include "draw.h"
+#include "draw_object.h"
 #include "item.h"
 #include "game.h"
 #include "rand.h"
+
+#define DEBUG_SHOW_SITE
 
 const int minimal_size = 10;
 
@@ -279,27 +282,8 @@ void create_site(siten type) {
 	last_site->area_index = current_area;
 	last_site->type = type;
 	create_content(*last_site, last_site->type);
-}
-
-void show_locations() {
-	pushrect push;
-	while(ismodal()) {
-		fore = colors::black;
-		rectf();
-		fore = colors::white;
-		const auto z = 6;
-		point pt = {20, 20};
-		for(auto& e : locations) {
-			caret.x = pt.x + e.x * z;
-			caret.y = pt.y + e.y * z;
-			width = e.w * z - 1;
-			height = e.h * z - 1;
-			rectf();
-		}
-		domodal();
-		switch(hkey) {
-		case KeyEscape: case KeyEnter: case KeySpace: breakmodal(0); break;
-		default: break;
-		}
-	}
+#ifdef DEBUG_SHOW_SITE
+	explore_all_area();
+	show_area_map();
+#endif
 }

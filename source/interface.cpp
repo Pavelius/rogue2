@@ -1582,7 +1582,7 @@ void wait_all() {
 	sync_scene(play_game_animate, have_move_effects);
 }
 
-static void explore_all_area() {
+void explore_all_area() {
 	area_set({0, 0, mps, mps}, Explored);
 }
 
