@@ -51,36 +51,6 @@ static abox random(abox e) {
 	return e;
 }
 
-static void add_location(abox p1) {
-	if(p1.maximum() < minimal_size * 2) {
-		locations.add(random(p1).resize(1, 1));
-		return;
-	}
-	auto size = p1.maximum();
-	auto m = size * xrand(30, 75) / 100;
-	if(m < minimal_size)
-		m = minimal_size;
-	if(size == p1.w) {
-		auto p2 = p1;
-		p2.x = p1.x + m;
-		p2.w = size - m;
-		p1.w = m;
-		add_location(p1);
-		add_location(p2);
-	} else {
-		auto p2 = p1;
-		p2.y = p1.y + m;
-		p2.h = size - m;
-		p1.h = m;
-		add_location(p1);
-		add_location(p2);
-	}
-}
-
-static void add_locations() {
-	add_location(crc);
-}
-
 static void place(featuren v, int chance) {
 	area_set(crc, v, chance);
 }
@@ -106,6 +76,32 @@ static void create_road(abox rc) {
 			rc.y = mps - 1;
 	}
 	area_set(rc, Rock);
+}
+
+static void create_overland_level(abox p1, int level) {
+	if(p1.maximum() < minimal_size * 2) {
+		locations.add(random(p1).resize(1, 1));
+		return;
+	}
+	auto size = p1.maximum();
+	auto m = size * xrand(30, 75) / 100;
+	if(m < minimal_size)
+		m = minimal_size;
+	if(size == p1.w) {
+		auto p2 = p1;
+		p2.x = p1.x + m;
+		p2.w = size - m;
+		p1.w = m;
+		create_overland_level(p1, level + 1);
+		create_overland_level(p2, level + 1);
+	} else {
+		auto p2 = p1;
+		p2.y = p1.y + m;
+		p2.h = size - m;
+		p1.h = m;
+		create_overland_level(p1, level + 1);
+		create_overland_level(p2, level + 1);
+	}
 }
 
 static void create_city_level(const abox& rc, int level) {
@@ -185,7 +181,7 @@ static void create(landscapen type) {
 		place(FootHill, 3);
 		place(FootMud, 2);
 		place(Tree, 2);
-		create_city_level({0, 0, mps - 1, mps - 1}, 1);
+		create_city_level({0, 0, mps - 1, mps - 1}, 0);
 		break;
 	default:
 		break;
@@ -202,7 +198,6 @@ void area_generate(landscapen type) {
 	bsdata<areai>::elements[current_area].type = type;
 	create(type);
 	locations.clear();
-	add_locations();
 	locations.sort(compare_location);
 	current_box_index = 0;
 }
