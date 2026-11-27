@@ -64,7 +64,7 @@ enum siten : unsigned char {
 	Blacksmith, Temple, Barracs, Tavern,
 	Armory, WeaponSmith, Shop, PeasantHouse,
 	HerdAnimals,
-	RandomHouse,
+	RandomHouse, RandomBuilding,
 };
 enum shapen : unsigned char {
 	ShapeCave,

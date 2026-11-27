@@ -18,10 +18,12 @@ static abox crc = {0, 0, mps, mps};
 static directionn strait_direction[] = {North, South, West, East};
 
 static siten random_house[] = {PeasantHouse};
+static siten random_building[] = {WeaponSmith, Blacksmith, Temple, Barracs, Tavern, Armory, WeaponSmith, Shop};
 
 siten random(siten v) {
 	switch(v) {
 	case RandomHouse: return maprnd(random_house);
+	case RandomBuilding: return maprnd(random_building);
 	default: return v;
 	}
 }
@@ -153,7 +155,13 @@ static void create_city_level(const abox& rc = {0, 0, mps - 1, mps - 1}, int lev
 	}
 }
 
-static void create(landscapen type) {
+static int compare_location(const void* v1, const void* v2) {
+	auto p1 = (abox*)v1;
+	auto p2 = (abox*)v2;
+	return p2->area() - p1->area();
+}
+
+static void area_landscape(landscapen type) {
 	switch(type) {
 	case Plains:
 		place(Grass);
@@ -178,24 +186,20 @@ static void create(landscapen type) {
 		place(FootMud, 2);
 		place(Tree, 2);
 		create_city_level();
+		locations.sort(compare_location);
+		create_site(RandomBuilding, xrand(3, 5));
+		create_site(RandomHouse, 20);
 		break;
 	default:
 		break;
 	}
 }
 
-static int compare_location(const void* v1, const void* v2) {
-	auto p1 = (abox*)v1;
-	auto p2 = (abox*)v2;
-	return p2->area() - p1->area();
-}
-
 void area_generate(landscapen type) {
 	bsdata<areai>::elements[current_area].type = type;
 	locations.clear();
 	current_box_index = 0;
-	create(type);
-	locations.sort(compare_location);
+	area_landscape(type);
 }
 
 static void set_herbs(short unsigned i) {

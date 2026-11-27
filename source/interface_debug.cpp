@@ -70,8 +70,9 @@ static void choose_images() {
 	an.add(ResItems, "Items");
 	an.add(ResMonsters, "Monsters");
 	an.add(ResDecals, "Decals");
-	auto n = (resid)choose_menu(getnm(Cancel), 0, 140, 160);
+	auto n = (resid)choose_menu(getnm(Cancel), 0, 140, 100);
 	switch(n) {
+	case 0: break;
 	case ResMonsters: show_images(gres(n), {64, 96}, 80); break;
 	default: show_images(gres(n), {64, 48}); break;
 	}
