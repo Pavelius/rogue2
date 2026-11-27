@@ -446,14 +446,14 @@ int main(int argc, char* argv[]) {
 	main_util();
 	test_array();
 #endif
-	xrand_seed = srand_time();
-	// srand(201902);
+	//xrand_origin_seed = srand_time();
+	xrand_origin_seed = 1795797820;
+	xrand_seed = xrand_origin_seed;
 	area_clear();
 	initialize_gui();
 	area_generate(Village);
 	test_player();
-	for(auto i = 0; i < 20; i++)
-		create_site(random(RandomHouse));
+	create_site(RandomHouse, 20);
 	next_scene(play_game);
 	start_scene();
 	return 0;

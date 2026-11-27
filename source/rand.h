@@ -18,7 +18,7 @@
 
 #define maprnd(t) t[xrand()%(sizeof(t)/sizeof(t[0]))]
 
-extern unsigned int xrand_seed;
+extern unsigned int xrand_seed, xrand_origin_seed;
 
 int xrand();
 

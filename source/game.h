@@ -71,6 +71,7 @@ inline sprite* gres(resid id) { return resid_data[id]; }
 void add_answer_items(short unsigned area_index, short unsigned index, fnvisible filter);
 void choose_player_move();
 long choose_menu(const char* cancel, const char* footer = 0, int menu_width = 420, int menu_height = 280);
+void debug_keys();
 void end_game();
 void initialize_gui();
 void open_backpack();

@@ -17,6 +17,7 @@
 #include "rand.h"
 
 unsigned int xrand_seed = 1;
+unsigned int xrand_origin_seed;
 
 int xrand() {
     xrand_seed ^= xrand_seed << 13;

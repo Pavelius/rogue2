@@ -8,7 +8,7 @@
 #include "game.h"
 #include "rand.h"
 
-#define DEBUG_SHOW_SITE
+// #define DEBUG_SHOW_SITE
 
 const int minimal_size = 10;
 
@@ -19,14 +19,9 @@ static directionn strait_direction[] = {North, South, West, East};
 
 static siten random_house[] = {PeasantHouse};
 
-template<unsigned N>
-static siten random(siten(&source)[N]) {
-	return random(source[xrand(N)]);
-}
-
 siten random(siten v) {
 	switch(v) {
-	case RandomHouse: return random(random_house);
+	case RandomHouse: return maprnd(random_house);
 	default: return v;
 	}
 }
@@ -78,7 +73,7 @@ static void create_road(abox rc) {
 	area_set(rc, Rock);
 }
 
-static void create_overland_level(abox p1, int level) {
+static void create_overland_level(abox p1 = {0, 0, mps - 1, mps - 1}, int level = 0) {
 	if(p1.maximum() < minimal_size * 2) {
 		locations.add(random(p1).resize(1, 1));
 		return;
@@ -104,7 +99,7 @@ static void create_overland_level(abox p1, int level) {
 	}
 }
 
-static void create_city_level(const abox& rc, int level) {
+static void create_city_level(const abox& rc = {0, 0, mps - 1, mps - 1}, int level = 0) {
 	const int min_building_size = 5;
 	const int max_building_size = 8;
 	auto w = rc.w;
@@ -146,7 +141,7 @@ static void create_city_level(const abox& rc, int level) {
 		create_city_level({rc.x, rc.y, w1 - rd - 1, h}, level + 1);
 		create_city_level({rc.x + w1, rc.y, w - w1, h}, level + 1);
 		if(rd)
-			create_road({rc.x + w1 - rd, rc.y, rd, h});
+			create_road({rc.x + w1 - rd, rc.y, rd, h + 1});
 	} else {
 		auto h1 = (h * m) / 100; // vertial
 		if(h1 < min_building_size)
@@ -154,7 +149,7 @@ static void create_city_level(const abox& rc, int level) {
 		create_city_level({rc.x, rc.y, w, h1 - rd - 1}, level + 1);
 		create_city_level({rc.x, rc.y + h1, w, h - h1}, level + 1);
 		if(rd)
-			create_road({rc.x, rc.y + h1 - rd, w, rd});
+			create_road({rc.x, rc.y + h1 - rd, w + 1, rd});
 	}
 }
 
@@ -175,13 +170,14 @@ static void create(landscapen type) {
 		place(Grass);
 		place(FootHill, 3);
 		place(Tree, 20);
+		create_overland_level();
 		break;
 	case Village:
 		place(Grass);
 		place(FootHill, 3);
 		place(FootMud, 2);
 		place(Tree, 2);
-		create_city_level({0, 0, mps - 1, mps - 1}, 0);
+		create_city_level();
 		break;
 	default:
 		break;
@@ -196,10 +192,10 @@ static int compare_location(const void* v1, const void* v2) {
 
 void area_generate(landscapen type) {
 	bsdata<areai>::elements[current_area].type = type;
-	create(type);
 	locations.clear();
-	locations.sort(compare_location);
 	current_box_index = 0;
+	create(type);
+	locations.sort(compare_location);
 }
 
 static void set_herbs(short unsigned i) {
@@ -272,6 +268,7 @@ static void create_content(const abox& rc, siten v) {
 void create_site(siten type) {
 	if(current_box_index >= locations.count)
 		return; // Overflow locations.
+	type = random(type);
 	last_site = bsdata<sitei>::add();
 	last_site->set(locations.data[current_box_index++]);
 	last_site->area_index = current_area;
@@ -281,4 +278,9 @@ void create_site(siten type) {
 	explore_all_area();
 	show_area_map();
 #endif
+}
+
+void create_site(siten type, int count) {
+	for(int i = 0; i < count; i++)
+		create_site(type);
 }

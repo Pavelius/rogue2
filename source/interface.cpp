@@ -34,6 +34,7 @@
 #include "manual.h"
 #include "print.h"
 #include "pushvalue.h"
+#include "rand.h"
 #include "screenshoot.h"
 #include "timer.h"
 
@@ -92,7 +93,7 @@ static tilei feature_frames[] = {
 	{10, {45, 4}, {49, 3}, color(35, 79, 31)}, // DeadTree
 	{10, {97, 3}, {}}, // ThornBush movedifficult(200)
 	{5, {14, 1}, {}}, // FootMud movedifficult(300)
-	{5, {15, 1}, {}}, // FootHill movedifficult(200)
+	{5, {15, 1}, {}, color(144, 182, 52)}, // FootHill movedifficult(200)
 	{10, {16, 2}, {}}, // Grave
 	{10, {43, 2}, {}}, // Statue
 	{5, {18, 1}, {}}, // HiveHole
@@ -1443,7 +1444,7 @@ static void paint_area_map() {
 		text_header(str("%1 (%Level %2i)", last_location->getnm(), game.level));
 	else
 		text_header(last_location->getnm());*/
-	// small_header(str(getnm("GlobalMapPosition"), game.position.x, game.position.y));
+		// small_header(str(getnm("GlobalMapPosition"), game.position.x, game.position.y));
 	const int z = 4;
 	point origin;
 	origin.x = 16;
@@ -1624,6 +1625,7 @@ void choose_player_move() {
 		paint_message(console_text);
 		direction_keys();
 		standart_keys();
+		debug_keys();
 		domodal();
 		update_message();
 		check_end_turn();
@@ -1700,7 +1702,11 @@ void initialize_gui() {
 	metrics::padding = 4;
 	camera_initialize();
 	sys_create_window(window_width, window_height);
+#ifdef _DEBUG
+	sys_caption(str("%1 seed %2i", getnm(ApplicationTitle), xrand_origin_seed));
+#else
 	sys_caption(getnm(ApplicationTitle));
+#endif // _DEBUG
 	camera_set_screen(478, 376);
 }
 

@@ -181,6 +181,7 @@ void block_tiles(tilen v);
 void block_zero();
 void clear_path();
 void create_site(siten type);
+void create_site(siten type, int count);
 void explore_all_area();
 bool is_trap(featuren v);
 bool is_free(featuren v, bool ignore_doors);
