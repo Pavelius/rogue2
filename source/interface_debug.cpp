@@ -1,3 +1,4 @@
+#include "answers.h"
 #include "draw.h"
 #include "game.h"
 
@@ -8,7 +9,7 @@ static void toggle(bool& value, unsigned key) {
 		value = !value;
 }
 
-static void show_images(sprite* ps, point size) {
+static void show_images(sprite* ps, point size, int pos_y = -1000) {
 	if(!ps)
 		return;
 	pushrect push;
@@ -21,7 +22,7 @@ static void show_images(sprite* ps, point size) {
 			current = maximum - 1;
 		if(current < 0)
 			current = 0;
-		if(current > origin + per_page * per_line)
+		if(current >= origin + per_page * per_line)
 			origin = (current / per_line - (per_page - 1)) * per_line;
 		if(current < origin)
 			origin = (current / per_line) * per_line;
@@ -37,7 +38,11 @@ static void show_images(sprite* ps, point size) {
 				height = size.y - 2;
 				if(show_grid)
 					rectb();
-				image(caret.x + width / 2, caret.y + height / 2, ps, index, 0);
+				auto px = caret.x + width / 2;
+				auto py = caret.y + height / 2;
+				if(pos_y != -1000)
+					py = caret.y + pos_y;
+				image(px, py, ps, index, 0);
 				if(index == current) {
 					pushfore push(colors::white);
 					setoffset(1, 1);
@@ -45,6 +50,8 @@ static void show_images(sprite* ps, point size) {
 				}
 			}
 		}
+		caret = {4, canvas->height - texth() - 4};
+		text(str("%1i of %2i", current, maximum));
 		domodal();
 		toggle(show_grid, 'G');
 		switch(hkey) {
@@ -58,14 +65,21 @@ static void show_images(sprite* ps, point size) {
 	}
 }
 
-static void images_command() {
-	auto id = (resid)hparam;
-	show_images(gres(id), {64, 64});
+static void choose_images() {
+	an.add(ResFeatures, "Features");
+	an.add(ResItems, "Items");
+	an.add(ResMonsters, "Monsters");
+	an.add(ResDecals, "Decals");
+	auto n = (resid)choose_menu(getnm(Cancel), 0, 140, 160);
+	switch(n) {
+	case ResMonsters: show_images(gres(n), {64, 96}, 80); break;
+	default: show_images(gres(n), {64, 48}); break;
+	}
 }
 
 void debug_keys() {
 	switch(hkey) {
-	case Ctrl + 'F': execute(images_command, ResFeatures); break;
+	case Ctrl + 'I': execute(choose_images); break;
 	default: break;
 	}
 }

@@ -446,8 +446,8 @@ int main(int argc, char* argv[]) {
 	main_util();
 	test_array();
 #endif
-	//xrand_origin_seed = srand_time();
-	xrand_origin_seed = 1795797820;
+	xrand_origin_seed = srand_time();
+	// xrand_origin_seed = 1795797820;
 	xrand_seed = xrand_origin_seed;
 	area_clear();
 	initialize_gui();
