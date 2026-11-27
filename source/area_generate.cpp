@@ -1,5 +1,6 @@
 #include "adat.h"
 #include "area.h"
+#include "creature.h"
 #include "bsdata.h"
 #include "direction.h"
 #include "draw.h"
@@ -188,7 +189,7 @@ static void area_landscape(landscapen type) {
 		create_city_level();
 		locations.sort(compare_location);
 		create_site(RandomBuilding, xrand(3, 5));
-		create_site(RandomHouse, 20);
+		create_site(RandomHouse, 25);
 		break;
 	default:
 		break;
@@ -260,6 +261,19 @@ static void create_content(const abox& rc, siten v) {
 	case Shop:
 		place_house(rc);
 		area_set(rc.resize(1, 1), RandomFood, xrand(3, 12));
+		break;
+	case Barracs:
+		place_house(rc);
+		break;
+	case Temple:
+		place_house(rc);
+		area_set(rc.center(), AltarGood);
+		create_creature(rc.center(), PriestOfGod);
+		break;
+	case Blacksmith:
+		place_house(rc);
+		area_set(rc.center(), AltarGood);
+		create_creature(rc.center(), DwarfSmith);
 		break;
 	case PeasantHouse:
 		place_house(rc);

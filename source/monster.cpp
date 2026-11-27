@@ -86,6 +86,8 @@ static monsteri monsters[] = {
 	{1, Rat, 5, 30, 3, BloodyRemains, "3"}, // Rat
 	{1, Skeleton, 20, 20, 10, Bones, "8", {Armor, Block, Spear}}, // Skeleton
 	{2, Zombie, 30, 10, 8, Bones, "16", {Dagger}}, // Zombie
+	{3, Human, 25, 10, 40, BloodyRemains, "307", {Staff}}, // Priest of God
+	{3, Dwarf, 35, 10, 25, BloodyRemains, "331", {WarHammer, Metallurgy, Metallurgy}}, // Dwarf Smith
 };
 static_assert(lenghtof(monsters) == (LastMonster + 1), "Invalid monsters count");
 

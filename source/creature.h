@@ -64,8 +64,9 @@ enum monstern : unsigned char {
 	GiantAnt, GiantAntWarrior, GiantAntQueen,
 	Rabbit, RabbitFemale, Racoon, Rat,
 	Skeleton, Zombie,
+	PriestOfGod, DwarfSmith,
 	FirstRace = Human, LastRace = Elf,
-	FirstMonster = Goblin, LastMonster = Zombie,
+	FirstMonster = Goblin, LastMonster = DwarfSmith,
 };
 enum namen : unsigned char {
 	NoName = 0xFF

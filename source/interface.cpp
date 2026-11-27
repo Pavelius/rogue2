@@ -1390,6 +1390,8 @@ static void paint_legends(point origin, int z) {
 	for(auto& e : bsdata<sitei>()) {
 		if(!e.ispresent())
 			continue;
+		if(!area_is(e.center(), Explored))
+			continue;
 		if(!e.ismarkable())
 			continue;
 		caret.x = origin.x + e.center().x * z + z / 2;
@@ -1420,6 +1422,8 @@ static void paint_legends_text(point origin) {
 	char temp[260]; stringbuilder sb(temp);
 	for(auto& e : bsdata<sitei>()) {
 		if(!e.ismarkable())
+			continue;
+		if(!area_is(e.center(), Explored))
 			continue;
 		caret.x = origin.x;
 		sb.clear(); sb.add("%1i.", index);
@@ -1594,6 +1598,7 @@ static void standart_keys() {
 	case 'P': execute(open_ground); break;
 	case 'U': execute(open_backpack); break;
 	case 'S': execute(player_shoot); break;
+	case 'M': execute(show_area_map); break;
 	case Ctrl + 'M': execute(open_manual); break;
 	case Ctrl + 'T': execute(test_scene); break;
 	case Ctrl + 'E': execute(explore_all_area); break;

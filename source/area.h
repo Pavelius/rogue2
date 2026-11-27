@@ -132,7 +132,7 @@ struct sitei : abox {
 	siten			type;
 	short unsigned	area_index;
 	bool			ispresent() const { return area_index == current_area; }
-	bool			ismarkable() const { return true; }
+	bool			ismarkable() const { return type != PeasantHouse; }
 };
 extern sitei* last_site;
 
