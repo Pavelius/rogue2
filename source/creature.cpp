@@ -45,6 +45,14 @@ char levelup_skills[LastSkill + 1];
 static collection allowed_spells;
 static short unsigned compare_index;
 
+static monstern random(monstern v) {
+	static monstern random_peasant[] = {PeasantMale, PeasantMale, PeasantFemale};
+	switch(v) {
+	case RandomPeasant: return maprnd(random_peasant);
+	default: return v;
+	}
+}
+
 abilityfni ability_formula[LastAbilityFormula + 1] = {
 	{Strenght, 1, 20}, // AdditionalArmor
 	{Strenght, 1, 15}, // AdditionalDamageMelee
@@ -257,6 +265,7 @@ static bool is_free_no_creature(short unsigned index) {
 }
 
 void create_creature(short unsigned index_position, monstern type) {
+	type = random(type);
 	index_position = area_free(index_position, is_free_no_creature);
 	if(index_position == 0xFFFF) {
 		player = 0;
@@ -661,6 +670,30 @@ static bool player_interact(short unsigned i, directionn d) {
 	return true;
 }
 
+static bool free_move_owner(short unsigned i1) {
+	if(player->isowner()) {
+		auto i = player->site_id;
+		auto p = find_site(i1);
+		if(!p || getbsi(p) != i)
+			return false;
+	}
+	return true;
+}
+
+static directionn get_player_move() {
+	directionn directions[] = {North, South, West, East};
+	zshuffle(directions, lenghtof(directions));
+	for(auto d : directions) {
+		auto i1 = to(player->index, d);
+		if(i1 == Blocked || !is_free(i1))
+			continue;
+		if(!free_move_owner(i1))
+			continue;
+		return d;
+	}
+	return Center;
+}
+
 bool player_move(directionn d) {
 	player->look(d);
 	auto i1 = to(player->index, d);
@@ -936,16 +969,13 @@ void check_level_up() {
 
 static void random_walk() {
 	if(chance(40)) {
-		auto new_index = maprnd(all_around_straight);
-		if(player->isowner()) {
-			auto i = player->site_id;
-			auto p = find_site(to(player->index, new_index));
-			if(!p || getbsi(p) != i)
-				return; // Owner of place can't leave place
+		auto d = get_player_move();
+		if(d != Center) {
+			player_move(d);
+			return;
 		}
-		player_move(new_index);
-	} else
-		player->wait(xrand(100, 300)); // All NPC creatures must move not in same time.
+	}
+	player->wait(xrand(100, 300)); // All NPC creatures must move not in same time.
 }
 
 void make_move() {

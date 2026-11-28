@@ -63,8 +63,16 @@ static void all_next(fnevent proc) {
 
 static monstern random_encounter(siten v) {
 	switch(v) {
-	case PeasantHouse: return Goblin;
+	case PeasantHouse: return RandomPeasant;
+	case Blacksmith: return RandomPeasant;
 	default: return (monstern)0;
+	}
+}
+
+static bool is_hostile(monstern v) {
+	switch(v) {
+	case RandomPeasant: return false;
+	default: return v < FirstNpc;
 	}
 }
 
@@ -83,7 +91,7 @@ static void check_monster_encounters() {
 			continue; // If any monster present - not spawn any creatures
 		auto count = xrand(2, 4);
 		for(auto i = 0; i < count; i++)
-			create_monster(center, monster);
+			create_monster(center, monster, is_hostile(monster));
 	}
 }
 

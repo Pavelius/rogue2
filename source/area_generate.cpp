@@ -198,9 +198,10 @@ static void set_owner() {
 }
 
 static void create_content(const abox& rc, siten v) {
+	auto center = rc.center();
 	switch(v) {
 	case MonstersLair:
-		area_set(rc.center(), Statue);
+		area_set(center, Statue);
 		break;
 	case HerbsPlace:
 		area_set(rc, set_herbs, xrand(2, 4));
@@ -230,13 +231,17 @@ static void create_content(const abox& rc, siten v) {
 		break;
 	case Temple:
 		place_house(rc);
-		area_set(rc.center(), AltarGood);
-		create_creature(rc.center(), PriestOfGod);
+		if(chance(70))
+			area_set(center, AltarGood);
+		else
+			area_set(center, Statue);
+		create_creature(center, PriestOfGod);
+		set_owner();
 		break;
 	case Blacksmith:
 		place_house(rc);
-		area_set(rc.center(), Furnance);
-		create_creature(rc.center(), DwarfSmith);
+		area_set(center, Furnance);
+		create_creature(center, DwarfSmith);
 		set_owner();
 		break;
 	case PeasantHouse:
