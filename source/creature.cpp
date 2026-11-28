@@ -265,13 +265,14 @@ static bool is_free_no_creature(short unsigned index) {
 }
 
 void create_creature(short unsigned index_position, monstern type) {
+	player = 0;
 	type = random(type);
 	index_position = area_free(index_position, is_free_no_creature);
-	if(index_position == 0xFFFF) {
-		player = 0;
+	if(index_position == 0xFFFF)
 		return;
-	}
 	player = bsdata<creature>::addz();
+	if(!player)
+		return;
 	player->clear();
 	player->type = type;
 	player->render = RenderCreature;

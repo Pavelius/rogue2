@@ -39,7 +39,7 @@ struct adat {
 	constexpr explicit operator bool() const { return count != 0; }
 	constexpr size_t lenght() const { return count; }
 	constexpr size_t maximum() const { return count_max; }
-	T* add() { if(count < count_max) return data + (count++); return data; }
+	T* add() { if(count < count_max) return data + (count++); return 0; }
 	T* addz() { for(auto& e : *this) if(!e) return &e; return add(); }
 	constexpr T* begin() { return data; }
 	constexpr T* end() { return data + count; }
