@@ -943,6 +943,15 @@ static void paint_dialog_message(int window_width) {
 	paint_message_answers(window_width);
 }
 
+static void paint_header(const char* header) {
+	if(!header)
+		return;
+	pushfont push(gres(Font2));
+	pushfore push_fore(colors::header);
+	texta(header, AlignCenter);
+	caret.y += texth() + metrics::padding;
+}
+
 static void paint_window(const char* header, int window_width, int window_height) {
 	caret.y = 32;
 	caret.x = (getwidth() - window_width - panel_width) / 2;
@@ -951,12 +960,7 @@ static void paint_window(const char* header, int window_width, int window_height
 	strokeout(strokeborder, metrics::padding);
 	answer_end = caret;
 	answer_end.y = caret.y + height - texth() - metrics::padding;
-	if(header) {
-		pushfont push(gres(Font2));
-		pushfore push_fore(colors::header);
-		texta(header, AlignCenter);
-		caret.y += texth() + metrics::padding;
-	}
+	paint_header(header);
 }
 
 long choose_answers() {
@@ -1444,11 +1448,11 @@ static void press_key_exit() {
 }
 
 static void paint_area_map() {
-	/*if(game.level)
-		text_header(str("%1 (%Level %2i)", last_location->getnm(), game.level));
+	if(area->level)
+		paint_header(str("%1 (%Level %2i)", getnm(area->type), area->level));
 	else
-		text_header(last_location->getnm());*/
-		// small_header(str(getnm("GlobalMapPosition"), game.position.x, game.position.y));
+		paint_header(getnm(area->type));
+	// small_header(str(getnm("GlobalMapPosition"), game.position.x, game.position.y));
 	const int z = 4;
 	point origin;
 	origin.x = 16;

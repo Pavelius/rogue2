@@ -131,7 +131,7 @@ struct sitei : abox {
 extern sitei* last_site;
 struct areai {
 	short unsigned	index; // Position on world map
-	landscapen		type;
+	landscapen		type; // Original landscape type of area
 	unsigned char	level; // Current level of dungeon. 0 is overland.
 	unsigned char	params[mps * mps];
 	tilen			tiles[mps * mps];
@@ -139,6 +139,7 @@ struct areai {
 	unsigned char	flags[mps * mps];
 	constexpr explicit operator bool() const { return index != 0xFFFF; }
 	void clear();
+	bool isoverland() const { return level == 0; }
 };
 extern areai* area;
 
