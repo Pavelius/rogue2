@@ -1292,7 +1292,7 @@ creature* item::owner() const {
 	if(p)
 		return p;
 	auto pn = bsdata<itemlay>::get(this);
-	if(pn->area_index == 0xFFFF)
+	if(pn && pn->area_index == 0xFFFF)
 		return bsdata<creature>::elements + pn->index;
 	return 0;
 }
