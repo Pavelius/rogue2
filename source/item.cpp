@@ -146,6 +146,10 @@ itemi item_data[LastItem + 1] = {
 	{Backpack, 1 * lb, 10 * gp, "item405"},
 	{Backpack, 1 * lb, 10 * gp, "item405"},
 	{Backpack, 1 * lb, 10 * gp, "item403"}, // RedJasper
+	{Backpack, 1 * lb, 10 * gp, "item403"},
+	{Backpack, 1 * lb, 10 * gp, "item403"},
+	{Backpack, 1 * lb, 10 * gp, "item403"},
+	{Backpack, 1 * lb, 10 * gp, "item403"},
 	{Backpack, 1 * lb, 10 * gp, "items37"}, // CP
 	{Backpack, 1 * lb, 10 * gp, "items37"},
 	{Backpack, 1 * lb, 10 * gp, "items37"},
