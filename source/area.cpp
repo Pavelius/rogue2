@@ -29,9 +29,7 @@ unsigned short current_area;
 areai* area;
 sitei* last_site;
 
-static unsigned char	area_flags[mps * mps];
-short unsigned			movement_rate[mps * mps];
-
+short unsigned movement_rate[mps * mps];
 static short unsigned stack[128 * 128];
 static short unsigned* push_counter;
 static short unsigned* pop_counter;
@@ -132,7 +130,7 @@ void area_change(tilen t1, tilen t2) {
 void areai::clear() {
 	memset(tiles, 0, sizeof(tiles));
 	memset(features, 0, sizeof(features));
-	memset(area_flags, 0, sizeof(area_flags));
+	memset(flags, 0, sizeof(flags));
 	for(auto& e : params)
 		e = (unsigned char)(xrand() % 256);
 }
@@ -210,7 +208,7 @@ directionn move_greater(short unsigned start, short unsigned goal) {
 }
 
 bool area_is(short unsigned i, areafn f) {
-	return (area_flags[i] & (1 << f)) != 0;
+	return (area->flags[i] & (1 << f)) != 0;
 }
 
 bool area_iswall(short unsigned i) {
@@ -318,11 +316,11 @@ void area_set(const abox& m, featuren v, int chance) {
 }
 
 void area_set(short unsigned i, areafn v) {
-	area_flags[i] |= 1 << v;
+	area->flags[i] |= 1 << v;
 }
 
 void area_remove(short unsigned i, areafn v) {
-	area_flags[i] &= ~(1 << v);
+	area->flags[i] &= ~(1 << v);
 }
 
 void area_block(short unsigned m, unsigned short v) {

@@ -77,7 +77,6 @@ enum itemn : unsigned char;
 const short mps = 64;
 
 extern unsigned short current_area;
-
 extern unsigned short movement_rate[mps * mps];
 
 inline short unsigned m2i(unsigned char x, unsigned char y) { return y * mps + x; }
@@ -137,6 +136,7 @@ struct areai {
 	unsigned char	params[mps * mps];
 	tilen			tiles[mps * mps];
 	featuren		features[mps * mps];
+	unsigned char	flags[mps * mps];
 	constexpr explicit operator bool() const { return index != 0xFFFF; }
 	void clear();
 };
