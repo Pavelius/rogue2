@@ -935,9 +935,16 @@ void check_level_up() {
 }
 
 static void random_walk() {
-	if(chance(40))
-		player_move(maprnd(all_around_straight));
-	else
+	if(chance(40)) {
+		auto new_index = maprnd(all_around_straight);
+		if(player->isowner()) {
+			auto i = player->site_id;
+			auto p = find_site(to(player->index, new_index));
+			if(!p || getbsi(p) != i)
+				return; // Owner of place can't leave place
+		}
+		player_move(new_index);
+	} else
 		player->wait(xrand(100, 300));
 }
 
