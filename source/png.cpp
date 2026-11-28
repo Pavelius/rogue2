@@ -466,12 +466,13 @@ static struct png_bitmap_plugin : public surface::plugin {
 		//auto compression = input[26];
 		//auto filter = input[27];
 		auto interlace = input[28];
+		auto input_end = input + input_size;
 		input += 33;
 		// retrevie size
 		const unsigned char* single_input;
 		color transparent;
 		bool use_transparent = false;
-		int size_compressed = read_idat(0, input, input + input_size, &single_input, transparent, use_transparent, pallette);
+		int size_compressed = read_idat(0, input, input_end, &single_input, transparent, use_transparent, pallette);
 		if(!size_compressed)
 			return false;
 		// decompress image data
@@ -482,7 +483,7 @@ static struct png_bitmap_plugin : public surface::plugin {
 				return false;
 		} else {
 			unsigned char* ptemp = new unsigned char[size_compressed];
-			if(!read_idat(ptemp, input, input + input_size, 0, transparent, use_transparent, pallette)) {
+			if(!read_idat(ptemp, input, input_end, 0, transparent, use_transparent, pallette)) {
 				delete[] ptemp;
 				return false;
 			}
