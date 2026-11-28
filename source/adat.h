@@ -16,6 +16,10 @@
 
 #pragma once
 
+#ifdef __GNUC__
+using size_t = decltype(sizeof(0));
+#endif
+
 typedef int(*fncompare)(const void*, const void*);
 
 extern "C" void* memmove(void* destination, const void* source, size_t size) noexcept(true);
