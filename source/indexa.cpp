@@ -46,7 +46,7 @@ void indexa::select(short unsigned i, int range) {
 			if(x < 0 || x >= mps)
 				continue;
 			auto i = y * mps + x;
-			if(!area_features[i])
+			if(!area->features[i])
 				continue;
 			if(pb < pe)
 				*pb++ = i;

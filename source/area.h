@@ -78,7 +78,6 @@ const short mps = 64;
 
 extern unsigned short current_area;
 
-extern featuren area_features[mps * mps];
 extern unsigned short movement_rate[mps * mps];
 
 inline short unsigned m2i(unsigned char x, unsigned char y) { return y * mps + x; }

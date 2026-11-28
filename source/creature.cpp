@@ -249,7 +249,7 @@ static void random_name() {
 static bool is_free_no_creature(short unsigned index) {
 	if(!is_free(area->tiles[index], false))
 		return false;
-	if(!is_free(area_features[index], false))
+	if(!is_free(area->features[index], false))
 		return false;
 	if(find_creature(index))
 		return false;
@@ -312,16 +312,16 @@ creature* find_creature(short unsigned i) {
 bool is_free(short unsigned i) {
 	if(!is_free(area->tiles[i], player->is(Fly)))
 		return false;
-	if(!is_free(area_features[i], false))
+	if(!is_free(area->features[i], false))
 		return false;
 	return true;
 }
 
 bool use_area(short unsigned i) {
-	auto f = area_features[i];
+	auto f = area->features[i];
 	switch(f) {
 	case Door:
-		area_features[i] = OpenedDoor;
+		area->features[i] = OpenedDoor;
 		break;
 	case LockedDoor:
 		break;
@@ -364,7 +364,7 @@ static void pay_action() {
 static void pay_movement() {
 	auto cost = 150 - player->get(Dexterity);
 	if(!player->is(Fly))
-		cost = cost * get_move_cost(area_features[player->index]) / 100;
+		cost = cost * get_move_cost(area->features[player->index]) / 100;
 	if(player->is(FastMove))
 		cost /= 2;
 	else if(player->is(SlowMove))
@@ -685,7 +685,7 @@ static bool is_free_light_set(short unsigned i) {
 		return false;
 	if(!is_free(area->tiles[i], true))
 		return false;
-	if(!is_free(area_features[i], false))
+	if(!is_free(area->features[i], false))
 		return false;
 	return true;
 }
@@ -778,7 +778,7 @@ static void detect_hidden_objects() {
 	for(auto i : source) {
 		if(!player->roll(Alertness))
 			continue;
-		auto f = area_features[i];
+		auto f = area->features[i];
 		if(f == HiddenDoor)
 			player->act(PlayerFoundSecretDoor);
 		else if(is_trap(f))

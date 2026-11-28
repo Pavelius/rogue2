@@ -347,7 +347,7 @@ static void paint_items() {
 			continue;
 		if(!area_is(p->index, Explored))
 			continue;
-		auto f = area_features[p->index];
+		auto f = area->features[p->index];
 		if(f == Chest)
 			continue;
 		point pt = i2s(p->index) - camera;
@@ -534,7 +534,7 @@ static void paint_features() {
 			if(is_wall(t))
 				paint_wall(pw, pt, i, tile_frames[t].frame.get(r), tile_frames[t].frame.next());
 			else {
-				auto f = area_features[i];
+				auto f = area->features[i];
 				if(f && !area_is(i, Hidden)) {
 					auto& ei = feature_frames[f];
 					if(is_between_walls(f)) {
@@ -1006,7 +1006,7 @@ static void paint_area(point origin, int z) {
 		fore = tile_frames[t].minimap;
 		if(fore.u)
 			rectf();
-		auto f = area_features[i];
+		auto f = area->features[i];
 		fore = feature_frames[f].minimap;
 		if(fore.u) {
 			auto push_alpha = alpha; alpha = 128;
