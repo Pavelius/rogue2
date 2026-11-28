@@ -63,6 +63,8 @@ int answers::compare(const void* v1, const void* v2) {
 
 void answers::addv(long value, const char* text, const char* format) {
 	auto p = elements.add();
+	if(!p)
+		return;
 	p->value = value;
 	p->text = sc.get();
 	sc.addv(text, format);
