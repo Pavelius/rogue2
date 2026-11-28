@@ -23,8 +23,10 @@
 #include "stringbuilder.h"
 
 #define BSENUM(T) template<> const char* bsenum<T>::names[]
-#define BSRTEST(T, N) static_assert((sizeof(bsenum<T>::names)/sizeof(bsenum<T>::names[0]))==N, "Invelid count of " #T " elements");
-#define BSTEST(T, N) BSRTEST(T, (N+1));
+#define BSCTEST(T, C, N) static_assert((sizeof(C)/sizeof(C[0]))==N, "Invalid count of " #T " elements");
+#define BSXTEST(C, N) BSCTEST(C, C, (N+1));
+#define BSRTEST(T, N) BSCTEST(T, bsenum<T>::names, N);
+#define BSTEST(T, N) BSCTEST(T, bsenum<T>::names, (N+1));
 
 BSENUM(messagen) = {
 	"Приключения в Забытых Королевствах",
@@ -88,7 +90,7 @@ BSENUM(abilityn) = {
 	"Отравление", "Болезнь", "Коррозия", "Горение", "Обморожение", "Пьянство",
 	"Опыт"
 }; BSTEST(abilityn, Experience)
-const char* ability_info[LastAbility + 1] = {
+const char* ability_info[] = {
 	0,
 	"Физическая сила персонажа, его здоровье и размер.",
 	"Ловкость, координация, скорость и точность персонажа.",
@@ -117,7 +119,7 @@ const char* ability_info[LastAbility + 1] = {
 	0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0,
 	0
-};
+}; BSXTEST(ability_info, LastAbility)
 const char* ability_formula_names[LastAbilityFormula + 1] = {
 	"Дополнительная броня",
 	"Дополнительный рукопашный урон",

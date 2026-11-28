@@ -319,8 +319,7 @@ static void decoy_items() {
 	}
 }
 
-void pass_minute() {
-	game.minutes++;
+static void pass_minute() {
 	update_enchantments(game.minutes);
 	all(creature_every_minute);
 	while(game.restore_half_turn < game.minutes) {
@@ -352,15 +351,19 @@ void pass_minute() {
 }
 
 static void make_move_long() {
-	if(player->wait_seconds >= 100 * 6)
-		player->wait_seconds -= 100 * 6;
+	if(player->wait_seconds >= 25 * 4 * 6)
+		player->wait_seconds -= 25 * 4 * 6;
 }
 
-void skip_long_time() {
-	if(!human)
-		return;
-	while(human->isunaware()) {
-		all(make_move_long);
+static void pass_time() {
+	if(human && human->isunaware()) {
+		while(human && human->isunaware()) {
+			all(make_move_long);
+			game.minutes += 6;
+			pass_minute();
+		}
+	} else {
+		game.minutes += 1;
 		pass_minute();
 	}
 }
@@ -387,8 +390,7 @@ static void play_minute() {
 				break;
 			}
 		}
-		pass_minute();
-		skip_long_time();
+		pass_time();
 	}
 }
 
