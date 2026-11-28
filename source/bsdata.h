@@ -19,18 +19,18 @@
 template<typename T>
 struct bsdata {
 	static T elements[]; // External initialize
-	static unsigned count; // Count of elements
-	static const unsigned count_max; // Need to be constant value
-	static constexpr void clear() { count = 0; }
-	static constexpr bool have(const void* p) { return p >= elements && p < elements + count; }
-	static constexpr unsigned indexof(const void* p) { return have(p) ? ((unsigned char*)p - (unsigned char*)elements) / sizeof(T) : -1; }
-	static constexpr T* add() { return (count < count_max) ? elements + (count++) : 0; }
-	static constexpr T* addz() { for(auto& e : bsdata<T>()) if(!e) return &e; return add(); }
-	static constexpr T*	get(const void* p) { return have(p) ? elements + indexof(p) : 0; }
-	static constexpr T*	begin() { return elements; }
-	static constexpr T*	end() { return elements + count; }
-	static void shrink() { auto ps = elements, pe = end(); for(auto pb = elements; pb < pe; pb++) if(*pb) *ps++ = *pb; count = ps - elements; }
-	static void shrinkt() { while(count > 0) { auto& e = elements[count - 1]; if(e) break; count--; } }
+	static unsigned count; // Count of active elements
+	static const unsigned count_max; // Need to be constant value (if present)
+	static unsigned indexof(const void* p) { return have(p) ? ((unsigned char*)p - (unsigned char*)elements) / sizeof(T) : -1; }
+	static T* add() { return (count < count_max) ? elements + (count++) : 0; }
+	static T* addz() { for(auto& e : bsdata<T>()) if(!e) return &e; return add(); }
+	static T* get(const void* p) { return have(p) ? elements + indexof(p) : 0; }
+	static T* begin() { return elements; }
+	static T* end() { return elements + count; }
+	static void clear() { count = 0; }
+	static bool have(const void* p) { return p >= elements && p < elements + count; }
+	static void shrinkall() { auto ps = elements, pe = end(); for(auto pb = elements; pb < pe; pb++) if(*pb) *ps++ = *pb; count = ps - elements; }
+	static void shrink() { while(count > 0) { auto& e = elements[count - 1]; if(e) break; count--; } }
 };
 
 #define BSDATAD1(T) template<> const unsigned bsdata<T>::count_max = sizeof(bsdata<T>::elements) / sizeof(bsdata<T>::elements[0]);

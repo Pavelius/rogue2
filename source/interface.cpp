@@ -117,6 +117,7 @@ static tilei feature_frames[] = {
 	{3, {78, 1}}, // RedPool
 	{10, {54, 1}}, // GatePortal
 	{10, {55, 1}}, // OpenedGatePortal
+	{10, {71, 1}}, // Furnance
 	{6, {106, 1}}, // Chest
 	{6, {106, 1}}, // LockedChest random_count(6)
 	{6, {107, 1}}, // ChestOpen

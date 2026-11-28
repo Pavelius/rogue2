@@ -369,7 +369,7 @@ static void play_minute() {
 	while(need_continue) {
 		need_continue = true;
 		for(auto i = 0; i < moves_per_minute; i++) {
-			bsdata<creature>::shrinkt();
+			bsdata<creature>::shrink();
 			update_los();
 			all_next(make_move);
 			if(!checkalive() || !running_scene()) {

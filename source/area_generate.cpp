@@ -162,47 +162,6 @@ static int compare_location(const void* v1, const void* v2) {
 	return p2->area() - p1->area();
 }
 
-static void area_landscape(landscapen type) {
-	switch(type) {
-	case Plains:
-		place(Grass);
-		place(FootHill, 3);
-		place(FootMud, 2);
-		place(Tree, 2);
-		break;
-	case Forest:
-		place(Grass);
-		place(FootHill, 3);
-		place(Tree, 10);
-		break;
-	case DeepForest:
-		place(Grass);
-		place(FootHill, 3);
-		place(Tree, 20);
-		create_overland_level();
-		break;
-	case Village:
-		place(Grass);
-		place(FootHill, 3);
-		place(FootMud, 2);
-		place(Tree, 2);
-		create_city_level();
-		locations.sort(compare_location);
-		create_site(RandomBuilding, xrand(3, 5));
-		create_site(RandomHouse, 25);
-		break;
-	default:
-		break;
-	}
-}
-
-void area_generate(landscapen type) {
-	bsdata<areai>::elements[current_area].type = type;
-	locations.clear();
-	current_box_index = 0;
-	area_landscape(type);
-}
-
 static void set_herbs(short unsigned i) {
 	area_set(i, Herbs);
 }
@@ -272,7 +231,7 @@ static void create_content(const abox& rc, siten v) {
 		break;
 	case Blacksmith:
 		place_house(rc);
-		area_set(rc.center(), AltarGood);
+		area_set(rc.center(), Furnance);
 		create_creature(rc.center(), DwarfSmith);
 		break;
 	case PeasantHouse:
@@ -301,4 +260,45 @@ void create_site(siten type) {
 void create_site(siten type, int count) {
 	for(int i = 0; i < count; i++)
 		create_site(type);
+}
+
+static void area_landscape(landscapen type) {
+	switch(type) {
+	case Plains:
+		place(Grass);
+		place(FootHill, 3);
+		place(FootMud, 2);
+		place(Tree, 2);
+		break;
+	case Forest:
+		place(Grass);
+		place(FootHill, 3);
+		place(Tree, 10);
+		break;
+	case DeepForest:
+		place(Grass);
+		place(FootHill, 3);
+		place(Tree, 20);
+		create_overland_level();
+		break;
+	case Village:
+		place(Grass);
+		place(FootHill, 3);
+		place(FootMud, 2);
+		place(Tree, 2);
+		create_city_level();
+		locations.sort(compare_location);
+		create_site(RandomBuilding, xrand(3, 5));
+		create_site(RandomHouse, 25);
+		break;
+	default:
+		break;
+	}
+}
+
+void area_generate(landscapen type) {
+	bsdata<areai>::elements[current_area].type = type;
+	locations.clear();
+	current_box_index = 0;
+	area_landscape(type);
 }

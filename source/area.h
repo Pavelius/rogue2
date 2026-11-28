@@ -55,6 +55,7 @@ enum featuren : unsigned char {
 	StairsUp, StairsDown,
 	GreenPool, RedPool,
 	GatePortal, OpenedGatePortal,
+	Furnance,
 	Chest, LockedChest, ChestOpen
 };
 enum siten : unsigned char {

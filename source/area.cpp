@@ -415,6 +415,7 @@ bool is_free(featuren v, bool ignore_doors) {
 	case TreePalm: case Tree: case DeadTree:
 	case Grave:
 	case Statue:
+	case Furnance:
 		return false;
 	case Door: case LockedDoor: case StuckDoor:
 		if(ignore_doors)
