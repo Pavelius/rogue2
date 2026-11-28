@@ -193,6 +193,10 @@ static void place_house(const abox& rc) {
 	place_door(rc, maprnd(strait_direction));
 }
 
+static void set_owner() {
+	last_site->owner_id = getbsi(player);
+}
+
 static void create_content(const abox& rc, siten v) {
 	switch(v) {
 	case MonstersLair:
@@ -233,6 +237,7 @@ static void create_content(const abox& rc, siten v) {
 		place_house(rc);
 		area_set(rc.center(), Furnance);
 		create_creature(rc.center(), DwarfSmith);
+		set_owner();
 		break;
 	case PeasantHouse:
 		place_house(rc);
@@ -250,6 +255,7 @@ void create_site(siten type) {
 	last_site->set(locations.data[current_box_index++]);
 	last_site->area_index = current_area;
 	last_site->type = type;
+	last_site->owner_id = 0xFFFF;
 	create_content(*last_site, last_site->type);
 #ifdef DEBUG_SHOW_SITE
 	explore_all_area();

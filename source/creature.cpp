@@ -640,7 +640,28 @@ static bool player_interact(short unsigned i, directionn d) {
 		player->fixact(d);
 		make_attack(player->wears[MeleeWeapon], 0, 100);
 		pay_attack(player->wears[MeleeWeapon]);
+	} else if(!player->ishuman())
+		pay_movement(); // NPC vs NPC/Player just pass their turn
+	else if(opponent->isowner()) {
+		player->fixact(d);
+		opponent->wait();
+		if(chance(40) && opponent->canspeak())
+			opponent->say(DontPushMePlaceOwner);
+		pay_movement();
+	} else {
+		//auto pt = opponent->getposition();
+		//opponent->setposition(player->getposition());
+		//opponent->fixmovement();
+		//opponent->wait();
+		//update_room(opponent);
+		//player->setposition(pt);
+		//update_room(player);
+		//player->fixmovement();
+		//if(d100() < 40 && opponent->canspeak())
+		//	opponent->speak("DontPushMe");
+		pay_movement();
 	}
+
 	return true;
 }
 
@@ -1333,6 +1354,12 @@ void creature::say(speechn v) const {
 		return;
 	auto n = speechn(v * 3 + xrand() % 3);
 	println("[%1:] \"%2\"", name(), getnm(n));
+}
+
+bool creature::isowner() const {
+	if(site_id == 0xFFFF)
+		return false;
+	return bsdata<sitei>::elements[site_id].owner_id == getbsi(this);
 }
 
 static bool drink_potion(item& v, bool run) {

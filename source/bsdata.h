@@ -33,6 +33,8 @@ struct bsdata {
 	static void shrink() { while(count > 0) { auto& e = elements[count - 1]; if(e) break; count--; } }
 };
 
+template<typename T> short unsigned getbsi(const T* v) { return (short unsigned)(v - bsdata<T>::elements); }
+
 #define BSDATAD1(T) template<> const unsigned bsdata<T>::count_max = sizeof(bsdata<T>::elements) / sizeof(bsdata<T>::elements[0]);
 #define BSDATAD2(T, N) template<> unsigned bsdata<T>::count = N;
 

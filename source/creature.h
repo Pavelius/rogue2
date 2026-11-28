@@ -72,8 +72,8 @@ enum namen : unsigned char {
 	NoName = 0xFF
 };
 enum speechn : unsigned char {
-	SayHello,
-	SayItsMine,
+	SayHello, SayItsMine, DontPushMePlaceOwner,
+	LastSpeech = DontPushMePlaceOwner,
 };
 
 struct statable {
@@ -130,6 +130,7 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	bool apply(featn v, magicn magic, bool run);
 	bool apply(spelln v, bool run);
 	bool canhear(short unsigned i) const;
+	bool canspeak() const { return get(Wits) >= 10; }
 	bool cast(spelln spell, int mana_cost, bool run);
 	void clear();
 	void damage(int v);
@@ -148,6 +149,7 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	bool isfemale() const { return is(Female); }
 	bool isguard() const { return guard_index != 0xFFFF; }
 	bool ishuman() const { return this == human; }
+	bool isowner() const;
 	bool ismirror() const { return is(Mirrorred); }
 	bool isunaware() const { return wait_seconds >= 25 * 4 * 6; }
 	bool isvisible() const;

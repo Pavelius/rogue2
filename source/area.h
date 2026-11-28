@@ -132,6 +132,7 @@ struct areai {
 struct sitei : abox {
 	siten			type;
 	short unsigned	area_index;
+	short unsigned	owner_id; // Creature owner
 	bool			ispresent() const { return area_index == current_area; }
 	bool			ismarkable() const { return type != PeasantHouse; }
 };
