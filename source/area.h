@@ -78,7 +78,6 @@ const short mps = 64;
 
 extern unsigned short current_area;
 
-extern tilen area_tiles[mps * mps];
 extern featuren area_features[mps * mps];
 extern unsigned short movement_rate[mps * mps];
 
@@ -147,8 +146,8 @@ extern areai* area;
 directionn move_lower(short unsigned start, short unsigned goal);
 directionn move_greater(short unsigned start, short unsigned goal);
 
-inline short unsigned p2i(unsigned char* v) { return (tilen*)v - area_tiles; }
-inline char unsigned* i2p(unsigned short v) { return (char unsigned*)area_tiles + v; }
+inline short unsigned p2i(unsigned char* v) { return (tilen*)v - area->tiles; }
+inline char unsigned* i2p(unsigned short v) { return (char unsigned*)area->tiles + v; }
 
 short unsigned area_free(short unsigned index, fnareais test_free);
 

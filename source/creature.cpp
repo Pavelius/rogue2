@@ -247,7 +247,7 @@ static void random_name() {
 }
 
 static bool is_free_no_creature(short unsigned index) {
-	if(!is_free(area_tiles[index], false))
+	if(!is_free(area->tiles[index], false))
 		return false;
 	if(!is_free(area_features[index], false))
 		return false;
@@ -310,7 +310,7 @@ creature* find_creature(short unsigned i) {
 }
 
 bool is_free(short unsigned i) {
-	if(!is_free(area_tiles[i], player->is(Fly)))
+	if(!is_free(area->tiles[i], player->is(Fly)))
 		return false;
 	if(!is_free(area_features[i], false))
 		return false;
@@ -683,7 +683,7 @@ static bool is_free_light_set(short unsigned i) {
 	area_set(i, Explored);
 	if(area_is(i, Darkened))
 		return false;
-	if(!is_free(area_tiles[i], true))
+	if(!is_free(area->tiles[i], true))
 		return false;
 	if(!is_free(area_features[i], false))
 		return false;

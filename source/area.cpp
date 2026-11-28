@@ -30,7 +30,6 @@ areai* area;
 sitei* last_site;
 
 static unsigned char	area_flags[mps * mps];
-tilen					area_tiles[mps * mps];
 featuren				area_features[mps * mps];
 short unsigned			movement_rate[mps * mps];
 
@@ -105,14 +104,14 @@ void block_creatures(const creature* ignore) {
 
 void block_tiles(tilen v) {
 	for(auto i = 0; i < mps * mps; i++) {
-		if(area_tiles[i] == v)
+		if(area->tiles[i] == v)
 			movement_rate[i] = Blocked;
 	}
 }
 
 void block_tiles(bool ignore_water) {
 	for(auto i = 0; i < mps * mps; i++) {
-		if(!is_free(area_tiles[i], ignore_water))
+		if(!is_free(area->tiles[i], ignore_water))
 			movement_rate[i] = Blocked;
 	}
 }
@@ -126,13 +125,13 @@ void block_zero() {
 
 void area_change(tilen t1, tilen t2) {
 	for(auto i = 0; i < mps * mps; i++) {
-		if(area_tiles[i] == t1)
-			area_tiles[i] = t2;
+		if(area->tiles[i] == t1)
+			area->tiles[i] = t2;
 	}
 }
 
 void areai::clear() {
-	memset(area_tiles, 0, sizeof(area_tiles));
+	memset(tiles, 0, sizeof(tiles));
 	memset(area_features, 0, sizeof(area_features));
 	memset(area_flags, 0, sizeof(area_flags));
 	for(auto& e : params)
@@ -216,11 +215,11 @@ bool area_is(short unsigned i, areafn f) {
 }
 
 bool area_iswall(short unsigned i) {
-	return is_wall(area_tiles[i]);
+	return is_wall(area->tiles[i]);
 }
 
 void area_set(short unsigned m, tilen v) {
-	area_tiles[m] = v;
+	area->tiles[m] = v;
 	area_features[m] = NoFeature;
 }
 
@@ -238,7 +237,7 @@ static void area_set(indexa& indecies, const abox& m) {
 	for(auto y = m.y; y < y2; y++) {
 		for(auto x = m.x; x < x2; x++) {
 			short unsigned i = apos(x, y);
-			if(!is_free(area_tiles[i], false))
+			if(!is_free(area->tiles[i], false))
 				continue;
 			if(!is_free(area_features[i], false))
 				continue;

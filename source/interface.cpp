@@ -232,16 +232,16 @@ static unsigned char get_frame(short unsigned m, areafn af) {
 static unsigned char get_frame(short unsigned m, tilen tile) {
 	auto r = 0;
 	auto f = 1;
-	if(!up_side(m) && get_base_tile(area_tiles[m - mps]) == tile)
+	if(!up_side(m) && get_base_tile(area->tiles[m - mps]) == tile)
 		r |= f;
 	f = f << 1;
-	if(!down_side(m) && get_base_tile(area_tiles[m + mps]) == tile)
+	if(!down_side(m) && get_base_tile(area->tiles[m + mps]) == tile)
 		r |= f;
 	f = f << 1;
-	if(!left_side(m) && get_base_tile(area_tiles[m - 1]) == tile)
+	if(!left_side(m) && get_base_tile(area->tiles[m - 1]) == tile)
 		r |= f;
 	f = f << 1;
-	if(!right_side(m) && get_base_tile(area_tiles[m + 1]) == tile)
+	if(!right_side(m) && get_base_tile(area->tiles[m + 1]) == tile)
 		r |= f;
 	return r;
 }
@@ -489,7 +489,7 @@ static void paint_floor() {
 		for(auto i = m2i(mb.x, y); i < i2; i++) {
 			if(!area_is(i, Explored))
 				continue;
-			auto t = area_tiles[i];
+			auto t = area->tiles[i];
 			if(is_wall(t))
 				continue;
 			auto pt = i2s(i);
@@ -520,7 +520,6 @@ static void paint_floor() {
 static void paint_features() {
 	pushrect push;
 	auto pw = gres(ResWalls);
-	//auto pf = gres(ResFeatures);
 	auto mb = camera_box();
 	auto y2 = mb.y + mb.h;
 	for(auto y = mb.y; y < y2; y++) {
@@ -531,7 +530,7 @@ static void paint_features() {
 			auto pt = i2s(i);
 			caret = pt - camera;
 			auto r = area->params[i];
-			auto t = area_tiles[i];
+			auto t = area->tiles[i];
 			if(is_wall(t))
 				paint_wall(pw, pt, i, tile_frames[t].frame.get(r), tile_frames[t].frame.next());
 			else {
@@ -1000,7 +999,7 @@ static void paint_area(point origin, int z) {
 	pushvalue push_fore(fore);
 	height = width = z;
 	for(short unsigned i = 0; i < mps * mps; i++) {
-		auto t = area_tiles[i];
+		auto t = area->tiles[i];
 		if(!t || !area_is(i, Explored))
 			continue;
 		set_minimap_caret(origin, i);
