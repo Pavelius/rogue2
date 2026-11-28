@@ -494,7 +494,7 @@ static void paint_floor() {
 				continue;
 			auto pt = i2s(i);
 			caret = pt - camera;
-			auto r = area_params[i];
+			auto r = area->params[i];
 			auto& ei = tile_frames[t];
 			if(ei.frame) {
 				image(pi, ei.frame.get(r), 0);
@@ -530,7 +530,7 @@ static void paint_features() {
 				continue;
 			auto pt = i2s(i);
 			caret = pt - camera;
-			auto r = area_params[i];
+			auto r = area->params[i];
 			auto t = area_tiles[i];
 			if(is_wall(t))
 				paint_wall(pw, pt, i, tile_frames[t].frame.get(r), tile_frames[t].frame.next());

@@ -26,12 +26,12 @@
 #include "slice.h"
 
 unsigned short current_area;
+areai* area;
 sitei* last_site;
 
 static unsigned char	area_flags[mps * mps];
 tilen					area_tiles[mps * mps];
 featuren				area_features[mps * mps];
-unsigned char			area_params[mps * mps];
 short unsigned			movement_rate[mps * mps];
 
 static short unsigned stack[128 * 128];
@@ -131,11 +131,11 @@ void area_change(tilen t1, tilen t2) {
 	}
 }
 
-void area_clear() {
+void areai::clear() {
 	memset(area_tiles, 0, sizeof(area_tiles));
 	memset(area_features, 0, sizeof(area_features));
 	memset(area_flags, 0, sizeof(area_flags));
-	for(auto& e : area_params)
+	for(auto& e : params)
 		e = (unsigned char)(xrand() % 256);
 }
 

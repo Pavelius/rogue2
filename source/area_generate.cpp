@@ -303,7 +303,10 @@ static void area_landscape(landscapen type) {
 }
 
 void area_generate(landscapen type) {
-	bsdata<areai>::elements[current_area].type = type;
+	area = bsdata<areai>::add();
+	area->clear();
+	area->type = type;
+	current_area = getbsi(area);
 	locations.clear();
 	current_box_index = 0;
 	area_landscape(type);

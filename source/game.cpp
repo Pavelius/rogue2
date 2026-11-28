@@ -460,7 +460,6 @@ int main(int argc, char* argv[]) {
 	// xrand_origin_seed = srand_time();
 	xrand_origin_seed = 1795808268;
 	xrand_seed = xrand_origin_seed;
-	area_clear();
 	initialize_gui();
 	area_generate(Village);
 	test_player();

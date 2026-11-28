@@ -78,7 +78,6 @@ const short mps = 64;
 
 extern unsigned short current_area;
 
-extern unsigned char area_params[mps * mps];
 extern tilen area_tiles[mps * mps];
 extern featuren area_features[mps * mps];
 extern unsigned short movement_rate[mps * mps];
@@ -90,16 +89,6 @@ inline bool right_side(short unsigned i) { return (i % mps) == (mps - 1); }
 inline bool up_side(short unsigned i) { return (i / mps) == 0; }
 inline bool down_side(short unsigned i) { return (i / mps) == (mps - 1); }
 
-struct areai {
-	short unsigned	index; // Position on world map
-	landscapen		type;
-	unsigned char	level; // Current level of dungeon. 0 is overland.
-	unsigned char	params[mps * mps];
-	tilen			tiles[mps * mps];
-	featuren		features[mps * mps];
-	constexpr explicit operator bool() const { return index != 0xFFFF; }
-};
-extern areai* area;
 struct apos {
 	unsigned char x, y;
 	constexpr apos() : x(0xFF), y(0xFF) {}
@@ -143,6 +132,17 @@ struct sitei : abox {
 	bool			ismarkable() const { return type != PeasantHouse; }
 };
 extern sitei* last_site;
+struct areai {
+	short unsigned	index; // Position on world map
+	landscapen		type;
+	unsigned char	level; // Current level of dungeon. 0 is overland.
+	unsigned char	params[mps * mps];
+	tilen			tiles[mps * mps];
+	featuren		features[mps * mps];
+	constexpr explicit operator bool() const { return index != 0xFFFF; }
+	void clear();
+};
+extern areai* area;
 
 directionn move_lower(short unsigned start, short unsigned goal);
 directionn move_greater(short unsigned start, short unsigned goal);
@@ -161,7 +161,6 @@ int area_range(short unsigned i1, short unsigned i2);
 int get_move_cost(featuren v);
 
 void area_change(tilen t1, tilen t2);
-void area_clear();
 void area_generate(landscapen type);
 bool area_is(short unsigned i, areafn f);
 bool area_iswall(short unsigned i);
