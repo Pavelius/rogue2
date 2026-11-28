@@ -1,18 +1,18 @@
-///////////////////////////////////////////////////////////////////////////
-//
-//  Copyright 2026 by Pavel Chistyakov
-//
-//  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
-//
-//  http ://www.apache.org/licenses/LICENSE-2.0
-//
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
+/*
+	Copyright 2026 by Pavel Chistyakov
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+*/
 
 #include "area.h"
 #include "bsdata.h"
@@ -63,11 +63,11 @@ BSENUM(speechn) = {
 	"Добрый день.", "Приветствую.", "Хороший день для разговора.",
 	"Нет. Это мое.", "Не отдам. Это мое богатство, моя ... прелесть.", "Пожалуй оставлю это себе.",
 	"Не толкай меня.", "Веди себя прилично в моем помещении.", "Не надо толкаться.",
-}; BSRTEST(speechn, (LastSpeech+1)*3)
+}; BSRTEST(speechn, (LastSpeech + 1) * 3)
 BSENUM(glown) = {
 	"Серым", "Черным", "Белым", "Красным", "Зеленым",
 	"Синим", "Коричневым", "Желтым",
-};
+}; BSTEST(glown, LastGlow)
 BSENUM(abilityn) = {
 	"Уровень",
 	"Сила", "Ловкость", "Интеллект",
@@ -162,7 +162,7 @@ BSENUM(wearn) = {
 	"Оружие", "Защита", "Стрельба", "Амуниция", "Тело",
 	"Голова", "Шея", "Спина", "Пояс", "Перчатки",
 	"Кольцо", "Кольцо", "Локти", "Ноги", "Рюкзак"
-};
+}; BSTEST(wearn, Backpack)
 BSENUM(monstern) = {
 	"Человек", "Дварф", "Эльф",
 	"Гоблин", "Гоблинша",
@@ -180,7 +180,7 @@ BSENUM(magicn) = {
 	"Обычная", "Проклятая", "Священная", "Могучая",
 	"Обычное", "Проклятое", "Священное", "Могучее",
 	"Обычные", "Проклятые", "Священные", "Могучие",
-};
+}; BSRTEST(magicn, (Artifact + 1) * 4)
 const char* item_state_names[2 * 4] = {
 	"Потерный", "Поврежденный",
 	"Потертая", "Поврежденная",
@@ -209,12 +209,12 @@ BSENUM(itemn) = {
 	"Зелёный авантюрин", "Малахит", "Хризолит", "Жадеит", "Изумруд",
 	"Красная яшма", "Сердолик", "Красный гранат", "Красная шпинель", "Рубин",
 	"Медные монеты", "Серебряные монеты", "Золотые монеты",
-};
+}; BSTEST(itemn, LastItem)
 BSENUM(directionn) = {
 	"Север", "Восток", "Юг", "Запад",
 	"Северо-восток", "Юго-восток", "Юго-запад", "Северо-запад",
 	"Центер"
-};
+}; BSTEST(directionn, Center)
 BSENUM(spelln) = {
 	"Ицелить легкое ранение", "Исцелить серьезное ранение", "Исцелить критическое ранение",
 	"Ицелить болезнь", "Исцелить яд",
@@ -223,7 +223,7 @@ BSENUM(spelln) = {
 	"Благословить предмет", "Определить магию", "Идентифицировать предмет", "Снять проклятие", "Зачаровать предмет", "Создать артефакт",
 	"Огненные руки", "Огненный шар", "Ледяное копье", "Волшебный снаряд", "Опутать", "Ужас", "Святое слово",
 	"Врата", "Телепорт",
-};
+}; BSTEST(spelln, LastSpell)
 BSENUM(siten) = {
 	"Пустая комната",
 	"Логово монстров", "Проклятое кладбище", "Темная комната", "Комната сокровищ", "Поляна растений",
@@ -231,14 +231,14 @@ BSENUM(siten) = {
 	"Кузница", "Храм", "Барраки", "Таверна",
 	"Арсенал", "Оружейник", "Магазин", "Дом",
 	"Животные",
-};
-const char* spell_power_names[] = {
+}; BSTEST(siten, LastSite)
+const char* spell_power_names[LastSpell + 1] = {
 	"Исцеления", "Серьезного исцеления", "Критического исцеления",
 	"Выздоровления", "Интоксикации",
 	"Брони", "Щита", "Света", "Починки", "Сна", "Паутины",
 	"Призыва животных", "Призыва слуг", "Призыва мертвых",
-	"Благословления", "Определения магии", "Опознания", "Снятия проклятия", "Зачарования", "Создания атрифакта",
-	"Искр", "Огня", "Мороза", "Волшебного снаряда", "Опутывания", "Ужаса",
+	"Благословления", "Определения магии", "Опознания", "Снятия проклятия", "Зачарования", "Великого зачарования",
+	"Искр", "Огня", "Мороза", "Волшебного снаряда", "Опутывания", "Ужаса", "Святости",
 	"Врат", "Телепорта",
 };
 const char* creature_names[4 * 50] = {

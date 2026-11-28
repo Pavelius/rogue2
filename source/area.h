@@ -65,6 +65,7 @@ enum siten : unsigned char {
 	Blacksmith, Temple, Barracs, Tavern,
 	Armory, WeaponSmith, Shop, PeasantHouse,
 	HerdAnimals,
+	LastSite = HerdAnimals,
 	RandomHouse, RandomBuilding,
 };
 enum shapen : unsigned char {
