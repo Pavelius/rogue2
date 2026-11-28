@@ -272,7 +272,6 @@ void create_creature(short unsigned index_position, monstern type) {
 	update_player();
 	create_finish();
 	random_name();
-	need_update_creatures = true;
 }
 
 void create_monster(short unsigned index, monstern type, bool enemy) {
@@ -345,7 +344,7 @@ static sitei* find_site(apos m) {
 	return 0;
 }
 
-static void update_player_site() {
+static void update_site(creature* player) {
 	auto pc = player->getsite();
 	auto pn = find_site(player->index);
 	if(pc == pn)
@@ -445,7 +444,6 @@ static void check_locale_remove() {
 	auto range = area_range(human->index, player->index);
 	if(range <= locale_remove_range)
 		return;
-	need_update_creatures = true;
 	remove_order(player);
 	player->clear();
 }
@@ -649,16 +647,14 @@ static bool player_interact(short unsigned i, directionn d) {
 			opponent->say(DontPushMePlaceOwner);
 		pay_movement();
 	} else {
-		//auto pt = opponent->getposition();
-		//opponent->setposition(player->getposition());
-		//opponent->fixmovement();
-		//opponent->wait();
-		//update_room(opponent);
-		//player->setposition(pt);
-		//update_room(player);
-		//player->fixmovement();
-		//if(d100() < 40 && opponent->canspeak())
-		//	opponent->speak("DontPushMe");
+		auto pt = opponent->index;
+		opponent->index = player->index;
+		opponent->wait();
+		update_site(opponent);
+		player->index = pt;
+		update_site(player);
+		if(d100() < 40 && opponent->canspeak())
+			opponent->say(DontPushMe);
 		pay_movement();
 	}
 
@@ -678,7 +674,7 @@ bool player_move(directionn d) {
 	}
 	player->index = i1;
 	pay_movement();
-	update_player_site();
+	update_site(player);
 	return true;
 }
 
@@ -832,6 +828,10 @@ static bool is_enemy(const void* object) {
 	return player->isenemy((creature*)object);
 }
 
+static bool is_visible(const void* object) {
+	return ((creature*)object)->isvisible();
+}
+
 static void ready_spells() {
 	select(allowed_spells, player->known);
 	allowed_spells.match(is_enough_mana, true);
@@ -850,6 +850,8 @@ static void ready_actions() {
 	// Filter visble enemies
 	enemies = parcipants;
 	enemies.match(is_enemy, true);
+	if(!player->ishuman())
+		enemies.match(is_visible, true);
 	if(enemies)
 		opponent = *enemies.begin();
 	else
@@ -936,7 +938,7 @@ static void random_walk() {
 	if(chance(40))
 		player_move(maprnd(all_around_straight));
 	else
-		pay_action();
+		player->wait(xrand(100, 300));
 }
 
 void make_move() {
@@ -955,10 +957,10 @@ void make_move() {
 	check_burning();
 	check_freezing();
 	check_locale_remove();
-	creature_human_turn();
 	if(!player->operator bool())
 		return; // Dead from blooding, burning, cold or other bad
 	check_level_up();
+	check_human_turn();
 	ready_actions();
 	ready_spells();
 	// check_horror();
@@ -985,6 +987,12 @@ void make_move() {
 			player->moveto(opponent->index);
 	} else {
 		allowed_spells.match(spell_is_combat, false);
+		if(player->move_index != 0xFFFF) { // If move order is active
+			if(player->move_index == player->index)
+				player->move_index = 0xFFFF;
+			else if(!player->moveto(player->move_index))
+				player->move_index = 0xFFFF;
+		}
 		//if(player->isfollowmaster())
 		//	player->moveto(player->getowner()->getposition());
 		//else if(d100() < 20)
@@ -1001,8 +1009,8 @@ void make_move() {
 		//		player->moveorder = player->guardorder;
 		//} else if(d100() < 20 && use_items()) {
 		//	// Nothing to do
-		//} else
-		random_walk();
+		else
+			random_walk();
 	}
 	check_blooding();
 	check_corrosion();
@@ -1094,6 +1102,9 @@ void creature::clear() {
 	site_id = 0xFFFF;
 	boss_id = 0xFFFF;
 	fear_id = 0xFFFF;
+	if(human == this)
+		human = 0;
+	need_update_creatures = true;
 }
 
 void creature::setindex(short unsigned i) {
@@ -1152,7 +1163,6 @@ static void drop_treasure(creature* player) {
 }
 
 void creature::kill() {
-	need_update_creatures = true;
 	if(d100() < 40)
 		area_set(index, Blooded);
 	fixact(BloodVisual);

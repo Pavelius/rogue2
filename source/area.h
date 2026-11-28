@@ -20,6 +20,7 @@ typedef bool(*fnareais)(short unsigned i);
 typedef void(*fnarea)(short unsigned i);
 
 enum directionn : unsigned char;
+enum monstern : unsigned char;
 
 struct creature;
 
@@ -160,6 +161,7 @@ void area_clear();
 void area_generate(landscapen type);
 bool area_is(short unsigned i, areafn f);
 bool area_iswall(short unsigned i);
+bool area_have_monsters(short unsigned i1, int radius);
 void area_los(short unsigned i, int r, fnareais test);
 void area_hor(short unsigned i, tilen v, short unsigned count);
 void area_remove(short unsigned i, areafn f);

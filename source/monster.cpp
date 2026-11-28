@@ -125,7 +125,6 @@ void apply_monster(monstern type) {
 			if(v)
 				player->equip(v);
 		}
-		player->set(Local);
 	} else {
 		player->basic.abilities[WeaponSkill] += 40;
 		player->basic.abilities[BalisticSkill] += 40;

@@ -72,8 +72,8 @@ enum namen : unsigned char {
 	NoName = 0xFF
 };
 enum speechn : unsigned char {
-	SayHello, SayItsMine, DontPushMePlaceOwner,
-	LastSpeech = DontPushMePlaceOwner,
+	SayHello, SayItsMine, DontPushMePlaceOwner, DontPushMe,
+	LastSpeech = DontPushMe,
 };
 
 struct statable {
@@ -188,12 +188,12 @@ int getv(monstern v, abilityn a);
 
 void add_equipment(itemn type);
 void apply_monster(monstern type);
+void check_human_turn();
 void check_level_up();
 void create_creature(short unsigned index_position, monstern type);
 void create_monster(short unsigned index_position, monstern type, bool enemy = true);
 void creature_every_minute();
 void creature_every_10_minutes();
-void creature_human_turn();
 bool is_free(short unsigned i);
 bool is_skill(unsigned char v);
 void logs(messagen v);

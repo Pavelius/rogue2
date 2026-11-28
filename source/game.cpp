@@ -61,24 +61,34 @@ static void all_next(fnevent proc) {
 	}
 }
 
+static monstern random_encounter(siten v) {
+	switch(v) {
+	case PeasantHouse: return Goblin;
+	default: return (monstern)0;
+	}
+}
+
 static void check_monster_encounters() {
 	for(auto& e : bsdata<sitei>()) {
 		if(!e.ispresent())
 			continue;
-		auto range = area_range(human->index, e.center());
+		auto center = e.center();
+		auto range = area_range(human->index, center);
 		if(range != locale_remove_range - 2)
 			continue;
-		if(area_get_monsters(e.center(), 3))
+		auto monster = random_encounter(e.type);
+		if(!monster)
+			continue;
+		if(area_have_monsters(center, 3))
 			continue; // If any monster present - not spawn any creatures
 		auto count = xrand(2, 4);
-		auto index = e.center();
 		for(auto i = 0; i < count; i++)
-			create_monster(index, Goblin);
+			create_monster(center, monster);
 	}
 }
 
-void creature_human_turn() {
-	if(!human || !(*human))
+void check_human_turn() {
+	if(!human || player != human)
 		return;
 	check_monster_encounters();
 }

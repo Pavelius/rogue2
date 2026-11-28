@@ -450,6 +450,18 @@ int area_get_monsters(short unsigned i1, int radius) {
 	return result;
 }
 
+bool area_have_monsters(short unsigned i1, int radius) {
+	update_creatures();
+	for(auto p : creatures) {
+		if(!(*p) || !p->is(Local))
+			continue;
+		if(area_range(i1, p->index) > radius)
+			continue;
+		return true;
+	}
+	return false;
+}
+
 static short unsigned area_free_horz(short unsigned index, int count, fnareais test_free) {
 	if(count <= 0)
 		return 0xFFFF;
