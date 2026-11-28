@@ -534,6 +534,8 @@ void add_item(short unsigned area_index, short unsigned index, item& v) {
 		return;
 	}
 	auto p = bsdata<itemlay>::addz();
+	if(!p)
+		return;
 	p->area_index = area_index;
 	p->index = index;
 	p->join(v);

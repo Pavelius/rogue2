@@ -29,12 +29,6 @@ siten random(siten v) {
 	}
 }
 
-static abox* add(const abox& source) {
-	auto p = locations.add();
-	*p = source;
-	return p;
-}
-
 static abox random(abox e) {
 	auto n = e.minimum();
 	if(n == e.w && n == e.h)

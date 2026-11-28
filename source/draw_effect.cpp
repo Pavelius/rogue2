@@ -42,6 +42,8 @@ void add_effect(point position, resid res, int cicle, int duration) {
 	if(p)
 		return;
 	p = objects.addz();
+	if(!p)
+		return;
 	p->position = position;
 	p->frame = cicle;
 	p->res = res;

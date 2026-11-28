@@ -14,6 +14,8 @@ void add_enchant(short unsigned parent, variant value, unsigned stop) {
 	auto p = find(parent, value);
 	if(!p)
 		p = bsdata<enchanti>::addz();
+	if(!p)
+		return;
 	p->parent = parent;
 	p->value = value;
 	if(p->stop < stop)
