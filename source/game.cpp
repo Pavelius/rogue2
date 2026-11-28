@@ -358,22 +358,20 @@ static void pass_minute() {
 	}
 }
 
-static void make_move_long() {
-	if(player->wait_seconds >= 25 * 4 * 6)
-		player->wait_seconds -= 25 * 4 * 6;
+static void make_long_rest() {
+	if(player->wait_seconds > 25 * 4)
+		player->wait_seconds -= 25 * 4;
 }
 
 static void pass_time() {
-	if(human && human->isunaware()) {
-		while(human && human->isunaware()) {
-			all(make_move_long);
-			game.minutes += 6;
-			pass_minute();
-		}
-	} else {
+	while(human && human->isunaware()) {
+		// Optimize and speed up waiting by human character.
+		all(make_long_rest);
 		game.minutes += 1;
 		pass_minute();
 	}
+	game.minutes += 1;
+	pass_minute();
 }
 
 static bool checkalive() {

@@ -10,9 +10,6 @@
     <Filter Include="Support">
       <UniqueIdentifier>{97a6580c-0b5f-4cb8-8173-50b1e5ed8315}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Interface">
-      <UniqueIdentifier>{742509a9-9c9e-4e76-8531-a402cde6b990}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Util">
       <UniqueIdentifier>{c24bbc81-8637-42f7-904e-3e742552b0cd}</UniqueIdentifier>
     </Filter>
@@ -21,6 +18,9 @@
     </Filter>
     <Filter Include="Help">
       <UniqueIdentifier>{6d0da46e-22be-4429-a7d7-9f3fb2afd850}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Logic\Interface">
+      <UniqueIdentifier>{742509a9-9c9e-4e76-8531-a402cde6b990}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -31,22 +31,22 @@
       <Filter>Util</Filter>
     </ClCompile>
     <ClCompile Include="draw.cpp">
-      <Filter>Interface</Filter>
+      <Filter>Logic\Interface</Filter>
     </ClCompile>
     <ClCompile Include="draw_object.cpp">
-      <Filter>Interface</Filter>
+      <Filter>Logic\Interface</Filter>
     </ClCompile>
     <ClCompile Include="draw_surface.cpp">
-      <Filter>Interface</Filter>
+      <Filter>Logic\Interface</Filter>
     </ClCompile>
     <ClCompile Include="draw_text.cpp">
-      <Filter>Interface</Filter>
+      <Filter>Logic\Interface</Filter>
     </ClCompile>
     <ClCompile Include="draw_textf.cpp">
-      <Filter>Interface</Filter>
+      <Filter>Logic\Interface</Filter>
     </ClCompile>
     <ClCompile Include="draw_theme.cpp">
-      <Filter>Interface</Filter>
+      <Filter>Logic\Interface</Filter>
     </ClCompile>
     <ClCompile Include="win_draw.cpp">
       <Filter>Platform</Filter>
@@ -130,7 +130,7 @@
       <Filter>Support</Filter>
     </ClCompile>
     <ClCompile Include="screenshoot.cpp">
-      <Filter>Interface</Filter>
+      <Filter>Logic\Interface</Filter>
     </ClCompile>
     <ClCompile Include="font_util.cpp">
       <Filter>Util</Filter>
@@ -145,10 +145,10 @@
       <Filter>Support</Filter>
     </ClCompile>
     <ClCompile Include="draw_floatinfo.cpp">
-      <Filter>Interface</Filter>
+      <Filter>Logic\Interface</Filter>
     </ClCompile>
     <ClCompile Include="draw_effect.cpp">
-      <Filter>Interface</Filter>
+      <Filter>Logic\Interface</Filter>
     </ClCompile>
     <ClCompile Include="enchant.cpp">
       <Filter>Logic</Filter>
@@ -160,7 +160,7 @@
       <Filter>Support</Filter>
     </ClCompile>
     <ClCompile Include="draw_move.cpp">
-      <Filter>Interface</Filter>
+      <Filter>Logic\Interface</Filter>
     </ClCompile>
     <ClCompile Include="manual.cpp">
       <Filter>Logic</Filter>
@@ -252,10 +252,10 @@
       <Filter>Util</Filter>
     </ClInclude>
     <ClInclude Include="draw.h">
-      <Filter>Interface</Filter>
+      <Filter>Logic\Interface</Filter>
     </ClInclude>
     <ClInclude Include="draw_object.h">
-      <Filter>Interface</Filter>
+      <Filter>Logic\Interface</Filter>
     </ClInclude>
     <ClInclude Include="win.h">
       <Filter>Platform</Filter>
@@ -348,7 +348,7 @@
       <Filter>Support</Filter>
     </ClInclude>
     <ClInclude Include="screenshoot.h">
-      <Filter>Interface</Filter>
+      <Filter>Logic\Interface</Filter>
     </ClInclude>
     <ClInclude Include="indexa.h">
       <Filter>Logic</Filter>
@@ -357,10 +357,10 @@
       <Filter>Logic</Filter>
     </ClInclude>
     <ClInclude Include="draw_floatinfo.h">
-      <Filter>Interface</Filter>
+      <Filter>Logic\Interface</Filter>
     </ClInclude>
     <ClInclude Include="draw_effect.h">
-      <Filter>Interface</Filter>
+      <Filter>Logic\Interface</Filter>
     </ClInclude>
     <ClInclude Include="draw_column.h">
       <Filter>Logic</Filter>
@@ -372,7 +372,7 @@
       <Filter>Logic</Filter>
     </ClInclude>
     <ClInclude Include="draw_move.h">
-      <Filter>Interface</Filter>
+      <Filter>Logic\Interface</Filter>
     </ClInclude>
     <ClInclude Include="manual.h">
       <Filter>Logic</Filter>
