@@ -16,6 +16,8 @@
 
 #include "direction.h"
 
+directionn all_around_straight[4] = {North, South, East, West};
+
 directionn round(directionn d, directionn v) {
 	switch(v) {
 	case NorthEast:

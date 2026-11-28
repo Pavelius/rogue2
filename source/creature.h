@@ -108,7 +108,7 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	spellable		known; // Known spells
 	short unsigned	fear_id, boss_id;
 	short unsigned	site_id; // Current site of 0xFFFF
-	short unsigned	move_index; // Move to this point
+	short unsigned	move_index, guard_index; // Move to this point
 	short			hits, hits_maximum, mana, mana_maximum;
 	int				experience;
 	int				wait_seconds;
@@ -146,6 +146,7 @@ struct creature : drawable, posable, statable, featable, spellable, wearable {
 	bool ischaracter() const { return type <= Elf; }
 	bool isenemy(const creature* p) const { return p->is(Enemy) != is(Enemy); }
 	bool isfemale() const { return is(Female); }
+	bool isguard() const { return guard_index != 0xFFFF; }
 	bool ishuman() const { return this == human; }
 	bool ismirror() const { return is(Mirrorred); }
 	bool isunaware() const { return wait_seconds >= 25 * 4 * 6; }

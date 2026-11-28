@@ -1522,10 +1522,6 @@ static void player_move_cmd() {
 	player_move((directionn)hparam);
 }
 
-static void test_scene() {
-	show_area_map();
-}
-
 void set_item_color(const item& it) {
 	if(!it.identified)
 		return;
@@ -1600,7 +1596,6 @@ static void standart_keys() {
 	case 'S': execute(player_shoot); break;
 	case 'M': execute(show_area_map); break;
 	case Ctrl + 'M': execute(open_manual); break;
-	case Ctrl + 'T': execute(test_scene); break;
 	case Ctrl + 'E': execute(explore_all_area); break;
 	default: break;
 	}

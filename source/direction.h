@@ -22,6 +22,8 @@ enum directionn : unsigned char {
 	Center
 };
 
+extern directionn all_around_straight[4];
+
 directionn round(directionn d, directionn v);
 
 short unsigned to(short unsigned m, directionn d, short unsigned me = 0xFFFF);

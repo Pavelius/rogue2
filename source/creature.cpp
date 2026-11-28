@@ -45,7 +45,7 @@ char levelup_skills[LastSkill + 1];
 static collection allowed_spells;
 static short unsigned compare_index;
 
-abilityfni ability_formula[LastAbilityFormula+1] = {
+abilityfni ability_formula[LastAbilityFormula + 1] = {
 	{Strenght, 1, 20}, // AdditionalArmor
 	{Strenght, 1, 15}, // AdditionalDamageMelee
 	{Level, 5}, // BaseHitPoints
@@ -210,7 +210,7 @@ static void update_skills() {
 	for(auto i = FirstSkill; i <= LastSkill; i = (abilityn)(i + 1)) {
 		if(player->basic.abilities[i]) {
 			auto base = get_skill_base(i);
-			if(base==Wits)
+			if(base == Wits)
 				add_value(i, player->get(BaseWitsSkill));
 			else
 				add_value(i, player->get(BaseDexteritySkill));
@@ -911,6 +911,13 @@ void check_level_up() {
 	}
 }
 
+static void random_walk() {
+	if(chance(40))
+		player_move(maprnd(all_around_straight));
+	else
+		pay_action();
+}
+
 void make_move() {
 	// Recoil form action
 	if(player->wait_seconds > 0) {
@@ -974,7 +981,7 @@ void make_move() {
 		//} else if(d100() < 20 && use_items()) {
 		//	// Nothing to do
 		//} else
-		//	random_walk();
+		random_walk();
 	}
 	check_blooding();
 	check_corrosion();
@@ -1060,13 +1067,12 @@ bool creature::apply(featn v, magicn magic, bool run) {
 
 void creature::clear() {
 	memset((void*)this, 0, sizeof(*this));
-	index = 0xFFFF;
+	index = move_index = guard_index = 0xFFFF;
 	area_index = 0xFFFF;
 	custom_name = NoName;
 	site_id = 0xFFFF;
 	boss_id = 0xFFFF;
 	fear_id = 0xFFFF;
-	move_index = 0xFFFF;
 }
 
 void creature::setindex(short unsigned i) {
@@ -1306,9 +1312,7 @@ bool creature::moveaway(short unsigned ni) {
 }
 
 bool creature::roll(abilityn v, int bonus) const {
-	last_value = get(v) + bonus;
-	roll_result = d100();
-	return roll_result < last_value;
+	return d100() < (get(v) + bonus);
 }
 
 bool creature::roll(abilityfnn v) const {

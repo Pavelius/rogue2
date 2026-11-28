@@ -29,6 +29,8 @@ struct bsdata {
 	static constexpr T*	get(const void* p) { return have(p) ? elements + indexof(p) : 0; }
 	static constexpr T*	begin() { return elements; }
 	static constexpr T*	end() { return elements + count; }
+	static void shrink() { auto ps = elements, pe = end(); for(auto pb = elements; pb < pe; pb++) if(*pb) *ps++ = *pb; count = ps - elements; }
+	static void shrinkt() { while(count > 0) { auto& e = elements[count - 1]; if(e) break; count--; } }
 };
 
 #define BSDATAD1(T) template<> const unsigned bsdata<T>::count_max = sizeof(bsdata<T>::elements) / sizeof(bsdata<T>::elements[0]);

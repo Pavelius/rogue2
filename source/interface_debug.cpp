@@ -1,6 +1,9 @@
 #include "answers.h"
+#include "bsdata.h"
+#include "creature.h"
 #include "draw.h"
 #include "game.h"
+#include "print.h"
 
 static bool show_grid = true;
 
@@ -78,9 +81,23 @@ static void choose_images() {
 	}
 }
 
+static int get_total_alive() {
+	auto result = 0;
+	for(auto& e : bsdata<creature>()) {
+		if(e)
+			result++;
+	}
+	return result;
+}
+
+static void debug_information() {
+	println("Creatures %1i of %2i", get_total_alive(), bsdata<creature>::count);
+}
+
 void debug_keys() {
 	switch(hkey) {
 	case Ctrl + 'I': execute(choose_images); break;
+	case Ctrl + 'D': execute(debug_information); break;
 	default: break;
 	}
 }
