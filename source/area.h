@@ -90,6 +90,16 @@ inline bool right_side(short unsigned i) { return (i % mps) == (mps - 1); }
 inline bool up_side(short unsigned i) { return (i / mps) == 0; }
 inline bool down_side(short unsigned i) { return (i / mps) == (mps - 1); }
 
+struct areai {
+	short unsigned	index; // Position on world map
+	landscapen		type;
+	unsigned char	level; // Current level of dungeon. 0 is overland.
+	unsigned char	params[mps * mps];
+	tilen			tiles[mps * mps];
+	featuren		features[mps * mps];
+	constexpr explicit operator bool() const { return index != 0xFFFF; }
+};
+extern areai* area;
 struct apos {
 	unsigned char x, y;
 	constexpr apos() : x(0xFF), y(0xFF) {}
@@ -124,12 +134,6 @@ struct abox : apos {
 	constexpr int minimum() const { return (w < h) ? w : h; }
 	constexpr abox resize(int dx, int dy) const { return abox(x + dx, y + dy, w - dx * 2, h - dy * 2); }
 	constexpr void set(const abox& v) { x = v.x; y = v.y; h = v.h;  w = v.w; }
-};
-struct areai {
-	short unsigned	index; // Position on world map
-	landscapen		type;
-	unsigned char	level; // Current level of dungeon. 0 is overland.
-	constexpr explicit operator bool() const { return index != 0xFFFF; }
 };
 struct sitei : abox {
 	siten			type;

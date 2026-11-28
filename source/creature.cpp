@@ -851,7 +851,7 @@ static void ready_actions() {
 	enemies = parcipants;
 	enemies.match(is_enemy, true);
 	if(!player->ishuman())
-		enemies.match(is_visible, true);
+		enemies.match(is_visible, true); // If human not visible don't anger.
 	if(enemies)
 		opponent = *enemies.begin();
 	else
@@ -945,7 +945,7 @@ static void random_walk() {
 		}
 		player_move(new_index);
 	} else
-		player->wait(xrand(100, 300));
+		player->wait(xrand(100, 300)); // All NPC creatures must move not in same time.
 }
 
 void make_move() {
